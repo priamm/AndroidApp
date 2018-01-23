@@ -19,10 +19,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import base_ui_primitives.TitleFragment
+import utils.KeyboardUtils
 import utils.SimpleTextWatcher
 
 
-class NewAccountPinFragment : MvpAppCompatFragment(), NewAccountPinView {
+class NewAccountPinFragment : TitleFragment(), NewAccountPinView {
     companion object {
         const val TAG = "NewAccountPinFragment"
 
@@ -44,7 +46,7 @@ class NewAccountPinFragment : MvpAppCompatFragment(), NewAccountPinView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        showKeyboard()
+        KeyboardUtils.showKeyboard(activity, pin1)
         for(field in listOf<EditText>(pin1, pin2)) {
             field.addTextChangedListener(object : SimpleTextWatcher() {
                 override fun afterTextChanged(s: Editable?) {
@@ -58,12 +60,5 @@ class NewAccountPinFragment : MvpAppCompatFragment(), NewAccountPinView {
         presenter.validateFields(pin1.text.toString(), pin2.text.toString())
     }
 
-    private fun showKeyboard() {
-        val handler = Handler(Looper.getMainLooper())
-        handler.postDelayed({
-            pin1.requestFocus()
-            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(pin1, InputMethodManager.SHOW_IMPLICIT)
-        }, 200)
-    }
+    override fun getTitle() = getString(R.string.pin_creation)
 }

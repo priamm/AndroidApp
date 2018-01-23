@@ -1,13 +1,7 @@
-package baseActivities
+package base_ui_primitives
 
-import android.app.Activity
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import application.EnecuumApplication
-import com.arellomobile.mvp.MvpAppCompatActivity
-import com.enecuum.androidapp.navigation.ActivityNavigator
 
 /**
  * Created by oleg on 22.01.18.

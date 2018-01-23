@@ -6,4 +6,6 @@
     <string name="next">далее</string>
     <string name="create_your_pin">Пожалуйста, задайте PIN код</string>
     <string name="confirm">Подтверждение</string>
+    <string name="pin_creation">Задайте PIN код</string>
+    <string name="backup_file">Резервная копия</string>
 </resources>

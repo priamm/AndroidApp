@@ -5,4 +5,6 @@
     <string name="next">next</string>
     <string name="create_your_pin">Please create your pin</string>
     <string name="confirm">Confirm</string>
+    <string name="pin_creation">Pin creation</string>
+    <string name="backup_file">Backup file</string>
 </resources>

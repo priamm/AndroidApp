@@ -3,7 +3,7 @@ package com.enecuum.androidapp.ui.activity.new_account
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import baseActivities.BackActivity
+import base_ui_primitives.BackActivity
 
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R

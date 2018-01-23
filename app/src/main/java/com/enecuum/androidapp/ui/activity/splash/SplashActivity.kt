@@ -3,7 +3,7 @@ package com.enecuum.androidapp.ui.activity.splash
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import baseActivities.BaseActivity
+import base_ui_primitives.BaseActivity
 
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
