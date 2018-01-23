@@ -2,6 +2,7 @@ package application
 
 import android.app.Application
 import android.content.Context
+import com.enecuum.androidapp.navigation.ScreenType
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.Router
 
@@ -15,13 +16,16 @@ class EnecuumApplication : Application() {
 
         private lateinit var cicerone: Cicerone<Router>
         fun cicerone() : Cicerone<Router> = cicerone
+
+        fun navigateTo(screenType: ScreenType) {
+            cicerone.router.navigateTo(screenType.toString())
+        }
     }
 
-    public override fun onCreate() {
+    override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
         cicerone = Cicerone.create()
     }
-
 
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Enecuum</string>
+    <string name="new_account">новый аккаунт</string>
+    <string name="sign_in">войти</string>
+    <string name="next">далее</string>
+    <string name="create_your_pin">Пожалуйста, задайте PIN код</string>
+    <string name="confirm">Подтверждение</string>
+</resources>

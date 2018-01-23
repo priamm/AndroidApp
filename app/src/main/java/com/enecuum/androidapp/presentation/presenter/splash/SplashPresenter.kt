@@ -11,9 +11,9 @@ import persistent_data.PersistentStorage
 class SplashPresenter : MvpPresenter<SplashView>() {
     fun onCreate() {
         if(PersistentStorage.isRegistrationFinished()) {
-            EnecuumApplication.cicerone().router.navigateTo(ScreenType.Main.toString())
+            EnecuumApplication.navigateTo(ScreenType.Main)
         } else {
-            EnecuumApplication.cicerone().router.navigateTo(ScreenType.Registration.toString())
+            EnecuumApplication.navigateTo(ScreenType.Registration)
         }
     }
 }

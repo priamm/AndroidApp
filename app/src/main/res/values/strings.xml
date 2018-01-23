@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">androidApp</string>
+    <string name="app_name">Enecuum</string>
+    <string name="new_account">new account</string>
+    <string name="sign_in">sign in</string>
+    <string name="next">next</string>
+    <string name="create_your_pin">Please create your pin</string>
+    <string name="confirm">Confirm</string>
 </resources>

@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.enecuum.androidapp.ui.fragment.new_account_pin.NewAccountPinFragment"
+    android:orientation="vertical">
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/create_your_pin"
+    android:layout_marginTop="30dp"
+    android:gravity="center"/>
+<EditText
+    android:layout_width="100dp"
+    android:layout_gravity="center"
+    android:layout_height="wrap_content"
+    android:maxLength="4"
+    android:gravity="center"
+    android:inputType="numberPassword"
+    android:id="@+id/pin1"
+    android:nextFocusDown="@id/pin2"
+    android:imeOptions="actionNext"
+    />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm"
+        android:layout_marginTop="30dp"
+        android:gravity="center"/>
+    <EditText
+        android:layout_width="100dp"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:maxLength="4"
+        android:gravity="center"
+        android:inputType="numberPassword"
+        android:id="@+id/pin2"
+        android:imeOptions="actionDone"
+        />
+</LinearLayout>

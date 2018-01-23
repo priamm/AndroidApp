@@ -1,7 +1,9 @@
 package com.enecuum.androidapp.navigation
 
 import com.enecuum.androidapp.ui.activity.main.MainActivity
+import com.enecuum.androidapp.ui.activity.new_account.NewAccountActivity
 import com.enecuum.androidapp.ui.activity.registration.RegistrationActivity
+import com.enecuum.androidapp.ui.activity.signin.SignInActivity
 import com.enecuum.androidapp.ui.activity.splash.SplashActivity
 import kotlin.reflect.KClass
 
@@ -11,7 +13,7 @@ import kotlin.reflect.KClass
 enum class ScreenType {
     Splash,
     Registration,
-    CreatePin,
+    NewAccount,
     SignIn,
     Main,
     Mining,
@@ -36,6 +38,12 @@ object ScreenClass {
         }
         ScreenType.Registration -> {
             RegistrationActivity::class.java
+        }
+        ScreenType.NewAccount -> {
+            NewAccountActivity::class.java
+        }
+        ScreenType.SignIn -> {
+            SignInActivity::class.java
         }
         else -> null
     }
