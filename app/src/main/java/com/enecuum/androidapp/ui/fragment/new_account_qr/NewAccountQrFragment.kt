@@ -15,7 +15,9 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import base_ui_primitives.TitleFragment
 import kotlinx.android.synthetic.main.fragment_new_account_qr.*
+import utils.FileSystemUtils
 import utils.KeyboardUtils
+import utils.PermissionUtils
 import utils.QrUtils
 
 
@@ -41,17 +43,39 @@ class NewAccountQrFragment : TitleFragment(), NewAccountQrView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val qr = QrUtils.createCodeFrom("�r��P���q���[�1GE�E�x�J��;��K+`�{�7������cE��S�6")
-        qrCode.setImageBitmap(qr)
+        save.setOnClickListener {
+            if(activity != null)
+                FileSystemUtils.chooseDirectory(activity!!, presenter)
+            presenter.onSaveClick()
+        }
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-
         if(isVisibleToUser) {
+            presenter.beginGenerateKeys()
             KeyboardUtils.hideKeyboard(activity, activity?.currentFocus)
         }
     }
 
+    override fun showQrCode(key: String) {
+        val qr = QrUtils.createCodeFrom(key)
+        qrCode.setImageBitmap(qr)
+        keyText.text = key
+    }
+
     override fun getTitle() = getString(R.string.backup_file)
+
+    override fun requestPermissions() {
+        PermissionUtils.requestPermissions(this, PermissionUtils.storagePermissions)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode != PermissionUtils.PermissionsRequestCode)
+            return
+        if(PermissionUtils.handleGrantResults(grantResults)) {
+            presenter.onSaveClick()
+        }
+    }
 }

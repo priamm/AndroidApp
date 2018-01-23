@@ -8,4 +8,5 @@
     <string name="confirm">Подтверждение</string>
     <string name="pin_creation">Задайте PIN код</string>
     <string name="backup_file">Резервная копия</string>
+    <string name="select_dir">Выберите каталог</string>
 </resources>
