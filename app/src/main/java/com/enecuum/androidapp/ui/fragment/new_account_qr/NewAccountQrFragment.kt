@@ -1,19 +1,15 @@
 package com.enecuum.androidapp.ui.fragment.new_account_qr
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.arellomobile.mvp.MvpAppCompatFragment
-import com.enecuum.androidapp.R
-import com.enecuum.androidapp.presentation.view.new_account_qr.NewAccountQrView
-import com.enecuum.androidapp.presentation.presenter.new_account_qr.NewAccountQrPresenter
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.qrcode.QRCodeWriter
-import android.graphics.Bitmap
-import android.graphics.Color
 import base_ui_primitives.TitleFragment
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.enecuum.androidapp.R
+import com.enecuum.androidapp.presentation.presenter.new_account_qr.NewAccountQrPresenter
+import com.enecuum.androidapp.presentation.view.new_account_qr.NewAccountQrView
 import kotlinx.android.synthetic.main.fragment_new_account_qr.*
 import utils.FileSystemUtils
 import utils.KeyboardUtils
@@ -44,9 +40,13 @@ class NewAccountQrFragment : TitleFragment(), NewAccountQrView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         save.setOnClickListener {
-            if(activity != null)
-                FileSystemUtils.chooseDirectory(activity!!, presenter)
             presenter.onSaveClick()
+        }
+        copy.setOnClickListener {
+            presenter.onCopyClick()
+        }
+        share.setOnClickListener {
+            presenter.onShareClick()
         }
     }
 
@@ -70,12 +70,22 @@ class NewAccountQrFragment : TitleFragment(), NewAccountQrView {
         PermissionUtils.requestPermissions(this, PermissionUtils.storagePermissions)
     }
 
+    override fun beginSelectKeyPath() {
+        if(activity != null)
+            FileSystemUtils.chooseDirectory(activity!!, presenter)
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode != PermissionUtils.PermissionsRequestCode)
-            return
-        if(PermissionUtils.handleGrantResults(grantResults)) {
-            presenter.onSaveClick()
-        }
+        presenter.onRequestPermissionsResult(requestCode, grantResults)
+    }
+
+    override fun sendKey(intent: Intent) {
+        startActivity(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.onResume()
     }
 }

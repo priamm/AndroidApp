@@ -3,6 +3,7 @@ package com.enecuum.androidapp.ui.activity.new_account
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import base_ui_primitives.BackActivity
 
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -40,5 +41,13 @@ class NewAccountActivity : BackActivity(), NewAccountView {
 
     override fun changeButtonState(enable: Boolean) {
         next.isEnabled = enable
+    }
+
+    override fun displaySkipDialog() {
+        val dialog = AlertDialog.Builder(this)
+                .setMessage(R.string.skip_dialog_message)
+                .setPositiveButton(android.R.string.ok, presenter)
+                .setNegativeButton(android.R.string.cancel, presenter)
+        dialog.show()
     }
 }

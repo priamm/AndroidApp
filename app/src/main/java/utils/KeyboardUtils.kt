@@ -3,10 +3,10 @@ package utils
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import kotlinx.android.synthetic.main.fragment_new_account_pin.*
 
 /**
  * Created by oleg on 23.01.18.

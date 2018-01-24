@@ -9,4 +9,7 @@
     <string name="pin_creation">Задайте PIN код</string>
     <string name="backup_file">Резервная копия</string>
     <string name="select_dir">Выберите каталог</string>
+    <string name="key_copied_to_clipboard">Ключ скопирован!</string>
+    <string name="sharing_key_finished">Ключ отослан</string>
+    <string name="skip_dialog_message">Вы действительно хотите пропустить этот шаг?</string>
 </resources>
