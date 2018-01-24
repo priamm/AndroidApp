@@ -26,19 +26,19 @@
             android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher_foreground"
+
             android:id="@+id/save"/>
         <ImageButton
             android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher_foreground"
+
             android:id="@+id/copy"/>
         <ImageButton
             android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher_foreground"
+
             android:id="@+id/share"/>
     </LinearLayout>
 </LinearLayout>

@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">Enecuum</string>
+    <string name="app_name">Enecuum Wallet</string>
     <string name="new_account">new account</string>
     <string name="sign_in">sign in</string>
     <string name="next">next</string>
-    <string name="create_your_pin">Please create your pin</string>
+    <string name="create_your_pin">Create your pin</string>
     <string name="confirm">Confirm</string>
     <string name="pin_creation">Pin creation</string>
     <string name="backup_file">Backup file</string>
@@ -11,4 +11,6 @@
     <string name="key_copied_to_clipboard">Key copied to clipboard!</string>
     <string name="sharing_key_finished">You have shared key</string>
     <string name="skip_dialog_message">Are you sure want to skip this step?</string>
+    <string name="account_registration_finished">Congratulations! Your wallet has created</string>
+    <string name="start_working">Start working</string>
 </resources>

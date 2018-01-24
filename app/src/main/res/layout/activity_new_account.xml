@@ -5,24 +5,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.enecuum.androidapp.ui.activity.new_account.NewAccountActivity"
     android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:background="@color/navy">
     <com.enecuum.androidapp.ui.view.UnscrollableViewPager
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:id="@+id/pager"/>
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:enabled="false"
         android:text="@string/next"
         android:id="@+id/next"
-        android:enabled="false"/>
+        android:layout_width="match_parent"
+        android:layout_marginLeft="27dp"
+        android:layout_marginRight="27dp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:layout_height="44dp"
+        android:layout_gravity="center"
+        android:textSize="14sp"
+        android:letterSpacing="0.04"
+        android:background="@drawable/standard_button_background"
+        android:layout_marginBottom="37dp"/>
     <me.relex.circleindicator.CircleIndicator android:layout_height="48dp"
         android:layout_width="match_parent"
         android:id="@+id/indicator"
-        app:ci_drawable="@android:color/holo_blue_bright"
-        app:ci_drawable_unselected="@android:color/holo_blue_dark"
+        app:ci_drawable="@drawable/active_dot"
+        app:ci_drawable_unselected="@drawable/passive_dot"
+        
         />
 
 </LinearLayout>
