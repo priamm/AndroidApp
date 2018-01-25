@@ -1,4 +1,4 @@
-package utils
+package com.enecuum.androidapp.utils
 
 /**
  * Created by oleg on 23.01.18.

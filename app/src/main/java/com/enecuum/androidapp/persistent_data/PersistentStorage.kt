@@ -1,9 +1,9 @@
-package persistent_data
+package com.enecuum.androidapp.persistent_data
 
 import android.content.Context
 import android.content.SharedPreferences
-import application.EnecuumApplication
 import com.enecuum.androidapp.BuildConfig
+import com.enecuum.androidapp.application.EnecuumApplication
 
 /**
  * Created by oleg on 22.01.18.

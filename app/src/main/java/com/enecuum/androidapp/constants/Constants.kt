@@ -1,4 +1,4 @@
-package constants
+package com.enecuum.androidapp.constants
 
 /**
  * Created by oleg on 25.01.18.

@@ -1,4 +1,4 @@
-package utils
+package com.enecuum.androidapp.utils
 
 import android.app.Activity
 import com.enecuum.androidapp.R

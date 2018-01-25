@@ -1,13 +1,13 @@
 package com.enecuum.androidapp.presentation.presenter.new_account
 
 import android.content.DialogInterface
-import application.EnecuumApplication
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.navigation.ScreenType
 import com.enecuum.androidapp.presentation.view.new_account.NewAccountView
-import events.BackupFinished
-import events.ChangeButtonState
+import com.enecuum.androidapp.events.BackupFinished
+import com.enecuum.androidapp.events.ChangeButtonState
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 

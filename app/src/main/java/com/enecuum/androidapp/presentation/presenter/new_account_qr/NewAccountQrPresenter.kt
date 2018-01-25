@@ -1,17 +1,15 @@
 package com.enecuum.androidapp.presentation.presenter.new_account_qr
 
 import android.content.*
-import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.presentation.view.new_account_qr.NewAccountQrView
 import com.github.angads25.filepicker.controller.DialogSelectionListener
-import persistent_data.PersistentStorage
-import utils.PermissionUtils
-import android.content.Context.CLIPBOARD_SERVICE
-import application.EnecuumApplication
+import com.enecuum.androidapp.persistent_data.PersistentStorage
+import com.enecuum.androidapp.utils.PermissionUtils
 import com.enecuum.androidapp.R
-import events.BackupFinished
+import com.enecuum.androidapp.application.EnecuumApplication
+import com.enecuum.androidapp.events.BackupFinished
 import org.greenrobot.eventbus.EventBus
 import java.security.*
 

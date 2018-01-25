@@ -1,28 +1,20 @@
 package com.enecuum.androidapp.ui.fragment.new_account_pin
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.arellomobile.mvp.MvpAppCompatFragment
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.presentation.view.new_account_pin.NewAccountPinView
 import com.enecuum.androidapp.presentation.presenter.new_account_pin.NewAccountPinPresenter
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.fragment_new_account_pin.*
-import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
-import android.content.Context.INPUT_METHOD_SERVICE
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
-import android.text.TextWatcher
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
-import base_ui_primitives.TitleFragment
-import utils.KeyboardUtils
-import utils.SimpleTextWatcher
+import com.enecuum.androidapp.base_ui_primitives.TitleFragment
+import com.enecuum.androidapp.utils.KeyboardUtils
+import com.enecuum.androidapp.utils.SimpleTextWatcher
 
 
 class NewAccountPinFragment : TitleFragment(), NewAccountPinView {

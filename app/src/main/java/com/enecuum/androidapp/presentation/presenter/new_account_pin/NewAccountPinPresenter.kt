@@ -3,9 +3,9 @@ package com.enecuum.androidapp.presentation.presenter.new_account_pin
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.presentation.view.new_account_pin.NewAccountPinView
-import events.ChangeButtonState
+import com.enecuum.androidapp.events.ChangeButtonState
 import org.greenrobot.eventbus.EventBus
-import utils.Validator
+import com.enecuum.androidapp.utils.Validator
 
 @InjectViewState
 class NewAccountPinPresenter : MvpPresenter<NewAccountPinView>() {

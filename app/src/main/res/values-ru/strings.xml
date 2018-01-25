@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Enecuum Wallet</string>
-    <string name="new_account">новый аккаунт</string>
+    <string name="new_account">Новый аккаунт</string>
     <string name="sign_in">войти</string>
     <string name="next">далее</string>
     <string name="create_your_pin">Задайте PIN код</string>
@@ -12,6 +12,7 @@
     <string name="key_copied_to_clipboard">Ключ скопирован!</string>
     <string name="sharing_key_finished">Ключ отослан</string>
     <string name="skip_dialog_message">Вы действительно хотите пропустить этот шаг?</string>
-    <string name="account_registration_finished">Поздравляем! Ваш кошелёк создан</string>
+    <string name="account_registration_finished">Поздравляем!\n Ваш кошелёк создан</string>
     <string name="start_working">Начать работу</string>
+    <string name="enter_your_pin">Введите PIN-код</string>
 </resources>

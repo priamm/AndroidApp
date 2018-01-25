@@ -3,7 +3,7 @@ package com.enecuum.androidapp.ui.activity.signin
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import base_ui_primitives.BackActivity
+import com.enecuum.androidapp.base_ui_primitives.BackActivity
 
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R

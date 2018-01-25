@@ -1,4 +1,4 @@
-package utils
+package com.enecuum.androidapp.utils
 
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -9,12 +9,12 @@ import com.google.zxing.qrcode.QRCodeWriter
  * Created by oleg on 23.01.18.
  */
 object QrUtils {
-    private const val W = 300
-    private const val H = 300
-    fun createCodeFrom(string : String) : Bitmap? {
+    fun createCodeFrom(string : String, widthInDp : Float, heightInDp : Float) : Bitmap? {
         try {
+            val realW = DimensionConverter.dipToPixels(widthInDp)
+            val realH = DimensionConverter.dipToPixels(heightInDp)
             val writer = QRCodeWriter()
-            val matrix = writer.encode(string, BarcodeFormat.QR_CODE, W, H)
+            val matrix = writer.encode(string, BarcodeFormat.QR_CODE, realW.toInt(), realH.toInt())
             val bmp = Bitmap.createBitmap(matrix.width, matrix.height, Bitmap.Config.RGB_565)
             val width = matrix.width
             val height = matrix.height

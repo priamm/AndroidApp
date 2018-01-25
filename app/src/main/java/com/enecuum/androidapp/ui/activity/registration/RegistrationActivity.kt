@@ -3,7 +3,7 @@ package com.enecuum.androidapp.ui.activity.registration
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import base_ui_primitives.BaseActivity
+import com.enecuum.androidapp.base_ui_primitives.BaseActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.presentation.presenter.registration.RegistrationPresenter

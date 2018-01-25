@@ -1,4 +1,4 @@
-package utils
+package com.enecuum.androidapp.utils
 
 import android.text.Editable
 import android.text.TextWatcher

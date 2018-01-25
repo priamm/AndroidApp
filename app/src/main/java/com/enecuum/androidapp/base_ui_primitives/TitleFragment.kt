@@ -1,10 +1,8 @@
-package base_ui_primitives
+package com.enecuum.androidapp.base_ui_primitives
 
 import android.os.Handler
 import android.os.Looper
-import android.support.v4.app.Fragment
 import com.arellomobile.mvp.MvpAppCompatFragment
-import com.enecuum.androidapp.R
 
 /**
  * Created by oleg on 23.01.18.

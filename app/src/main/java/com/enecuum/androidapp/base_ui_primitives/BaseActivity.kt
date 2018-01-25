@@ -1,7 +1,8 @@
-package base_ui_primitives
+package com.enecuum.androidapp.base_ui_primitives
 
-import application.EnecuumApplication
+
 import com.arellomobile.mvp.MvpAppCompatActivity
+import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.navigation.ActivityNavigator
 
 /**

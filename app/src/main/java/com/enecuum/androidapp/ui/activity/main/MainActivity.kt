@@ -3,7 +3,7 @@ package com.enecuum.androidapp.ui.activity.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import base_ui_primitives.BaseActivity
+import com.enecuum.androidapp.base_ui_primitives.BaseActivity
 
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
@@ -23,5 +23,9 @@ class MainActivity : BaseActivity(), MainView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+    }
+
+    override fun onBackPressed() {
+        finish()
     }
 }

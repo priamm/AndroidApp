@@ -5,20 +5,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import base_ui_primitives.TitleFragment
+import com.enecuum.androidapp.base_ui_primitives.TitleFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.presentation.presenter.new_account_qr.NewAccountQrPresenter
 import com.enecuum.androidapp.presentation.view.new_account_qr.NewAccountQrView
 import kotlinx.android.synthetic.main.fragment_new_account_qr.*
-import utils.FileSystemUtils
-import utils.KeyboardUtils
-import utils.PermissionUtils
-import utils.QrUtils
+import com.enecuum.androidapp.utils.FileSystemUtils
+import com.enecuum.androidapp.utils.KeyboardUtils
+import com.enecuum.androidapp.utils.PermissionUtils
+import com.enecuum.androidapp.utils.QrUtils
 
 
 class NewAccountQrFragment : TitleFragment(), NewAccountQrView {
     companion object {
+        const val QR_CODE_SIZE = 206f
         const val TAG = "NewAccountQrFragment"
 
         fun newInstance(): NewAccountQrFragment {
@@ -59,7 +60,7 @@ class NewAccountQrFragment : TitleFragment(), NewAccountQrView {
     }
 
     override fun showQrCode(key: String) {
-        val qr = QrUtils.createCodeFrom(key)
+        val qr = QrUtils.createCodeFrom(key, QR_CODE_SIZE, QR_CODE_SIZE)
         qrCode.setImageBitmap(qr)
         keyText.text = key
     }

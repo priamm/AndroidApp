@@ -1,4 +1,4 @@
-package application
+package com.enecuum.androidapp.application
 
 import android.app.Application
 import android.content.Context
