@@ -19,6 +19,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageView
 import base_ui_primitives.TitleFragment
 import utils.KeyboardUtils
 import utils.SimpleTextWatcher
@@ -53,6 +54,19 @@ class NewAccountPinFragment : TitleFragment(), NewAccountPinView {
                     validateFields()
                 }
             })
+            field.onFocusChangeListener = object : View.OnFocusChangeListener {
+                override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                    if(v != null && hasFocus) {
+                        val editText = v as EditText
+                        if(!editText.text.isEmpty()) {
+                            editText.post({
+                                editText.setSelection(editText.length())
+                            })
+                        }
+                    }
+                }
+
+            }
         }
     }
 
@@ -61,4 +75,46 @@ class NewAccountPinFragment : TitleFragment(), NewAccountPinView {
     }
 
     override fun getTitle() = getString(R.string.pin_creation)
+
+    override fun setPinVisible(visible: Boolean, pinString: NewAccountPinPresenter.PinString) {
+        val visibility = if(visible) View.VISIBLE else View.INVISIBLE
+        when(pinString) {
+            NewAccountPinPresenter.PinString.First -> {
+                pin1_1.visibility = visibility
+                pin1_2.visibility = visibility
+                pin1_3.visibility = visibility
+                pin1_4.visibility = visibility
+            }
+            NewAccountPinPresenter.PinString.Second -> {
+                pin2_1.visibility = visibility
+                pin2_2.visibility = visibility
+                pin2_3.visibility = visibility
+                pin2_4.visibility = visibility
+            }
+        }
+    }
+
+    override fun refreshPinState(length: Int, pinString: NewAccountPinPresenter.PinString) {
+        when(pinString) {
+            NewAccountPinPresenter.PinString.First -> {
+                changeDotState(length, 0, pin1_1)
+                changeDotState(length, 1, pin1_2)
+                changeDotState(length, 2, pin1_3)
+                changeDotState(length, 3, pin1_4)
+            }
+            NewAccountPinPresenter.PinString.Second -> {
+                changeDotState(length, 0, pin2_1)
+                changeDotState(length, 1, pin2_2)
+                changeDotState(length, 2, pin2_3)
+                changeDotState(length, 3, pin2_4)
+            }
+        }
+    }
+
+    private fun changeDotState(length: Int, value2check : Int, dot: ImageView) {
+        if(length > value2check)
+            dot.setImageResource(R.drawable.dot_1)
+        else
+            dot.setImageResource(R.drawable.dot_2)
+    }
 }

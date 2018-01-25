@@ -1,58 +1,83 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.enecuum.androidapp.ui.activity.registration.RegistrationActivity"
     android:orientation="vertical"
-    android:background="@drawable/group">
-
+    >
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/logo"
-        android:layout_gravity="center"
-        android:layout_marginTop="84dp"/>
-    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
-        android:textSize="26sp"
-        android:textColor="@android:color/white"
-        android:fontFamily="@font/neuropol"
-        android:textStyle="bold"
-        android:text="Enecuum\nwallet"
-        android:textAllCaps="true"
-        android:gravity="center"
-        />
-    <View
+        android:layout_height="match_parent"
+        android:src="@drawable/group"
+        android:scaleType="centerCrop"/>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_marginLeft="27dp"
-        android:layout_marginRight="27dp"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:layout_height="44dp"
-        android:layout_gravity="center"
-        android:textSize="14sp"
-        android:text="@string/new_account"
-        android:letterSpacing="0.04"
-        android:id="@+id/newAccount"
-        android:background="@drawable/standard_button_background"
-        android:layout_marginBottom="21dp"/>
-    <Button
-        android:layout_marginLeft="27dp"
-        android:layout_marginRight="27dp"
-        android:textSize="14sp"
-        android:letterSpacing="0.04"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@android:color/transparent"
-        android:text="@string/sign_in"
-        android:id="@+id/signIn"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="126dp"/>
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.17"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.15"
+            android:src="@drawable/logo"
+            android:layout_gravity="center"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.04"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="26sp"
+            android:textColor="@android:color/white"
+            android:fontFamily="@font/neuropol"
+            android:textStyle="bold"
+            android:text="Enecuum\nwallet"
+            android:textAllCaps="true"
+            android:gravity="center"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.11"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_marginLeft="27dp"
+            android:layout_marginRight="27dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="14sp"
+            android:text="@string/new_account"
+            android:letterSpacing="0.04"
+            android:id="@+id/newAccount"
+            android:background="@drawable/standard_button_background"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.03"/>
+        <Button
+            android:layout_marginLeft="27dp"
+            android:layout_marginRight="27dp"
+            android:textSize="14sp"
+            android:letterSpacing="0.04"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:text="@string/sign_in"
+            android:id="@+id/signIn"
+            android:textColor="@android:color/white"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.27"/>
+    </LinearLayout>
+
+</FrameLayout>

@@ -9,8 +9,20 @@ import utils.Validator
 
 @InjectViewState
 class NewAccountPinPresenter : MvpPresenter<NewAccountPinView>() {
+    enum class PinString {
+        First,
+        Second
+    }
     private var previousState = false
     fun validateFields(pin1: String, pin2: String) {
+        viewState.setPinVisible(!pin1.isEmpty(), PinString.First)
+        viewState.setPinVisible(!pin2.isEmpty(), PinString.Second)
+        if(!pin1.isEmpty()) {
+            viewState.refreshPinState(pin1.length, PinString.First)
+        }
+        if(!pin2.isEmpty()) {
+            viewState.refreshPinState(pin2.length, PinString.Second)
+        }
         val nextState: Boolean = Validator.validatePin(pin1) && Validator.validatePin(pin2) && pin1 == pin2
         if(nextState != previousState) {
             EventBus.getDefault().post(ChangeButtonState(nextState))

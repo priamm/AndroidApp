@@ -27,12 +27,16 @@
         android:letterSpacing="0.04"
         android:background="@drawable/standard_button_background"
         android:layout_marginBottom="37dp"/>
-    <me.relex.circleindicator.CircleIndicator android:layout_height="48dp"
+    <me.relex.circleindicator.CircleIndicator android:layout_height="7dp"
+        android:layout_marginBottom="28dp"
         android:layout_width="match_parent"
         android:id="@+id/indicator"
         app:ci_drawable="@drawable/active_dot"
         app:ci_drawable_unselected="@drawable/passive_dot"
-        
+        app:ci_animator_enabled="false"
+        app:ci_margin="3dp"
+        app:ci_height="7dp"
+        app:ci_width="7dp"
         />
 
 </LinearLayout>
