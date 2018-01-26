@@ -9,7 +9,7 @@ import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.utils.PermissionUtils
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.application.EnecuumApplication
-import com.enecuum.androidapp.events.BackupFinished
+import com.enecuum.androidapp.events.PinBackupFinished
 import org.greenrobot.eventbus.EventBus
 import java.security.*
 
@@ -87,7 +87,7 @@ class NewAccountQrPresenter : MvpPresenter<NewAccountQrView>(), DialogSelectionL
     }
 
     private fun notifyBackupFinished() {
-        EventBus.getDefault().post(BackupFinished())
+        EventBus.getDefault().post(PinBackupFinished())
     }
 
 }

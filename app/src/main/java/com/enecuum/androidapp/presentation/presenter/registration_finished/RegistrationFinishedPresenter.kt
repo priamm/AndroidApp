@@ -13,7 +13,7 @@ class RegistrationFinishedPresenter : MvpPresenter<RegistrationFinishedView>() {
     }
 
     fun onNextButtonClick() {
-        EnecuumApplication.cicerone().router.newRootScreen(ScreenType.Main.toString())
+        EnecuumApplication.navigateTo(ScreenType.Main)
     }
 
 }

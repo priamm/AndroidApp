@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.enecuum.androidapp.ui.activity.restore_pin.RestorePinActivity"
+    android:background="@color/navy"
+    android:orientation="vertical">
+
+<fragment
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:name="com.enecuum.androidapp.ui.fragment.new_account_pin.NewAccountPinFragment"
+    android:layout_weight="1"
+    android:id="@+id/pinFragment"/>
+    <Button
+        android:enabled="false"
+        android:text="@string/save"
+        android:id="@+id/next"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="27dp"
+        android:layout_marginRight="27dp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:layout_height="44dp"
+        android:layout_gravity="center"
+        android:textSize="14sp"
+        android:letterSpacing="0.04"
+        android:background="@drawable/standard_button_background"
+        android:layout_marginBottom="37dp"/>
+</LinearLayout>

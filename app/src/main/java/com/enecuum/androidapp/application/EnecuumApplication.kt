@@ -18,6 +18,10 @@ class EnecuumApplication : Application() {
         fun cicerone() : Cicerone<Router> = cicerone
 
         fun navigateTo(screenType: ScreenType) {
+            if(screenType == ScreenType.Main) {
+                cicerone.router.newRootScreen(screenType.toString())
+                return
+            }
             cicerone.router.navigateTo(screenType.toString())
         }
     }

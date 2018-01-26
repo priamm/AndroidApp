@@ -24,8 +24,7 @@
             android:gravity="center"
             android:inputType="numberPassword"
             android:id="@+id/pin1"
-            android:nextFocusDown="@id/pin2"
-            android:imeOptions="actionNext"
+            android:imeOptions="actionDone"
             android:paddingTop="2dp"
             android:cursorVisible="false"
             android:paddingLeft="21dp"
@@ -76,6 +75,15 @@
                 android:visibility="invisible"/>
         </LinearLayout>
     </FrameLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/hinto"
+        android:text="@string/forgot_pin"
+        android:gravity="center"
+        android:id="@+id/forgot"
+        android:minHeight="48dp"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"

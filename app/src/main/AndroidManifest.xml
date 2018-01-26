@@ -13,9 +13,9 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.activity.splash.SplashActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:noHistory="true"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,27 +24,40 @@
         </activity>
         <activity
             android:name=".ui.activity.registration.RegistrationActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".ui.activity.main.MainActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.new_account.NewAccountActivity"
+            android:label=""
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize|stateHidden"
             android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
-            android:label=""/>
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize|stateHidden" />
         <activity
             android:name=".ui.activity.signin.SignInActivity"
-            android:screenOrientation="portrait"
             android:label="@string/enter_your_pin"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize|stateHidden"
-            android:theme="@style/Theme.AppCompat.Light.NavyActionBar"/>
-        <activity android:name=".ui.activity.registration_finished.RegistrationFinishedActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize|stateHidden" />
+        <activity
+            android:name=".ui.activity.registration_finished.RegistrationFinishedActivity"
             android:label="@string/new_account"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.TransparentActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.TransparentActionBar" />
+        <activity
+            android:name=".ui.activity.forgot.ForgotPinActivity"
+            android:label="@string/forgot_pin"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize|stateHidden" />
+        <activity android:name=".ui.activity.restore_pin.RestorePinActivity"
+            android:label="@string/restore_pin"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize|stateHidden"
+            />
     </application>
 
 </manifest>

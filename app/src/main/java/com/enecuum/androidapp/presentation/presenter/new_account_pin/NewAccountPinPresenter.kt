@@ -4,6 +4,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.presentation.view.new_account_pin.NewAccountPinView
 import com.enecuum.androidapp.events.ChangeButtonState
+import com.enecuum.androidapp.events.PinCreated
 import org.greenrobot.eventbus.EventBus
 import com.enecuum.androidapp.utils.Validator
 
@@ -27,6 +28,9 @@ class NewAccountPinPresenter : MvpPresenter<NewAccountPinView>() {
         if(nextState != previousState) {
             EventBus.getDefault().post(ChangeButtonState(nextState))
             previousState = nextState
+            if(nextState) {
+                EventBus.getDefault().post(PinCreated(pin1))
+            }
         }
     }
 

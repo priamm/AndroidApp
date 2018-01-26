@@ -6,13 +6,21 @@ import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.navigation.ScreenType
 import com.enecuum.androidapp.presentation.view.new_account.NewAccountView
-import com.enecuum.androidapp.events.BackupFinished
+import com.enecuum.androidapp.events.PinBackupFinished
 import com.enecuum.androidapp.events.ChangeButtonState
+import com.enecuum.androidapp.events.PinCreated
+import com.enecuum.androidapp.events.SeedBackupFinished
+import com.enecuum.androidapp.persistent_data.PersistentStorage
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
 @InjectViewState
 class NewAccountPresenter : MvpPresenter<NewAccountView>(), DialogInterface.OnClickListener {
+
+    private var pin : String = ""
+    private var isKeyBackedUp = false
+    private var isSeedBackedUp = false
+
     override fun onClick(dialog: DialogInterface?, which: Int) {
         when(which) {
             DialogInterface.BUTTON_POSITIVE -> {
@@ -21,7 +29,6 @@ class NewAccountPresenter : MvpPresenter<NewAccountView>(), DialogInterface.OnCl
         }
     }
 
-    private var isKeyBackedUp = false
     fun onCreate() {
         if(!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this)
@@ -35,19 +42,28 @@ class NewAccountPresenter : MvpPresenter<NewAccountView>(), DialogInterface.OnCl
 
 
     fun onNextClick(currentScreen : Int) {
-        if(currentScreen == 0)
-            viewState.openNextScreen()
-        else {
-            if(!isKeyBackedUp) {
-                viewState.displaySkipDialog()
-            } else {
-                openNextScreen()
+        when(currentScreen) {
+            0 -> viewState.openNextScreen()
+            1 -> {
+                if (isKeyBackedUp) {
+                    viewState.openNextScreen()
+                } else {
+                    viewState.displaySkipDialog()
+                }
+            }
+            2 -> {
+                if (isSeedBackedUp) {
+                    openNextScreen()
+                } else {
+                    viewState.displaySkipDialog()
+                }
             }
         }
     }
 
     private fun openNextScreen() {
-        EnecuumApplication.cicerone().router.navigateTo(ScreenType.RegistrationFinished.toString())
+        PersistentStorage.setPin(pin)
+        EnecuumApplication.navigateTo(ScreenType.RegistrationFinished)
     }
 
     @Subscribe
@@ -56,7 +72,17 @@ class NewAccountPresenter : MvpPresenter<NewAccountView>(), DialogInterface.OnCl
     }
 
     @Subscribe
-    fun onBackupFinished(event: BackupFinished) {
+    fun onPinBackupFinished(event: PinBackupFinished) {
         isKeyBackedUp = true
+    }
+
+    @Subscribe
+    fun onSeedBackupFinished(event: SeedBackupFinished) {
+        isSeedBackedUp = true
+    }
+
+    @Subscribe
+    fun onPinCreated(event: PinCreated) {
+        pin = event.value
     }
 }

@@ -15,4 +15,13 @@
     <string name="account_registration_finished">Поздравляем!\n Ваш кошелёк создан</string>
     <string name="start_working">Начать работу</string>
     <string name="enter_your_pin">Введите PIN-код</string>
+    <string name="forgot_pin">Забыли PIN-код?</string>
+    <string name="enter_your_seed_phrase">Введите свою seed-фразу:</string>
+    <string name="seed_phrase">Введите 12 слов</string>
+    <string name="change_pin">Сменить PIN-код</string>
+    <string name="restore_pin">Восстановление PIN-кода</string>
+    <string name="words_left">слов осталось:</string>
+    <string name="save">Сохранить</string>
+    <string name="create_seed_title">Создание seed-фразы</string>
+    <string name="create_seed">Задайте seed-фразу:</string>
 </resources>

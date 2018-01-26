@@ -1,5 +1,7 @@
 package com.enecuum.androidapp.utils
 
+import com.enecuum.androidapp.persistent_data.Constants
+
 /**
  * Created by oleg on 23.01.18.
  */
@@ -7,5 +9,17 @@ object Validator {
     fun validatePin(text : String) : Boolean {
         val regex = Regex("\\d{4}")
         return regex.matches(text)
+    }
+
+    fun validateSeed(text : String) : Boolean {
+        val wordCount = wordCount(text)
+        return wordCount == Constants.SEED_PHRASE_SIZE
+    }
+
+    fun seedRemainCount(text : String) : Int = Constants.SEED_PHRASE_SIZE - wordCount(text)
+
+    private fun wordCount(text: String): Int {
+        val wordCount = text.split(" ").filter { !it.isEmpty() }.size
+        return wordCount
     }
 }

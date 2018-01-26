@@ -11,6 +11,7 @@ import com.enecuum.androidapp.application.EnecuumApplication
 object PersistentStorage {
     private const val IS_REGISTRATION_FINISHED = "IS_REGISTRATION_FINISHED"
     private const val KEY_PATH = "KEY_PATH"
+    private const val PIN = "PIN"
 
     private fun getPrefs() : SharedPreferences = EnecuumApplication.applicationContext()
             .getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
@@ -38,5 +39,17 @@ object PersistentStorage {
 
     fun setKeyPath(keyPath: String) {
         setString(KEY_PATH, keyPath)
+    }
+
+    fun getPin() : String = getPrefs().getString(PIN, "")
+
+    fun setPin(pin : String) {
+        if(pin.isEmpty())
+            return
+        setString(PIN, pin)
+    }
+
+    fun deletePin() {
+        setString(PIN,"")
     }
 }

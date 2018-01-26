@@ -27,4 +27,15 @@ object KeyboardUtils {
             imm.hideSoftInputFromWindow(view?.windowToken, 0)
         }, 200)
     }
+
+    fun createMoveCursorToEndFocusListener() : View.OnFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+        if(v != null && hasFocus) {
+            val editText = v as EditText
+            if(!editText.text.isEmpty()) {
+                editText.post({
+                    editText.setSelection(editText.length())
+                })
+            }
+        }
+    }
 }
