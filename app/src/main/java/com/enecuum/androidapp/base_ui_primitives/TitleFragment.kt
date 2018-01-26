@@ -18,7 +18,8 @@ abstract class TitleFragment : MvpAppCompatFragment() {
             else {
                 val handler = Handler(Looper.getMainLooper())
                 handler.postDelayed({
-                    activity?.title = getTitle()
+                    if(getTitle().isNotEmpty())
+                        activity?.title = getTitle()
                 }, 300)
             }
 

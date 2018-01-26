@@ -40,4 +40,12 @@ object PermissionUtils {
         }
         return true
     }
+
+    fun checkPermissionsAndRunFunction(function: () -> Unit, requestCode : Int, grantResults : IntArray) {
+        if(requestCode != PermissionUtils.PermissionsRequestCode)
+            return
+        if(PermissionUtils.handleGrantResults(grantResults)) {
+            function()
+        }
+    }
 }

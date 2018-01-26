@@ -4,15 +4,11 @@ import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
+import com.enecuum.androidapp.base_ui_primitives.FileOpener
 
-interface CreateSeedView : MvpView {
+interface CreateSeedView : FileOpener {
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun displayRemainWords(size: Int)
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun setButtonEnabled(enabled: Boolean)
-    @StateStrategyType(SkipStrategy::class)
-    fun chooseSeedDirectory()
-    @StateStrategyType(SkipStrategy::class)
-    fun requestPermissions()
-
 }

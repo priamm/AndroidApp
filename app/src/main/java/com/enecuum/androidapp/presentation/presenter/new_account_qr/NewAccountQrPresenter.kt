@@ -9,13 +9,15 @@ import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.utils.PermissionUtils
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.application.EnecuumApplication
+import com.enecuum.androidapp.base_ui_primitives.FileOpeningFragment
 import com.enecuum.androidapp.events.PinBackupFinished
+import com.enecuum.androidapp.utils.FileSystemUtils
 import org.greenrobot.eventbus.EventBus
 import java.security.*
 
 
 @InjectViewState
-class NewAccountQrPresenter : MvpPresenter<NewAccountQrView>(), DialogSelectionListener {
+class NewAccountQrPresenter : MvpPresenter<NewAccountQrView>(), FileOpeningFragment.FileOpeningPresenter {
     override fun onSelectedFilePaths(files: Array<out String>?) {
         if(files != null && files.isNotEmpty()) {
             PersistentStorage.setKeyPath(files[0])
@@ -42,19 +44,11 @@ class NewAccountQrPresenter : MvpPresenter<NewAccountQrView>(), DialogSelectionL
     }
 
     fun onSaveClick() {
-        if(!PermissionUtils.checkPermissions(PermissionUtils.storagePermissions)) {
-            viewState.requestPermissions()
-            return
-        }
-        viewState.beginSelectKeyPath()
+        FileSystemUtils.checkPermissionsAndChooseDir(viewState)
     }
 
-    fun onRequestPermissionsResult(requestCode: Int, grantResults: IntArray) {
-        if(requestCode != PermissionUtils.PermissionsRequestCode)
-            return
-        if(PermissionUtils.handleGrantResults(grantResults)) {
-            onSaveClick()
-        }
+    override fun onRequestPermissionsResult(requestCode: Int, grantResults: IntArray) {
+        PermissionUtils.checkPermissionsAndRunFunction({onSaveClick()}, requestCode, grantResults)
     }
 
     fun onCopyClick() {

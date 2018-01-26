@@ -20,11 +20,15 @@ class NewAccountPresenter : MvpPresenter<NewAccountView>(), DialogInterface.OnCl
     private var pin : String = ""
     private var isKeyBackedUp = false
     private var isSeedBackedUp = false
+    private var currentPage = 0
 
     override fun onClick(dialog: DialogInterface?, which: Int) {
         when(which) {
             DialogInterface.BUTTON_POSITIVE -> {
-                openNextScreen()
+                if(currentPage < 2)
+                    viewState.openNextScreen()
+                else
+                    openNextScreen()
             }
         }
     }
@@ -32,6 +36,7 @@ class NewAccountPresenter : MvpPresenter<NewAccountView>(), DialogInterface.OnCl
     fun onCreate() {
         if(!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this)
+        currentPage = 0
     }
 
     override fun onDestroy() {
@@ -59,6 +64,7 @@ class NewAccountPresenter : MvpPresenter<NewAccountView>(), DialogInterface.OnCl
                 }
             }
         }
+        currentPage = currentScreen
     }
 
     private fun openNextScreen() {

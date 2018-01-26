@@ -2,6 +2,7 @@ package com.enecuum.androidapp.utils
 
 import android.app.Activity
 import com.enecuum.androidapp.R
+import com.enecuum.androidapp.base_ui_primitives.FileOpener
 import com.github.angads25.filepicker.controller.DialogSelectionListener
 import com.github.angads25.filepicker.model.DialogConfigs
 import com.github.angads25.filepicker.model.DialogProperties
@@ -20,5 +21,13 @@ object FileSystemUtils {
         dialog.setTitle(activity.getString(R.string.select_dir))
         dialog.setDialogSelectionListener(listener)
         dialog.show()
+    }
+
+    fun checkPermissionsAndChooseDir(fileOpener: FileOpener) {
+        if(!PermissionUtils.checkPermissions(PermissionUtils.storagePermissions)) {
+            fileOpener.requestPermissions()
+            return
+        }
+        fileOpener.chooseDirectory()
     }
 }

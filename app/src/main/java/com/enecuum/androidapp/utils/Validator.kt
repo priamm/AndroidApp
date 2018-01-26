@@ -18,8 +18,5 @@ object Validator {
 
     fun seedRemainCount(text : String) : Int = Constants.SEED_PHRASE_SIZE - wordCount(text)
 
-    private fun wordCount(text: String): Int {
-        val wordCount = text.split(" ").filter { !it.isEmpty() }.size
-        return wordCount
-    }
+    private fun wordCount(text: String): Int = text.split(" ").filter { it.isNotEmpty() }.size
 }

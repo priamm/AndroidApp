@@ -31,7 +31,7 @@ object KeyboardUtils {
     fun createMoveCursorToEndFocusListener() : View.OnFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
         if(v != null && hasFocus) {
             val editText = v as EditText
-            if(!editText.text.isEmpty()) {
+            if(editText.text.isNotEmpty()) {
                 editText.post({
                     editText.setSelection(editText.length())
                 })

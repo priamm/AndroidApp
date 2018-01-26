@@ -11,6 +11,7 @@ import com.enecuum.androidapp.base_ui_primitives.BackActivity
 import com.enecuum.androidapp.presentation.presenter.forgot.ForgotPinPresenter
 import com.enecuum.androidapp.presentation.view.forgot.ForgotPinView
 import com.enecuum.androidapp.utils.KeyboardUtils
+import com.enecuum.androidapp.utils.SeedUtils
 import com.enecuum.androidapp.utils.SimpleTextWatcher
 import kotlinx.android.synthetic.main.activity_forgot_pin.*
 
@@ -44,10 +45,6 @@ class ForgotPinActivity : BackActivity(), ForgotPinView {
     }
 
     override fun displayRemainWords(size: Int) {
-        if(size == 0)
-            seedHint.visibility = View.INVISIBLE
-        else
-            seedHint.visibility = View.VISIBLE
-        seedHint.text = String.format("%s: %d", getString(R.string.words_left), size)
+        SeedUtils.displayRemainingCount(size, seedHint)
     }
 }
