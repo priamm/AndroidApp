@@ -2,6 +2,8 @@ package com.enecuum.androidapp.presentation.presenter.balance
 
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import com.enecuum.androidapp.application.EnecuumApplication
+import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
 
 @InjectViewState
@@ -16,6 +18,6 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
     }
 
     fun onTokensClick() {
-
+        EnecuumApplication.navigateToFragment(FragmentType.Tokens)
     }
 }

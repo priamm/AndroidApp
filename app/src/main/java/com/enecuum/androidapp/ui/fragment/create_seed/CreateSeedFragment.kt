@@ -5,15 +5,11 @@ import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.arellomobile.mvp.MvpAppCompatFragment
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.presentation.view.create_seed.CreateSeedView
 import com.enecuum.androidapp.presentation.presenter.create_seed.CreateSeedPresenter
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.base_ui_primitives.FileOpeningFragment
-import com.enecuum.androidapp.base_ui_primitives.TitleFragment
-import com.enecuum.androidapp.utils.FileSystemUtils
-import com.enecuum.androidapp.utils.PermissionUtils
 import com.enecuum.androidapp.utils.SeedUtils
 import com.enecuum.androidapp.utils.SimpleTextWatcher
 import kotlinx.android.synthetic.main.fragment_create_seed.*

@@ -1,7 +1,5 @@
 package com.enecuum.androidapp.base_ui_primitives
 
-import com.arellomobile.mvp.MvpAppCompatFragment
-import com.arellomobile.mvp.MvpView
 import com.enecuum.androidapp.utils.FileSystemUtils
 import com.enecuum.androidapp.utils.PermissionUtils
 import com.github.angads25.filepicker.controller.DialogSelectionListener

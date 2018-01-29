@@ -15,7 +15,7 @@ class RegistrationFinishedPresenter : MvpPresenter<RegistrationFinishedView>() {
 
     fun onNextButtonClick() {
         PersistentStorage.setRegistrationFinished()
-        EnecuumApplication.navigateTo(ScreenType.Main)
+        EnecuumApplication.navigateToActivity(ScreenType.Main)
     }
 
 }

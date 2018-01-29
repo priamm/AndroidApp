@@ -1,17 +1,18 @@
 package com.enecuum.androidapp.ui.fragment.balance
 
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
-import com.enecuum.androidapp.base_ui_primitives.TitleFragment
+import com.enecuum.androidapp.base_ui_primitives.OrdinalTitleFragment
 import com.enecuum.androidapp.presentation.presenter.balance.BalancePresenter
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
 import kotlinx.android.synthetic.main.fragment_balance.*
 
-class BalanceFragment : TitleFragment(), BalanceView {
+class BalanceFragment : OrdinalTitleFragment(), BalanceView {
     override fun getTitle(): String {
         if(activity == null)
             return ""
@@ -67,5 +68,11 @@ class BalanceFragment : TitleFragment(), BalanceView {
     override fun displayPercentage(percentage: Double, karmaPercentage: Double) {
         percent.text = resources.getQuantityString(R.plurals.percent_plural, percentage.toInt(), percentage)
         karmaPercent.text = String.format(FORMAT, getString(R.string.karma_percent), karmaPercentage)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val supportActionBar = (activity as AppCompatActivity).supportActionBar
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 }

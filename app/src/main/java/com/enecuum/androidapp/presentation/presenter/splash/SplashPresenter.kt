@@ -11,9 +11,9 @@ import com.enecuum.androidapp.persistent_data.PersistentStorage
 class SplashPresenter : MvpPresenter<SplashView>() {
     fun onCreate() {
         if(PersistentStorage.isRegistrationFinished()) {
-            EnecuumApplication.navigateTo(ScreenType.Main)
+            EnecuumApplication.navigateToActivity(ScreenType.Main)
         } else {
-            EnecuumApplication.navigateTo(ScreenType.Registration)
+            EnecuumApplication.navigateToActivity(ScreenType.Registration)
         }
     }
 }

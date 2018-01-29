@@ -18,11 +18,11 @@ class SignInPresenter : MvpPresenter<SignInView>() {
     fun onNextClick() {
         //TODO: check pin
         PersistentStorage.setRegistrationFinished()
-        EnecuumApplication.navigateTo(ScreenType.Main)
+        EnecuumApplication.navigateToActivity(ScreenType.Main)
     }
 
     fun onForgotClick() {
-        EnecuumApplication.navigateTo(ScreenType.ForgotPin)
+        EnecuumApplication.navigateToActivity(ScreenType.ForgotPin)
     }
 
 }

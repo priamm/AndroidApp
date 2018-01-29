@@ -9,11 +9,11 @@ import com.enecuum.androidapp.presentation.view.registration.RegistrationView
 @InjectViewState
 class RegistrationPresenter : MvpPresenter<RegistrationView>() {
     fun newAccountClick() {
-        EnecuumApplication.navigateTo(ScreenType.NewAccount)
+        EnecuumApplication.navigateToActivity(ScreenType.NewAccount)
     }
 
     fun signInClick() {
-        EnecuumApplication.navigateTo(ScreenType.SignIn)
+        EnecuumApplication.navigateToActivity(ScreenType.SignIn)
     }
 
 }

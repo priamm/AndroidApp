@@ -69,7 +69,7 @@ class NewAccountPresenter : MvpPresenter<NewAccountView>(), DialogInterface.OnCl
 
     private fun openNextScreen() {
         PersistentStorage.setPin(pin)
-        EnecuumApplication.navigateTo(ScreenType.RegistrationFinished)
+        EnecuumApplication.navigateToActivity(ScreenType.RegistrationFinished)
     }
 
     @Subscribe

@@ -5,16 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.enecuum.androidapp.base_ui_primitives.TitleFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.base_ui_primitives.FileOpeningFragment
 import com.enecuum.androidapp.presentation.presenter.new_account_qr.NewAccountQrPresenter
 import com.enecuum.androidapp.presentation.view.new_account_qr.NewAccountQrView
 import kotlinx.android.synthetic.main.fragment_new_account_qr.*
-import com.enecuum.androidapp.utils.FileSystemUtils
 import com.enecuum.androidapp.utils.KeyboardUtils
-import com.enecuum.androidapp.utils.PermissionUtils
 import com.enecuum.androidapp.utils.QrUtils
 
 

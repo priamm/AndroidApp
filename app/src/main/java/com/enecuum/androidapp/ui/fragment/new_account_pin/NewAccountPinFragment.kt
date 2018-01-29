@@ -11,14 +11,13 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.fragment_new_account_pin.*
 import android.text.Editable
 import android.widget.EditText
-import android.widget.ImageView
-import com.enecuum.androidapp.base_ui_primitives.TitleFragment
+import com.enecuum.androidapp.base_ui_primitives.SlideshowTitleFragment
 import com.enecuum.androidapp.utils.KeyboardUtils
 import com.enecuum.androidapp.utils.PinUtils
 import com.enecuum.androidapp.utils.SimpleTextWatcher
 
 
-class NewAccountPinFragment : TitleFragment(), NewAccountPinView {
+class NewAccountPinFragment : SlideshowTitleFragment(), NewAccountPinView {
     companion object {
         const val TAG = "NewAccountPinFragment"
 
