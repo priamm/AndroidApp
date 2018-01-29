@@ -5,6 +5,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+    signingConfigs {
+        config {
+            storeFile file('/home/oleg/Android/enecuum.jks')
+        }
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.enecuum.androidapp"
@@ -33,7 +38,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation "com.android.support:appcompat-v7:$support_version"
     implementation "com.android.support:support-v4:$support_version"
@@ -41,23 +46,15 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-
     compile "com.arello-mobile:moxy-app-compat:$moxy_version"
     compile "com.android.support:appcompat-v7:$support_version"
     kapt "com.arello-mobile:moxy-compiler:$moxy_version"
-
     compile 'org.greenrobot:eventbus:3.1.1'
-
     compile 'ru.terrakok.cicerone:cicerone:3.0.0'
-
     compile 'com.squareup.okhttp3:okhttp:3.9.1'
-
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
-
-    compile(name:'circleindicator', ext:'aar')
-
-    compile group: 'com.google.zxing', name: 'core', version: '3.3.1'
-
+    compile(name: 'circleindicator', ext: 'aar')
+    compile 'com.google.zxing:core:3.3.1'
     compile 'com.github.angads25:filepicker:1.1.1'
 }
 

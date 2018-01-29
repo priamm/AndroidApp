@@ -12,6 +12,20 @@ import ru.terrakok.cicerone.commands.*
  * Created by oleg on 22.01.18.
  */
 class ActivityNavigator(private val currentActivity : Activity?) : Navigator {
+    companion object {
+        private fun generateScreenIntent(currentActivity: Activity?, screenKey : String, data : Any? = null): Intent? {
+            try {
+                val screenType = ScreenType.valueOf(screenKey)
+                val intent = Intent(currentActivity, ScreenClass.getClassBy(screenType))
+                if(data != null)
+                    intent.putExtra(TransitionData.Key, data as TransitionData)
+                return intent
+            } catch (e : Throwable) {
+                e.printStackTrace()
+            }
+            return null
+        }
+    }
     private var isPendingClearStackIntent = false
 
     override fun applyCommands(commands: Array<out Command>?) {
@@ -22,25 +36,21 @@ class ActivityNavigator(private val currentActivity : Activity?) : Navigator {
                         currentActivity?.finish()
                     }
                     is Forward -> {
-                        val intent = generateScreenIntent(command.screenKey)
-                        if(command.transitionData != null)
-                            intent.putExtra(TransitionData.Key, command.transitionData as TransitionData)
+                        val intent = generateScreenIntent(currentActivity, command.screenKey, command.transitionData)
                         currentActivity?.startActivity(intent)
                     }
                     is BackTo -> {
                         if(command.screenKey != null) {
-                            currentActivity?.navigateUpTo(generateScreenIntent(command.screenKey))
+                            currentActivity?.navigateUpTo(generateScreenIntent(currentActivity, command.screenKey))
                         } else {
                             isPendingClearStackIntent = true
                         }
                     }
                     is Replace -> {
-                        val intent = generateScreenIntent(command.screenKey)
-                        if(command.transitionData != null)
-                            intent.putExtra(TransitionData.Key, command.transitionData as TransitionData)
+                        val intent = generateScreenIntent(currentActivity, command.screenKey, command.transitionData)
                         if(isPendingClearStackIntent) {
                             isPendingClearStackIntent = false
-                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            intent?.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                         }
                         currentActivity?.finish()
                         currentActivity?.startActivity(intent)
@@ -72,10 +82,5 @@ class ActivityNavigator(private val currentActivity : Activity?) : Navigator {
                 isDisplayingMessage = false
             }, period)
         })
-    }
-
-    private fun generateScreenIntent(screenKey : String): Intent {
-        val screenType = ScreenType.valueOf(screenKey)
-        return Intent(currentActivity, ScreenClass.getClassBy(screenType))
     }
 }

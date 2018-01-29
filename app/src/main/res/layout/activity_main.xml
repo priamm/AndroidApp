@@ -1,11 +1,13 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.enecuum.androidapp.ui.activity.main.MainActivity">
-    <TextView
+    tools:context="com.enecuum.androidapp.ui.activity.main.MainActivity"
+    android:background="@color/navy"
+    android:orientation="vertical">
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="main"/>
-
-</FrameLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/container"/>
+</LinearLayout>

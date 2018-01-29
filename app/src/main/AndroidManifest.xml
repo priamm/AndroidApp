@@ -28,7 +28,9 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".ui.activity.main.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
+            />
         <activity
             android:name=".ui.activity.new_account.NewAccountActivity"
             android:label=""

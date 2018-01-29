@@ -14,7 +14,7 @@
 
             android:textSize="16sp"
             android:lineSpacingExtra="8sp"
-            android:textColorHint="@color/hinto"
+            android:textColorHint="@color/white_87"
             android:textColor="@color/navy"
             android:hint="@string/enter_your_pin"
             android:layout_width="wrap_content"
@@ -79,7 +79,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:textColor="@color/hinto"
+        android:textColor="@color/white_87"
         android:text="@string/forgot_pin"
         android:gravity="center"
         android:id="@+id/forgot"

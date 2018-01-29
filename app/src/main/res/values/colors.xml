@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="hinto">#deffffff</color>
+    <color name="white_87">#deffffff</color>
     <color name="perrywinkle">#88b9df</color>
+    <color name="turquoise_blue_two">#00a7d0</color>
     <color name="turquoise_blue">#00add3</color>
     <color name="deep_turquoise">#00677d</color>
     <color name="peacock_blue">#044ca1</color>
@@ -15,4 +16,5 @@
     <color name="colorPrimary">#010d15</color>
     <color name="midnight">#010d15</color>
     <color name="colorPrimaryDark">#000000</color>
+    <color name="dark_slate_blue">#0e2e44</color>
 </resources>

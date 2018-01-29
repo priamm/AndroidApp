@@ -27,11 +27,12 @@ enum class ScreenType {
     Terms
 }
 
-enum class TabType {
+enum class FragmentType {
     Home,
     Send,
     Receive,
-    History
+    History,
+    Tokens
 }
 
 object ScreenClass {

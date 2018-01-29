@@ -4,6 +4,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.navigation.ScreenType
+import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.view.registration_finished.RegistrationFinishedView
 
 @InjectViewState
@@ -13,6 +14,7 @@ class RegistrationFinishedPresenter : MvpPresenter<RegistrationFinishedView>() {
     }
 
     fun onNextButtonClick() {
+        PersistentStorage.setRegistrationFinished()
         EnecuumApplication.navigateTo(ScreenType.Main)
     }
 
