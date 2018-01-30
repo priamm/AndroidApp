@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.util.Log
 import android.view.MenuItem
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -61,11 +62,12 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     }
 
     override fun onBackPressed() {
-        EnecuumApplication.fragmentCicerone().router.exit()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        EventBus.getDefault().post(MainActivityStopped())
+        val backStackCount = EnecuumApplication.getCurrentBackStackCount()
+        if(backStackCount == 1) {
+            EventBus.getDefault().post(MainActivityStopped())
+            finish()
+            return
+        }
+        EnecuumApplication.exitFromCurrentFragment()
     }
 }

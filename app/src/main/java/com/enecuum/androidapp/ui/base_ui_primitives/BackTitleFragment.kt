@@ -17,7 +17,7 @@ abstract class BackTitleFragment : OrdinalTitleFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if(item?.itemId == android.R.id.home) {
-            EnecuumApplication.fragmentCicerone().router.exit()
+            EnecuumApplication.exitFromCurrentFragment()
         }
         return super.onOptionsItemSelected(item)
     }

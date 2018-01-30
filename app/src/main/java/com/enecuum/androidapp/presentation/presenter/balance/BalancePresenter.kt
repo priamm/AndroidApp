@@ -6,6 +6,7 @@ import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.models.TransactionType
 import com.enecuum.androidapp.navigation.FragmentType
+import com.enecuum.androidapp.navigation.TabType
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
 
 @InjectViewState
@@ -33,6 +34,6 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
     }
 
     fun onTokensClick() {
-        EnecuumApplication.navigateToFragment(FragmentType.Tokens)
+        EnecuumApplication.navigateToFragment(FragmentType.Tokens, TabType.Home)
     }
 }

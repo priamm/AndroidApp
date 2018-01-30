@@ -1,7 +1,19 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.enecuum.androidapp.ui.fragment.tokens_jettons.TokensAndJettonsFragment">
-
-</FrameLayout>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+<android.support.v4.view.ViewPager
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/viewPager">
+    <android.support.design.widget.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tabLayout"
+        app:tabSelectedTextColor="@android:color/white"
+        app:tabTextColor="@color/white__70"
+        app:tabIndicatorColor="@color/turquoise_blue_three"/>
+</android.support.v4.view.ViewPager>
+</LinearLayout>

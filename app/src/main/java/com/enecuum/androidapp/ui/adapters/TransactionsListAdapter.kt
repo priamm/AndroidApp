@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.models.TransactionType
+import com.enecuum.androidapp.ui.adapters.holders.TransactionViewHolder
 import kotlinx.android.synthetic.main.item_transactions_list.view.*
 import java.text.SimpleDateFormat
 import java.util.*

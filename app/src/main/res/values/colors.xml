@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="dark_grey_blue">#2b404f</color>
     <color name="inactive_tab">#3b454b</color>
+    <color name="white__70">#b3ffffff</color>
     <color name="inactive_text">#a8a8a8</color>
     <color name="white_87">#deffffff</color>
     <color name="perrywinkle">#88b9df</color>
+    <color name="turquoise_blue_three">#00abd2</color>
     <color name="turquoise_blue_two">#00a7d0</color>
     <color name="turquoise_blue">#00add3</color>
     <color name="deep_turquoise">#00677d</color>

@@ -1,11 +1,15 @@
 package com.enecuum.androidapp.utils
 
 import android.content.Context
+import android.graphics.Rect
 import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.util.DisplayMetrics
+
+
 
 /**
  * Created by oleg on 23.01.18.
@@ -37,5 +41,14 @@ object KeyboardUtils {
                 })
             }
         }
+    }
+
+    fun isKeyboardShown(rootView: View): Boolean {
+        val softKeyboardHeight = 100
+        val r = Rect()
+        rootView.getWindowVisibleDisplayFrame(r)
+        val dm = rootView.resources.displayMetrics
+        val heightDiff = rootView.bottom - r.bottom
+        return heightDiff > softKeyboardHeight * dm.density
     }
 }

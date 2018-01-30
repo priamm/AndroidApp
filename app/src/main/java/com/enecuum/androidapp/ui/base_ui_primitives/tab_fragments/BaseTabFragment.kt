@@ -32,7 +32,7 @@ open class BaseTabFragment : Fragment() {
     }
 
     @Subscribe
-    fun onnMainActivityStopped(event: MainActivityStopped) {
+    fun onMainActivityStopped(event: MainActivityStopped) {
         isSetupFinished = false
     }
 

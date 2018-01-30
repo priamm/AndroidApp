@@ -1,6 +1,7 @@
 package com.enecuum.androidapp.ui.fragment.tokens_jettons
 
 import android.os.Bundle
+import android.support.design.widget.TabLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import com.enecuum.androidapp.R
 import com.enecuum.androidapp.ui.base_ui_primitives.BackTitleFragment
 import com.enecuum.androidapp.presentation.presenter.tokens_jettons.TokensAndJettonsPresenter
 import com.enecuum.androidapp.presentation.view.tokens_jettons.TokensAndJettonsView
+import com.enecuum.androidapp.ui.adapters.SendTabsAdapter
+import kotlinx.android.synthetic.main.fragment_tokens_and_jettons.*
 
 class TokensAndJettonsFragment : BackTitleFragment(), TokensAndJettonsView {
     companion object {
@@ -28,6 +31,12 @@ class TokensAndJettonsFragment : BackTitleFragment(), TokensAndJettonsView {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_tokens_and_jettons, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewPager.adapter = SendTabsAdapter(activity?.supportFragmentManager, context!!)
+        tabLayout.setupWithViewPager(viewPager)
     }
 
     override fun getTitle(): String = getString(R.string.tokens_and_jettons)
