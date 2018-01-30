@@ -61,13 +61,15 @@ class TokensSingleFragment : MvpAppCompatFragment(), TokensSingleView {
             }
         })
         searchField.viewTreeObserver.addOnGlobalLayoutListener {
-            if(KeyboardUtils.isKeyboardShown(searchField.rootView)) {
-                send.visibility = View.GONE
-                receive.visibility = View.GONE
-            } else {
-                if(currentMode == Mode.TokenMode) {
-                    send.visibility = View.VISIBLE
-                    receive.visibility = View.VISIBLE
+            if(searchField != null) {
+                if(KeyboardUtils.isKeyboardShown(searchField.rootView)) {
+                    send.visibility = View.GONE
+                    receive.visibility = View.GONE
+                } else {
+                    if(currentMode == Mode.TokenMode) {
+                        send.visibility = View.VISIBLE
+                        receive.visibility = View.VISIBLE
+                    }
                 }
             }
         }

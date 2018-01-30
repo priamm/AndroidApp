@@ -63,7 +63,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
 
     override fun onBackPressed() {
         val backStackCount = EnecuumApplication.getCurrentBackStackCount()
-        if(backStackCount == 1) {
+        if(backStackCount <= 1) {
             EventBus.getDefault().post(MainActivityStopped())
             finish()
             return

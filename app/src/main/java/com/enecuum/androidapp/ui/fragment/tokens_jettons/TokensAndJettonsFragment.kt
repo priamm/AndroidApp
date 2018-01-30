@@ -35,7 +35,7 @@ class TokensAndJettonsFragment : BackTitleFragment(), TokensAndJettonsView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewPager.adapter = SendTabsAdapter(activity?.supportFragmentManager, context!!)
+        viewPager.adapter = SendTabsAdapter(childFragmentManager, context!!)
         tabLayout.setupWithViewPager(viewPager)
     }
 
