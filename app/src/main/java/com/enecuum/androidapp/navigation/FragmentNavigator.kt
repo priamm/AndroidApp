@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import com.enecuum.androidapp.ui.fragment.balance.BalanceFragment
+import com.enecuum.androidapp.ui.fragment.send_parameters.SendParametersFragment
 import com.enecuum.androidapp.ui.fragment.tokens_jettons.TokensAndJettonsFragment
 import ru.terrakok.cicerone.android.SupportAppNavigator
 
@@ -28,7 +29,7 @@ class FragmentNavigator(activity: FragmentActivity?,
             FragmentType.Tokens -> return TokensAndJettonsFragment.newInstance()
             FragmentType.MainReceive -> TODO()
             FragmentType.QrReceive -> TODO()
-            FragmentType.SendOptions -> TODO()
+            FragmentType.SendOptions -> return SendParametersFragment.newInstance()
             FragmentType.SendFinish -> TODO()
             FragmentType.Settings -> TODO()
         }

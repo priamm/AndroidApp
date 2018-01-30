@@ -1,0 +1,54 @@
+<com.sothree.slidinguppanel.SlidingUpPanelLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+tools:context="com.enecuum.androidapp.ui.fragment.send_parameters.SendParametersFragment"
+    android:orientation="vertical"
+    android:gravity="bottom"
+    app:umanoPanelHeight="260dp">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <android.support.v4.view.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/viewPager">
+        <android.support.design.widget.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tabLayout"
+            app:tabSelectedTextColor="@android:color/white"
+            app:tabTextColor="@color/white__70"
+            app:tabIndicatorColor="@color/turquoise_blue_three"/>
+    </android.support.v4.view.ViewPager>
+</LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center|top"
+    android:background="@android:color/white">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="normal"
+        android:textColor="@color/black_87"
+        android:lineSpacingExtra="10sp"
+        android:text="@string/transactions_history"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:layout_marginBottom="7dp"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/transactionsHistory"/>
+</LinearLayout>
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

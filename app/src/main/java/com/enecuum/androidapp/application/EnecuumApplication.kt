@@ -52,6 +52,10 @@ class EnecuumApplication : Application() {
                 fragmentCicerone.router.newRootScreen(screenType.toString())
                 return
             }
+            if(screenType == FragmentType.SendOptions) {
+                fragmentCicerone.router.newRootScreen(screenType.toString())
+                return
+            }
             fragmentCicerone.router.navigateTo(screenType.toString())
         }
 

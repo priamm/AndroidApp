@@ -14,9 +14,10 @@ import com.enecuum.androidapp.ui.base_ui_primitives.OrdinalTitleFragment
 import com.enecuum.androidapp.presentation.presenter.balance.BalancePresenter
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
 import com.enecuum.androidapp.ui.adapters.TransactionsListAdapter
+import com.enecuum.androidapp.ui.base_ui_primitives.NoBackFragment
 import kotlinx.android.synthetic.main.fragment_balance.*
 
-class BalanceFragment : OrdinalTitleFragment(), BalanceView {
+class BalanceFragment : NoBackFragment(), BalanceView {
     override fun getTitle(): String {
         if(activity == null)
             return ""
@@ -79,11 +80,5 @@ class BalanceFragment : OrdinalTitleFragment(), BalanceView {
         val layoutManager = LinearLayoutManager(activity)
         transactionsHistory.layoutManager = layoutManager
         transactionsHistory.adapter = adapter
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val supportActionBar = (activity as AppCompatActivity).supportActionBar
-        supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 }
