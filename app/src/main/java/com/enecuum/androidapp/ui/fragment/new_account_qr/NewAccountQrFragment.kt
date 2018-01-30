@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
-import com.enecuum.androidapp.base_ui_primitives.FileOpeningFragment
+import com.enecuum.androidapp.ui.base_ui_primitives.FileOpeningFragment
 import com.enecuum.androidapp.presentation.presenter.new_account_qr.NewAccountQrPresenter
 import com.enecuum.androidapp.presentation.view.new_account_qr.NewAccountQrView
 import kotlinx.android.synthetic.main.fragment_new_account_qr.*

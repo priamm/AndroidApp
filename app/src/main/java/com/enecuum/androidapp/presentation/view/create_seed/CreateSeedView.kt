@@ -1,10 +1,8 @@
 package com.enecuum.androidapp.presentation.view.create_seed
 
-import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
-import com.arellomobile.mvp.viewstate.strategy.SkipStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
-import com.enecuum.androidapp.base_ui_primitives.FileOpener
+import com.enecuum.androidapp.ui.base_ui_primitives.FileOpener
 
 interface CreateSeedView : FileOpener {
     @StateStrategyType(AddToEndSingleStrategy::class)

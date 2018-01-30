@@ -1,4 +1,4 @@
-package com.enecuum.androidapp.base_ui_primitives
+package com.enecuum.androidapp.ui.base_ui_primitives
 
 import android.os.Bundle
 import android.view.MenuItem

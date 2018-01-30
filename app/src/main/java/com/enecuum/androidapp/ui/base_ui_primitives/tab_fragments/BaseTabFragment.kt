@@ -1,4 +1,4 @@
-package com.enecuum.androidapp.base_ui_primitives.tab_fragments
+package com.enecuum.androidapp.ui.base_ui_primitives.tab_fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -7,15 +7,34 @@ import android.view.View
 import android.view.ViewGroup
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.application.EnecuumApplication
+import com.enecuum.androidapp.events.MainActivityStopped
 import com.enecuum.androidapp.navigation.FragmentNavigator
-import com.enecuum.androidapp.navigation.FragmentType
-import kotlin.reflect.KClass
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 /**
  * Created by oleg on 29.01.18.
  */
 open class BaseTabFragment : Fragment() {
     private var navigator: FragmentNavigator? = null
+    protected var isSetupFinished = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if(EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe
+    fun onnMainActivityStopped(event: MainActivityStopped) {
+        isSetupFinished = false
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -24,7 +43,7 @@ open class BaseTabFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if(navigator == null) {
+        if(navigator == null || !isSetupFinished) {
             navigator = FragmentNavigator(activity, childFragmentManager, R.id.fragmentContainer)
         }
         EnecuumApplication.fragmentCicerone().navigatorHolder.setNavigator(navigator)

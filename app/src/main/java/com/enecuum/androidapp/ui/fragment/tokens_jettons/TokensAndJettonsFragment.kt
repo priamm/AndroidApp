@@ -6,8 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
-import com.enecuum.androidapp.base_ui_primitives.BackTitleFragment
-import com.enecuum.androidapp.base_ui_primitives.OrdinalTitleFragment
+import com.enecuum.androidapp.ui.base_ui_primitives.BackTitleFragment
 import com.enecuum.androidapp.presentation.presenter.tokens_jettons.TokensAndJettonsPresenter
 import com.enecuum.androidapp.presentation.view.tokens_jettons.TokensAndJettonsView
 

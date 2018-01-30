@@ -1,184 +1,218 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.enecuum.androidapp.ui.fragment.balance.BalanceFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="bottom"
+    app:umanoPanelHeight="260dp">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="26dp"
-        android:layout_marginRight="26dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="@color/turquoise_blue_two"
-            android:lineSpacingExtra="10sp"
-            tools:text="7.99999999 ENQ/USD"
-            android:id="@+id/enqUsd"
-            />
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="@color/turquoise_blue_two"
-            android:lineSpacingExtra="10sp"
-            tools:text="7.99999999 ENQ/BTC"
-            android:id="@+id/enqBtc"
-            />
-    </LinearLayout>
-    <TextView
-        android:layout_marginTop="14dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:fontFamily="sans-serif"
-        android:textStyle="normal"
-        android:textColor="@color/white_87"
-        android:lineSpacingExtra="10sp"
-        android:text="@string/balance"
-        android:textAllCaps="true"
-        android:gravity="center"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:fontFamily="sans-serif"
-        android:textStyle="bold"
-        android:textColor="@color/white_87"
-        android:lineSpacingExtra="8sp"
-        tools:text="ENQ   30,00000000  "
-        android:id="@+id/enqBalance"
-        android:gravity="center"
-        android:layout_marginTop="3dp"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:fontFamily="sans-serif"
-        android:textStyle="bold"
-        android:textColor="@color/white_87"
-        android:lineSpacingExtra="8sp"
-        tools:text="ENQ+   30,00000000  "
-        android:id="@+id/enqPlusBalance"
-        android:gravity="center"
-        android:layout_marginTop="6dp"
-        />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/dark_slate_blue"
-        android:layout_marginTop="12dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="14dp"
-        android:layout_marginBottom="14dp"
-        android:layout_marginLeft="56dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"
-                android:textStyle="normal"
-                android:textColor="@color/white_87"
-                android:lineSpacingExtra="12sp"
-                tools:text="Points 1.00000000"
-                android:id="@+id/points"
-                />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"
-                android:textStyle="normal"
-                android:textColor="@color/white_87"
-                android:lineSpacingExtra="12sp"
-                tools:text="Karma 1.00000000"
-                android:id="@+id/karma"
-                />
-        </LinearLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="7dp">
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="26dp"
+            android:layout_marginRight="26dp">
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:fontFamily="sans-serif"
                 android:textStyle="normal"
-                android:textColor="@color/white_87"
-                android:lineSpacingExtra="12sp"
-                tools:text="Percent 1.00000000"
-                android:id="@+id/percent"
+                android:textColor="@color/turquoise_blue_two"
+                android:lineSpacingExtra="10sp"
+                tools:text="7.99999999 ENQ/USD"
+                android:id="@+id/enqUsd"
+                />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 />
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:fontFamily="sans-serif"
                 android:textStyle="normal"
-                android:textColor="@color/white_87"
-                android:lineSpacingExtra="12sp"
-                tools:text="Karma Percent 1.00000000"
-                android:id="@+id/karmaPercent"
+                android:textColor="@color/turquoise_blue_two"
+                android:lineSpacingExtra="10sp"
+                tools:text="7.99999999 ENQ/BTC"
+                android:id="@+id/enqBtc"
                 />
         </LinearLayout>
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/dark_slate_blue"
-        android:layout_marginTop="12dp"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="66dp"
-        android:background="@color/navy"
-        android:orientation="horizontal"
-        android:id="@+id/tokens">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_marginTop="14dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:fontFamily="sans-serif"
             android:textStyle="normal"
             android:textColor="@color/white_87"
-            android:text="@string/tokens_and_jettons"
-            android:layout_centerInParent="true"
-            android:id="@+id/tokensText"/>
-        <ImageView
-            android:layout_width="wrap_content"
+            android:lineSpacingExtra="10sp"
+            android:text="@string/balance"
+            android:textAllCaps="true"
+            android:gravity="center"
+            />
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/chevron_right"
-            android:layout_toRightOf="@+id/tokensText"
-            android:layout_centerVertical="true"/>
-    </RelativeLayout>
-</LinearLayout>
+            android:textSize="16sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:textColor="@color/white_87"
+            android:lineSpacingExtra="8sp"
+            tools:text="ENQ   30,00000000  "
+            android:id="@+id/enqBalance"
+            android:gravity="center"
+            android:layout_marginTop="3dp"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:textColor="@color/white_87"
+            android:lineSpacingExtra="8sp"
+            tools:text="ENQ+   30,00000000  "
+            android:id="@+id/enqPlusBalance"
+            android:gravity="center"
+            android:layout_marginTop="6dp"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dark_slate_blue"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="14dp"
+            android:layout_marginLeft="56dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="normal"
+                    android:textColor="@color/white_87"
+                    android:lineSpacingExtra="12sp"
+                    tools:text="Points 1.00000000"
+                    android:id="@+id/points"
+                    />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="normal"
+                    android:textColor="@color/white_87"
+                    android:lineSpacingExtra="12sp"
+                    tools:text="Karma 1.00000000"
+                    android:id="@+id/karma"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="7dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="normal"
+                    android:textColor="@color/white_87"
+                    android:lineSpacingExtra="12sp"
+                    tools:text="Percent 1.00000000"
+                    android:id="@+id/percent"
+                    />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="normal"
+                    android:textColor="@color/white_87"
+                    android:lineSpacingExtra="12sp"
+                    tools:text="Karma Percent 1.00000000"
+                    android:id="@+id/karmaPercent"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dark_slate_blue"
+            android:layout_marginTop="12dp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="66dp"
+            android:background="@color/navy"
+            android:orientation="horizontal"
+            android:id="@+id/tokens">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:textColor="@color/white_87"
+                android:text="@string/tokens_and_jettons"
+                android:layout_centerInParent="true"
+                android:id="@+id/tokensText"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/chevron_right"
+                android:layout_toRightOf="@+id/tokensText"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center|top"
+        android:background="@android:color/white">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-medium"
+            android:textStyle="normal"
+            android:textColor="@color/black_87"
+            android:lineSpacingExtra="10sp"
+            android:text="@string/transactions_history"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:layout_marginBottom="7dp"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/transactionsHistory"/>
+    </LinearLayout>
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

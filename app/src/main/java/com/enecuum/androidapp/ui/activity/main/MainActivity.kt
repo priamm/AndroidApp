@@ -9,11 +9,12 @@ import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.application.EnecuumApplication
-import com.enecuum.androidapp.navigation.FragmentNavigator
+import com.enecuum.androidapp.events.MainActivityStopped
 import com.enecuum.androidapp.navigation.TabsNavigator
 import com.enecuum.androidapp.presentation.presenter.main.MainPresenter
 import com.enecuum.androidapp.presentation.view.main.MainView
 import kotlinx.android.synthetic.main.activity_main.*
+import org.greenrobot.eventbus.EventBus
 
 class MainActivity : MvpAppCompatActivity(), MainView {
     companion object {
@@ -57,5 +58,14 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     override fun onPause() {
         super.onPause()
         EnecuumApplication.tabCicerone().navigatorHolder.removeNavigator()
+    }
+
+    override fun onBackPressed() {
+        EnecuumApplication.fragmentCicerone().router.exit()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().post(MainActivityStopped())
     }
 }

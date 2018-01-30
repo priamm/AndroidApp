@@ -45,4 +45,5 @@
     </plurals>
     <string name="karma_percent">Процент кармы</string>
     <string name="tokens_and_jettons">Токены и жетоны</string>
+    <string name="transactions_history">История транзакций</string>
 </resources>

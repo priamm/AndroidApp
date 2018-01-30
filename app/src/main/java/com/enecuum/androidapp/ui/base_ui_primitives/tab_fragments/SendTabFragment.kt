@@ -1,4 +1,4 @@
-package com.enecuum.androidapp.base_ui_primitives.tab_fragments
+package com.enecuum.androidapp.ui.base_ui_primitives.tab_fragments
 
 /**
  * Created by oleg on 30.01.18.

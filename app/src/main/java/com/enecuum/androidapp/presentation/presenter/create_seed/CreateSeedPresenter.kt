@@ -2,7 +2,7 @@ package com.enecuum.androidapp.presentation.presenter.create_seed
 
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
-import com.enecuum.androidapp.base_ui_primitives.FileOpeningFragment
+import com.enecuum.androidapp.ui.base_ui_primitives.FileOpeningFragment
 import com.enecuum.androidapp.events.SeedBackupFinished
 import com.enecuum.androidapp.presentation.view.create_seed.CreateSeedView
 import com.enecuum.androidapp.utils.FileSystemUtils

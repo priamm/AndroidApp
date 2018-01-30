@@ -2,7 +2,7 @@ package com.enecuum.androidapp.utils
 
 import android.app.Activity
 import com.enecuum.androidapp.R
-import com.enecuum.androidapp.base_ui_primitives.FileOpener
+import com.enecuum.androidapp.ui.base_ui_primitives.FileOpener
 import com.github.angads25.filepicker.controller.DialogSelectionListener
 import com.github.angads25.filepicker.model.DialogConfigs
 import com.github.angads25.filepicker.model.DialogProperties

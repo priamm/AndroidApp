@@ -9,7 +9,7 @@ import com.enecuum.androidapp.R
 import com.enecuum.androidapp.presentation.view.create_seed.CreateSeedView
 import com.enecuum.androidapp.presentation.presenter.create_seed.CreateSeedPresenter
 import com.arellomobile.mvp.presenter.InjectPresenter
-import com.enecuum.androidapp.base_ui_primitives.FileOpeningFragment
+import com.enecuum.androidapp.ui.base_ui_primitives.FileOpeningFragment
 import com.enecuum.androidapp.utils.SeedUtils
 import com.enecuum.androidapp.utils.SimpleTextWatcher
 import kotlinx.android.synthetic.main.fragment_create_seed.*

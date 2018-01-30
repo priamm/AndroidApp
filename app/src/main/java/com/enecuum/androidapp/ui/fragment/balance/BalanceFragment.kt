@@ -2,14 +2,18 @@ package com.enecuum.androidapp.ui.fragment.balance
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
-import com.enecuum.androidapp.base_ui_primitives.OrdinalTitleFragment
+import com.enecuum.androidapp.models.Transaction
+import com.enecuum.androidapp.ui.base_ui_primitives.OrdinalTitleFragment
 import com.enecuum.androidapp.presentation.presenter.balance.BalancePresenter
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
+import com.enecuum.androidapp.ui.adapters.TransactionsListAdapter
 import kotlinx.android.synthetic.main.fragment_balance.*
 
 class BalanceFragment : OrdinalTitleFragment(), BalanceView {
@@ -68,6 +72,13 @@ class BalanceFragment : OrdinalTitleFragment(), BalanceView {
     override fun displayPercentage(percentage: Double, karmaPercentage: Double) {
         percent.text = resources.getQuantityString(R.plurals.percent_plural, percentage.toInt(), percentage)
         karmaPercent.text = String.format(FORMAT, getString(R.string.karma_percent), karmaPercentage)
+    }
+
+    override fun displayTransactionsHistory(transactionsList: List<Transaction>) {
+        val adapter = TransactionsListAdapter(transactionsList)
+        val layoutManager = LinearLayoutManager(activity)
+        transactionsHistory.layoutManager = layoutManager
+        transactionsHistory.adapter = adapter
     }
 
     override fun onResume() {

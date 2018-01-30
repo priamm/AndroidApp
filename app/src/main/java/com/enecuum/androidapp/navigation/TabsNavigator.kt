@@ -5,9 +5,8 @@ import android.content.Intent
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
-import com.enecuum.androidapp.base_ui_primitives.tab_fragments.*
+import com.enecuum.androidapp.ui.base_ui_primitives.tab_fragments.*
 import ru.terrakok.cicerone.android.SupportAppNavigator
-import kotlin.reflect.KClass
 
 /**
  * Created by oleg on 29.01.18.

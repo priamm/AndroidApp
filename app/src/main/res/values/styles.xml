@@ -23,6 +23,7 @@
         <item name="colorPrimary">@color/navy</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowActionBarOverlay">true</item>
     </style>
     <style name="Theme.AppCompat.Light.TransparentActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowContentOverlay">@null</item>

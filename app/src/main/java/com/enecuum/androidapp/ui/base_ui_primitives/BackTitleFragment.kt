@@ -1,11 +1,7 @@
-package com.enecuum.androidapp.base_ui_primitives
+package com.enecuum.androidapp.ui.base_ui_primitives
 
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import com.arellomobile.mvp.MvpAppCompatFragment
 import com.enecuum.androidapp.application.EnecuumApplication
 
 /**

@@ -56,7 +56,10 @@ dependencies {
     compile(name: 'circleindicator', ext: 'aar')
     compile 'com.google.zxing:core:3.3.1'
     compile 'com.github.angads25:filepicker:1.1.1'
-
+    repositories {
+        mavenCentral()
+    }
+    compile 'com.sothree.slidinguppanel:library:3.4.0'
 }
 
 

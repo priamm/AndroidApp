@@ -1,4 +1,4 @@
-package com.enecuum.androidapp.base_ui_primitives.tab_fragments
+package com.enecuum.androidapp.ui.base_ui_primitives.tab_fragments
 
 import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.navigation.FragmentType
@@ -15,8 +15,6 @@ class HomeTabFragment : BaseTabFragment() {
             return instance!!
         }
     }
-
-    private var isSetupFinished = false
 
     override fun onResume() {
         super.onResume()

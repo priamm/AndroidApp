@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
-import com.enecuum.androidapp.base_ui_primitives.BackActivity
+import com.enecuum.androidapp.ui.base_ui_primitives.BackActivity
 
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R

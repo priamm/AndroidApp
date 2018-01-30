@@ -4,12 +4,11 @@ import android.content.*
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.presentation.view.new_account_qr.NewAccountQrView
-import com.github.angads25.filepicker.controller.DialogSelectionListener
 import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.utils.PermissionUtils
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.application.EnecuumApplication
-import com.enecuum.androidapp.base_ui_primitives.FileOpeningFragment
+import com.enecuum.androidapp.ui.base_ui_primitives.FileOpeningFragment
 import com.enecuum.androidapp.events.PinBackupFinished
 import com.enecuum.androidapp.utils.FileSystemUtils
 import org.greenrobot.eventbus.EventBus

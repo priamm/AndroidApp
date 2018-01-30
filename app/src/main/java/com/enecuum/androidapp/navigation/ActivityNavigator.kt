@@ -5,6 +5,14 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.support.design.widget.Snackbar
+import com.enecuum.androidapp.ui.activity.forgot.ForgotPinActivity
+import com.enecuum.androidapp.ui.activity.main.MainActivity
+import com.enecuum.androidapp.ui.activity.new_account.NewAccountActivity
+import com.enecuum.androidapp.ui.activity.registration.RegistrationActivity
+import com.enecuum.androidapp.ui.activity.registration_finished.RegistrationFinishedActivity
+import com.enecuum.androidapp.ui.activity.restore_pin.RestorePinActivity
+import com.enecuum.androidapp.ui.activity.signin.SignInActivity
+import com.enecuum.androidapp.ui.activity.splash.SplashActivity
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.commands.*
 
@@ -16,7 +24,7 @@ class ActivityNavigator(private val currentActivity : Activity?) : Navigator {
         private fun generateScreenIntent(currentActivity: Activity?, screenKey : String, data : Any? = null): Intent? {
             try {
                 val screenType = ScreenType.valueOf(screenKey)
-                val intent = Intent(currentActivity, ScreenClass.getClassBy(screenType))
+                val intent = Intent(currentActivity, getClassBy(screenType))
                 if(data != null)
                     intent.putExtra(TransitionData.Key, data as TransitionData)
                 return intent
@@ -24,6 +32,34 @@ class ActivityNavigator(private val currentActivity : Activity?) : Navigator {
                 e.printStackTrace()
             }
             return null
+        }
+
+        private fun getClassBy(screenType: ScreenType) : Class<*>? = when(screenType) {
+            ScreenType.Splash -> {
+                SplashActivity::class.java
+            }
+            ScreenType.Main -> {
+                MainActivity::class.java
+            }
+            ScreenType.Registration -> {
+                RegistrationActivity::class.java
+            }
+            ScreenType.NewAccount -> {
+                NewAccountActivity::class.java
+            }
+            ScreenType.SignIn -> {
+                SignInActivity::class.java
+            }
+            ScreenType.RegistrationFinished -> {
+                RegistrationFinishedActivity::class.java
+            }
+            ScreenType.ForgotPin -> {
+                ForgotPinActivity::class.java
+            }
+            ScreenType.RestorePin -> {
+                RestorePinActivity::class.java
+            }
+            else -> null
         }
     }
     private var isPendingClearStackIntent = false

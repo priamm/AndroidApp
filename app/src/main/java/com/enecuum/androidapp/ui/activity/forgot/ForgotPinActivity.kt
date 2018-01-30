@@ -4,10 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
-import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
-import com.enecuum.androidapp.base_ui_primitives.BackActivity
+import com.enecuum.androidapp.ui.base_ui_primitives.BackActivity
 import com.enecuum.androidapp.presentation.presenter.forgot.ForgotPinPresenter
 import com.enecuum.androidapp.presentation.view.forgot.ForgotPinView
 import com.enecuum.androidapp.utils.KeyboardUtils

@@ -3,6 +3,8 @@ package com.enecuum.androidapp.presentation.presenter.balance
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.application.EnecuumApplication
+import com.enecuum.androidapp.models.Transaction
+import com.enecuum.androidapp.models.TransactionType
 import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
 
@@ -15,6 +17,19 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
         viewState.displayPoints(1.0)
         viewState.displayKarma(1.0)
         viewState.displayPercentage(1.0, 1.0)
+        val transactionsList = listOf(
+                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
+                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
+                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
+                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
+                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
+                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
+                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
+                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
+                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
+                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…")
+        )
+        viewState.displayTransactionsHistory(transactionsList)
     }
 
     fun onTokensClick() {

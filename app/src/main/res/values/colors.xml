@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="inactive_tab">#3b454b</color>
+    <color name="inactive_text">#a8a8a8</color>
     <color name="white_87">#deffffff</color>
     <color name="perrywinkle">#88b9df</color>
     <color name="turquoise_blue_two">#00a7d0</color>
@@ -18,4 +19,5 @@
     <color name="colorPrimary">#010d15</color>
     <color name="midnight">#010d15</color>
     <color name="colorPrimaryDark">#000000</color>
+    <color name="black_87">#de000000</color>
 </resources>

@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
-import com.enecuum.androidapp.base_ui_primitives.BackActivity
+import com.enecuum.androidapp.ui.base_ui_primitives.BackActivity
 import com.enecuum.androidapp.presentation.presenter.restore_pin.RestorePinPresenter
 import com.enecuum.androidapp.presentation.view.restore_pin.RestorePinView
 import kotlinx.android.synthetic.main.activity_restore_pin.*

@@ -1,4 +1,4 @@
-package com.enecuum.androidapp.base_ui_primitives
+package com.enecuum.androidapp.ui.base_ui_primitives
 
 import com.enecuum.androidapp.utils.FileSystemUtils
 import com.enecuum.androidapp.utils.PermissionUtils

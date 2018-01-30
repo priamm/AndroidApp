@@ -11,7 +11,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.fragment_new_account_pin.*
 import android.text.Editable
 import android.widget.EditText
-import com.enecuum.androidapp.base_ui_primitives.SlideshowTitleFragment
+import com.enecuum.androidapp.ui.base_ui_primitives.SlideshowTitleFragment
 import com.enecuum.androidapp.utils.KeyboardUtils
 import com.enecuum.androidapp.utils.PinUtils
 import com.enecuum.androidapp.utils.SimpleTextWatcher

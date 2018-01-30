@@ -1,7 +1,7 @@
 package com.enecuum.androidapp.ui.activity.registration_finished
 
 import android.os.Bundle
-import com.enecuum.androidapp.base_ui_primitives.BackActivity
+import com.enecuum.androidapp.ui.base_ui_primitives.BackActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.presentation.presenter.registration_finished.RegistrationFinishedPresenter
