@@ -1,9 +1,7 @@
 package com.enecuum.androidapp.ui.fragment.send_parameters
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.models.Transaction
@@ -29,6 +27,8 @@ class SendParametersFragment : NoBackFragment(), SendParametersView {
         }
     }
 
+    private var menuInflater: MenuInflater? = null
+
     @InjectPresenter
     lateinit var presenter: SendParametersPresenter
 
@@ -45,6 +45,7 @@ class SendParametersFragment : NoBackFragment(), SendParametersView {
         send.setOnClickListener {
             presenter.onSendClick()
         }
+        setHasOptionsMenu(true)
     }
 
     override fun getTitle(): String = getString(R.string.send)
@@ -59,5 +60,25 @@ class SendParametersFragment : NoBackFragment(), SendParametersView {
 
     override fun changeButtonState(enable: Boolean) {
         send.isEnabled = enable
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        this.menuInflater = inflater
+        inflater?.inflate(R.menu.qr_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if(item?.itemId == R.id.qr) {
+            presenter.onQrClick()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(menu != null && !menu!!.hasVisibleItems()) {
+            menuInflater?.inflate(R.menu.qr_menu, menu)
+        }
     }
 }

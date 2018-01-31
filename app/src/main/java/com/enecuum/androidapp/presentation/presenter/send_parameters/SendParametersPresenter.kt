@@ -69,14 +69,15 @@ class SendParametersPresenter : MvpPresenter<SendParametersView>() {
 
     fun onSendClick() {
         if(currency != null && currentAmount > 0 && address.isNotEmpty()) {
-            Log.d("SEND", currency.toString())
-            Log.d("SEND", currentAmount.toString())
-            Log.d("SEND", address)
-            /*val bundle = Bundle()
+            val bundle = Bundle()
             bundle.putString(SendParametersFragment.Companion.ADDRESS, address)
             bundle.putFloat(SendParametersFragment.Companion.AMOUNT, currentAmount)
             bundle.putSerializable(SendParametersFragment.Companion.CURRENCY, currency)
-            EnecuumApplication.navigateToFragment(FragmentType.SendFinish, TabType.Send, bundle)*/
+            EnecuumApplication.navigateToFragment(FragmentType.SendFinish, TabType.Send, bundle)
         }
+    }
+
+    fun onQrClick() {
+
     }
 }

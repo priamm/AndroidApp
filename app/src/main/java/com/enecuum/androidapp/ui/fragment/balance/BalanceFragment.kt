@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.models.Transaction
@@ -19,11 +17,6 @@ import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
 import kotlinx.android.synthetic.main.fragment_balance.*
 
 class BalanceFragment : NoBackFragment(), BalanceView {
-    override fun getTitle(): String {
-        if(activity == null)
-            return ""
-        return activity!!.getString(R.string.my_wallet)
-    }
 
     companion object {
         const val FORMAT = "%s %.8f"
@@ -51,6 +44,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
             presenter.onTokensClick()
         })
         presenter.onCreate()
+        setHasOptionsMenu(true)
     }
 
     override fun displayCurrencyRates(enq2Usd: Double, enq2Btc: Double) {
@@ -78,5 +72,16 @@ class BalanceFragment : NoBackFragment(), BalanceView {
 
     override fun displayTransactionsHistory(transactionsList: List<Transaction>) {
         TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
+    }
+
+    override fun getTitle(): String {
+        if(activity == null)
+            return ""
+        return activity!!.getString(R.string.my_wallet)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        menu?.clear()
     }
 }

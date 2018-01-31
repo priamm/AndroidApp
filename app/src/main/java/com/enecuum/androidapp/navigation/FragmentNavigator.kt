@@ -2,10 +2,12 @@ package com.enecuum.androidapp.navigation
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import com.enecuum.androidapp.ui.fragment.balance.BalanceFragment
+import com.enecuum.androidapp.ui.fragment.send_finish.SendFinishFragment
 import com.enecuum.androidapp.ui.fragment.send_parameters.SendParametersFragment
 import com.enecuum.androidapp.ui.fragment.tokens_jettons.TokensAndJettonsFragment
 import ru.terrakok.cicerone.android.SupportAppNavigator
@@ -30,7 +32,7 @@ class FragmentNavigator(activity: FragmentActivity?,
             FragmentType.MainReceive -> TODO()
             FragmentType.QrReceive -> TODO()
             FragmentType.SendOptions -> return SendParametersFragment.newInstance()
-            FragmentType.SendFinish -> TODO()
+            FragmentType.SendFinish -> return SendFinishFragment.newInstance(data as Bundle)
             FragmentType.Settings -> TODO()
         }
     }

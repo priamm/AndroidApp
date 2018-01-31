@@ -43,4 +43,7 @@
     <string name="amount">Amount</string>
     <string name="send_max">Send MAX.</string>
     <string name="your_balance">Your balance:</string>
+    <string name="confirm_send">Confirm send</string>
+    <string name="you_are_going_to_send">You are going to send:</string>
+    <string name="to_address">To address</string>
 </resources>

@@ -36,7 +36,13 @@ class TokensAndJettonsFragment : BackTitleFragment(), TokensAndJettonsView {
         super.onViewCreated(view, savedInstanceState)
         viewPager.adapter = SendTokensTabsAdapter(childFragmentManager, context!!)
         tabLayout.setupWithViewPager(viewPager)
+        setHasOptionsMenu(true)
     }
 
     override fun getTitle(): String = getString(R.string.tokens_and_jettons)
+
+    override fun onResume() {
+        super.onResume()
+        menu?.clear()
+    }
 }

@@ -19,7 +19,7 @@
     <string name="enter_your_seed_phrase">Введите свою seed-фразу:</string>
     <string name="seed_phrase">Введите 12 слов</string>
     <string name="change_pin">Сменить PIN-код</string>
-    <string name="restore_pin">Восстановление PIN-кода</string>
+    <string name="restore_pin">Восстановить PIN-код</string>
     <string name="words_left">слов осталось:</string>
     <string name="save">Сохранить</string>
     <string name="create_seed_title">Создание seed-фразы</string>
@@ -54,4 +54,7 @@
     <string name="amount">Количество</string>
     <string name="send_max">Отправить всё</string>
     <string name="your_balance">Ваш баланс:</string>
+    <string name="confirm_send">Подтвердить отправку</string>
+    <string name="you_are_going_to_send">Вы собираетесь отправить:</string>
+    <string name="to_address">На адрес</string>
 </resources>
