@@ -1,7 +1,11 @@
 package com.enecuum.androidapp.presentation.view.send_parameters
 
-import com.arellomobile.mvp.MvpView
+import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
+import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
+import com.enecuum.androidapp.presentation.view.ButtonStateView
+import com.enecuum.androidapp.presentation.view.TransactionsHistoryView
 
-interface SendParametersView : MvpView {
-
+interface SendParametersView : TransactionsHistoryView, ButtonStateView {
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun handleKeyboardVisibility(visible: Boolean)
 }

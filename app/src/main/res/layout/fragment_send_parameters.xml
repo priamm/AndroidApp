@@ -5,16 +5,18 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 tools:context="com.enecuum.androidapp.ui.fragment.send_parameters.SendParametersFragment"
+    android:id="@+id/mainLayout"
     android:orientation="vertical"
     android:gravity="bottom"
-    app:umanoPanelHeight="260dp">
+    app:umanoPanelHeight="130dp">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginBottom="130dp">
     <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="280dp"
         android:id="@+id/viewPager">
         <android.support.design.widget.TabLayout
             android:layout_width="match_parent"
@@ -24,6 +26,22 @@ tools:context="com.enecuum.androidapp.ui.fragment.send_parameters.SendParameters
             app:tabTextColor="@color/white__70"
             app:tabIndicatorColor="@color/turquoise_blue_three"/>
     </android.support.v4.view.ViewPager>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_marginLeft="27dp"
+        android:layout_marginRight="27dp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="14sp"
+        android:text="@string/send"
+        android:letterSpacing="0.04"
+        android:enabled="false"
+        android:id="@+id/send"
+        android:layout_marginBottom="23dp"
+        android:background="@drawable/standard_button_background"
+        />
 </LinearLayout>
 <LinearLayout
     android:layout_width="match_parent"

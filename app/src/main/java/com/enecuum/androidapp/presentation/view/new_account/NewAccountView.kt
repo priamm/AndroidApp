@@ -4,12 +4,11 @@ import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
+import com.enecuum.androidapp.presentation.view.ButtonStateView
 
-interface NewAccountView : MvpView {
+interface NewAccountView : ButtonStateView {
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun openNextScreen()
-    @StateStrategyType(AddToEndSingleStrategy::class)
-    fun changeButtonState(enable: Boolean)
     @StateStrategyType(SkipStrategy::class)
     fun displaySkipDialog()
 }

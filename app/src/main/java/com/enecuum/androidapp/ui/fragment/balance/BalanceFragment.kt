@@ -15,6 +15,7 @@ import com.enecuum.androidapp.presentation.presenter.balance.BalancePresenter
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
 import com.enecuum.androidapp.ui.adapters.TransactionsListAdapter
 import com.enecuum.androidapp.ui.base_ui_primitives.NoBackFragment
+import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
 import kotlinx.android.synthetic.main.fragment_balance.*
 
 class BalanceFragment : NoBackFragment(), BalanceView {
@@ -76,9 +77,6 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     }
 
     override fun displayTransactionsHistory(transactionsList: List<Transaction>) {
-        val adapter = TransactionsListAdapter(transactionsList)
-        val layoutManager = LinearLayoutManager(activity)
-        transactionsHistory.layoutManager = layoutManager
-        transactionsHistory.adapter = adapter
+        TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
     }
 }

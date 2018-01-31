@@ -1,11 +1,10 @@
 package com.enecuum.androidapp.presentation.view.balance
 
-import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
-import com.enecuum.androidapp.models.Transaction
+import com.enecuum.androidapp.presentation.view.TransactionsHistoryView
 
-interface BalanceView : MvpView {
+interface BalanceView : TransactionsHistoryView {
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun displayCurrencyRates(enq2Usd: Double, enq2Btc: Double)
     @StateStrategyType(AddToEndSingleStrategy::class)
@@ -16,6 +15,4 @@ interface BalanceView : MvpView {
     fun displayKarma(karmaValue: Double)
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun displayPercentage(percentage: Double, karmaPercentage: Double)
-    @StateStrategyType(AddToEndSingleStrategy::class)
-    fun displayTransactionsHistory(transactionsList: List<Transaction>)
 }

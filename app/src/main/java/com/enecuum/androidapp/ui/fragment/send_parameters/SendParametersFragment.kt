@@ -6,15 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
+import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.presentation.presenter.send_parameters.SendParametersPresenter
 import com.enecuum.androidapp.presentation.view.send_parameters.SendParametersView
+import com.enecuum.androidapp.ui.adapters.SendEnqTabsAdapter
 import com.enecuum.androidapp.ui.base_ui_primitives.NoBackFragment
+import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
+import kotlinx.android.synthetic.main.fragment_send_parameters.*
 
 class SendParametersFragment : NoBackFragment(), SendParametersView {
 
     companion object {
         const val TAG = "SendParametersFragment"
-
+        const val AMOUNT = "amount"
+        const val CURRENCY = "currency"
+        const val ADDRESS = "address"
         fun newInstance(): SendParametersFragment {
             val fragment: SendParametersFragment = SendParametersFragment()
             val args: Bundle = Bundle()
@@ -31,5 +37,27 @@ class SendParametersFragment : NoBackFragment(), SendParametersView {
         return inflater.inflate(R.layout.fragment_send_parameters, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter.onCreate()
+        viewPager.adapter = SendEnqTabsAdapter(childFragmentManager, context!!)
+        tabLayout.setupWithViewPager(viewPager)
+        send.setOnClickListener {
+            presenter.onSendClick()
+        }
+    }
+
     override fun getTitle(): String = getString(R.string.send)
+
+    override fun displayTransactionsHistory(transactionsList: List<Transaction>) {
+        TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
+    }
+
+    override fun handleKeyboardVisibility(visible: Boolean) {
+        transactionsHistory.visibility = if(visible) View.GONE else View.VISIBLE
+    }
+
+    override fun changeButtonState(enable: Boolean) {
+        send.isEnabled = enable
+    }
 }

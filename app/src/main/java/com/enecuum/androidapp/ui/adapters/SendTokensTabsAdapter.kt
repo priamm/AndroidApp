@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.fragment_balance.view.*
 /**
  * Created by oleg on 30.01.18.
  */
-class SendTabsAdapter(fm: FragmentManager?, val context: Context) : FragmentPagerAdapter(fm) {
+class SendTokensTabsAdapter(fm: FragmentManager?, val context: Context) : FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
         val currentMode = if(position == 0)
             TokensSingleFragment.Companion.Mode.TokenMode

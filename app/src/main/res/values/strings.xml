@@ -39,4 +39,8 @@
     <string name="jettons">Jettons</string>
     <string name="send">Send</string>
     <string name="receive">Receive</string>
+    <string name="address">Address</string>
+    <string name="amount">Amount</string>
+    <string name="send_max">Send MAX.</string>
+    <string name="your_balance">Your balance:</string>
 </resources>

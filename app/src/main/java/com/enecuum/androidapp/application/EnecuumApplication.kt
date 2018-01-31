@@ -31,15 +31,15 @@ class EnecuumApplication : Application() {
         private var currentTab = TabType.Home
         private val backStack = mutableMapOf<TabType, Int>()
 
-        fun navigateToActivity(screenType: ScreenType) {
+        fun navigateToActivity(screenType: ScreenType, transitionData: Any? = null) {
             if(screenType == ScreenType.Main) {
-                cicerone.router.newRootScreen(screenType.toString())
+                cicerone.router.newRootScreen(screenType.toString(), transitionData)
                 return
             }
-            cicerone.router.navigateTo(screenType.toString())
+            cicerone.router.navigateTo(screenType.toString(), transitionData)
         }
 
-        fun navigateToFragment(screenType: FragmentType, tabType: TabType) {
+        fun navigateToFragment(screenType: FragmentType, tabType: TabType, transitionData: Any? = null) {
             currentTab = tabType
             if(backStack.containsKey(tabType)) {
                 var newVal = backStack[tabType]!!
@@ -49,14 +49,14 @@ class EnecuumApplication : Application() {
                 backStack[tabType] = 1
             }
             if(screenType == FragmentType.Balance) {
-                fragmentCicerone.router.newRootScreen(screenType.toString())
+                fragmentCicerone.router.newRootScreen(screenType.toString(), transitionData)
                 return
             }
             if(screenType == FragmentType.SendOptions) {
-                fragmentCicerone.router.newRootScreen(screenType.toString())
+                fragmentCicerone.router.newRootScreen(screenType.toString(), transitionData)
                 return
             }
-            fragmentCicerone.router.navigateTo(screenType.toString())
+            fragmentCicerone.router.navigateTo(screenType.toString(), transitionData)
         }
 
         fun exitFromCurrentFragment() {

@@ -30,7 +30,7 @@ class RestorePinActivity : BackActivity(), RestorePinView {
         }
     }
 
-    override fun setButtonEnabled(enabled: Boolean) {
-        next.isEnabled = enabled
+    override fun changeButtonState(enable: Boolean) {
+        next.isEnabled = enable
     }
 }

@@ -33,7 +33,7 @@ class RestorePinPresenter : MvpPresenter<RestorePinView>() {
 
     @Subscribe
     fun onChangeButtonEvent(event: ChangeButtonState) {
-        viewState.setButtonEnabled(event.enable)
+        viewState.changeButtonState(event.enable)
     }
 
     @Subscribe

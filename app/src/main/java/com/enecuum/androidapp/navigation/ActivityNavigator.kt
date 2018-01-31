@@ -2,6 +2,7 @@ package com.enecuum.androidapp.navigation
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.design.widget.Snackbar
@@ -26,7 +27,7 @@ class ActivityNavigator(private val currentActivity : Activity?) : Navigator {
                 val screenType = ScreenType.valueOf(screenKey)
                 val intent = Intent(currentActivity, getClassBy(screenType))
                 if(data != null)
-                    intent.putExtra(TransitionData.Key, data as TransitionData)
+                    intent.putExtras(data as Bundle)
                 return intent
             } catch (e : Throwable) {
                 e.printStackTrace()

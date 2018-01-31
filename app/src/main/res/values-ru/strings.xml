@@ -50,4 +50,8 @@
     <string name="jettons">Жетоны</string>
     <string name="send">Отправить</string>
     <string name="receive">Получить</string>
+    <string name="address">Адрес</string>
+    <string name="amount">Количество</string>
+    <string name="send_max">Отправить всё</string>
+    <string name="your_balance">Ваш баланс:</string>
 </resources>
