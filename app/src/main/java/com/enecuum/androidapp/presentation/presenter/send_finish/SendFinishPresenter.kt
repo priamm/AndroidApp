@@ -32,7 +32,7 @@ class SendFinishPresenter : MvpPresenter<SendFinishView>() {
     }
 
     fun onSendClick() {
-        
+
     }
 
 }

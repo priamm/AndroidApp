@@ -40,6 +40,7 @@ class SendFinishFragment : BackTitleFragment(), SendFinishView {
         send.setOnClickListener {
             presenter.onSendClick()
         }
+        setHasOptionsMenu(true)
     }
 
     override fun getTitle(): String = getString(R.string.confirm_send)
@@ -51,5 +52,10 @@ class SendFinishFragment : BackTitleFragment(), SendFinishView {
     override fun setupWithData(address: String?, amount: Float?, currency: Currency) {
         addressText.text = address
         amountCurrency.text = String.format("%.8f %s", amount, currency.value)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        menu?.clear()
     }
 }

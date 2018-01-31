@@ -91,4 +91,9 @@ class TokensSingleFragment : MvpAppCompatFragment(), TokensSingleView {
         adapter = TokenSendListAdapter(listOf, currentMode)
         tokensList.adapter = adapter
     }
+
+    override fun changeButtonState(enable: Boolean) {
+        send.isEnabled = enable
+        receive.isEnabled = enable
+    }
 }

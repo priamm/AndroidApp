@@ -46,4 +46,6 @@
     <string name="confirm_send">Confirm send</string>
     <string name="you_are_going_to_send">You are going to send:</string>
     <string name="to_address">To address</string>
+    <string name="send_history">Send History</string>
+    <string name="receive_history">Receive History</string>
 </resources>

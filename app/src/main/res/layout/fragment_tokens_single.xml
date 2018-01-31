@@ -43,10 +43,12 @@
         android:textSize="14sp"
         android:letterSpacing="0.04"
         android:background="@drawable/blue_button_background"
-        android:layout_marginBottom="14dp"/>
+        android:layout_marginBottom="14dp"
+        android:enabled="false"/>
     <Button
         android:text="@string/receive"
         android:id="@+id/receive"
+        android:enabled="false"
         android:layout_width="match_parent"
         android:layout_marginLeft="27dp"
         android:layout_marginRight="27dp"

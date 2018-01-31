@@ -6,7 +6,7 @@
     tools:context="com.enecuum.androidapp.ui.fragment.balance.BalanceFragment"
     android:orientation="vertical"
     android:gravity="bottom"
-    app:umanoPanelHeight="260dp">
+    app:umanoPanelHeight="130dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

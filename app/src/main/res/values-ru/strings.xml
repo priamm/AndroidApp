@@ -57,4 +57,6 @@
     <string name="confirm_send">Подтвердить отправку</string>
     <string name="you_are_going_to_send">Вы собираетесь отправить:</string>
     <string name="to_address">На адрес</string>
+    <string name="send_history">История отправлений</string>
+    <string name="receive_history">История пополнений</string>
 </resources>
