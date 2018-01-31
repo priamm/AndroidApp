@@ -14,10 +14,11 @@ import com.enecuum.androidapp.events.MainActivityStopped
 import com.enecuum.androidapp.navigation.TabsNavigator
 import com.enecuum.androidapp.presentation.presenter.main.MainPresenter
 import com.enecuum.androidapp.presentation.view.main.MainView
+import com.enecuum.androidapp.ui.base_ui_primitives.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
 
-class MainActivity : MvpAppCompatActivity(), MainView {
+class MainActivity : BaseActivity(), MainView {
     companion object {
         const val TAG = "MainActivity"
         fun getIntent(context: Context): Intent = Intent(context, MainActivity::class.java)

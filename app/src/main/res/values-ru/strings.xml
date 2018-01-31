@@ -59,4 +59,5 @@
     <string name="to_address">На адрес</string>
     <string name="send_history">История отправлений</string>
     <string name="receive_history">История пополнений</string>
+    <string name="text_copied">Текст скопирован</string>
 </resources>

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import com.enecuum.androidapp.ui.fragment.balance.BalanceFragment
+import com.enecuum.androidapp.ui.fragment.receive_by_address.ReceiveByAddressFragment
 import com.enecuum.androidapp.ui.fragment.send_finish.SendFinishFragment
 import com.enecuum.androidapp.ui.fragment.send_parameters.SendParametersFragment
 import com.enecuum.androidapp.ui.fragment.tokens_jettons.TokensAndJettonsFragment
@@ -29,7 +30,7 @@ class FragmentNavigator(activity: FragmentActivity?,
         when (fragmentType) {
             FragmentType.Balance -> return BalanceFragment.newInstance()
             FragmentType.Tokens -> return TokensAndJettonsFragment.newInstance()
-            FragmentType.MainReceive -> TODO()
+            FragmentType.ReceiveByAddress -> return ReceiveByAddressFragment.newInstance()
             FragmentType.QrReceive -> TODO()
             FragmentType.SendOptions -> return SendParametersFragment.newInstance()
             FragmentType.SendFinish -> return SendFinishFragment.newInstance(data as Bundle)

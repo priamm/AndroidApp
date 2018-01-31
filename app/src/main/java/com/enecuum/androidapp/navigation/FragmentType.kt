@@ -6,7 +6,7 @@ package com.enecuum.androidapp.navigation
 enum class FragmentType {
     Balance,
     Tokens,
-    MainReceive,
+    ReceiveByAddress,
     QrReceive,
     SendOptions,
     SendFinish,

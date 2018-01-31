@@ -10,6 +10,7 @@ import com.enecuum.androidapp.R
 import com.enecuum.androidapp.presentation.view.send_single_tab.SendSingleTabView
 import com.enecuum.androidapp.presentation.presenter.send_single_tab.SendSingleTabPresenter
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.enecuum.androidapp.models.SendReceiveMode
 import com.enecuum.androidapp.utils.SimpleTextWatcher
 import kotlinx.android.synthetic.main.fragment_send_single_tab.*
 
@@ -17,11 +18,7 @@ class SendSingleTabFragment : MvpAppCompatFragment(), SendSingleTabView {
     companion object {
         const val TAG = "SendSingleTabFragment"
         const val SEND_MODE = "sendMode"
-        enum class SendMode {
-            Enq,
-            EnqPlus
-        }
-        fun newInstance(sendMode: SendMode): SendSingleTabFragment {
+        fun newInstance(sendMode: SendReceiveMode): SendSingleTabFragment {
             val fragment = SendSingleTabFragment()
             val args = Bundle()
             fragment.arguments = args

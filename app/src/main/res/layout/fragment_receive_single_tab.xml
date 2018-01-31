@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:paddingLeft="16dp"
+android:paddingRight="16dp"
+    tools:context="com.enecuum.androidapp.ui.fragment.receive_single_tab.ReceiveSingleTabFragment">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/addressText"
+
+            android:hint="@string/address"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:textColor="@android:color/white"
+            android:textColorHint="@color/white_87"
+            android:lineSpacingExtra="8sp"
+            android:inputType="textNoSuggestions"
+            android:maxLines="1"
+            android:imeOptions="actionDone"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/copy1"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginBottom="6dp"
+            android:id="@+id/copy"/>
+    </FrameLayout>
+    <TextView
+        android:layout_marginTop="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:textColor="@color/white_87"
+        android:lineSpacingExtra="10sp"
+        tools:text="Your balance: 30,00000000"
+        android:id="@+id/balanceAmount"
+        android:layout_marginRight="19dp"
+        />
+</LinearLayout>
+

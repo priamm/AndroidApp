@@ -8,6 +8,7 @@ import com.enecuum.androidapp.events.ChangeButtonState
 import com.enecuum.androidapp.events.KeyboardIsVisible
 import com.enecuum.androidapp.events.SendAttempt
 import com.enecuum.androidapp.models.Currency
+import com.enecuum.androidapp.models.SendReceiveMode
 import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.view.send_single_tab.SendSingleTabView
 import com.enecuum.androidapp.ui.fragment.send_single_tab.SendSingleTabFragment
@@ -24,10 +25,10 @@ class SendSingleTabPresenter : MvpPresenter<SendSingleTabView>() {
     private var address = ""
 
     fun handleArgs(arguments: Bundle?) {
-        val sendMode = arguments?.getSerializable(SEND_MODE) as SendSingleTabFragment.Companion.SendMode
+        val sendMode = arguments?.getSerializable(SEND_MODE) as SendReceiveMode
         currency = when (sendMode) {
-            SendSingleTabFragment.Companion.SendMode.Enq -> Currency.Enq
-            SendSingleTabFragment.Companion.SendMode.EnqPlus -> Currency.EnqPlus
+            SendReceiveMode.Enq -> Currency.Enq
+            SendReceiveMode.EnqPlus -> Currency.EnqPlus
         }
         totalAmount = PersistentStorage.getCurrencyAmount(currency!!)
         viewState.setupWithAmount(totalAmount)

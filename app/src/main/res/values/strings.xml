@@ -48,4 +48,5 @@
     <string name="to_address">To address</string>
     <string name="send_history">Send History</string>
     <string name="receive_history">Receive History</string>
+    <string name="text_copied">text copied</string>
 </resources>

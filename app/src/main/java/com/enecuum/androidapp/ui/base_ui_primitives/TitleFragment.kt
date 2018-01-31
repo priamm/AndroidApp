@@ -10,9 +10,11 @@ import com.arellomobile.mvp.MvpAppCompatFragment
 abstract class TitleFragment : MvpAppCompatFragment() {
     abstract fun getTitle() : String
     protected var menu: Menu? = null
+    protected var menuInflater: MenuInflater? = null
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         this.menu = menu
+        this.menuInflater = inflater
     }
 }
