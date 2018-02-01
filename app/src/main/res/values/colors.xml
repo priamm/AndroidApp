@@ -2,6 +2,7 @@
 <resources>
     <color name="dark_grey_blue">#2b404f</color>
     <color name="inactive_tab">#3b454b</color>
+    <color name="steel_grey">#79858e</color>
     <color name="white__70">#b3ffffff</color>
     <color name="inactive_text">#a8a8a8</color>
     <color name="white_87">#deffffff</color>
@@ -17,6 +18,7 @@
     <color name="twilight_blue">#0b3553</color>
     <color name="dark_slate_blue">#0e2e44</color>>
     <color name="marine">#052a44</color>
+    <color name="dark_indigo">#0b2753</color>
     <color name="navy_two">#04243a</color>
     <color name="navy">#010d28</color>
     <color name="colorPrimary">#010d15</color>

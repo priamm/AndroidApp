@@ -6,11 +6,14 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     tools:context="com.enecuum.androidapp.ui.fragment.send_single_tab.SendSingleTabFragment">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.045"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/addressText"
-        android:layout_marginTop="28dp"
         android:hint="@string/address"
         android:textSize="16sp"
         android:fontFamily="sans-serif"
@@ -22,11 +25,14 @@
         android:maxLines="1"
         android:imeOptions="actionNext"
         android:nextFocusDown="@id/amount"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.044"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/amountText"
-        android:layout_marginTop="28dp"
         android:hint="@string/amount"
         android:textSize="16sp"
         android:fontFamily="sans-serif"
@@ -37,10 +43,13 @@
         android:maxLines="1"
         android:imeOptions="actionDone"
         android:inputType="number"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.038"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -65,8 +74,12 @@
             android:lineSpacingExtra="12sp"
             android:text="@string/send_max"
             android:id="@+id/sendMax"
-            android:paddingRight="5dp"
-            android:paddingLeft="5dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
             />
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.031"/>
 </LinearLayout>

@@ -29,7 +29,7 @@
         <activity
             android:name=".ui.activity.main.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
+            android:theme="@style/AppTheme"
             />
         <activity
             android:name=".ui.activity.new_account.NewAccountActivity"

@@ -6,6 +6,10 @@
     android:orientation="vertical"
     android:paddingLeft="16dp"
     android:paddingRight="16dp">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.022"/>
 <EditText
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -14,22 +18,27 @@
     android:textColorHint="@color/white_87"
     android:hint="@android:string/search_go"
     android:id="@+id/searchField"
-    android:layout_marginTop="14dp"
     android:textSize="16sp"
     android:fontFamily="sans-serif"
     android:textStyle="normal"
     android:lineSpacingExtra="8sp"
     android:imeOptions="actionSearch"
-    android:layout_marginBottom="19dp"
     android:singleLine="true"
     />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.03"/>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:id="@+id/tokensList"
-        android:layout_marginBottom="30dp"/>
+        android:id="@+id/tokensList"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.044"/>
     <Button
         android:text="@string/send"
         android:id="@+id/send"
@@ -43,8 +52,11 @@
         android:textSize="14sp"
         android:letterSpacing="0.04"
         android:background="@drawable/blue_button_background"
-        android:layout_marginBottom="14dp"
         android:enabled="false"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.022"/>
     <Button
         android:text="@string/receive"
         android:id="@+id/receive"
@@ -59,5 +71,9 @@
         android:textSize="14sp"
         android:letterSpacing="0.04"
         android:background="@drawable/blue_button_background"
-        android:layout_marginBottom="14dp"/>
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.023"/>
 </LinearLayout>

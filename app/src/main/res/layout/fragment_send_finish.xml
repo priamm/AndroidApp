@@ -8,75 +8,88 @@ tools:context="com.enecuum.androidapp.ui.fragment.send_finish.SendFinishFragment
 android:id="@+id/mainLayout"
 android:orientation="vertical"
 android:gravity="bottom"
-app:umanoPanelHeight="130dp">
+app:umanoPanelHeight="127dp">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginBottom="130dp">
-    <LinearLayout
+    android:layout_marginBottom="127dp">
+    <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
+        android:layout_weight="0.039"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:textColor="@color/white_87"
+        android:lineSpacingExtra="14sp"
+        android:gravity="center_horizontal"
+        android:text="@string/you_are_going_to_send"
+        android:layout_gravity="center"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.028"/>
+    <TextView
         android:paddingLeft="16dp"
-        android:paddingRight="16dp">
-        <TextView
-            android:layout_marginTop="25dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="@color/white_87"
-            android:lineSpacingExtra="14sp"
-            android:gravity="center_horizontal"
-            android:text="@string/you_are_going_to_send"
-            android:layout_gravity="center"
-            />
-        <TextView
-            android:layout_marginTop="18dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="@color/white_87"
-            android:lineSpacingExtra="10sp"
-            android:text="@string/to_address"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="@android:color/white"
-            tools:text="5Kb8kLL6TsZZY36hWXMssSzNydYXYB9"
-            android:id="@+id/addressText"
-            />
-        <TextView
-            android:layout_marginTop="13dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="@color/white_87"
-            android:lineSpacingExtra="10sp"
-            android:text="@string/amount"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="@android:color/white"
-            tools:text="8.00000000 ENQ"
-            android:id="@+id/amountCurrency"
-            />
-    </LinearLayout>
+        android:paddingRight="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:textColor="@color/white_87"
+        android:lineSpacingExtra="10sp"
+        android:text="@string/to_address"
+        />
+    <TextView
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:textColor="@android:color/white"
+        tools:text="5Kb8kLL6TsZZY36hWXMssSzNydYXYB9"
+        android:id="@+id/addressText"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.02"/>
+    <TextView
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:textColor="@color/white_87"
+        android:lineSpacingExtra="10sp"
+        android:text="@string/amount"
+        />
+    <TextView
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:textColor="@android:color/white"
+        tools:text="8.00000000 ENQ"
+        android:id="@+id/amountCurrency"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.084"/>
     <Button
         android:layout_width="match_parent"
         android:layout_marginLeft="27dp"
@@ -89,9 +102,12 @@ app:umanoPanelHeight="130dp">
         android:text="@string/confirm_send"
         android:letterSpacing="0.04"
         android:id="@+id/send"
-        android:layout_marginBottom="23dp"
         android:background="@drawable/standard_button_background"
         />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.036"/>
 </LinearLayout>
 <LinearLayout
     android:layout_width="match_parent"
@@ -107,7 +123,7 @@ app:umanoPanelHeight="130dp">
         android:textStyle="normal"
         android:textColor="@color/black_87"
         android:lineSpacingExtra="10sp"
-        android:text="@string/transactions_history"
+        android:text="@string/send_history"
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:layout_marginBottom="7dp"

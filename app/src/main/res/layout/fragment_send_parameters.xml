@@ -8,7 +8,7 @@ tools:context="com.enecuum.androidapp.ui.fragment.send_parameters.SendParameters
     android:id="@+id/mainLayout"
     android:orientation="vertical"
     android:gravity="bottom"
-    app:umanoPanelHeight="130dp">
+    app:umanoPanelHeight="127dp">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -39,9 +39,12 @@ tools:context="com.enecuum.androidapp.ui.fragment.send_parameters.SendParameters
         android:letterSpacing="0.04"
         android:enabled="false"
         android:id="@+id/send"
-        android:layout_marginBottom="23dp"
         android:background="@drawable/standard_button_background"
         />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.036"/>
 </LinearLayout>
 <LinearLayout
     android:layout_width="match_parent"
