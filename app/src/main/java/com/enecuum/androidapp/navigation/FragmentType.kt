@@ -10,5 +10,5 @@ enum class FragmentType {
     QrReceive,
     SendOptions,
     SendFinish,
-    Settings
+    SettingsMain
 }

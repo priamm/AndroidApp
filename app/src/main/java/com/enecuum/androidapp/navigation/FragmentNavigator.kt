@@ -11,6 +11,7 @@ import com.enecuum.androidapp.ui.fragment.receive_by_address.ReceiveByAddressFra
 import com.enecuum.androidapp.ui.fragment.receive_qr.ReceiveQrFragment
 import com.enecuum.androidapp.ui.fragment.send_finish.SendFinishFragment
 import com.enecuum.androidapp.ui.fragment.send_parameters.SendParametersFragment
+import com.enecuum.androidapp.ui.fragment.settings_main.SettingsMainFragment
 import com.enecuum.androidapp.ui.fragment.tokens_jettons.TokensAndJettonsFragment
 import ru.terrakok.cicerone.android.SupportAppNavigator
 
@@ -35,7 +36,7 @@ class FragmentNavigator(activity: FragmentActivity?,
             FragmentType.QrReceive -> return ReceiveQrFragment.newInstance(data as Bundle)
             FragmentType.SendOptions -> return SendParametersFragment.newInstance()
             FragmentType.SendFinish -> return SendFinishFragment.newInstance(data as Bundle)
-            FragmentType.Settings -> TODO()
+            FragmentType.SettingsMain -> return SettingsMainFragment.newInstance()
         }
     }
 }

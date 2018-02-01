@@ -51,4 +51,10 @@
     <string name="text_copied">text copied</string>
     <string name="use_qr_code">Use QR code</string>
     <string name="your_current_enq_address">Your current ENQ address:</string>
+    <string name="settings">Settings</string>
+    <string name="backup_actions">Backup actions</string>
+    <string name="backup_actions_settings">Backup actions settings</string>
+    <string name="change_pin_description">Change your PIN code</string>
+    <string name="about_app">About app</string>
+    <string name="about_app_description">Terms, privacy policy, whitepaper etc.</string>
 </resources>

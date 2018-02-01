@@ -48,23 +48,25 @@ class EnecuumApplication : Application() {
             } else {
                 backStack[tabType] = 1
             }
-            if(screenType == FragmentType.Balance && tabType == TabType.Home) {
+            if(isRoot(screenType, tabType))
                 newRootScreen(screenType, transitionData)
-                return
+            fragmentCicerone.router.navigateTo(screenType.toString(), transitionData)
+        }
+
+        private fun isRoot(screenType: FragmentType, tabType: TabType) : Boolean {
+            if(screenType == FragmentType.Balance && tabType == TabType.Home) {
+                return true
             }
             if(screenType == FragmentType.SendOptions && tabType == TabType.Send) {
-                newRootScreen(screenType, transitionData)
-                return
+                return true
             }
             if(screenType == FragmentType.ReceiveByAddress && tabType == TabType.Receive) {
-                newRootScreen(screenType, transitionData)
-                return
+                return true
             }
-            if(screenType == FragmentType.Settings && tabType == TabType.Settings) {
-                newRootScreen(screenType, transitionData)
-                return
+            if(screenType == FragmentType.SettingsMain && tabType == TabType.Settings) {
+                return true
             }
-            fragmentCicerone.router.navigateTo(screenType.toString(), transitionData)
+            return false
         }
 
         private fun newRootScreen(screenType: FragmentType, transitionData: Any?) {

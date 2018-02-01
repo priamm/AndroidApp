@@ -62,4 +62,10 @@
     <string name="text_copied">Текст скопирован</string>
     <string name="use_qr_code">Использовать QR код</string>
     <string name="your_current_enq_address">Ваш текущий адрес ENQ:</string>
+    <string name="settings">Настройки</string>
+    <string name="backup_actions">Резервное копирование</string>
+    <string name="backup_actions_settings">Настройки резервного копирования</string>
+    <string name="change_pin_description">Смена своего PIN-кода</string>
+    <string name="about_app">О программе</string>
+    <string name="about_app_description">Правила использования, соглашение о конфиденциальности, whitepaper и т.д.</string>
 </resources>
