@@ -38,6 +38,7 @@ class SettingsMainFragment : NoBackFragment(), SettingsMainView {
         SettingsInfoUtils.setupSettingInfo(changePin, changePinInfo, changePinDescription, {presenter.onChangePinClick()})
         SettingsInfoUtils.setupSettingInfo(backupActions, backupInfo, backupDescription, {presenter.onBackupActionClick()})
         SettingsInfoUtils.setupSettingInfo(aboutApp, aboutInfo, aboutDescription, {presenter.onAboutAppClick()})
+        setHasOptionsMenu(true)
     }
 
     override fun getTitle(): String = getString(R.string.settings)

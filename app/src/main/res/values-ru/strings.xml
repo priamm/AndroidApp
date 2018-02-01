@@ -74,4 +74,8 @@
     <string name="wrong_pin">Неправильный PIN-код</string>
     <string name="pin_not_equals">PIN не совпадают</string>
     <string name="pin_changed">Ваш PIN-код был изменён</string>
+    <string name="save_description">Сохранить криптографический ключ в файл</string>
+    <string name="copy_description">Копировать ключ в буфер обмена</string>
+    <string name="share_description">Отправить ключ в Сеть</string>
+    <string name="share">Отправить</string>
 </resources>

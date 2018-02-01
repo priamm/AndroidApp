@@ -52,7 +52,6 @@
     <string name="use_qr_code">Use QR code</string>
     <string name="your_current_enq_address">Your current ENQ address:</string>
     <string name="settings">Settings</string>
-    <string name="backup_actions">Backup actions</string>
     <string name="backup_actions_settings">Backup actions settings</string>
     <string name="change_pin_description">Change your PIN code</string>
     <string name="about_app">About app</string>
@@ -63,4 +62,9 @@
     <string name="wrong_pin">Wrong pin number</string>
     <string name="pin_not_equals">PIN not equals</string>
     <string name="pin_changed">Your PIN has been changed</string>
+    <string name="save_description">Save crypto key to file</string>
+    <string name="copy_description">Copy key to clipboard</string>
+    <string name="share_description">Share key on the Web</string>
+    <string name="backup_actions">Backup actions</string>
+    <string name="share">Share</string>
 </resources>
