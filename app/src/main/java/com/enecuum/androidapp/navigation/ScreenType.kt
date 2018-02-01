@@ -24,5 +24,6 @@ enum class ScreenType {
     Main,
     Mining,
     QrCode,
-    Terms
+    Terms,
+    ChangePin
 }

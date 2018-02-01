@@ -68,4 +68,10 @@
     <string name="change_pin_description">Смена своего PIN-кода</string>
     <string name="about_app">О программе</string>
     <string name="about_app_description">Правила использования, соглашение о конфиденциальности, whitepaper и т.д.</string>
+    <string name="enter_current_pin">Введите текущий PIN-код</string>
+    <string name="enter_new_pin">Введите новый PIN-код</string>
+    <string name="confirm_new_pin">Повторите новый PIN-код</string>
+    <string name="wrong_pin">Неправильный PIN-код</string>
+    <string name="pin_not_equals">PIN не совпадают</string>
+    <string name="pin_changed">Ваш PIN-код был изменён</string>
 </resources>

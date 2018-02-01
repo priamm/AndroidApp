@@ -56,29 +56,6 @@ class NewAccountPinFragment : SlideshowTitleFragment(), NewAccountPinView {
 
     override fun getTitle() = getString(R.string.pin_creation)
 
-    override fun setPinVisible(visible: Boolean, pinString: NewAccountPinPresenter.PinString) {
-        when(pinString) {
-            NewAccountPinPresenter.PinString.First -> {
-                PinUtils.setPinsVisibility(
-                        pin1_1,
-                        pin1_2,
-                        pin1_3,
-                        pin1_4,
-                        visible
-                )
-            }
-            NewAccountPinPresenter.PinString.Second -> {
-                PinUtils.setPinsVisibility(
-                        pin2_1,
-                        pin2_2,
-                        pin2_3,
-                        pin2_4,
-                        visible
-                )
-            }
-        }
-    }
-
     override fun refreshPinState(length: Int, pinString: NewAccountPinPresenter.PinString) {
         when(pinString) {
             NewAccountPinPresenter.PinString.First -> {

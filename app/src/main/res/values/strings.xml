@@ -57,4 +57,10 @@
     <string name="change_pin_description">Change your PIN code</string>
     <string name="about_app">About app</string>
     <string name="about_app_description">Terms, privacy policy, whitepaper etc.</string>
+    <string name="enter_current_pin">Enter current PIN</string>
+    <string name="enter_new_pin">Enter new PIN</string>
+    <string name="confirm_new_pin">Confirm new PIN</string>
+    <string name="wrong_pin">Wrong pin number</string>
+    <string name="pin_not_equals">PIN not equals</string>
+    <string name="pin_changed">Your PIN has been changed</string>
 </resources>

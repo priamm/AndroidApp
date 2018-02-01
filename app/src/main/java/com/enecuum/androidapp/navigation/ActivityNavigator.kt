@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.design.widget.Snackbar
+import android.widget.Toast
+import com.enecuum.androidapp.ui.activity.change_pin.ChangePinActivity
 import com.enecuum.androidapp.ui.activity.forgot.ForgotPinActivity
 import com.enecuum.androidapp.ui.activity.main.MainActivity
 import com.enecuum.androidapp.ui.activity.new_account.NewAccountActivity
@@ -60,6 +62,9 @@ class ActivityNavigator(private val currentActivity : Activity?) : Navigator {
             ScreenType.RestorePin -> {
                 RestorePinActivity::class.java
             }
+            ScreenType.ChangePin -> {
+                ChangePinActivity::class.java
+            }
             else -> null
         }
     }
@@ -103,7 +108,7 @@ class ActivityNavigator(private val currentActivity : Activity?) : Navigator {
 
     private var isDisplayingMessage = false
     private val locker = Any()
-    private val period = 500L
+    private val period = 2000L
 
     private fun displayMessage(text: String) {
         if(currentActivity == null)
@@ -113,9 +118,11 @@ class ActivityNavigator(private val currentActivity : Activity?) : Navigator {
         synchronized(locker, {
             isDisplayingMessage = true
             val handler = Handler(Looper.getMainLooper())
+            handler.post {
+                val toast = Toast.makeText(currentActivity, text, Toast.LENGTH_SHORT)
+                toast.show()
+            }
             handler.postDelayed({
-                val snackbar = Snackbar.make(currentActivity.window!!.decorView, text, Snackbar.LENGTH_LONG)
-                snackbar.show()
                 isDisplayingMessage = false
             }, period)
         })

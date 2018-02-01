@@ -29,8 +29,7 @@
         <activity
             android:name=".ui.activity.main.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.activity.new_account.NewAccountActivity"
             android:label=""
@@ -54,11 +53,17 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize|stateHidden" />
-        <activity android:name=".ui.activity.restore_pin.RestorePinActivity"
+        <activity
+            android:name=".ui.activity.restore_pin.RestorePinActivity"
             android:label="@string/restore_pin"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize|stateHidden"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize|stateHidden" />
+        <activity android:name=".ui.activity.change_pin.ChangePinActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
+            android:label="@string/change_pin"
+            android:windowSoftInputMode="adjustResize"
             />
     </application>
 

@@ -10,19 +10,23 @@ import kotlinx.android.synthetic.main.fragment_new_account_pin.*
  */
 object PinUtils {
 
-    fun setPinsVisibility(pin1: ImageView, pin2: ImageView, pin3: ImageView, pin4: ImageView, isVisible: Boolean) {
+    fun changePinState(pin1: ImageView, pin2: ImageView, pin3: ImageView, pin4: ImageView, currentLength : Int) {
+        val isVisible = currentLength > 0
+        setPinsVisibility(pin1, pin2, pin3, pin4, isVisible)
+        if(isVisible) {
+            changeDotState(currentLength, 0, pin1)
+            changeDotState(currentLength, 1, pin2)
+            changeDotState(currentLength, 2, pin3)
+            changeDotState(currentLength, 3, pin4)
+        }
+    }
+
+    private fun setPinsVisibility(pin1: ImageView, pin2: ImageView, pin3: ImageView, pin4: ImageView, isVisible: Boolean) {
         val visibility = if(isVisible) View.VISIBLE else View.INVISIBLE
         pin1.visibility = visibility
         pin2.visibility = visibility
         pin3.visibility = visibility
         pin4.visibility = visibility
-    }
-
-    fun changePinState(pin1: ImageView, pin2: ImageView, pin3: ImageView, pin4: ImageView, currentLength : Int) {
-        changeDotState(currentLength, 0, pin1)
-        changeDotState(currentLength, 1, pin2)
-        changeDotState(currentLength, 2, pin3)
-        changeDotState(currentLength, 3, pin4)
     }
 
     private fun changeDotState(length: Int, value2check : Int, dot: ImageView) {

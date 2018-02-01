@@ -44,8 +44,6 @@ class SignInActivity : BackActivity(), SignInView {
     }
 
     override fun displayPin(length: Int) {
-        val isVisible = length > 0
-        PinUtils.setPinsVisibility(pin1_1, pin1_2, pin1_3, pin1_4, isVisible)
         PinUtils.changePinState(pin1_1, pin1_2, pin1_3, pin1_4, length)
     }
 

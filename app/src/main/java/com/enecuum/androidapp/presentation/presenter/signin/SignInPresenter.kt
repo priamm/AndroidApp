@@ -10,13 +10,16 @@ import com.enecuum.androidapp.presentation.view.signin.SignInView
 
 @InjectViewState
 class SignInPresenter : MvpPresenter<SignInView>() {
+    private var pin = ""
     fun onPinTextChanged(text: String) {
+        pin = text
         viewState.displayPin(text.length)
         viewState.changeButtonState(text.length == Constants.PIN_COUNT)
     }
 
     fun onNextClick() {
         //TODO: check pin
+        PersistentStorage.setPin(pin)
         PersistentStorage.setRegistrationFinished()
         EnecuumApplication.navigateToActivity(ScreenType.Main)
     }
