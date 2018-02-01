@@ -49,4 +49,6 @@
     <string name="send_history">Send History</string>
     <string name="receive_history">Receive History</string>
     <string name="text_copied">text copied</string>
+    <string name="use_qr_code">Use QR code</string>
+    <string name="your_current_enq_address">Your current ENQ address:</string>
 </resources>

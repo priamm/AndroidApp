@@ -10,6 +10,7 @@ import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.events.KeyboardIsVisible
+import com.enecuum.androidapp.events.StringValueChanged
 import com.enecuum.androidapp.models.Currency
 import com.enecuum.androidapp.models.SendReceiveMode
 import com.enecuum.androidapp.persistent_data.PersistentStorage
@@ -41,6 +42,10 @@ class ReceiveSingleTabPresenter : MvpPresenter<ReceiveSingleTabView>() {
 
     fun onKeyboardVisibilityChanged(rootView: View) {
         EventBus.getDefault().post(KeyboardIsVisible(KeyboardUtils.isKeyboardShown(rootView)))
+    }
+
+    fun onAddressTextChanged(text: String) {
+        EventBus.getDefault().post(StringValueChanged(text))
     }
 
 }

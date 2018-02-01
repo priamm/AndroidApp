@@ -8,12 +8,15 @@ import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.events.ChangeButtonState
 import com.enecuum.androidapp.events.KeyboardIsVisible
 import com.enecuum.androidapp.events.SendAttempt
+import com.enecuum.androidapp.events.StringValueChanged
 import com.enecuum.androidapp.models.Currency
 import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.models.TransactionType
 import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.navigation.TabType
+import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.view.send_parameters.SendParametersView
+import com.enecuum.androidapp.ui.fragment.receive_qr.ReceiveQrFragment
 import com.enecuum.androidapp.ui.fragment.send_parameters.SendParametersFragment
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -78,6 +81,8 @@ class SendParametersPresenter : MvpPresenter<SendParametersView>() {
     }
 
     fun onQrClick() {
-
+        val bundle = Bundle()
+        bundle.putString(ReceiveQrFragment.ADDRESS, PersistentStorage.getAddress())
+        EnecuumApplication.navigateToFragment(FragmentType.QrReceive, TabType.Send, bundle)
     }
 }

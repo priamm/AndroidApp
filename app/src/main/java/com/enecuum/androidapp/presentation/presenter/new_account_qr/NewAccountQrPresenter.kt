@@ -38,8 +38,11 @@ class NewAccountQrPresenter : MvpPresenter<NewAccountQrView>(), FileOpeningFragm
         val secureRandom = SecureRandom.getInstance("SHA1PRNG")
         generator.initialize(512, secureRandom)
         keys = generator.generateKeyPair()
-        if(keys != null)
-            viewState.showQrCode(keys?.public?.encoded.toString())
+        if(keys != null) {
+            val address = keys?.public?.encoded.toString()
+            viewState.showQrCode(address)
+            PersistentStorage.setAddress(address)
+        }
     }
 
     fun onSaveClick() {

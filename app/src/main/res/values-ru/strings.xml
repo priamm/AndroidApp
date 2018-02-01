@@ -60,4 +60,6 @@
     <string name="send_history">История отправлений</string>
     <string name="receive_history">История пополнений</string>
     <string name="text_copied">Текст скопирован</string>
+    <string name="use_qr_code">Использовать QR код</string>
+    <string name="your_current_enq_address">Ваш текущий адрес ENQ:</string>
 </resources>

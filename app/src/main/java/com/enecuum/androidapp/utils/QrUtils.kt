@@ -9,10 +9,11 @@ import com.google.zxing.qrcode.QRCodeWriter
  * Created by oleg on 23.01.18.
  */
 object QrUtils {
-    fun createCodeFrom(string : String, widthInDp : Float, heightInDp : Float) : Bitmap? {
+    private const val QR_CODE_SIZE = 206f
+    fun createCodeFrom(string : String) : Bitmap? {
         try {
-            val realW = DimensionConverter.dipToPixels(widthInDp)
-            val realH = DimensionConverter.dipToPixels(heightInDp)
+            val realW = DimensionConverter.dipToPixels(QR_CODE_SIZE)
+            val realH = DimensionConverter.dipToPixels(QR_CODE_SIZE)
             val writer = QRCodeWriter()
             val matrix = writer.encode(string, BarcodeFormat.QR_CODE, realW.toInt(), realH.toInt())
             val bmp = Bitmap.createBitmap(matrix.width, matrix.height, Bitmap.Config.RGB_565)

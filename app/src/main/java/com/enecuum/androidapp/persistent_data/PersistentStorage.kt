@@ -17,6 +17,7 @@ object PersistentStorage {
     private const val ENQ_PLUS_AMOUNT = "ENQ_PLUS_AMOUNT"
     private const val TOKEN_AMOUNT = "TOKEN_AMOUNT"
     private const val JETTON_AMOUNT = "JETTON_AMOUNT"
+    private const val ADDRESS = "ADDRESS"
 
     private fun getPrefs() : SharedPreferences = EnecuumApplication.applicationContext()
             .getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
@@ -79,5 +80,19 @@ object PersistentStorage {
             Currency.Token -> setFloat(TOKEN_AMOUNT, amount)
             Currency.Jetton -> setFloat(JETTON_AMOUNT, amount)
         }
+    }
+
+    fun getAddress() : String = getPrefs().getString(ADDRESS, "5Kb8kLL6TsZZY36hWXMssSzNydYXYB9")
+
+    fun setAddress(address : String) {
+        if(address.isEmpty())
+            return
+        setString(ADDRESS, address)
+    }
+
+    fun eraseAddress() {
+        val editor = getPrefs().edit()
+        editor.remove(ADDRESS)
+        editor.apply()
     }
 }

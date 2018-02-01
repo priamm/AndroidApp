@@ -17,7 +17,6 @@ import com.enecuum.androidapp.utils.QrUtils
 
 class NewAccountQrFragment : FileOpeningFragment(), NewAccountQrView {
     companion object {
-        const val QR_CODE_SIZE = 206f
         const val TAG = "NewAccountQrFragment"
 
         fun newInstance(): NewAccountQrFragment {
@@ -58,7 +57,7 @@ class NewAccountQrFragment : FileOpeningFragment(), NewAccountQrView {
     }
 
     override fun showQrCode(key: String) {
-        val qr = QrUtils.createCodeFrom(key, QR_CODE_SIZE, QR_CODE_SIZE)
+        val qr = QrUtils.createCodeFrom(key)
         qrCode.setImageBitmap(qr)
         keyText.text = key
     }

@@ -10,6 +10,7 @@ import com.enecuum.androidapp.presentation.view.registration_finished.Registrati
 @InjectViewState
 class RegistrationFinishedPresenter : MvpPresenter<RegistrationFinishedView>() {
     fun onBackPressed() {
+        PersistentStorage.eraseAddress()
         EnecuumApplication.cicerone().router.backTo(ScreenType.Registration.toString())
     }
 

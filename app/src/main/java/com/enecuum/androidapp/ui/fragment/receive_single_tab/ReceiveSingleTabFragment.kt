@@ -1,6 +1,7 @@
 package com.enecuum.androidapp.ui.fragment.receive_single_tab
 
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import com.enecuum.androidapp.R
 import com.enecuum.androidapp.models.SendReceiveMode
 import com.enecuum.androidapp.presentation.presenter.receive_single_tab.ReceiveSingleTabPresenter
 import com.enecuum.androidapp.presentation.view.receive_single_tab.ReceiveSingleTabView
+import com.enecuum.androidapp.utils.SimpleTextWatcher
 import kotlinx.android.synthetic.main.fragment_receive_single_tab.*
 
 class ReceiveSingleTabFragment : MvpAppCompatFragment(), ReceiveSingleTabView {
@@ -44,6 +46,11 @@ class ReceiveSingleTabFragment : MvpAppCompatFragment(), ReceiveSingleTabView {
                 presenter.onKeyboardVisibilityChanged(addressText.rootView)
             }
         }
+        addressText.addTextChangedListener(object : SimpleTextWatcher() {
+            override fun afterTextChanged(s: Editable?) {
+                presenter.onAddressTextChanged(addressText.text.toString())
+            }
+        })
     }
 
     override fun setupWithAmount(totalAmount: Float) {
