@@ -1,6 +1,7 @@
 package com.enecuum.androidapp.ui.fragment.settings_terms
 
 import android.os.Bundle
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import com.enecuum.androidapp.presentation.presenter.settings_terms.SettingsTerm
 
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.ui.base_ui_primitives.BackTitleFragment
+import kotlinx.android.synthetic.main.fragment_settings_terms.*
 
 class SettingsTermsFragment : BackTitleFragment(), SettingsTermsView {
     companion object {
@@ -31,10 +33,19 @@ class SettingsTermsFragment : BackTitleFragment(), SettingsTermsView {
         return inflater.inflate(R.layout.fragment_settings_terms, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter.onCreate()
+    }
+
     override fun onResume() {
         super.onResume()
         menu?.clear()
     }
 
     override fun getTitle(): String = getString(R.string.terms)
+
+    override fun displayTerms(termsText: Spanned?) {
+        terms.text = termsText
+    }
 }
