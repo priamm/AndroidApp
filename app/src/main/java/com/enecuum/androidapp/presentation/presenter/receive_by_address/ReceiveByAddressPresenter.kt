@@ -47,7 +47,7 @@ class ReceiveByAddressPresenter : MvpPresenter<ReceiveByAddressView>() {
         val bundle = Bundle()
         val realAddress = if(address.isEmpty()) PersistentStorage.getAddress() else address
         bundle.putString(ReceiveQrFragment.ADDRESS, realAddress)
-        EnecuumApplication.navigateToFragment(FragmentType.QrReceive, TabType.Receive, bundle)
+        EnecuumApplication.navigateToFragment(FragmentType.ReceiveQr, TabType.Receive, bundle)
     }
 
     @Subscribe

@@ -7,6 +7,4 @@ import com.enecuum.androidapp.ui.base_ui_primitives.FileOpener
 
 interface NewAccountQrView : FileOpener {
     fun showQrCode(key: String)
-    @StateStrategyType(SkipStrategy::class)
-    fun sendKey(intent: Intent)
 }

@@ -7,9 +7,11 @@ enum class FragmentType {
     Balance,
     Tokens,
     ReceiveByAddress,
-    QrReceive,
+    ReceiveQr,
     SendOptions,
     SendFinish,
     SettingsMain,
-    SettingsBackup
+    SettingsBackup,
+    SettingsAboutApp,
+    SettingsTerms
 }

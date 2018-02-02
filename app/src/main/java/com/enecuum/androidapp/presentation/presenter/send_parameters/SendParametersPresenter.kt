@@ -1,14 +1,12 @@
 package com.enecuum.androidapp.presentation.presenter.send_parameters
 
 import android.os.Bundle
-import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.events.ChangeButtonState
 import com.enecuum.androidapp.events.KeyboardIsVisible
 import com.enecuum.androidapp.events.SendAttempt
-import com.enecuum.androidapp.events.StringValueChanged
 import com.enecuum.androidapp.models.Currency
 import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.models.TransactionType
@@ -83,6 +81,6 @@ class SendParametersPresenter : MvpPresenter<SendParametersView>() {
     fun onQrClick() {
         val bundle = Bundle()
         bundle.putString(ReceiveQrFragment.ADDRESS, PersistentStorage.getAddress())
-        EnecuumApplication.navigateToFragment(FragmentType.QrReceive, TabType.Send, bundle)
+        EnecuumApplication.navigateToFragment(FragmentType.ReceiveQr, TabType.Send, bundle)
     }
 }

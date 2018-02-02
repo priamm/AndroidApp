@@ -52,6 +52,7 @@ class SettingsBackupFragment : FileOpeningFragment(), SettingsBackupView {
         setHasOptionsMenu(true)
         val supportActionBar = (activity as AppCompatActivity).supportActionBar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        activity?.title = getTitle()
         menu?.clear()
     }
 

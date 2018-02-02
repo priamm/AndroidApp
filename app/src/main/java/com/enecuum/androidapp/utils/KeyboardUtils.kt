@@ -1,5 +1,7 @@
 package com.enecuum.androidapp.utils
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Rect
 import android.os.Handler
@@ -8,7 +10,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.util.DisplayMetrics
-
+import com.enecuum.androidapp.application.EnecuumApplication
 
 
 /**
@@ -50,5 +52,11 @@ object KeyboardUtils {
         val dm = rootView.resources.displayMetrics
         val heightDiff = rootView.bottom - r.bottom
         return heightDiff > softKeyboardHeight * dm.density
+    }
+
+    fun copyToClipboard(value: String) {
+        val clipboard = EnecuumApplication.applicationContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("enecuum key", value)
+        clipboard.primaryClip = clip
     }
 }

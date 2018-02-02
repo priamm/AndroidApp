@@ -79,4 +79,9 @@
     <string name="share_description">Отправить ключ в Сеть</string>
     <string name="share">Отправить</string>
     <string name="key_backup_finished">Резервная копия ключа сохранена</string>
+    <string name="version">Версия</string>
+    <string name="website">Веб-сайт</string>
+    <string name="terms">Условия</string>
+    <string name="show"><u>Показать</u></string>
+    <string name="privacy_policy">Конфиденциальность</string>
 </resources>

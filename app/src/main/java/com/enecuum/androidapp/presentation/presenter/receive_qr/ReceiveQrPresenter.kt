@@ -10,6 +10,7 @@ import com.enecuum.androidapp.R
 import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.presentation.view.receive_qr.ReceiveQrView
 import com.enecuum.androidapp.ui.fragment.receive_qr.ReceiveQrFragment.Companion.ADDRESS
+import com.enecuum.androidapp.utils.KeyboardUtils
 
 @InjectViewState
 class ReceiveQrPresenter : MvpPresenter<ReceiveQrView>() {
@@ -26,9 +27,7 @@ class ReceiveQrPresenter : MvpPresenter<ReceiveQrView>() {
     }
 
     fun onCopyClick() {
-        val clipboard = EnecuumApplication.applicationContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("address", address!!)
-        clipboard.primaryClip = clip
+        KeyboardUtils.copyToClipboard(address!!)
         EnecuumApplication.cicerone().router.showSystemMessage(EnecuumApplication.applicationContext().getString(R.string.text_copied))
     }
 

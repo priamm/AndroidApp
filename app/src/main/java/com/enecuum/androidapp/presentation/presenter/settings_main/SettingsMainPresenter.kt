@@ -19,6 +19,6 @@ class SettingsMainPresenter : MvpPresenter<SettingsMainView>() {
     }
 
     fun onAboutAppClick() {
-
+        EnecuumApplication.navigateToFragment(FragmentType.SettingsAboutApp, TabType.Settings)
     }
 }

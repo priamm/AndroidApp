@@ -11,8 +11,10 @@ import com.enecuum.androidapp.ui.fragment.receive_by_address.ReceiveByAddressFra
 import com.enecuum.androidapp.ui.fragment.receive_qr.ReceiveQrFragment
 import com.enecuum.androidapp.ui.fragment.send_finish.SendFinishFragment
 import com.enecuum.androidapp.ui.fragment.send_parameters.SendParametersFragment
+import com.enecuum.androidapp.ui.fragment.settings_about_app.SettingsAboutAppFragment
 import com.enecuum.androidapp.ui.fragment.settings_backup.SettingsBackupFragment
 import com.enecuum.androidapp.ui.fragment.settings_main.SettingsMainFragment
+import com.enecuum.androidapp.ui.fragment.settings_terms.SettingsTermsFragment
 import com.enecuum.androidapp.ui.fragment.tokens_jettons.TokensAndJettonsFragment
 import ru.terrakok.cicerone.android.SupportAppNavigator
 
@@ -34,11 +36,13 @@ class FragmentNavigator(activity: FragmentActivity?,
             FragmentType.Balance -> return BalanceFragment.newInstance()
             FragmentType.Tokens -> return TokensAndJettonsFragment.newInstance()
             FragmentType.ReceiveByAddress -> return ReceiveByAddressFragment.newInstance()
-            FragmentType.QrReceive -> return ReceiveQrFragment.newInstance(data as Bundle)
+            FragmentType.ReceiveQr -> return ReceiveQrFragment.newInstance(data as Bundle)
             FragmentType.SendOptions -> return SendParametersFragment.newInstance()
             FragmentType.SendFinish -> return SendFinishFragment.newInstance(data as Bundle)
             FragmentType.SettingsMain -> return SettingsMainFragment.newInstance()
             FragmentType.SettingsBackup -> return SettingsBackupFragment.newInstance()
+            FragmentType.SettingsAboutApp -> return SettingsAboutAppFragment.newInstance()
+            FragmentType.SettingsTerms -> return SettingsTermsFragment.newInstance()
         }
     }
 }

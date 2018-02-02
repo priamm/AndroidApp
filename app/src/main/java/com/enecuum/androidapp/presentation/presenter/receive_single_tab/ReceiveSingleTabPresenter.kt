@@ -34,9 +34,7 @@ class ReceiveSingleTabPresenter : MvpPresenter<ReceiveSingleTabView>() {
     fun onCopyClicked(text: String) {
         if(text.isEmpty())
             return
-        val clipboard = EnecuumApplication.applicationContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("address", text)
-        clipboard.primaryClip = clip
+        KeyboardUtils.copyToClipboard(text)
         EnecuumApplication.cicerone().router.showSystemMessage(EnecuumApplication.applicationContext().getString(R.string.text_copied))
     }
 

@@ -1,6 +1,5 @@
 package com.enecuum.androidapp.presentation.presenter.new_account_qr
 
-import android.content.*
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.presentation.view.new_account_qr.NewAccountQrView
@@ -11,6 +10,8 @@ import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.ui.base_ui_primitives.FileOpeningFragment
 import com.enecuum.androidapp.events.PinBackupFinished
 import com.enecuum.androidapp.utils.FileSystemUtils
+import com.enecuum.androidapp.utils.KeyboardUtils
+import com.enecuum.androidapp.utils.SystemIntentManager
 import org.greenrobot.eventbus.EventBus
 import java.security.*
 
@@ -56,21 +57,16 @@ class NewAccountQrPresenter : MvpPresenter<NewAccountQrView>(), FileOpeningFragm
     fun onCopyClick() {
         if(keys == null)
             return
-        val clipboard = EnecuumApplication.applicationContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("public key", keys?.public?.encoded.toString())
-        clipboard.primaryClip = clip
-        EnecuumApplication.cicerone().router.showSystemMessage(EnecuumApplication.applicationContext().getString(R.string.key_copied_to_clipboard))
+        KeyboardUtils.copyToClipboard(keys?.public?.encoded.toString())
+        EnecuumApplication.cicerone().router.showSystemMessage(
+                EnecuumApplication.applicationContext().getString(R.string.key_copied_to_clipboard))
         notifyBackupFinished()
     }
 
     fun onShareClick() {
         if(keys == null)
             return
-        val intent = Intent()
-        intent.action = Intent.ACTION_SEND
-        intent.putExtra(Intent.EXTRA_TEXT, keys?.public?.encoded.toString())
-        intent.type = "text/plain"
-        viewState.sendKey(intent)
+        SystemIntentManager.sendText(keys?.public?.encoded.toString())
         isSendingStarted = true
     }
 

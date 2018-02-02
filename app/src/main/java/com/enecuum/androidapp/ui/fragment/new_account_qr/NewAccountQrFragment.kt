@@ -64,11 +64,6 @@ class NewAccountQrFragment : FileOpeningFragment(), NewAccountQrView {
 
     override fun getTitle() = getString(R.string.backup_file)
 
-
-    override fun sendKey(intent: Intent) {
-        startActivity(intent)
-    }
-
     override fun onResume() {
         super.onResume()
         presenter.onResume()

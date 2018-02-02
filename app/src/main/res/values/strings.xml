@@ -68,4 +68,11 @@
     <string name="backup_actions">Backup actions</string>
     <string name="share">Share</string>
     <string name="key_backup_finished">Key backup finished</string>
+    <string name="version">Version</string>
+    <string name="website">Website</string>
+    <string name="terms">Terms</string>
+    <string name="show"><u>Show</u></string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="enecuum_com" translatable="false"><u>enecuum.com</u></string>
+    <string name="white_paper" translatable="false">White Paper</string>
 </resources>
