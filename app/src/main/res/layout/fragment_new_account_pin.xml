@@ -7,17 +7,17 @@
     android:background="@color/navy"
     >
     <FrameLayout
+        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="83dp">
+        android:layout_height="wrap_content">
         <EditText
-
+            android:backgroundTint="@color/navy"
             android:textSize="16sp"
             android:lineSpacingExtra="8sp"
             android:textColorHint="@color/white_87"
             android:textColor="@color/navy"
             android:hint="@string/create_your_pin"
-            android:layout_width="wrap_content"
+            android:layout_width="174dp"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
             android:maxLength="4"
@@ -81,13 +81,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp">
         <EditText
+            android:backgroundTint="@color/navy"
             android:textSize="16sp"
             android:paddingTop="2dp"
             android:lineSpacingExtra="8sp"
             android:textColorHint="@color/white_87"
             android:textColor="@color/navy"
             android:hint="@string/confirm"
-            android:layout_width="wrap_content"
+            android:layout_width="174dp"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
             android:maxLength="4"
