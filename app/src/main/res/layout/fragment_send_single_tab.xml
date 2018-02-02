@@ -68,6 +68,7 @@
             android:id="@+id/sendMax"
             android:paddingRight="10dp"
             android:paddingLeft="10dp"
+            android:textAllCaps="false"
             />
     </LinearLayout>
 </LinearLayout>

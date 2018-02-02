@@ -60,6 +60,7 @@
             tools:text="5Kb8kLL6TsZZY36hWXMssSzNyd…"
             android:textColor="@color/inactive_text"
             android:id="@+id/address"
+            android:layout_marginTop="1dp"
             />
     </LinearLayout>
     <ImageView

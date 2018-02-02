@@ -51,7 +51,7 @@
             android:layout_marginLeft="27dp"
             android:layout_marginRight="27dp"
             android:textColor="@android:color/white"
-            android:textStyle="bold"
+            android:fontFamily="sans-serif"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textSize="14sp"

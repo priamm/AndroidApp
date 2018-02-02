@@ -24,7 +24,7 @@
         android:layout_gravity="center"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:inputType="textMultiLine|textNoSuggestions"
+        android:inputType="textNoSuggestions|textVisiblePassword"
         android:id="@+id/seed"
         android:imeOptions="actionDone"
         android:paddingTop="2dp"
@@ -39,7 +39,8 @@
         android:lineSpacingExtra="10sp"
         android:textColor="@color/white_87"
         android:id="@+id/seedHint"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:layout_marginBottom="20dp"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -52,7 +53,7 @@
         android:layout_marginLeft="27dp"
         android:layout_marginRight="27dp"
         android:textColor="@color/blue_button_text"
-        android:textStyle="bold"
+        android:fontFamily="sans-serif"
         android:layout_height="44dp"
         android:layout_gravity="center"
         android:textSize="14sp"

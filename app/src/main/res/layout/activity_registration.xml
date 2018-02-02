@@ -47,11 +47,11 @@
             android:layout_width="match_parent"
             android:layout_marginLeft="27dp"
             android:layout_marginRight="27dp"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
+            android:textColor="@color/standard_button_text"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textSize="14sp"
+            android:fontFamily="sans-serif"
             android:text="@string/new_account"
             android:letterSpacing="0.04"
             android:id="@+id/newAccount"
@@ -62,6 +62,7 @@
             android:layout_height="0dp"
             android:layout_weight="0.03"/>
         <Button
+            android:fontFamily="sans-serif"
             android:layout_marginLeft="27dp"
             android:layout_marginRight="27dp"
             android:textSize="14sp"
