@@ -90,7 +90,7 @@ object PersistentStorage {
         setString(ADDRESS, address)
     }
 
-    fun eraseAddress() {
+    fun deleteAddress() {
         val editor = getPrefs().edit()
         editor.remove(ADDRESS)
         editor.apply()

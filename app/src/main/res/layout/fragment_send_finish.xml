@@ -24,7 +24,7 @@ app:umanoPanelHeight="127dp">
         android:textSize="18sp"
         android:fontFamily="sans-serif"
         android:textStyle="normal"
-        android:textColor="@color/white_87"
+        android:textColor="@android:color/white"
         android:lineSpacingExtra="14sp"
         android:gravity="center_horizontal"
         android:text="@string/you_are_going_to_send"
@@ -103,11 +103,8 @@ app:umanoPanelHeight="127dp">
         android:letterSpacing="0.04"
         android:id="@+id/send"
         android:background="@drawable/standard_button_background"
+        android:layout_marginBottom="23dp"
         />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.036"/>
 </LinearLayout>
 <LinearLayout
     android:layout_width="match_parent"

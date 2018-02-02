@@ -78,4 +78,5 @@
     <string name="copy_description">Копировать ключ в буфер обмена</string>
     <string name="share_description">Отправить ключ в Сеть</string>
     <string name="share">Отправить</string>
+    <string name="key_backup_finished">Резервная копия ключа сохранена</string>
 </resources>

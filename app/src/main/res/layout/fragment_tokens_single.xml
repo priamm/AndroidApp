@@ -6,11 +6,8 @@
     android:orientation="vertical"
     android:paddingLeft="16dp"
     android:paddingRight="16dp">
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.022"/>
 <EditText
+    android:layout_marginTop="14dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:focusedByDefault="false"
@@ -25,21 +22,16 @@
     android:imeOptions="actionSearch"
     android:singleLine="true"
     />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.03"/>
 
     <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="19dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:id="@+id/tokensList"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.044"/>
     <Button
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="14dp"
         android:text="@string/send"
         android:id="@+id/send"
         android:layout_width="match_parent"
@@ -53,13 +45,10 @@
         android:letterSpacing="0.04"
         android:background="@drawable/blue_button_background"
         android:enabled="false"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.022"/>
     <Button
         android:text="@string/receive"
         android:id="@+id/receive"
+        android:layout_marginBottom="14dp"
         android:enabled="false"
         android:layout_width="match_parent"
         android:layout_marginLeft="27dp"
@@ -72,8 +61,4 @@
         android:letterSpacing="0.04"
         android:background="@drawable/blue_button_background"
         />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.023"/>
 </LinearLayout>

@@ -5,11 +5,9 @@
     tools:context="com.enecuum.androidapp.ui.activity.change_pin.ChangePinActivity"
     android:background="@color/navy"
     android:orientation="vertical">
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.055"/>
     <TextView
+        android:layout_marginTop="35dp"
+        android:layout_marginBottom="26dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
@@ -21,10 +19,6 @@
         android:layout_gravity="center"
         android:id="@+id/currentTitle"
         />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.041"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -110,9 +104,6 @@
         android:layout_gravity="center"
         android:textSize="14sp"
         android:letterSpacing="0.04"
-        android:background="@drawable/standard_button_background" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.033"/>
+        android:background="@drawable/standard_button_background"
+        android:layout_marginBottom="21dp"/>
 </LinearLayout>

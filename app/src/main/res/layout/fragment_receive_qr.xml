@@ -14,7 +14,7 @@
         android:textSize="18sp"
         android:fontFamily="sans-serif"
         android:textStyle="normal"
-        android:textColor="@color/white_87"
+        android:textColor="@android:color/white"
         android:lineSpacingExtra="14sp"
         android:gravity="center_horizontal"
         android:text="@string/your_current_enq_address"

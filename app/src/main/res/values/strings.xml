@@ -67,4 +67,5 @@
     <string name="share_description">Share key on the Web</string>
     <string name="backup_actions">Backup actions</string>
     <string name="share">Share</string>
+    <string name="key_backup_finished">Key backup finished</string>
 </resources>

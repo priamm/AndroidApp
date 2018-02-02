@@ -6,11 +6,8 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     tools:context="com.enecuum.androidapp.ui.fragment.send_single_tab.SendSingleTabFragment">
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.045"/>
     <EditText
+        android:layout_marginTop="29dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/addressText"
@@ -19,17 +16,14 @@
         android:fontFamily="sans-serif"
         android:textStyle="normal"
         android:textColor="@android:color/white"
-        android:textColorHint="@color/white_87"
+        android:textColorHint="@android:color/white"
         android:lineSpacingExtra="8sp"
         android:inputType="textNoSuggestions"
         android:maxLines="1"
         android:imeOptions="actionNext"
         android:nextFocusDown="@id/amount"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.044"/>
     <EditText
+        android:layout_marginTop="32dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/amountText"
@@ -38,16 +32,14 @@
         android:fontFamily="sans-serif"
         android:textStyle="normal"
         android:textColor="@android:color/white"
-        android:textColorHint="@color/white_87"
+        android:textColorHint="@android:color/white"
         android:lineSpacingExtra="8sp"
         android:maxLines="1"
         android:imeOptions="actionDone"
         android:inputType="number"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.038"/>
     <LinearLayout
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -65,12 +57,12 @@
             />
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="27dp"
             android:background="@drawable/send_max_bg"
             android:textSize="12sp"
             android:fontFamily="sans-serif"
             android:textStyle="normal"
-            android:textColor="@android:color/white"
+            android:textColor="@color/white_87"
             android:lineSpacingExtra="12sp"
             android:text="@string/send_max"
             android:id="@+id/sendMax"
@@ -78,8 +70,4 @@
             android:paddingLeft="10dp"
             />
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.031"/>
 </LinearLayout>

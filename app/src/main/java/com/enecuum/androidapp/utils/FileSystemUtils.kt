@@ -12,7 +12,6 @@ import com.github.angads25.filepicker.view.FilePickerDialog
  * Created by oleg on 23.01.18.
  */
 object FileSystemUtils {
-    const val PICK_FILE_REQUEST = 1024
     fun chooseDirectory(activity: Activity, listener : DialogSelectionListener) {
         val properties = DialogProperties()
         properties.selection_mode = DialogConfigs.SINGLE_MODE
