@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     tools:context="com.enecuum.androidapp.ui.activity.scan.ScanActivity">
 
-    <FrameLayout
+    <me.dm7.barcodescanner.zxing.ZXingScannerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/container"/>
+        android:id="@+id/zxingScanner"/>
 
 </LinearLayout>

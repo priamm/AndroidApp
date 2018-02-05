@@ -14,6 +14,7 @@ import com.enecuum.androidapp.application.EnecuumApplication
 object PermissionUtils {
     const val PermissionsRequestCode = 1024
     val storagePermissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    val cameraPermissions = arrayOf(Manifest.permission.CAMERA)
 
     fun checkPermissions(permissions: Array<String>) : Boolean {
         var result: Int
@@ -33,12 +34,8 @@ object PermissionUtils {
         fragment.requestPermissions(permissions, PermissionsRequestCode)
     }
 
-    fun handleGrantResults(results: IntArray) : Boolean {
-        for(result in results) {
-            if(result != PackageManager.PERMISSION_GRANTED)
-                return false
-        }
-        return true
+    private fun handleGrantResults(results: IntArray) : Boolean {
+        return results.none { it != PackageManager.PERMISSION_GRANTED }
     }
 
     fun checkPermissionsAndRunFunction(function: () -> Unit, requestCode : Int, grantResults : IntArray) {
