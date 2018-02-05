@@ -6,6 +6,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.events.ChangeButtonState
 import com.enecuum.androidapp.events.KeyboardIsVisible
+import com.enecuum.androidapp.events.SendAddressChanged
 import com.enecuum.androidapp.events.SendAttempt
 import com.enecuum.androidapp.models.Currency
 import com.enecuum.androidapp.models.SendReceiveMode
@@ -15,6 +16,7 @@ import com.enecuum.androidapp.ui.fragment.send_single_tab.SendSingleTabFragment
 import com.enecuum.androidapp.ui.fragment.send_single_tab.SendSingleTabFragment.Companion.SEND_MODE
 import com.enecuum.androidapp.utils.KeyboardUtils
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 @InjectViewState
 class SendSingleTabPresenter : MvpPresenter<SendSingleTabView>() {
@@ -32,9 +34,26 @@ class SendSingleTabPresenter : MvpPresenter<SendSingleTabView>() {
         }
         totalAmount = PersistentStorage.getCurrencyAmount(currency!!)
         viewState.setupWithAmount(totalAmount)
+        if(!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
+        }
     }
 
-    fun onAmountTextChanged(text: String) {
+    override fun onDestroy() {
+        super.onDestroy()
+        if(EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe
+    fun onSendAddressChanged(event: SendAddressChanged) {
+        if(event.currency == currency) {
+            viewState.changeAddress(event.newValue)
+            //onAddressChanged(event.newValue)
+        }
+    }
+
+    fun onAmountTextChanged(text: String, skip:Boolean = false) {
         try {
             val floatRepresentation = text.toFloat()
             currentAmount = floatRepresentation
@@ -42,34 +61,33 @@ class SendSingleTabPresenter : MvpPresenter<SendSingleTabView>() {
             currentAmount = 0f
             e.printStackTrace()
         }
-        validate()
+        if(!skip)
+            validate()
     }
 
     private fun validate() {
+        EventBus.getDefault().post(SendAttempt(currency!!, currentAmount, address))
         if (currentAmount > totalAmount || currentAmount <= 0) {
             EventBus.getDefault().post(ChangeButtonState(false))
         } else {
-            if (isAddressDefined) {
-                EventBus.getDefault().post(ChangeButtonState(true))
-                EventBus.getDefault().post(SendAttempt(currency!!, currentAmount, address))
-            } else
-                EventBus.getDefault().post(ChangeButtonState(false))
+            EventBus.getDefault().post(ChangeButtonState(isAddressDefined))
         }
     }
 
-    fun onAddressChanged(address: String) {
+    fun onAddressChanged(address: String, skip:Boolean = false) {
         this.address = address
         isAddressDefined = address.isNotEmpty()
-        validate()
+        if(!skip)
+            validate()
     }
 
     fun refreshButtonState(address: String, amount: String) {
-        onAddressChanged(address)
-        onAmountTextChanged(amount)
+        onAddressChanged(address, true)
+        onAmountTextChanged(amount, true)
+        validate()
     }
 
     fun onKeyboardVisibilityChanged(rootView: View) {
         EventBus.getDefault().post(KeyboardIsVisible(KeyboardUtils.isKeyboardShown(rootView)))
     }
-
 }

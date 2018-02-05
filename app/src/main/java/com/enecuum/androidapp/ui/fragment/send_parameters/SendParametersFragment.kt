@@ -1,6 +1,7 @@
 package com.enecuum.androidapp.ui.fragment.send_parameters
 
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
@@ -10,6 +11,7 @@ import com.enecuum.androidapp.presentation.view.send_parameters.SendParametersVi
 import com.enecuum.androidapp.ui.adapters.SendEnqTabsAdapter
 import com.enecuum.androidapp.ui.base_ui_primitives.NoBackFragment
 import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
+import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.fragment_send_parameters.*
 
 class SendParametersFragment : NoBackFragment(), SendParametersView {
@@ -67,7 +69,7 @@ class SendParametersFragment : NoBackFragment(), SendParametersView {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if(item?.itemId == R.id.qr) {
-            presenter.onQrClick()
+            presenter.onQrCodeClicked()
         }
         return super.onOptionsItemSelected(item)
     }

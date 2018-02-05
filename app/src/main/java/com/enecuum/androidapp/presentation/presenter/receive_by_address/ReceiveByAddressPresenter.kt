@@ -5,7 +5,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.events.KeyboardIsVisible
-import com.enecuum.androidapp.events.StringValueChanged
+import com.enecuum.androidapp.events.ReceiveAddressChanged
 import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.models.TransactionType
 import com.enecuum.androidapp.navigation.FragmentType
@@ -56,7 +56,7 @@ class ReceiveByAddressPresenter : MvpPresenter<ReceiveByAddressView>() {
     }
 
     @Subscribe
-    fun onAddressChanged(event: StringValueChanged) {
+    fun onAddressChanged(event: ReceiveAddressChanged) {
         address = event.newValue
     }
 }

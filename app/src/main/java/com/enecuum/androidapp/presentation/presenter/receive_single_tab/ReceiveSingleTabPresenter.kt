@@ -1,8 +1,5 @@
 package com.enecuum.androidapp.presentation.presenter.receive_single_tab
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import com.arellomobile.mvp.InjectViewState
@@ -10,7 +7,7 @@ import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.events.KeyboardIsVisible
-import com.enecuum.androidapp.events.StringValueChanged
+import com.enecuum.androidapp.events.ReceiveAddressChanged
 import com.enecuum.androidapp.models.Currency
 import com.enecuum.androidapp.models.SendReceiveMode
 import com.enecuum.androidapp.persistent_data.PersistentStorage
@@ -43,7 +40,7 @@ class ReceiveSingleTabPresenter : MvpPresenter<ReceiveSingleTabView>() {
     }
 
     fun onAddressTextChanged(text: String) {
-        EventBus.getDefault().post(StringValueChanged(text))
+        EventBus.getDefault().post(ReceiveAddressChanged(text))
     }
 
 }

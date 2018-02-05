@@ -59,11 +59,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize|stateHidden" />
-        <activity android:name=".ui.activity.change_pin.ChangePinActivity"
+        <activity
+            android:name=".ui.activity.change_pin.ChangePinActivity"
+            android:label="@string/change_pin"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
-            android:label="@string/change_pin"
-            android:windowSoftInputMode="adjustResize"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.activity.scan.ScanActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
             />
     </application>
 

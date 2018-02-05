@@ -23,7 +23,6 @@ enum class ScreenType {
     RestorePin,
     Main,
     Mining,
-    QrCode,
-    Terms,
-    ChangePin
+    ChangePin,
+    Scan
 }

@@ -76,4 +76,8 @@ class SendSingleTabFragment : MvpAppCompatFragment(), SendSingleTabView {
             presenter.refreshButtonState(addressText.text.toString(), amountText.text.toString())
         }
     }
+
+    override fun changeAddress(newValue: String) {
+        addressText.setText(newValue)
+    }
 }
