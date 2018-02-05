@@ -26,7 +26,6 @@ class SplashActivity : BaseActivity(), SplashView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        loading.startAnimation(AnimationUtils.loadAnimation(this, R.anim.rotate))
         presenter.onCreate()
     }
 }

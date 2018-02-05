@@ -13,5 +13,9 @@ enum class FragmentType {
     SettingsMain,
     SettingsBackup,
     SettingsAboutApp,
-    SettingsTerms
+    SettingsTerms,
+    MiningStart,
+    MiningProgress,
+    MiningLoading,
+    MiningJoinTeam
 }

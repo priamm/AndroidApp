@@ -47,6 +47,23 @@ class MainActivity : BaseActivity(), MainView {
                 return true
             }
         })
+        presenter.onCreate()
+        miningIcon.setOnClickListener {
+            presenter.onMiningButtonClick()
+        }
+        miningPanel.setOnClickListener {
+            presenter.onMiningClick()
+        }
+    }
+
+    override fun setupMiningPanel(miningInProgress: Boolean) {
+        if(miningInProgress) {
+            miningIcon.setImageResource(R.drawable.stop)
+            miningStatus.setText(R.string.mining_is_working)
+        } else {
+            miningIcon.setImageResource(R.drawable.play)
+            miningStatus.setText(R.string.mining_has_ended)
+        }
     }
 
     override fun onResume() {

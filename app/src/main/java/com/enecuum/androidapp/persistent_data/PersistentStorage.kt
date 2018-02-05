@@ -18,6 +18,7 @@ object PersistentStorage {
     private const val TOKEN_AMOUNT = "TOKEN_AMOUNT"
     private const val JETTON_AMOUNT = "JETTON_AMOUNT"
     private const val ADDRESS = "ADDRESS"
+    private const val IS_MINING_IN_PROGRESS = "IS_MINING_IN_PROGRESS"
 
     private fun getPrefs() : SharedPreferences = EnecuumApplication.applicationContext()
             .getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
@@ -95,4 +96,11 @@ object PersistentStorage {
         editor.remove(ADDRESS)
         editor.apply()
     }
+
+    fun setMiningInProgress(value: Boolean) {
+        setBoolean(IS_MINING_IN_PROGRESS, value)
+    }
+
+    fun isMiningInProgress() : Boolean =
+            getPrefs().getBoolean(IS_MINING_IN_PROGRESS, false)
 }

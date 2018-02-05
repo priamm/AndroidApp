@@ -1,0 +1,30 @@
+package com.enecuum.androidapp.presentation.presenter.mining_loading
+
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import com.arellomobile.mvp.InjectViewState
+import com.arellomobile.mvp.MvpPresenter
+import com.enecuum.androidapp.application.EnecuumApplication
+import com.enecuum.androidapp.navigation.FragmentType
+import com.enecuum.androidapp.presentation.view.mining_loading.MiningLoadingView
+import java.util.*
+
+
+@InjectViewState
+class MiningLoadingPresenter : MvpPresenter<MiningLoadingView>() {
+    companion object {
+        const val TEAM_COUNT = "TEAM_COUNT"
+    }
+    fun onCreate() {
+        //TODO: load team members from dag
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed({
+            val bundle = Bundle()
+            val random = Random(Date().time)
+            bundle.putInt(TEAM_COUNT, 1 + random.nextInt(5))
+            EnecuumApplication.fragmentCicerone().router.replaceScreen(FragmentType.MiningJoinTeam.toString(), bundle)
+        }, 1000)
+    }
+
+}

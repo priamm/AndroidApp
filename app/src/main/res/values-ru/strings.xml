@@ -84,4 +84,18 @@
     <string name="terms">Условия</string>
     <string name="show"><u>Показать</u></string>
     <string name="privacy_policy">Конфиденциальность</string>
+    <string name="mining_is_working">Идёт майнинг</string>
+    <string name="mining">Майнинг</string>
+    <string name="scan">Сканирование</string>
+    <string name="mining_has_ended">Майнинг остановлен</string>
+    <string name="start">Старт</string>
+    <string name="join">Присоединиться</string>
+    <plurals name="team_members">
+        <item quantity="zero">команда не найдена</item>
+        <item quantity="one">%1$d член команды</item>
+        <item quantity="two">%1$d члена команды</item>
+        <item quantity="few">%1$d члена команды</item>
+        <item quantity="many">%1$d членов команды</item>
+        <item quantity="other">%1$d членов команды</item>
+    </plurals>
 </resources>

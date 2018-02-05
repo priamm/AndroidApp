@@ -7,6 +7,10 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import com.enecuum.androidapp.ui.fragment.balance.BalanceFragment
+import com.enecuum.androidapp.ui.fragment.mining_in_progress.MiningInProgressFragment
+import com.enecuum.androidapp.ui.fragment.mining_join_team.MiningJoinTeamFragment
+import com.enecuum.androidapp.ui.fragment.mining_loading.MiningLoadingFragment
+import com.enecuum.androidapp.ui.fragment.mining_start.MiningStartFragment
 import com.enecuum.androidapp.ui.fragment.receive_by_address.ReceiveByAddressFragment
 import com.enecuum.androidapp.ui.fragment.receive_qr.ReceiveQrFragment
 import com.enecuum.androidapp.ui.fragment.send_finish.SendFinishFragment
@@ -43,6 +47,10 @@ class FragmentNavigator(activity: FragmentActivity?,
             FragmentType.SettingsBackup -> return SettingsBackupFragment.newInstance()
             FragmentType.SettingsAboutApp -> return SettingsAboutAppFragment.newInstance()
             FragmentType.SettingsTerms -> return SettingsTermsFragment.newInstance()
+            FragmentType.MiningStart -> return MiningStartFragment.newInstance()
+            FragmentType.MiningProgress -> return MiningInProgressFragment.newInstance()
+            FragmentType.MiningLoading -> return MiningLoadingFragment.newInstance()
+            FragmentType.MiningJoinTeam -> return MiningJoinTeamFragment.newInstance(data as Bundle)
         }
     }
 }

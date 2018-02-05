@@ -67,8 +67,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".ui.activity.scan.ScanActivity"
+        <activity
+            android:name=".ui.activity.scan.ScanActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
+            android:label="@string/scan"/>
+        <activity android:name=".ui.activity.mining.MiningActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/mining"
             android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
             />
     </application>

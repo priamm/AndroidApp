@@ -5,5 +5,7 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 
 interface MainView : MvpView {
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun setupMiningPanel(miningInProgress: Boolean)
 
 }

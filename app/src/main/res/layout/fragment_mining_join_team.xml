@@ -1,0 +1,76 @@
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+tools:context="com.enecuum.androidapp.ui.fragment.mining_join_team.MiningJoinTeamFragment"
+android:orientation="vertical"
+android:gravity="bottom"
+app:umanoPanelHeight="127dp">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.388"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:textColor="#ffffff"
+        android:id="@+id/team"
+        android:layout_gravity="center"
+        tools:text="4 team members"
+        android:layout_marginBottom="17dp"
+        />
+    <Button
+        android:text="@string/join"
+        android:id="@+id/join"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="27dp"
+        android:layout_marginRight="27dp"
+        android:textColor="@color/standard_button_text"
+        android:layout_height="44dp"
+        android:layout_gravity="center"
+        android:textSize="14sp"
+        android:letterSpacing="0.04"
+        android:background="@drawable/standard_button_background"
+        android:fontFamily="sans-serif"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.327"
+        />
+</LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center|top"
+    android:background="@android:color/white">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="normal"
+        android:textColor="@color/black_87"
+        android:lineSpacingExtra="10sp"
+        android:text="@string/transactions_history"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/transactionsHistory"/>
+</LinearLayout>
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

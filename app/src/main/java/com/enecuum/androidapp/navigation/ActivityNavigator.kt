@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.enecuum.androidapp.ui.activity.change_pin.ChangePinActivity
 import com.enecuum.androidapp.ui.activity.forgot.ForgotPinActivity
 import com.enecuum.androidapp.ui.activity.main.MainActivity
+import com.enecuum.androidapp.ui.activity.mining.MiningActivity
 import com.enecuum.androidapp.ui.activity.new_account.NewAccountActivity
 import com.enecuum.androidapp.ui.activity.registration.RegistrationActivity
 import com.enecuum.androidapp.ui.activity.registration_finished.RegistrationFinishedActivity
@@ -49,7 +50,7 @@ class ActivityNavigator(private val currentActivity : Activity?) : Navigator {
             ScreenType.RestorePin -> RestorePinActivity::class.java
             ScreenType.ChangePin -> ChangePinActivity::class.java
             ScreenType.Scan -> ScanActivity::class.java
-            else -> null
+            ScreenType.Mining -> MiningActivity::class.java
         }
     }
     private var isPendingClearStackIntent = false

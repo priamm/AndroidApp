@@ -75,4 +75,13 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="enecuum_com" translatable="false"><u>enecuum.com</u></string>
     <string name="white_paper" translatable="false">White Paper</string>
+    <string name="mining_is_working">Mining is working</string>
+    <string name="mining">Mining</string>
+    <string name="scan">Scan</string>
+    <string name="mining_has_ended">Mining has ended</string>
+    <string name="start">Start</string>
+    <string name="join">Join</string>
+    <plurals name="team_members">
+        <item quantity="other">%1$d team members</item>
+    </plurals>
 </resources>
