@@ -10,6 +10,7 @@ import com.enecuum.androidapp.presentation.view.mining_join_team.MiningJoinTeamV
 import com.enecuum.androidapp.presentation.presenter.mining_join_team.MiningJoinTeamPresenter
 
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.enecuum.androidapp.models.MiningHistoryItem
 import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
 import kotlinx.android.synthetic.main.fragment_mining_join_team.*
@@ -41,8 +42,8 @@ class MiningJoinTeamFragment : MvpAppCompatFragment(), MiningJoinTeamView {
         }
     }
 
-    override fun displayTransactionsHistory(transactionsList: List<Transaction>) {
-        TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
+    override fun displayTransactionsHistory(transactionsList: List<MiningHistoryItem>) {
+        TransactionsHistoryRenderer.displayMiningHistoryInRecyclerView(transactionsList, transactionsHistory)
     }
 
     override fun setupWithMembersCount(teamMemberCount: Int) {

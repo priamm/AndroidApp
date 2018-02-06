@@ -8,7 +8,7 @@ import com.enecuum.androidapp.models.Transaction
 /**
  * Created by oleg on 31.01.18.
  */
-interface TransactionsHistoryView : MvpView {
+interface HistoryView<in T> : MvpView {
     @StateStrategyType(AddToEndSingleStrategy::class)
-    fun displayTransactionsHistory(transactionsList: List<Transaction>)
+    fun displayTransactionsHistory(transactionsList: List<T>)
 }

@@ -11,6 +11,7 @@ import com.enecuum.androidapp.presentation.view.mining_in_progress.MiningInProgr
 import com.enecuum.androidapp.presentation.presenter.mining_in_progress.MiningInProgressPresenter
 
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.enecuum.androidapp.models.MiningHistoryItem
 import com.enecuum.androidapp.models.PoaMemberStatus
 import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
@@ -70,8 +71,8 @@ class MiningInProgressFragment : MvpAppCompatFragment(), MiningInProgressView {
         graph.addSeries(graphData)
     }
 
-    override fun displayTransactionsHistory(transactionsList: List<Transaction>) {
-        TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
+    override fun displayTransactionsHistory(transactionsList: List<MiningHistoryItem>) {
+        TransactionsHistoryRenderer.displayMiningHistoryInRecyclerView(transactionsList, transactionsHistory)
     }
 
     override fun setupWithStatus(status: PoaMemberStatus) {

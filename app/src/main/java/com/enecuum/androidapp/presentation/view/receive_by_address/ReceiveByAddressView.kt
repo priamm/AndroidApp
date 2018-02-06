@@ -1,6 +1,7 @@
 package com.enecuum.androidapp.presentation.view.receive_by_address
 
+import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.presentation.view.KeyboardVisibilityView
-import com.enecuum.androidapp.presentation.view.TransactionsHistoryView
+import com.enecuum.androidapp.presentation.view.HistoryView
 
-interface ReceiveByAddressView : TransactionsHistoryView, KeyboardVisibilityView
+interface ReceiveByAddressView : HistoryView<Transaction>, KeyboardVisibilityView

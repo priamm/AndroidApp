@@ -7,11 +7,14 @@
     <color name="perrywinkle">#606f91</color>
     <color name="steel_grey">#79858e</color>
     <color name="bluegrey">#7da1ae</color>
+    <color name="pinkish_grey_87">#debdbdbd</color>
     <color name="white__70">#b3ffffff</color>
+    <color name="background_white">#e0e0e0</color>
     <color name="inactive_text">#a8a8a8</color>
     <color name="turquoise_blue_three">#00abd2</color>
     <color name="turquoise_blue_two">#00a7d0</color>
     <color name="turquoise_blue">#00acd2</color>
+    <color name="cerulian">#0098d0</color>
     <color name="deep_turquoise">#0690ae</color>
     <color name="dark_sky_blue">#4a90e2</color>
     <color name="french_blue">#4474ad</color>
@@ -30,6 +33,7 @@
     <color name="midnight">#010d15</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="black_87">#de000000</color>
-    <color name="mustard">#daad00</color>
-    <color name="orange_brown">#c05c00</color>
+    <color name="black21">#212121</color>
+    <color name="mustard">#9100da</color>
+    <color name="orange_brown">#c02e00</color>
 </resources>

@@ -14,6 +14,6 @@
         android:id="@+id/tabLayout"
         app:tabSelectedTextColor="@android:color/white"
         app:tabTextColor="@color/white__70"
-        app:tabIndicatorColor="@color/turquoise_blue_three"/>
+        app:tabIndicatorColor="@color/cerulian"/>
 </android.support.v4.view.ViewPager>
 </LinearLayout>

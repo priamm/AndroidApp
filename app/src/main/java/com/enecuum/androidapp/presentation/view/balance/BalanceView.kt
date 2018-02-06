@@ -2,9 +2,10 @@ package com.enecuum.androidapp.presentation.view.balance
 
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
-import com.enecuum.androidapp.presentation.view.TransactionsHistoryView
+import com.enecuum.androidapp.models.Transaction
+import com.enecuum.androidapp.presentation.view.HistoryView
 
-interface BalanceView : TransactionsHistoryView {
+interface BalanceView : HistoryView<Transaction> {
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun displayCurrencyRates(enq2Usd: Double, enq2Btc: Double)
     @StateStrategyType(AddToEndSingleStrategy::class)
