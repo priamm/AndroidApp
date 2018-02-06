@@ -15,6 +15,7 @@ import java.util.*
 class MiningLoadingPresenter : MvpPresenter<MiningLoadingView>() {
     companion object {
         const val TEAM_COUNT = "TEAM_COUNT"
+        private const val TEAM_SIZE = 64
     }
     fun onCreate() {
         //TODO: load team members from dag
@@ -22,7 +23,7 @@ class MiningLoadingPresenter : MvpPresenter<MiningLoadingView>() {
         handler.postDelayed({
             val bundle = Bundle()
             val random = Random(Date().time)
-            bundle.putInt(TEAM_COUNT, 1 + random.nextInt(5))
+            bundle.putInt(TEAM_COUNT, 1 + random.nextInt(TEAM_SIZE-1))
             EnecuumApplication.fragmentCicerone().router.replaceScreen(FragmentType.MiningJoinTeam.toString(), bundle)
         }, 1000)
     }

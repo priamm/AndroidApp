@@ -1,7 +1,107 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.enecuum.androidapp.ui.fragment.mining_in_progress.MiningInProgressFragment"
+android:orientation="vertical"
+android:gravity="bottom"
+app:umanoPanelHeight="127dp">
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.enecuum.androidapp.ui.fragment.mining_in_progress.MiningInProgressFragment">
+    android:orientation="vertical"
+    android:paddingRight="16dp"
+    android:paddingLeft="16dp"
+    tools:background="@color/navy">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="21dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:lineSpacingExtra="6sp"
+            android:text="@string/poa"
+            android:layout_marginRight="14dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:textColor="@color/white_87"
+            android:lineSpacingExtra="8sp"
+            tools:text="Rate 5000/sec"
+            android:id="@+id/hashRateText"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:textColor="#ffffff"
+            android:lineSpacingExtra="8sp"
+            tools:text="You are a team lead"
+            android:id="@+id/memberStatus"
+            />
+    </LinearLayout>
+    <com.jjoe64.graphview.GraphView
+        android:layout_width="match_parent"
+        android:layout_height="225dp"
+        android:id="@+id/graph"
+        app:seriesData="0=5;2=5;3=0;4=2"
+        app:seriesType="line" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:textColor="#ffffff"
+        tools:text="Total Balance 5000 ENQ"
+        android:layout_gravity="center"
+        android:layout_marginTop="22dp"
+        android:id="@+id/totalBalanceText"
+        />
+</LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center|top"
+    android:background="@android:color/white">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="normal"
+        android:textColor="@color/black_87"
+        android:lineSpacingExtra="10sp"
+        android:text="@string/transactions_history"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"
+        />
 
-</FrameLayout>
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/transactionsHistory"/>
+</LinearLayout>
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>
+

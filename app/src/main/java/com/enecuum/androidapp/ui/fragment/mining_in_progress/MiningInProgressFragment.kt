@@ -1,6 +1,7 @@
 package com.enecuum.androidapp.ui.fragment.mining_in_progress
 
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,13 @@ import com.enecuum.androidapp.presentation.view.mining_in_progress.MiningInProgr
 import com.enecuum.androidapp.presentation.presenter.mining_in_progress.MiningInProgressPresenter
 
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.enecuum.androidapp.models.PoaMemberStatus
+import com.enecuum.androidapp.models.Transaction
+import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
+import com.jjoe64.graphview.GridLabelRenderer
+import com.jjoe64.graphview.series.DataPoint
+import com.jjoe64.graphview.series.LineGraphSeries
+import kotlinx.android.synthetic.main.fragment_mining_in_progress.*
 
 class MiningInProgressFragment : MvpAppCompatFragment(), MiningInProgressView {
     companion object {
@@ -25,10 +33,63 @@ class MiningInProgressFragment : MvpAppCompatFragment(), MiningInProgressView {
 
     @InjectPresenter
     lateinit var presenter: MiningInProgressPresenter
+    private val graphData = LineGraphSeries<DataPoint>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_mining_in_progress, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter.onCreate()
+        setupGraph()
+    }
+
+    private fun setupGraph() {
+        graph.gridLabelRenderer.gridColor = ContextCompat.getColor(activity!!, R.color.french_blue)
+        graph.gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.BOTH
+        graph.viewport.backgroundColor = ContextCompat.getColor(activity!!, R.color.dark_indigo_three)
+        graph.viewport.borderColor = ContextCompat.getColor(activity!!, android.R.color.white)
+        graph.viewport.isScrollable = true
+        graph.viewport.isXAxisBoundsManual = true
+        graph.viewport.setMinX(0.0)
+        graph.viewport.setMaxX(40.0)
+        graph.viewport.isYAxisBoundsManual = true
+        graph.viewport.setMinY(0.0)
+        graph.viewport.setMaxY(5000.0)
+        graph.legendRenderer.isVisible = false
+        graph.gridLabelRenderer.isVerticalLabelsVisible = false
+        graph.gridLabelRenderer.isHorizontalLabelsVisible = false
+        graphData.color = ContextCompat.getColor(activity!!, R.color.dark_sky_blue)
+        graphData.isDrawDataPoints = true
+        graphData.dataPointsRadius = 9f
+        graphData.thickness = 3
+        graphData.isDrawBackground = true
+        graphData.backgroundColor = ContextCompat.getColor(activity!!, R.color.turquoise_blue_five)
+        graph.addSeries(graphData)
+    }
+
+    override fun displayTransactionsHistory(transactionsList: List<Transaction>) {
+        TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
+    }
+
+    override fun setupWithStatus(status: PoaMemberStatus) {
+        when(status) {
+            PoaMemberStatus.PoaMember -> memberStatus.text = getString(R.string.poa_member)
+            PoaMemberStatus.TeamLead -> memberStatus.text = getString(R.string.team_lead)
+        }
+    }
+
+    override fun displayHashRate(hashRate: Int) {
+        hashRateText.text = String.format(getString(R.string.hash_rate), hashRate)
+    }
+
+    override fun displayTotalBalance(totalBalance: Int) {
+        totalBalanceText.text = String.format(getString(R.string.total_balance), totalBalance)
+    }
+
+    override fun refreshGraph(newGraphData: Array<DataPoint>) {
+        graphData.resetData(newGraphData)
+    }
 }

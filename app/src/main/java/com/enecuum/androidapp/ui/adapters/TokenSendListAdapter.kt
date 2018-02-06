@@ -35,7 +35,7 @@ class TokenSendListAdapter(private val data: List<TokenInfo>, private val mode: 
         } else {
             holder?.itemView?.checkBox?.visibility = View.VISIBLE
             holder?.itemView?.checkBox?.setOnCheckedChangeListener(null)
-            holder?.itemView?.checkBox?.setOnCheckedChangeListener { buttonView, isChecked ->
+            holder?.itemView?.checkBox?.setOnCheckedChangeListener { _, isChecked ->
                 if(isChecked) {
                     selectedIds.add(tokenInfo.id)
                 } else {

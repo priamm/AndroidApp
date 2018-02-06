@@ -47,7 +47,7 @@ class SignInActivity : BackActivity(), SignInView {
         PinUtils.changePinState(pin1_1, pin1_2, pin1_3, pin1_4, length)
     }
 
-    override fun changeButtonState(enabled: Boolean) {
-        next.isEnabled = enabled
+    override fun changeButtonState(enable: Boolean) {
+        next.isEnabled = enable
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="turquoise_blue_five">#3a00a8d0</color>
     <color name="dark_grey_blue">#2b404f</color>
     <color name="inactive_tab">#3b454b</color>
     <color name="white_87">#565f74</color>
@@ -13,8 +14,9 @@
     <color name="turquoise_blue">#00acd2</color>
     <color name="deep_turquoise">#0690ae</color>
     <color name="dark_sky_blue">#4a90e2</color>
-    <color name="peacock_blue">#044ca1</color>
+    <color name="french_blue">#4474ad</color>
     <color name="peacock_blue_two">#0459a1</color>
+    <color name="peacock_blue">#044ca1</color>
     <color name="marine_two">#013f74</color>
     <color name="colorAccent">#0b3553</color>
     <color name="twilight_blue">#0b3553</color>
@@ -22,6 +24,7 @@
     <color name="marine">#122551</color>
     <color name="dark_indigo">#0b2753</color>
     <color name="navy_two">#0e1e44</color>
+    <color name="dark_indigo_three">#0a1b42</color>
     <color name="navy">#010d28</color>
     <color name="colorPrimary">#010d15</color>
     <color name="midnight">#010d15</color>
