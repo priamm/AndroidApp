@@ -17,7 +17,6 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
         viewState.displayBalances(30.0, 30.0)
         viewState.displayPoints(1.0)
         viewState.displayKarma(1.0)
-        viewState.displayPercentage(1.0, 1.0)
         val transactionsList = listOf(
                 Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
                 Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),

@@ -14,7 +14,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.03"/>
+            android:layout_weight="0.031"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
                 android:textSize="14sp"
                 android:fontFamily="sans-serif"
                 android:textStyle="normal"
-                android:textColor="@color/turquoise_blue_two"
+                android:textColor="@color/cerulian"
                 android:lineSpacingExtra="10sp"
                 tools:text="7.99999999 ENQ/USD"
                 android:id="@+id/enqUsd"
@@ -43,7 +43,7 @@
                 android:textSize="14sp"
                 android:fontFamily="sans-serif"
                 android:textStyle="normal"
-                android:textColor="@color/turquoise_blue_two"
+                android:textColor="@color/cerulian"
                 android:lineSpacingExtra="10sp"
                 tools:text="7.99999999 ENQ/BTC"
                 android:id="@+id/enqBtc"
@@ -52,7 +52,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.022"/>
+            android:layout_weight="0.028"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.005"/>
+            android:layout_weight="0.06"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.009"/>
+            android:layout_weight="0.05"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -100,95 +100,63 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.019"/>
+            android:layout_weight="0.03"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/dark_slate_blue"
+            android:background="@color/dark_indigo_four"
             android:layout_marginRight="30dp"
             android:layout_marginLeft="30dp"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.022"/>
+            android:layout_weight="0.025"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="56dp">
-            <LinearLayout
-                android:layout_width="match_parent"
+            android:orientation="horizontal">
+            <TextView
+                android:gravity="right"
+                android:layout_marginRight="10dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="normal"
-                    android:textColor="@color/white_87"
-                    android:lineSpacingExtra="12sp"
-                    tools:text="Points 1.00000000"
-                    android:id="@+id/points"
-                    />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="normal"
-                    android:textColor="@color/white_87"
-                    android:lineSpacingExtra="12sp"
-                    tools:text="Karma 1.00000000"
-                    android:id="@+id/karma"
-                    />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:textColor="@color/white_87"
+                android:lineSpacingExtra="12sp"
+                tools:text="Points 1.00000000"
+                android:id="@+id/points"
+                />
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="7dp">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="normal"
-                    android:textColor="@color/white_87"
-                    android:lineSpacingExtra="12sp"
-                    tools:text="Percent 1.00000000"
-                    android:id="@+id/percent"
-                    />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="normal"
-                    android:textColor="@color/white_87"
-                    android:lineSpacingExtra="12sp"
-                    tools:text="Karma Percent 1.00000000"
-                    android:id="@+id/karmaPercent"
-                    />
-            </LinearLayout>
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:textColor="@color/white_87"
+                android:lineSpacingExtra="12sp"
+                tools:text="Karma 1.00000000"
+                android:id="@+id/karma"
+                />
         </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.02"/>
+            android:layout_weight="0.023"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/dark_slate_blue"
+            android:background="@color/dark_indigo_four"
             />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="69dp"
+            android:layout_height="77dp"
             android:background="@color/navy"
             android:orientation="horizontal"
             android:id="@+id/tokens">
@@ -219,11 +187,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:fontFamily="sans-serif-medium"
             android:textStyle="normal"
             android:textColor="@color/black_87"
-            android:lineSpacingExtra="10sp"
+            android:lineSpacingExtra="8sp"
             android:text="@string/transactions_history"
             android:layout_marginTop="16dp"
             android:gravity="center"

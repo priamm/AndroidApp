@@ -14,6 +14,4 @@ interface BalanceView : HistoryView<Transaction> {
     fun displayPoints(pointsValue: Double)
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun displayKarma(karmaValue: Double)
-    @StateStrategyType(AddToEndSingleStrategy::class)
-    fun displayPercentage(percentage: Double, karmaPercentage: Double)
 }

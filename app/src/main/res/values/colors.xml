@@ -3,7 +3,7 @@
     <color name="turquoise_blue_five">#3a00a8d0</color>
     <color name="dark_grey_blue">#2b404f</color>
     <color name="inactive_tab">#3b454b</color>
-    <color name="white_87">#565f74</color>
+    <color name="white_87">#6d778e</color>
     <color name="perrywinkle">#606f91</color>
     <color name="steel_grey">#79858e</color>
     <color name="bluegrey">#7da1ae</color>
@@ -28,6 +28,7 @@
     <color name="dark_indigo">#0b2753</color>
     <color name="navy_two">#0e1e44</color>
     <color name="dark_indigo_three">#0a1b42</color>
+    <color name="dark_indigo_four">#0b1a3d</color>
     <color name="navy">#010d28</color>
     <color name="colorPrimary">#010d15</color>
     <color name="midnight">#010d15</color>

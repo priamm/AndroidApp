@@ -65,11 +65,6 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         karma.text = String.format(FORMAT, getString(R.string.karma), karmaValue)
     }
 
-    override fun displayPercentage(percentage: Double, karmaPercentage: Double) {
-        percent.text = resources.getQuantityString(R.plurals.percent_plural, percentage.toInt(), percentage)
-        karmaPercent.text = String.format(FORMAT, getString(R.string.karma_percent), karmaPercentage)
-    }
-
     override fun displayTransactionsHistory(transactionsList: List<Transaction>) {
         TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
     }
