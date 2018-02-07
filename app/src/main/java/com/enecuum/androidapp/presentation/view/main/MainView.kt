@@ -1,11 +1,5 @@
 package com.enecuum.androidapp.presentation.view.main
 
-import com.arellomobile.mvp.MvpView
-import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
-import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
+import com.enecuum.androidapp.presentation.view.BaseMiningView
 
-interface MainView : MvpView {
-    @StateStrategyType(AddToEndSingleStrategy::class)
-    fun setupMiningPanel(miningInProgress: Boolean)
-
-}
+interface MainView : BaseMiningView

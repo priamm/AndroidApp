@@ -83,6 +83,7 @@
     <string name="team_lead">You are a team leader</string>
     <string name="hash_rate">Rate %d/sec</string>
     <string name="total_balance">Total Balance %d ENQ</string>
+    <string name="stop">Stop</string>
     <plurals name="team_members">
         <item quantity="other">%1$d team members</item>
     </plurals>

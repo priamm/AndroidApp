@@ -15,7 +15,9 @@ import com.enecuum.androidapp.navigation.TabsNavigator
 import com.enecuum.androidapp.presentation.presenter.main.MainPresenter
 import com.enecuum.androidapp.presentation.view.main.MainView
 import com.enecuum.androidapp.ui.base_ui_primitives.BaseActivity
+import com.enecuum.androidapp.utils.MiningUtils
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.mining_toolbar.*
 import org.greenrobot.eventbus.EventBus
 
 class MainActivity : BaseActivity(), MainView {
@@ -32,6 +34,7 @@ class MainActivity : BaseActivity(), MainView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(toolbar)
         bottomNavigation.setTextVisibility(false)
         bottomNavigation.enableAnimation(false)
         bottomNavigation.enableItemShiftingMode(false)
@@ -47,23 +50,11 @@ class MainActivity : BaseActivity(), MainView {
                 return true
             }
         })
-        presenter.onCreate()
-        miningIcon.setOnClickListener {
-            presenter.onMiningButtonClick()
-        }
-        miningPanel.setOnClickListener {
-            presenter.onMiningClick()
-        }
+        MiningUtils.setupMiningPanel(miningStatusChanger, miningPanel, this)
     }
 
-    override fun setupMiningPanel(miningInProgress: Boolean) {
-        if(miningInProgress) {
-            miningIcon.setImageResource(R.drawable.stop)
-            miningStatus.setText(R.string.mining_is_working)
-        } else {
-            miningIcon.setImageResource(R.drawable.play)
-            miningStatus.setText(R.string.mining_has_ended)
-        }
+    override fun setupMiningPanel() {
+        MiningUtils.refreshMiningPanel(miningIcon, miningStatus)
     }
 
     override fun onResume() {
@@ -73,6 +64,7 @@ class MainActivity : BaseActivity(), MainView {
             isSetupFinished = true
             presenter.finishSetup()
         }
+        setupMiningPanel()
     }
 
     override fun onPause() {

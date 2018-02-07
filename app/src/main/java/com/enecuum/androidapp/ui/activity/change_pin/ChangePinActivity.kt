@@ -11,9 +11,11 @@ import com.enecuum.androidapp.presentation.view.change_pin.ChangePinView
 import com.enecuum.androidapp.presentation.presenter.change_pin.ChangePinPresenter
 import com.enecuum.androidapp.ui.base_ui_primitives.BackActivity
 import com.enecuum.androidapp.utils.KeyboardUtils
+import com.enecuum.androidapp.utils.MiningUtils
 import com.enecuum.androidapp.utils.PinUtils
 import com.enecuum.androidapp.utils.SimpleTextWatcher
 import kotlinx.android.synthetic.main.activity_change_pin.*
+import kotlinx.android.synthetic.main.mining_toolbar.*
 
 
 class ChangePinActivity : BackActivity(), ChangePinView {
@@ -34,6 +36,8 @@ class ChangePinActivity : BackActivity(), ChangePinView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_pin)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         KeyboardUtils.showKeyboard(this, pinText)
         presenter.onCreate()
         pinText.addTextChangedListener(object : SimpleTextWatcher() {
@@ -44,6 +48,7 @@ class ChangePinActivity : BackActivity(), ChangePinView {
         next.setOnClickListener {
             presenter.onNextClick()
         }
+        MiningUtils.setupMiningPanel(miningStatusChanger, miningPanel, this)
     }
 
     override fun setupForPhase(currentPhase: CurrentPhase) {
@@ -62,10 +67,8 @@ class ChangePinActivity : BackActivity(), ChangePinView {
 
     private fun setup(title: Int, buttonTitle: Int) {
         currentTitle.text = getString(title)
-        pinText.hint = getString(title)
         next.text = getString(buttonTitle)
         pinText.setText("")
-        //displayPin(0)
     }
 
     override fun displayPin(length: Int) {
@@ -78,5 +81,14 @@ class ChangePinActivity : BackActivity(), ChangePinView {
 
     override fun onBackPressed() {
         presenter.onBackPressed()
+    }
+
+    override fun setupMiningPanel() {
+        MiningUtils.refreshMiningPanel(miningIcon, miningStatus)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupMiningPanel()
     }
 }

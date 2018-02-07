@@ -31,7 +31,7 @@
         <activity
             android:name=".ui.activity.main.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/Theme.AppCompat.Light.Mining" />
         <activity
             android:name=".ui.activity.new_account.NewAccountActivity"
             android:label=""
@@ -65,7 +65,7 @@
             android:name=".ui.activity.change_pin.ChangePinActivity"
             android:label="@string/change_pin"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
+            android:theme="@style/Theme.AppCompat.Light.Mining"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.activity.scan.ScanActivity"

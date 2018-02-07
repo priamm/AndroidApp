@@ -5,6 +5,7 @@
     tools:context="com.enecuum.androidapp.ui.activity.change_pin.ChangePinActivity"
     android:background="@color/navy"
     android:orientation="vertical">
+    <include layout="@layout/mining_toolbar"/>
     <TextView
         android:layout_marginTop="35dp"
         android:layout_marginBottom="26dp"

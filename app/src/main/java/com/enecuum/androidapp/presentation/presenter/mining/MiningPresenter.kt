@@ -3,8 +3,6 @@ package com.enecuum.androidapp.presentation.presenter.mining
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.application.EnecuumApplication
-import com.enecuum.androidapp.models.Transaction
-import com.enecuum.androidapp.models.TransactionType
 import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.view.mining.MiningView

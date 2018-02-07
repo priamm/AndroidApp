@@ -2,9 +2,7 @@ package com.enecuum.androidapp.ui.fragment.mining_in_progress
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.presentation.view.mining_in_progress.MiningInProgressView
@@ -45,6 +43,16 @@ class MiningInProgressFragment : MvpAppCompatFragment(), MiningInProgressView {
         super.onViewCreated(view, savedInstanceState)
         presenter.onCreate()
         setupGraph()
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.mining_menu, menu)
+        val stop = menu?.findItem(R.id.stop)
+        stop?.actionView?.setOnClickListener {
+            presenter.onStopClick()
+        }
     }
 
     private fun setupGraph() {

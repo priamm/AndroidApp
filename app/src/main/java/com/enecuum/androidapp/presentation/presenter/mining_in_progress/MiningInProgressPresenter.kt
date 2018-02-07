@@ -2,10 +2,13 @@ package com.enecuum.androidapp.presentation.presenter.mining_in_progress
 
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.models.MiningHistoryItem
 import com.enecuum.androidapp.models.PoaMemberStatus
 import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.models.TransactionType
+import com.enecuum.androidapp.navigation.FragmentType
+import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.view.mining_in_progress.MiningInProgressView
 import com.jjoe64.graphview.series.DataPoint
 import java.util.*
@@ -15,6 +18,7 @@ class MiningInProgressPresenter : MvpPresenter<MiningInProgressView>() {
     private var maxX = 0.0
 
     fun onCreate() {
+        PersistentStorage.setMiningInProgress(true)
         val transactionsList = listOf(
                 MiningHistoryItem(1517307367,1517307367, 10.0),
                 MiningHistoryItem(1517307367,1517307367, 10.0),
@@ -56,6 +60,11 @@ class MiningInProgressPresenter : MvpPresenter<MiningInProgressView>() {
             return@Array v
         })
         return values
+    }
+
+    fun onStopClick() {
+        PersistentStorage.setMiningInProgress(false)
+        EnecuumApplication.fragmentCicerone().router.replaceScreen(FragmentType.MiningStart.toString())
     }
 
 }

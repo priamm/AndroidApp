@@ -28,9 +28,9 @@ app:umanoPanelHeight="127dp">
         android:layout_gravity="center"
         />
     <TextView
-        android:layout_marginTop="18dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
+        android:layout_marginTop="38dp"
+        android:paddingLeft="19dp"
+        android:paddingRight="19dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
@@ -41,8 +41,8 @@ app:umanoPanelHeight="127dp">
         android:text="@string/to_address"
         />
     <TextView
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
+        android:paddingLeft="19dp"
+        android:paddingRight="19dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
@@ -53,9 +53,9 @@ app:umanoPanelHeight="127dp">
         android:id="@+id/addressText"
         />
     <TextView
-        android:layout_marginTop="13dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
+        android:layout_marginTop="33dp"
+        android:paddingLeft="19dp"
+        android:paddingRight="19dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
@@ -66,8 +66,8 @@ app:umanoPanelHeight="127dp">
         android:text="@string/amount"
         />
     <TextView
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
+        android:paddingLeft="19dp"
+        android:paddingRight="19dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
