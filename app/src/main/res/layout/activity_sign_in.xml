@@ -9,14 +9,13 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp">
+        android:layout_marginTop="67dp">
         <EditText
             android:backgroundTint="@color/navy"
             android:textSize="16sp"
             android:lineSpacingExtra="8sp"
             android:textColorHint="@color/white_87"
             android:textColor="@color/navy"
-            android:hint="@string/enter_your_pin"
             android:layout_width="174dp"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
@@ -35,55 +34,56 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal"
-            android:paddingBottom="16dp"
             >
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dot_1"
+                android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin1_1"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:visibility="invisible"/>
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dot_1"
+                android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin1_2"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:visibility="invisible"/>
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dot_1"
+                android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin1_3"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:visibility="invisible"/>
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dot_1"
+                android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin1_4"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:visibility="invisible"/>
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
         </LinearLayout>
     </FrameLayout>
     <TextView
+        android:layout_marginTop="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:textColor="@color/white_87"
         android:text="@string/forgot_pin"
         android:gravity="center"
-        android:id="@+id/forgot"
-        android:minHeight="48dp"/>
+        android:id="@+id/forgot"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"

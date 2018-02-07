@@ -47,7 +47,6 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal"
-            android:paddingBottom="0dp"
             >
             <ImageView
                 android:layout_width="wrap_content"
@@ -127,8 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:paddingBottom="0dp">
+            android:orientation="horizontal">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

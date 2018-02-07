@@ -40,7 +40,6 @@
             android:cursorVisible="false"
             android:paddingLeft="21dp"
             android:paddingRight="21dp"
-            android:hint="@string/enter_your_pin"
             />
         <LinearLayout
             android:layout_width="wrap_content"
@@ -52,39 +51,38 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dot_1"
+                android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin1"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:visibility="invisible"/>
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dot_1"
+                android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin2"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:visibility="invisible"/>
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dot_1"
+                android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin3"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:visibility="invisible"/>
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dot_1"
+                android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin4"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:visibility="invisible"/>
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"/>
         </LinearLayout>
     </FrameLayout>
     <View
