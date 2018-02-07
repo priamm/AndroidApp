@@ -40,7 +40,7 @@ tools:context="com.enecuum.androidapp.ui.fragment.send_parameters.SendParameters
         android:enabled="false"
         android:id="@+id/send"
         android:background="@drawable/standard_button_background"
-        android:layout_marginBottom="23dp"
+        android:layout_marginBottom="22dp"
         />
 </LinearLayout>
 <LinearLayout
@@ -52,15 +52,15 @@ tools:context="com.enecuum.androidapp.ui.fragment.send_parameters.SendParameters
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:fontFamily="sans-serif-medium"
         android:textStyle="normal"
         android:textColor="@color/black_87"
-        android:lineSpacingExtra="10sp"
+        android:lineSpacingExtra="8sp"
         android:text="@string/send_history"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:layout_marginBottom="7dp"
+        android:layout_marginBottom="16dp"
         />
 
     <android.support.v7.widget.RecyclerView

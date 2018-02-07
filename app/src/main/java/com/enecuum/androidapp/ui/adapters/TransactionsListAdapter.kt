@@ -38,7 +38,7 @@ class TransactionsListAdapter(private val data : List<Transaction>) : RecyclerVi
                 holder?.itemView?.icon?.setImageResource(R.drawable.send_little)
             }
             TransactionType.Receive -> {
-                holder?.itemView?.icon?.setImageResource(R.drawable.teceive_little)
+                holder?.itemView?.icon?.setImageResource(R.drawable.receive_little)
             }
         }
 

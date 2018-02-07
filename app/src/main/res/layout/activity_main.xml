@@ -48,6 +48,7 @@
             android:layout_gravity="center_vertical"
             />
         <ImageView
+            android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/chevron_right"
@@ -62,7 +63,7 @@
 
     <com.enecuum.androidapp.ui.view.BottomNavigationViewEx
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?android:attr/actionBarSize"
         app:menu="@menu/bottom_menu"
         android:id="@+id/bottomNavigation"
         app:itemIconTint="@color/tab_icon"

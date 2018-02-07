@@ -45,7 +45,6 @@ android:paddingRight="16dp"
         android:lineSpacingExtra="10sp"
         tools:text="Your balance: 30,00000000"
         android:id="@+id/balanceAmount"
-        android:layout_marginRight="19dp"
         />
 </LinearLayout>
 

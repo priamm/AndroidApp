@@ -23,7 +23,7 @@
         android:imeOptions="actionNext"
         android:nextFocusDown="@id/amount"/>
     <EditText
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="28dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/amountText"
@@ -38,7 +38,7 @@
         android:imeOptions="actionDone"
         android:inputType="number"/>
     <LinearLayout
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="19dp"
         android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

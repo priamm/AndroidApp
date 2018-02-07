@@ -19,7 +19,7 @@ class SettingsAboutAppPresenter : MvpPresenter<SettingsAboutAppView>() {
     }
 
     fun openSite() {
-        SystemIntentManager.openSite(EnecuumApplication.applicationContext().getString(R.string.enecuum_com))
+        SystemIntentManager.openSite("https://enecuum.com")
     }
 
     fun onTermsClick() {
