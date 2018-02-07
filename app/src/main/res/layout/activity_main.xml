@@ -25,7 +25,7 @@
             android:text="@string/mining_has_ended"
             android:id="@+id/miningStatus"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="14dp"
             />
         <ImageView
             android:layout_width="wrap_content"

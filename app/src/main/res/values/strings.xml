@@ -4,7 +4,7 @@
     <string name="sign_in">sign in</string>
     <string name="next">next</string>
     <string name="create_your_pin">Create your pin</string>
-    <string name="confirm">Confirm</string>
+    <string name="confirm">Confirm PIN</string>
     <string name="pin_creation">Pin creation</string>
     <string name="backup_file">Backup file</string>
     <string name="select_dir">Select directory</string>

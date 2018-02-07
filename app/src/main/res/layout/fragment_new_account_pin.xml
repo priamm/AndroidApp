@@ -6,8 +6,20 @@
     android:orientation="vertical"
     android:background="@color/navy"
     >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:textColor="@color/white_87"
+        android:lineSpacingExtra="10sp"
+        android:text="@string/create_your_pin"
+        android:layout_gravity="center"
+        android:layout_marginTop="36dp"
+        android:layout_marginBottom="17dp"
+        />
     <FrameLayout
-        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
@@ -16,8 +28,7 @@
             android:lineSpacingExtra="8sp"
             android:textColorHint="@color/white_87"
             android:textColor="@color/navy"
-            android:hint="@string/create_your_pin"
-            android:layout_width="174dp"
+            android:layout_width="179dp"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
             android:maxLength="4"
@@ -36,50 +47,62 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal"
-            android:paddingBottom="16dp"
+            android:paddingBottom="0dp"
             >
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dot_1"
+                android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin1_1"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:visibility="invisible"/>
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp" />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dot_1"
+                android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin1_2"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:visibility="invisible"/>
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dot_1"
+                android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin1_3"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:visibility="invisible"/>
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dot_1"
+                android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin1_4"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:visibility="invisible"/>
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
         </LinearLayout>
     </FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:textColor="@color/white_87"
+        android:lineSpacingExtra="10sp"
+        android:text="@string/confirm"
+        android:layout_gravity="center"
+        android:layout_marginTop="27dp"
+        android:layout_marginBottom="17dp"
+        />
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp">
+        >
         <EditText
             android:backgroundTint="@color/navy"
             android:textSize="16sp"
@@ -87,8 +110,7 @@
             android:lineSpacingExtra="8sp"
             android:textColorHint="@color/white_87"
             android:textColor="@color/navy"
-            android:hint="@string/confirm"
-            android:layout_width="174dp"
+            android:layout_width="179dp"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
             android:maxLength="4"
@@ -106,43 +128,43 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal"
-            android:paddingBottom="16dp">
+            android:paddingBottom="0dp">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dot_1"
+                android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin2_1"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:visibility="invisible"/>
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dot_1"
+                android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin2_2"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:visibility="invisible"/>
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dot_1"
+                android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin2_3"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:visibility="invisible"/>
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dot_1"
+                android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin2_4"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:visibility="invisible"/>
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
         </LinearLayout>
     </FrameLayout>
 </LinearLayout>
