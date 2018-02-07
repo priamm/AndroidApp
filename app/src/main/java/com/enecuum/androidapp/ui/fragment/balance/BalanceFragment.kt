@@ -58,7 +58,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     }
 
     override fun displayPoints(pointsValue: Double) {
-        points.text = resources.getQuantityString(R.plurals.point_plural, pointsValue.toInt(), pointsValue)
+        points.text = String.format(FORMAT, getString(R.string.points), pointsValue)
     }
 
     override fun displayKarma(karmaValue: Double) {

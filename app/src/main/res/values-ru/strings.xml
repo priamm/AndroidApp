@@ -27,14 +27,7 @@
     <string name="my_wallet">Мой кошелёк</string>
     <string name="balance">баланс</string>
     <string name="karma">Карма</string>
-    <plurals name="point_plural">
-        <item quantity="zero">нет баллов</item>
-        <item quantity="one">%1$f балл</item>
-        <item quantity="two">%1$f балла</item>
-        <item quantity="few">%1$f балла</item>
-        <item quantity="many">%1$f баллов</item>
-        <item quantity="other">%1$f баллов</item>
-    </plurals>
+    <string name="points">Баллы</string>
     <plurals name="percent_plural">
         <item quantity="zero">0 процентов</item>
         <item quantity="one">%1$f процент</item>

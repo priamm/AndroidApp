@@ -26,9 +26,7 @@
     <string name="my_wallet">My wallet</string>
     <string name="balance">balance</string>
     <string name="karma">Karma</string>
-    <plurals name="point_plural">
-        <item quantity="other">Points %1$f</item>
-    </plurals>
+    <string name="points">Points</string>
     <plurals name="percent_plural">
         <item quantity="other">Percent %1$f</item>
     </plurals>
