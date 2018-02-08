@@ -53,7 +53,7 @@ app:umanoPanelHeight="127dp">
         android:id="@+id/addressText"
         />
     <TextView
-        android:layout_marginTop="33dp"
+        android:layout_marginTop="19dp"
         android:paddingLeft="19dp"
         android:paddingRight="19dp"
         android:layout_width="wrap_content"

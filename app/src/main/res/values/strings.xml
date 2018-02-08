@@ -5,7 +5,7 @@
     <string name="next">next</string>
     <string name="create_your_pin">Create your pin</string>
     <string name="confirm">Confirm PIN</string>
-    <string name="pin_creation">Pin creation</string>
+    <string name="pin_creation">PIN creation</string>
     <string name="backup_file">Backup file</string>
     <string name="select_dir">Select directory</string>
     <string name="key_copied_to_clipboard">Key copied to clipboard!</string>
@@ -78,7 +78,6 @@
     <string name="mining_has_ended">Mining has ended</string>
     <string name="start">Start</string>
     <string name="join">Join</string>
-    <string name="poa" translatable="false">POA</string>
     <string name="poa_member">You are a PoA member</string>
     <string name="team_lead">You are a team leader</string>
     <string name="hash_rate">Rate %d/sec</string>

@@ -52,11 +52,11 @@ tools:context="com.enecuum.androidapp.ui.fragment.send_parameters.SendParameters
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:fontFamily="sans-serif-medium"
         android:textStyle="normal"
         android:textColor="@color/black_87"
-        android:lineSpacingExtra="8sp"
+        android:lineSpacingExtra="14sp"
         android:text="@string/send_history"
         android:layout_marginTop="16dp"
         android:gravity="center"
