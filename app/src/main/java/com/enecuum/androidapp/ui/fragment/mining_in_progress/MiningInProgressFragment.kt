@@ -44,6 +44,7 @@ class MiningInProgressFragment : MvpAppCompatFragment(), MiningInProgressView {
         presenter.onCreate()
         setupGraph()
         setHasOptionsMenu(true)
+        TransactionsHistoryRenderer.configurePanelListener(slidingLayout, panelHint)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

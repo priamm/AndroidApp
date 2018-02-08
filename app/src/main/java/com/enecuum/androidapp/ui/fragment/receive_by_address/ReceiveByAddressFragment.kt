@@ -39,6 +39,7 @@ class ReceiveByAddressFragment : NoBackFragment(), ReceiveByAddressView {
         viewPager.adapter = ReceiveEnqTabsAdapter(childFragmentManager, context!!)
         tabLayout.setupWithViewPager(viewPager)
         setHasOptionsMenu(true)
+        TransactionsHistoryRenderer.configurePanelListener(slidingLayout, panelHint)
     }
 
     override fun getTitle(): String = getString(R.string.receive)

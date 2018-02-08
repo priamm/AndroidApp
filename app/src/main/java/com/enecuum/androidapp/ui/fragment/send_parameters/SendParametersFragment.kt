@@ -46,6 +46,7 @@ class SendParametersFragment : NoBackFragment(), SendParametersView {
             presenter.onSendClick()
         }
         setHasOptionsMenu(true)
+        TransactionsHistoryRenderer.configurePanelListener(slidingLayout, panelHint)
     }
 
     override fun getTitle(): String = getString(R.string.send)

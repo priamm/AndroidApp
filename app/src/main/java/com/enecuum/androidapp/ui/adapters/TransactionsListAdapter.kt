@@ -4,10 +4,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.enecuum.androidapp.R
+import com.enecuum.androidapp.events.TransactionRepeated
 import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.models.TransactionType
 import com.enecuum.androidapp.ui.adapters.holders.TransactionViewHolder
 import kotlinx.android.synthetic.main.item_transactions_list.view.*
+import org.greenrobot.eventbus.EventBus
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -41,6 +43,8 @@ class TransactionsListAdapter(private val data : List<Transaction>) : RecyclerVi
                 holder?.itemView?.icon?.setImageResource(R.drawable.receive_little)
             }
         }
-
+        holder?.itemView?.repeatTransaction?.setOnClickListener {
+            EventBus.getDefault().post(TransactionRepeated(transaction))
+        }
     }
 }

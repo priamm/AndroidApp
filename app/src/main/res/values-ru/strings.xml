@@ -88,6 +88,7 @@
     <string name="hash_rate">Частота %d/сек</string>
     <string name="total_balance">Полный баланс %d ENQ</string>
     <string name="stop">Стоп</string>
+    <string name="mining_history">История майнинга</string>
     <plurals name="team_members">
         <item quantity="zero">команда не найдена</item>
         <item quantity="one">%1$d член команды</item>

@@ -1,6 +1,7 @@
 package com.enecuum.androidapp.ui.fragment.balance
 
 import android.os.Bundle
+import android.support.v4.widget.SlidingPaneLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -14,6 +15,7 @@ import com.enecuum.androidapp.presentation.view.balance.BalanceView
 import com.enecuum.androidapp.ui.adapters.TransactionsListAdapter
 import com.enecuum.androidapp.ui.base_ui_primitives.NoBackFragment
 import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import kotlinx.android.synthetic.main.fragment_balance.*
 
 class BalanceFragment : NoBackFragment(), BalanceView {
@@ -45,6 +47,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         })
         presenter.onCreate()
         setHasOptionsMenu(true)
+        TransactionsHistoryRenderer.configurePanelListener(slidingLayout, panelHint)
     }
 
     override fun displayCurrencyRates(enq2Usd: Double, enq2Btc: Double) {

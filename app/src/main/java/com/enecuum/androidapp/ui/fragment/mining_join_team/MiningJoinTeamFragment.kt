@@ -40,6 +40,7 @@ class MiningJoinTeamFragment : MvpAppCompatFragment(), MiningJoinTeamView {
         join.setOnClickListener {
             presenter.onJoinClick()
         }
+        TransactionsHistoryRenderer.configurePanelListener(slidingLayout, panelHint)
     }
 
     override fun displayTransactionsHistory(transactionsList: List<MiningHistoryItem>) {
