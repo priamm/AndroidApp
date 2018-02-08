@@ -41,11 +41,6 @@ class ReceiveSingleTabFragment : MvpAppCompatFragment(), ReceiveSingleTabView {
         copy.setOnClickListener {
             presenter.onCopyClicked(addressText.text.toString())
         }
-        addressText.viewTreeObserver.addOnGlobalLayoutListener {
-            if(addressText != null) {
-                presenter.onKeyboardVisibilityChanged(addressText.rootView)
-            }
-        }
         addressText.addTextChangedListener(object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable?) {
                 presenter.onAddressTextChanged(addressText.text.toString())

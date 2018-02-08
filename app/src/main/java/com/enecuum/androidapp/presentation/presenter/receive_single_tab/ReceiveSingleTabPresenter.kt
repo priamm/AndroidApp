@@ -1,12 +1,10 @@
 package com.enecuum.androidapp.presentation.presenter.receive_single_tab
 
 import android.os.Bundle
-import android.view.View
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.application.EnecuumApplication
-import com.enecuum.androidapp.events.KeyboardIsVisible
 import com.enecuum.androidapp.events.ReceiveAddressChanged
 import com.enecuum.androidapp.models.Currency
 import com.enecuum.androidapp.models.SendReceiveMode
@@ -33,10 +31,6 @@ class ReceiveSingleTabPresenter : MvpPresenter<ReceiveSingleTabView>() {
             return
         KeyboardUtils.copyToClipboard(text)
         EnecuumApplication.cicerone().router.showSystemMessage(EnecuumApplication.applicationContext().getString(R.string.text_copied))
-    }
-
-    fun onKeyboardVisibilityChanged(rootView: View) {
-        EventBus.getDefault().post(KeyboardIsVisible(KeyboardUtils.isKeyboardShown(rootView)))
     }
 
     fun onAddressTextChanged(text: String) {

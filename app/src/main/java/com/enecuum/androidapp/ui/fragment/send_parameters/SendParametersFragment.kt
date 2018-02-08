@@ -54,10 +54,6 @@ class SendParametersFragment : NoBackFragment(), SendParametersView {
         TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
     }
 
-    override fun handleKeyboardVisibility(visible: Boolean) {
-        transactionsHistory.visibility = if(visible) View.GONE else View.VISIBLE
-    }
-
     override fun changeButtonState(enable: Boolean) {
         send.isEnabled = enable
     }

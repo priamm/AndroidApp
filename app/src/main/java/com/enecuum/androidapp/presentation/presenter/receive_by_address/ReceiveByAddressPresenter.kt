@@ -4,7 +4,6 @@ import android.os.Bundle
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.application.EnecuumApplication
-import com.enecuum.androidapp.events.KeyboardIsVisible
 import com.enecuum.androidapp.events.ReceiveAddressChanged
 import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.models.TransactionType
@@ -48,11 +47,6 @@ class ReceiveByAddressPresenter : MvpPresenter<ReceiveByAddressView>() {
         val realAddress = if(address.isEmpty()) PersistentStorage.getAddress() else address
         bundle.putString(ReceiveQrFragment.ADDRESS, realAddress)
         EnecuumApplication.navigateToFragment(FragmentType.ReceiveQr, TabType.Receive, bundle)
-    }
-
-    @Subscribe
-    fun onKeyboardVisibilityChanged(event: KeyboardIsVisible) {
-        viewState.handleKeyboardVisibility(event.isVisible)
     }
 
     @Subscribe

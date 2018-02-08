@@ -65,8 +65,4 @@ class ReceiveByAddressFragment : NoBackFragment(), ReceiveByAddressView {
             menuInflater?.inflate(R.menu.qr_menu, menu)
         }
     }
-
-    override fun handleKeyboardVisibility(visible: Boolean) {
-        transactionsHistory.visibility = if(visible) View.GONE else View.VISIBLE
-    }
 }

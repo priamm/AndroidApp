@@ -1,20 +1,16 @@
 package com.enecuum.androidapp.presentation.presenter.send_single_tab
 
 import android.os.Bundle
-import android.view.View
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.events.ChangeButtonState
-import com.enecuum.androidapp.events.KeyboardIsVisible
 import com.enecuum.androidapp.events.SendAddressChanged
 import com.enecuum.androidapp.events.SendAttempt
 import com.enecuum.androidapp.models.Currency
 import com.enecuum.androidapp.models.SendReceiveMode
 import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.view.send_single_tab.SendSingleTabView
-import com.enecuum.androidapp.ui.fragment.send_single_tab.SendSingleTabFragment
 import com.enecuum.androidapp.ui.fragment.send_single_tab.SendSingleTabFragment.Companion.SEND_MODE
-import com.enecuum.androidapp.utils.KeyboardUtils
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
@@ -85,9 +81,5 @@ class SendSingleTabPresenter : MvpPresenter<SendSingleTabView>() {
         onAddressChanged(address, true)
         onAmountTextChanged(amount, true)
         validate()
-    }
-
-    fun onKeyboardVisibilityChanged(rootView: View) {
-        EventBus.getDefault().post(KeyboardIsVisible(KeyboardUtils.isKeyboardShown(rootView)))
     }
 }

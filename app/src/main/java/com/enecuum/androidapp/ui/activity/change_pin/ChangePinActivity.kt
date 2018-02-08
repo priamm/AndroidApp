@@ -4,13 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
-
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
-import com.enecuum.androidapp.presentation.view.change_pin.ChangePinView
 import com.enecuum.androidapp.presentation.presenter.change_pin.ChangePinPresenter
+import com.enecuum.androidapp.presentation.view.change_pin.ChangePinView
 import com.enecuum.androidapp.ui.base_ui_primitives.BackActivity
-import com.enecuum.androidapp.utils.KeyboardUtils
 import com.enecuum.androidapp.utils.MiningUtils
 import com.enecuum.androidapp.utils.PinUtils
 import com.enecuum.androidapp.utils.SimpleTextWatcher
@@ -38,13 +39,18 @@ class ChangePinActivity : BackActivity(), ChangePinView {
         setContentView(R.layout.activity_change_pin)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        KeyboardUtils.showKeyboard(this, pinText)
         presenter.onCreate()
         pinText.addTextChangedListener(object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable?) {
                 presenter.onPinTextChanged(pinText.text.toString())
             }
         })
+        pinText.setOnEditorActionListener { _, actionId, _ ->
+            if(actionId == EditorInfo.IME_ACTION_DONE) {
+                presenter.onNextClick()
+            }
+            true
+        }
         next.setOnClickListener {
             presenter.onNextClick()
         }

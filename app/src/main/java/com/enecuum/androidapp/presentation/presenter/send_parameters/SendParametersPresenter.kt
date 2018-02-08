@@ -59,11 +59,6 @@ class SendParametersPresenter : MvpPresenter<SendParametersView>(), ResultListen
     }
 
     @Subscribe
-    fun onKeyboardVisibilityChanged(event: KeyboardIsVisible) {
-        viewState.handleKeyboardVisibility(event.isVisible)
-    }
-
-    @Subscribe
     fun onButtonStateChanged(event: ChangeButtonState) {
         viewState.changeButtonState(event.enable)
     }

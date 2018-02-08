@@ -45,16 +45,6 @@ class SendSingleTabFragment : MvpAppCompatFragment(), SendSingleTabView {
                 presenter.onAddressChanged(addressText.text.toString())
             }
         })
-        addressText.viewTreeObserver.addOnGlobalLayoutListener {
-            if(addressText != null) {
-                presenter.onKeyboardVisibilityChanged(addressText.rootView)
-            }
-        }
-        amountText.viewTreeObserver.addOnGlobalLayoutListener {
-            if(addressText != null) {
-                presenter.onKeyboardVisibilityChanged(amountText.rootView)
-            }
-        }
     }
 
     override fun setupWithAmount(amount: Float) {
