@@ -38,7 +38,7 @@
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+            android:windowSoftInputMode="adjustResize|stateVisible" />
         <activity
             android:name=".ui.activity.signin.SignInActivity"
             android:label="@string/enter_your_pin"
@@ -55,7 +55,7 @@
             android:label="@string/forgot_pin"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".ui.activity.restore_pin.RestorePinActivity"
             android:label="@string/restore_pin"
@@ -67,7 +67,7 @@
             android:label="@string/change_pin"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.Mining"
-            android:windowSoftInputMode="stateVisible" />
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".ui.activity.scan.ScanActivity"
             android:screenOrientation="portrait"

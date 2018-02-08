@@ -2,6 +2,7 @@
 <resources>
     <color name="turquoise_blue_five">#3a00a8d0</color>
     <color name="dark_grey_blue">#2b404f</color>
+    <color name="dark">#2f384d</color>
     <color name="inactive_tab">#3b454b</color>
     <color name="white_87">#6d778e</color>
     <color name="perrywinkle">#606f91</color>

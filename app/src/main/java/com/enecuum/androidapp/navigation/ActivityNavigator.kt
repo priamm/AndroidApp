@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.design.widget.Snackbar
 import android.widget.Toast
 import com.enecuum.androidapp.ui.activity.change_pin.ChangePinActivity
 import com.enecuum.androidapp.ui.activity.forgot.ForgotPinActivity
@@ -14,7 +13,6 @@ import com.enecuum.androidapp.ui.activity.mining.MiningActivity
 import com.enecuum.androidapp.ui.activity.new_account.NewAccountActivity
 import com.enecuum.androidapp.ui.activity.registration.RegistrationActivity
 import com.enecuum.androidapp.ui.activity.registration_finished.RegistrationFinishedActivity
-import com.enecuum.androidapp.ui.activity.restore_pin.RestorePinActivity
 import com.enecuum.androidapp.ui.activity.scan.ScanActivity
 import com.enecuum.androidapp.ui.activity.signin.SignInActivity
 import com.enecuum.androidapp.ui.activity.splash.SplashActivity
@@ -47,7 +45,6 @@ class ActivityNavigator(private val currentActivity : Activity?) : Navigator {
             ScreenType.SignIn -> SignInActivity::class.java
             ScreenType.RegistrationFinished -> RegistrationFinishedActivity::class.java
             ScreenType.ForgotPin -> ForgotPinActivity::class.java
-            ScreenType.RestorePin -> RestorePinActivity::class.java
             ScreenType.ChangePin -> ChangePinActivity::class.java
             ScreenType.Scan -> ScanActivity::class.java
             ScreenType.Mining -> MiningActivity::class.java

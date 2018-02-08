@@ -5,10 +5,9 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import com.enecuum.androidapp.presentation.view.ButtonStateView
+import com.enecuum.androidapp.presentation.view.PagerView
 
-interface NewAccountView : ButtonStateView {
-    @StateStrategyType(AddToEndSingleStrategy::class)
-    fun openNextScreen()
+interface NewAccountView : ButtonStateView, PagerView {
     @StateStrategyType(SkipStrategy::class)
     fun displaySkipDialog()
 }

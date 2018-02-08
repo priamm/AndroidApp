@@ -17,10 +17,9 @@ import kotlinx.android.synthetic.main.fragment_create_seed.*
 class CreateSeedFragment : FileOpeningFragment(), CreateSeedView {
     companion object {
         const val TAG = "CreateSeedFragment"
-
-        fun newInstance(): CreateSeedFragment {
+        const val RESTORE_MODE = "RESTORE_MODE"
+        fun newInstance(args: Bundle): CreateSeedFragment {
             val fragment: CreateSeedFragment = CreateSeedFragment()
-            val args: Bundle = Bundle()
             fragment.arguments = args
             return fragment
         }
@@ -44,6 +43,7 @@ class CreateSeedFragment : FileOpeningFragment(), CreateSeedView {
         save.setOnClickListener {
             presenter.onSaveClick()
         }
+        presenter.handleArgs(arguments)
     }
 
     override fun getTitle(): String = getString(R.string.create_seed_title)
@@ -57,4 +57,9 @@ class CreateSeedFragment : FileOpeningFragment(), CreateSeedView {
     }
 
     override fun getFilePresenter(): FileOpeningPresenter = presenter
+
+    override fun setupRestoreMode() {
+        save.visibility = View.GONE
+        caption.text = getString(R.string.enter_your_seed_phrase)
+    }
 }

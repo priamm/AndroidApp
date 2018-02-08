@@ -33,10 +33,22 @@ class NewAccountActivity : BackActivity(), NewAccountView {
         next.setOnClickListener {
             presenter.onNextClick(pager.currentItem)
         }
+        title = getString(R.string.pin_creation)
     }
 
-    override fun openNextScreen() {
+    override fun moveNext() {
         pager.setCurrentItem(pager.currentItem+1, true)
+        when(pager.currentItem) {
+            1 -> {
+                title = getString(R.string.pin_creation)
+            }
+            2 -> {
+                title = getString(R.string.backup_file)
+            }
+            3 -> {
+                title = getString(R.string.seed_phrase)
+            }
+        }
     }
 
     override fun changeButtonState(enable: Boolean) {
@@ -49,5 +61,10 @@ class NewAccountActivity : BackActivity(), NewAccountView {
                 .setPositiveButton(android.R.string.ok, presenter)
                 .setNegativeButton(android.R.string.cancel, presenter)
         dialog.show()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        presenter.onBackPressed()
     }
 }

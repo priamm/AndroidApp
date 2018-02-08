@@ -9,4 +9,5 @@ interface CreateSeedView : FileOpener {
     fun displayRemainWords(size: Int)
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun setButtonEnabled(enabled: Boolean)
+    fun setupRestoreMode()
 }

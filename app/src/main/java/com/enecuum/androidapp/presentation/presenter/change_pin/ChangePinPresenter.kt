@@ -4,87 +4,72 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.application.EnecuumApplication
+import com.enecuum.androidapp.events.ChangeButtonState
+import com.enecuum.androidapp.events.PinChanged
 import com.enecuum.androidapp.persistent_data.Constants
 import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.view.change_pin.ChangePinView
 import com.enecuum.androidapp.ui.activity.change_pin.ChangePinActivity
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 @InjectViewState
 class ChangePinPresenter : MvpPresenter<ChangePinView>() {
 
-    private var phase = ChangePinActivity.Companion.CurrentPhase.CurrentPin
     private var currentText = ""
     private var firstPin = ""
 
-    fun onCreate() {
-        viewState.setupForPhase(ChangePinActivity.Companion.CurrentPhase.CurrentPin)
+    fun onBackPressed() {
+        EnecuumApplication.cicerone().router.exit()
     }
 
-    fun onPinTextChanged(text: String) {
-        currentText = text
-        val l = text.length
-        viewState.displayPin(l)
-        viewState.changeButtonState(l == Constants.PIN_COUNT)
-    }
-
-    fun onNextClick() {
-        if(validateForCurrentPhase()) {
-            phase = when(phase) {
-                ChangePinActivity.Companion.CurrentPhase.CurrentPin -> {
-                    ChangePinActivity.Companion.CurrentPhase.NewPin
-                }
-                ChangePinActivity.Companion.CurrentPhase.NewPin -> {
-                    ChangePinActivity.Companion.CurrentPhase.ConfirmPin
-                }
-                ChangePinActivity.Companion.CurrentPhase.ConfirmPin -> {
-                    PersistentStorage.setPin(currentText)
-                    EnecuumApplication.cicerone().router.exit()
-                    return
-                }
-            }
-            viewState.setupForPhase(phase)
-        }
-    }
-
-    private fun validateForCurrentPhase() : Boolean {
-        when(phase) {
-            ChangePinActivity.Companion.CurrentPhase.CurrentPin -> {
-                if(currentText == PersistentStorage.getPin())
-                    return true
-                else
+    fun onNextClick(currentItem: Int) {
+        when(currentItem) {
+            0 -> {
+                if(currentText == PersistentStorage.getPin()) {
+                    viewState.moveNext()
+                } else {
                     EnecuumApplication.cicerone().router.showSystemMessage(
                             EnecuumApplication.applicationContext().getString(R.string.wrong_pin))
+                }
             }
-            ChangePinActivity.Companion.CurrentPhase.NewPin -> {
-                firstPin = currentText
-                return true
+            1 -> {
+               firstPin = currentText
+                viewState.moveNext()
             }
-            ChangePinActivity.Companion.CurrentPhase.ConfirmPin -> {
+            2 -> {
                 if(currentText == firstPin) {
                     EnecuumApplication.cicerone().router.showSystemMessage(
                             EnecuumApplication.applicationContext().getString(R.string.pin_changed))
-                    return true
-                } else
+                    PersistentStorage.setPin(currentText)
+                    EnecuumApplication.cicerone().router.exit()
+                } else {
                     EnecuumApplication.cicerone().router.showSystemMessage(
                             EnecuumApplication.applicationContext().getString(R.string.pin_not_equals))
+                }
             }
         }
-        return false
     }
 
-    fun onBackPressed() {
-        phase = when(phase) {
-            ChangePinActivity.Companion.CurrentPhase.CurrentPin -> {
-                EnecuumApplication.cicerone().router.exit()
-                return
-            }
-            ChangePinActivity.Companion.CurrentPhase.NewPin -> {
-                ChangePinActivity.Companion.CurrentPhase.CurrentPin
-            }
-            ChangePinActivity.Companion.CurrentPhase.ConfirmPin -> {
-                ChangePinActivity.Companion.CurrentPhase.NewPin
-            }
+    @Subscribe
+    fun onButtonStateChanged(event: ChangeButtonState) {
+        viewState.changeButtonState(event.enable)
+    }
+
+    @Subscribe
+    fun onPinChanged(event: PinChanged) {
+        currentText = event.value
+    }
+
+    fun onCreate() {
+        if(!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
         }
-        viewState.setupForPhase(phase)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if(EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(this)
     }
 }

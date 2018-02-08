@@ -1,0 +1,88 @@
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+    android:paddingTop="67dp"
+tools:context="com.enecuum.androidapp.ui.fragment.pin.PinFragment"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:textColor="@color/white_87"
+        android:lineSpacingExtra="10sp"
+        tools:text="Create your PIN"
+        android:gravity="center"
+        android:id="@+id/caption"
+        android:layout_marginBottom="17dp"
+        />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:backgroundTint="@color/navy"
+            android:textSize="16sp"
+            android:lineSpacingExtra="8sp"
+            android:textColorHint="@color/white_87"
+            android:textColor="@color/navy"
+            android:layout_width="174dp"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:maxLength="4"
+            android:gravity="center"
+            android:inputType="numberPassword"
+            android:id="@+id/pin1"
+            android:imeOptions="actionDone"
+            android:paddingTop="2dp"
+            android:cursorVisible="false"
+            android:paddingLeft="21dp"
+            android:paddingRight="21dp"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/dot_2"
+                android:layout_gravity="center"
+                android:id="@+id/pin1_1"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/dot_2"
+                android:layout_gravity="center"
+                android:id="@+id/pin1_2"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/dot_2"
+                android:layout_gravity="center"
+                android:id="@+id/pin1_3"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/dot_2"
+                android:layout_gravity="center"
+                android:id="@+id/pin1_4"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

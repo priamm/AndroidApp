@@ -3,15 +3,12 @@ package com.enecuum.androidapp.ui.activity.forgot
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
-import com.enecuum.androidapp.ui.base_ui_primitives.BackActivity
 import com.enecuum.androidapp.presentation.presenter.forgot.ForgotPinPresenter
 import com.enecuum.androidapp.presentation.view.forgot.ForgotPinView
-import com.enecuum.androidapp.utils.KeyboardUtils
-import com.enecuum.androidapp.utils.SeedUtils
-import com.enecuum.androidapp.utils.SimpleTextWatcher
+import com.enecuum.androidapp.ui.adapters.RestorePinPagerAdapter
+import com.enecuum.androidapp.ui.base_ui_primitives.BackActivity
 import kotlinx.android.synthetic.main.activity_forgot_pin.*
 
 
@@ -28,22 +25,23 @@ class ForgotPinActivity : BackActivity(), ForgotPinView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_pin)
-        KeyboardUtils.showKeyboard(this, seed)
-        seed.addTextChangedListener(object : SimpleTextWatcher() {
-            override fun afterTextChanged(s: Editable?) {
-                presenter.onSeedTextChanged(seed.text.toString())
-            }
-        })
+        val adapter = RestorePinPagerAdapter(supportFragmentManager)
+        pager.adapter = adapter
+        indicator.setViewPager(pager)
         next.setOnClickListener {
-            presenter.onNextButtonClick()
+            presenter.onNextClick(pager.currentItem)
         }
+        presenter.onCreate()
     }
 
-    override fun setButtonEnabled(enabled: Boolean) {
-        next.isEnabled = enabled
+    override fun changeButtonState(enable: Boolean) {
+        next.isEnabled = enable
     }
 
-    override fun displayRemainWords(size: Int) {
-        SeedUtils.displayRemainingCount(size, seedHint)
+    override fun moveNext() {
+        pager.setCurrentItem(pager.currentItem+1, true)
+        if(pager.currentItem == 2) {
+            next.text = getString(R.string.change_pin)
+        }
     }
 }
