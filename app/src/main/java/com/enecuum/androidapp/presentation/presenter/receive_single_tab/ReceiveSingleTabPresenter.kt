@@ -8,8 +8,10 @@ import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.events.ReceiveAddressChanged
 import com.enecuum.androidapp.models.Currency
 import com.enecuum.androidapp.models.SendReceiveMode
+import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.view.receive_single_tab.ReceiveSingleTabView
+import com.enecuum.androidapp.ui.activity.transaction_details.TransactionDetailsActivity.Companion.TRANSACTION
 import com.enecuum.androidapp.ui.fragment.receive_single_tab.ReceiveSingleTabFragment.Companion.RECEIVE_MODE
 import com.enecuum.androidapp.utils.KeyboardUtils
 import org.greenrobot.eventbus.EventBus
@@ -24,6 +26,9 @@ class ReceiveSingleTabPresenter : MvpPresenter<ReceiveSingleTabView>() {
         }
         val totalAmount = PersistentStorage.getCurrencyAmount(currency)
         viewState.setupWithAmount(totalAmount)
+        val transaction = arguments.getSerializable(TRANSACTION) as Transaction?
+        if(transaction != null)
+            viewState.setupWithTransaction(transaction)
     }
 
     fun onCopyClicked(text: String) {

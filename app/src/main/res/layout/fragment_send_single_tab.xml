@@ -1,74 +1,80 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    tools:context="com.enecuum.androidapp.ui.fragment.send_single_tab.SendSingleTabFragment">
-    <EditText
-        android:layout_marginTop="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/addressText"
-        android:hint="@string/address"
-        android:textSize="16sp"
-        android:fontFamily="sans-serif"
-        android:textStyle="normal"
-        android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
-        android:lineSpacingExtra="8sp"
-        android:inputType="textNoSuggestions"
-        android:maxLines="1"
-        android:imeOptions="actionNext"
-        android:nextFocusDown="@id/amount"/>
-    <EditText
-        android:layout_marginTop="12dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/amountText"
-        android:hint="@string/amount"
-        android:textSize="16sp"
-        android:fontFamily="sans-serif"
-        android:textStyle="normal"
-        android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
-        android:lineSpacingExtra="8sp"
-        android:maxLines="1"
-        android:imeOptions="actionDone"
-        android:inputType="number"/>
+    tools:context="com.enecuum.androidapp.ui.fragment.send_single_tab.SendSingleTabFragment"
+    android:background="@color/navy">
     <LinearLayout
-        android:layout_marginTop="19dp"
-        android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
+        android:orientation="vertical">
+        <EditText
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:id="@+id/addressText"
+            android:hint="@string/address"
+            android:textSize="16sp"
             android:fontFamily="sans-serif"
             android:textStyle="normal"
-            android:textColor="@color/white_87"
-            android:lineSpacingExtra="10sp"
-            tools:text="Your balance: 30,00000000"
-            android:id="@+id/balanceAmount"
-            android:layout_marginRight="19dp"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="27dp"
-            android:background="@drawable/send_max_bg"
-            android:textSize="12sp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
+            android:lineSpacingExtra="8sp"
+            android:inputType="textNoSuggestions"
+            android:maxLines="1"
+            android:imeOptions="actionNext"
+            android:nextFocusDown="@id/amount"/>
+        <EditText
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/amountText"
+            android:hint="@string/amount"
+            android:textSize="16sp"
             android:fontFamily="sans-serif"
             android:textStyle="normal"
-            android:textColor="@color/white_87"
-            android:lineSpacingExtra="12sp"
-            android:text="@string/send_max"
-            android:id="@+id/sendMax"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
-            android:textAllCaps="false"
-            />
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
+            android:lineSpacingExtra="8sp"
+            android:maxLines="1"
+            android:imeOptions="actionDone"
+            android:inputType="number"/>
+        <LinearLayout
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:textColor="@color/white_87"
+                android:lineSpacingExtra="10sp"
+                tools:text="Your balance: 30,00000000"
+                android:id="@+id/balanceAmount"
+                android:layout_marginRight="19dp"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="27dp"
+                android:background="@drawable/send_max_bg"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:textColor="@color/white_87"
+                android:lineSpacingExtra="12sp"
+                android:text="@string/send_max"
+                android:id="@+id/sendMax"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:textAllCaps="false"
+                />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

@@ -32,7 +32,7 @@
             android:name=".ui.activity.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.Mining"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.activity.new_account.NewAccountActivity"
             android:label=""
@@ -64,14 +64,18 @@
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".ui.activity.scan.ScanActivity"
+            android:label="@string/scan"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
-            android:label="@string/scan"/>
-        <activity android:name=".ui.activity.mining.MiningActivity"
-            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NavyActionBar" />
+        <activity
+            android:name=".ui.activity.mining.MiningActivity"
             android:label="@string/mining"
-            android:theme="@style/Theme.AppCompat.Light.TransparentActionBar"
-            />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.TransparentActionBar" />
+        <activity android:name=".ui.activity.transaction_details.TransactionDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.Mining"
+            android:windowSoftInputMode="adjustResize|stateVisible"/>
     </application>
 
 </manifest>

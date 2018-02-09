@@ -6,13 +6,16 @@ import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.events.*
 import com.enecuum.androidapp.models.Currency
+import com.enecuum.androidapp.models.SendReceiveMode
 import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.models.TransactionType
 import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.navigation.ScreenType
 import com.enecuum.androidapp.navigation.TabType
 import com.enecuum.androidapp.presentation.view.send_parameters.SendParametersView
+import com.enecuum.androidapp.ui.activity.transaction_details.TransactionDetailsActivity.Companion.TRANSACTION
 import com.enecuum.androidapp.ui.fragment.send_parameters.SendParametersFragment
+import com.enecuum.androidapp.utils.EventBusUtils
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import ru.terrakok.cicerone.result.ResultListener
@@ -26,30 +29,32 @@ class SendParametersPresenter : MvpPresenter<SendParametersView>(), ResultListen
     private var currency = Currency.Enq
     private var address: String = ""
 
-    fun onCreate() {
-        if(!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this)
+    fun onCreate(arguments: Bundle?) {
+        EventBusUtils.register(this)
+        val transaction = arguments?.getSerializable(TRANSACTION) as Transaction?
+        if(transaction != null) {
+            viewState.setupForTransaction(transaction)
+        } else {
+            val transactionsList = listOf(
+                    Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.EnqPlus),
+                    Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
+                    Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
+                    Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
+                    Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
+                    Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
+                    Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
+                    Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
+                    Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
+                    Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq)
+            )
+            viewState.setupNormally()
+            viewState.displayTransactionsHistory(transactionsList)
         }
-        val transactionsList = listOf(
-                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
-                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
-                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
-                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
-                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
-                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
-                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
-                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
-                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…"),
-                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…")
-        )
-        viewState.displayTransactionsHistory(transactionsList)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if(EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this)
-        }
+        EventBusUtils.unregister(this)
     }
 
     override fun onResult(resultData: Any?) {
@@ -72,13 +77,19 @@ class SendParametersPresenter : MvpPresenter<SendParametersView>(), ResultListen
             address = event.address
     }
 
-    fun onSendClick() {
+    fun onSendClick(isMainMode: Boolean) {
         if(currentAmount > 0 && address.isNotEmpty()) {
             val bundle = Bundle()
             bundle.putString(SendParametersFragment.Companion.ADDRESS, address)
             bundle.putFloat(SendParametersFragment.Companion.AMOUNT, currentAmount)
             bundle.putSerializable(SendParametersFragment.Companion.CURRENCY, currency)
-            EnecuumApplication.navigateToFragment(FragmentType.SendFinish, TabType.Send, bundle)
+            bundle.putBoolean(SendParametersFragment.Companion.IS_HISTORY_VISIBLE, isMainMode)
+            if(isMainMode) {
+                EnecuumApplication.navigateToFragment(FragmentType.SendFinish, TabType.Send, bundle)
+            } else {
+                EventBus.getDefault().post(BackStackIncreased())
+                EnecuumApplication.fragmentCicerone().router.navigateTo(FragmentType.SendFinish.toString(), bundle)
+            }
         }
     }
 

@@ -10,6 +10,7 @@ import com.enecuum.androidapp.persistent_data.Constants
 import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.view.change_pin.ChangePinView
 import com.enecuum.androidapp.ui.activity.change_pin.ChangePinActivity
+import com.enecuum.androidapp.utils.EventBusUtils
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
@@ -62,14 +63,11 @@ class ChangePinPresenter : MvpPresenter<ChangePinView>() {
     }
 
     fun onCreate() {
-        if(!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this)
-        }
+        EventBusUtils.register(this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if(EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().unregister(this)
+        EventBusUtils.unregister(this)
     }
 }

@@ -35,14 +35,17 @@ class FragmentNavigator(activity: FragmentActivity?,
     override fun createFragment(screenKey: String?, data: Any?): Fragment? {
         if(screenKey == null)
             return null
+        var safeData = data
+        if(safeData == null)
+            safeData = Bundle.EMPTY
         val fragmentType = FragmentType.valueOf(screenKey)
         when (fragmentType) {
             FragmentType.Balance -> return BalanceFragment.newInstance()
             FragmentType.Tokens -> return TokensAndJettonsFragment.newInstance()
-            FragmentType.ReceiveByAddress -> return ReceiveByAddressFragment.newInstance()
-            FragmentType.ReceiveQr -> return ReceiveQrFragment.newInstance(data as Bundle)
-            FragmentType.SendOptions -> return SendParametersFragment.newInstance()
-            FragmentType.SendFinish -> return SendFinishFragment.newInstance(data as Bundle)
+            FragmentType.ReceiveByAddress -> return ReceiveByAddressFragment.newInstance(safeData as Bundle)
+            FragmentType.ReceiveQr -> return ReceiveQrFragment.newInstance(safeData as Bundle)
+            FragmentType.SendOptions -> return SendParametersFragment.newInstance(safeData as Bundle)
+            FragmentType.SendFinish -> return SendFinishFragment.newInstance(safeData as Bundle)
             FragmentType.SettingsMain -> return SettingsMainFragment.newInstance()
             FragmentType.SettingsBackup -> return SettingsBackupFragment.newInstance()
             FragmentType.SettingsAboutApp -> return SettingsAboutAppFragment.newInstance()
@@ -50,7 +53,7 @@ class FragmentNavigator(activity: FragmentActivity?,
             FragmentType.MiningStart -> return MiningStartFragment.newInstance()
             FragmentType.MiningProgress -> return MiningInProgressFragment.newInstance()
             FragmentType.MiningLoading -> return MiningLoadingFragment.newInstance()
-            FragmentType.MiningJoinTeam -> return MiningJoinTeamFragment.newInstance(data as Bundle)
+            FragmentType.MiningJoinTeam -> return MiningJoinTeamFragment.newInstance(safeData as Bundle)
         }
     }
 }

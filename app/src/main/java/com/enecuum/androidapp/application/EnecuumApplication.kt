@@ -6,6 +6,7 @@ import com.enecuum.androidapp.events.MainActivityStopped
 import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.navigation.ScreenType
 import com.enecuum.androidapp.navigation.TabType
+import com.enecuum.androidapp.utils.EventBusUtils
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import ru.terrakok.cicerone.Cicerone
@@ -103,15 +104,12 @@ class EnecuumApplication : Application() {
         cicerone = Cicerone.create()
         fragmentCicerone = Cicerone.create()
         tabCicerone = Cicerone.create()
-        if(!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this)
-        }
+        EventBusUtils.register(this)
     }
 
     override fun onTerminate() {
         super.onTerminate()
-        if(EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().unregister(this)
+        EventBusUtils.unregister(this)
     }
 
     @Subscribe

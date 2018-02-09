@@ -9,6 +9,7 @@ import com.enecuum.androidapp.events.PinChanged
 import com.enecuum.androidapp.navigation.ScreenType
 import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.view.forgot.ForgotPinView
+import com.enecuum.androidapp.utils.EventBusUtils
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
@@ -18,15 +19,12 @@ class ForgotPinPresenter : MvpPresenter<ForgotPinView>() {
     private var firstPin = ""
 
     fun onCreate() {
-        if(!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this)
-        }
+        EventBusUtils.register(this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if(EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().unregister(this)
+        EventBusUtils.unregister(this)
     }
 
     @Subscribe

@@ -1,17 +1,17 @@
 package com.enecuum.androidapp.ui.fragment.send_parameters
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
+import com.enecuum.androidapp.models.SendReceiveMode
 import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.presentation.presenter.send_parameters.SendParametersPresenter
 import com.enecuum.androidapp.presentation.view.send_parameters.SendParametersView
+import com.enecuum.androidapp.ui.activity.main.MainActivity
 import com.enecuum.androidapp.ui.adapters.SendEnqTabsAdapter
 import com.enecuum.androidapp.ui.base_ui_primitives.NoBackFragment
 import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
-import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.fragment_send_parameters.*
 
 class SendParametersFragment : NoBackFragment(), SendParametersView {
@@ -21,9 +21,9 @@ class SendParametersFragment : NoBackFragment(), SendParametersView {
         const val AMOUNT = "amount"
         const val CURRENCY = "currency"
         const val ADDRESS = "address"
-        fun newInstance(): SendParametersFragment {
-            val fragment: SendParametersFragment = SendParametersFragment()
-            val args: Bundle = Bundle()
+        const val IS_HISTORY_VISIBLE = "isHistoryVisible"
+        fun newInstance(args: Bundle): SendParametersFragment {
+            val fragment = SendParametersFragment()
             fragment.arguments = args
             return fragment
         }
@@ -39,14 +39,10 @@ class SendParametersFragment : NoBackFragment(), SendParametersView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter.onCreate()
-        viewPager.adapter = SendEnqTabsAdapter(childFragmentManager, context!!)
-        tabLayout.setupWithViewPager(viewPager)
+        presenter.onCreate(arguments)
         send.setOnClickListener {
-            presenter.onSendClick()
+            presenter.onSendClick(activity is MainActivity)
         }
-        setHasOptionsMenu(true)
-        TransactionsHistoryRenderer.configurePanelListener(slidingLayout, panelHint)
     }
 
     override fun getTitle(): String = getString(R.string.send)
@@ -76,5 +72,25 @@ class SendParametersFragment : NoBackFragment(), SendParametersView {
         if(menu != null && !menu!!.hasVisibleItems()) {
             menuInflater?.inflate(R.menu.qr_menu, menu)
         }
+    }
+
+    override fun setupForTransaction(transaction: Transaction) {
+        slidingLayout.panelHeight = 0
+        val adapter = SendEnqTabsAdapter(childFragmentManager, context!!)
+        adapter.setTransaction(transaction)
+        viewPager.adapter = adapter
+        tabLayout.setupWithViewPager(viewPager)
+        setHasOptionsMenu(false)
+        when(transaction.mode) {
+            SendReceiveMode.Enq -> viewPager.currentItem = 0
+            SendReceiveMode.EnqPlus -> viewPager.currentItem = 1
+        }
+    }
+
+    override fun setupNormally() {
+        viewPager.adapter = SendEnqTabsAdapter(childFragmentManager, context!!)
+        tabLayout.setupWithViewPager(viewPager)
+        TransactionsHistoryRenderer.configurePanelListener(slidingLayout, panelHint)
+        setHasOptionsMenu(true)
     }
 }

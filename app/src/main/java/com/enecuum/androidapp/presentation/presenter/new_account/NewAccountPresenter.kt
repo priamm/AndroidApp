@@ -9,6 +9,7 @@ import com.enecuum.androidapp.events.*
 import com.enecuum.androidapp.navigation.ScreenType
 import com.enecuum.androidapp.presentation.view.new_account.NewAccountView
 import com.enecuum.androidapp.persistent_data.PersistentStorage
+import com.enecuum.androidapp.utils.EventBusUtils
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
@@ -33,15 +34,13 @@ class NewAccountPresenter : MvpPresenter<NewAccountView>(), DialogInterface.OnCl
     }
 
     fun onCreate() {
-        if(!EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().register(this)
+        EventBusUtils.register(this)
         currentPage = 0
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if(EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().unregister(this)
+        EventBusUtils.unregister(this)
     }
 
 

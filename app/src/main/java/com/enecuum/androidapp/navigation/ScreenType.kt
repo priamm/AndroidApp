@@ -13,5 +13,6 @@ enum class ScreenType {
     Main,
     Mining,
     ChangePin,
-    Scan
+    Scan,
+    TransactionDetails
 }

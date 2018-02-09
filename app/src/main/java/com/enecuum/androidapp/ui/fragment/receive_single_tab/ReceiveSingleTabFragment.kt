@@ -9,8 +9,10 @@ import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.models.SendReceiveMode
+import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.presentation.presenter.receive_single_tab.ReceiveSingleTabPresenter
 import com.enecuum.androidapp.presentation.view.receive_single_tab.ReceiveSingleTabView
+import com.enecuum.androidapp.ui.activity.transaction_details.TransactionDetailsActivity.Companion.TRANSACTION
 import com.enecuum.androidapp.utils.SimpleTextWatcher
 import kotlinx.android.synthetic.main.fragment_receive_single_tab.*
 
@@ -18,10 +20,11 @@ class ReceiveSingleTabFragment : MvpAppCompatFragment(), ReceiveSingleTabView {
     companion object {
         const val TAG = "ReceiveSingleTabFragment"
         const val RECEIVE_MODE = "receiveMode"
-        fun newInstance(receiveMode: SendReceiveMode): ReceiveSingleTabFragment {
+        fun newInstance(receiveMode: SendReceiveMode, currentTransaction: Transaction?): ReceiveSingleTabFragment {
             val fragment = ReceiveSingleTabFragment()
             val args = Bundle()
             args.putSerializable(RECEIVE_MODE, receiveMode)
+            args.putSerializable(TRANSACTION, currentTransaction)
             fragment.arguments = args
             return fragment
         }
@@ -50,5 +53,9 @@ class ReceiveSingleTabFragment : MvpAppCompatFragment(), ReceiveSingleTabView {
 
     override fun setupWithAmount(totalAmount: Float) {
         balanceAmount.text = String.format("%s %.8f", getString(R.string.your_balance), totalAmount)
+    }
+
+    override fun setupWithTransaction(transaction: Transaction) {
+        addressText.setText(transaction.address)
     }
 }

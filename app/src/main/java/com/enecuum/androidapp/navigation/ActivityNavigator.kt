@@ -16,6 +16,7 @@ import com.enecuum.androidapp.ui.activity.registration_finished.RegistrationFini
 import com.enecuum.androidapp.ui.activity.scan.ScanActivity
 import com.enecuum.androidapp.ui.activity.signin.SignInActivity
 import com.enecuum.androidapp.ui.activity.splash.SplashActivity
+import com.enecuum.androidapp.ui.activity.transaction_details.TransactionDetailsActivity
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.commands.*
 
@@ -48,6 +49,7 @@ class ActivityNavigator(private val currentActivity : Activity?) : Navigator {
             ScreenType.ChangePin -> ChangePinActivity::class.java
             ScreenType.Scan -> ScanActivity::class.java
             ScreenType.Mining -> MiningActivity::class.java
+            ScreenType.TransactionDetails -> TransactionDetailsActivity::class.java
         }
     }
     private var isPendingClearStackIntent = false

@@ -10,10 +10,11 @@ import com.enecuum.androidapp.navigation.FragmentNavigator
 import com.enecuum.androidapp.presentation.presenter.mining.MiningPresenter
 import com.enecuum.androidapp.presentation.view.mining.MiningView
 import com.enecuum.androidapp.ui.base_ui_primitives.BackActivity
+import com.enecuum.androidapp.ui.base_ui_primitives.FragmentNavigatorActivity
 import kotlinx.android.synthetic.main.transparent_toolbar.*
 
 
-class MiningActivity : BackActivity(), MiningView {
+class MiningActivity : FragmentNavigatorActivity(), MiningView {
     companion object {
         const val TAG = "MiningActivity"
         fun getIntent(context: Context): Intent = Intent(context, MiningActivity::class.java)
@@ -29,15 +30,5 @@ class MiningActivity : BackActivity(), MiningView {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         presenter.onCreate()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        EnecuumApplication.fragmentCicerone().navigatorHolder.setNavigator(FragmentNavigator(this, supportFragmentManager, R.id.container))
-    }
-
-    override fun onPause() {
-        super.onPause()
-        EnecuumApplication.fragmentCicerone().navigatorHolder.removeNavigator()
     }
 }

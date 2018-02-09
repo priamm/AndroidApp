@@ -5,6 +5,7 @@ android:layout_height="match_parent"
 android:orientation="vertical"
 android:paddingLeft="16dp"
 android:paddingRight="16dp"
+    android:background="@color/navy"
     tools:context="com.enecuum.androidapp.ui.fragment.receive_single_tab.ReceiveSingleTabFragment">
     <FrameLayout
         android:layout_marginTop="16dp"
@@ -25,7 +26,8 @@ android:paddingRight="16dp"
             android:lineSpacingExtra="8sp"
             android:inputType="textNoSuggestions"
             android:maxLines="1"
-            android:imeOptions="actionDone"/>
+            android:imeOptions="actionDone"
+            />
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -58,4 +58,8 @@ class SendFinishFragment : BackTitleFragment(), SendFinishView {
         super.onResume()
         menu?.clear()
     }
+
+    override fun hideHistory() {
+        mainLayout.panelHeight = 0
+    }
 }

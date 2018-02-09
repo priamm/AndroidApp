@@ -9,6 +9,7 @@ import com.enecuum.androidapp.R
 import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.events.MainActivityStopped
 import com.enecuum.androidapp.navigation.FragmentNavigator
+import com.enecuum.androidapp.utils.EventBusUtils
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
@@ -21,14 +22,12 @@ open class BaseTabFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if(!EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().register(this)
+        EventBusUtils.register(this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if(EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().unregister(this)
+        EventBusUtils.unregister(this)
     }
 
     @Subscribe

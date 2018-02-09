@@ -8,9 +8,12 @@ import com.enecuum.androidapp.events.SendAddressChanged
 import com.enecuum.androidapp.events.SendAttempt
 import com.enecuum.androidapp.models.Currency
 import com.enecuum.androidapp.models.SendReceiveMode
+import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.view.send_single_tab.SendSingleTabView
+import com.enecuum.androidapp.ui.activity.transaction_details.TransactionDetailsActivity.Companion.TRANSACTION
 import com.enecuum.androidapp.ui.fragment.send_single_tab.SendSingleTabFragment.Companion.SEND_MODE
+import com.enecuum.androidapp.utils.EventBusUtils
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
@@ -30,15 +33,15 @@ class SendSingleTabPresenter : MvpPresenter<SendSingleTabView>() {
         }
         totalAmount = PersistentStorage.getCurrencyAmount(currency!!)
         viewState.setupWithAmount(totalAmount)
-        if(!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this)
-        }
+        EventBusUtils.register(this)
+        val transaction = arguments.getSerializable(TRANSACTION) as Transaction?
+        if(transaction != null)
+            viewState.setupWithTransaction(transaction)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if(EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().unregister(this)
+        EventBusUtils.unregister(this)
     }
 
     @Subscribe

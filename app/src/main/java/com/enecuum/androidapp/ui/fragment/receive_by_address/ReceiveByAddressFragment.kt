@@ -7,7 +7,9 @@ import com.enecuum.androidapp.presentation.view.receive_by_address.ReceiveByAddr
 import com.enecuum.androidapp.presentation.presenter.receive_by_address.ReceiveByAddressPresenter
 
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.enecuum.androidapp.models.SendReceiveMode
 import com.enecuum.androidapp.models.Transaction
+import com.enecuum.androidapp.ui.activity.main.MainActivity
 import com.enecuum.androidapp.ui.adapters.ReceiveEnqTabsAdapter
 import com.enecuum.androidapp.ui.base_ui_primitives.NoBackFragment
 import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
@@ -17,9 +19,8 @@ class ReceiveByAddressFragment : NoBackFragment(), ReceiveByAddressView {
     companion object {
         const val TAG = "ReceiveByAddressFragment"
 
-        fun newInstance(): ReceiveByAddressFragment {
+        fun newInstance(args: Bundle): ReceiveByAddressFragment {
             val fragment = ReceiveByAddressFragment()
-            val args = Bundle()
             fragment.arguments = args
             return fragment
         }
@@ -35,11 +36,8 @@ class ReceiveByAddressFragment : NoBackFragment(), ReceiveByAddressView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter.onCreate()
-        viewPager.adapter = ReceiveEnqTabsAdapter(childFragmentManager, context!!)
-        tabLayout.setupWithViewPager(viewPager)
+        presenter.onCreate(arguments)
         setHasOptionsMenu(true)
-        TransactionsHistoryRenderer.configurePanelListener(slidingLayout, panelHint)
     }
 
     override fun getTitle(): String = getString(R.string.receive)
@@ -55,7 +53,7 @@ class ReceiveByAddressFragment : NoBackFragment(), ReceiveByAddressView {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if(item?.itemId == R.id.qr) {
-            presenter.onQrClick()
+            presenter.onQrClick(activity is MainActivity)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -65,5 +63,23 @@ class ReceiveByAddressFragment : NoBackFragment(), ReceiveByAddressView {
         if(menu != null && !menu!!.hasVisibleItems()) {
             menuInflater?.inflate(R.menu.qr_menu, menu)
         }
+    }
+
+    override fun setupForTransaction(transaction: Transaction) {
+        slidingLayout.panelHeight = 0
+        val adapter = ReceiveEnqTabsAdapter(childFragmentManager, context!!)
+        adapter.setTransaction(transaction)
+        viewPager.adapter = adapter
+        tabLayout.setupWithViewPager(viewPager)
+        when(transaction.mode) {
+            SendReceiveMode.Enq -> viewPager.currentItem = 0
+            SendReceiveMode.EnqPlus -> viewPager.currentItem = 1
+        }
+    }
+
+    override fun setupNormally() {
+        viewPager.adapter = ReceiveEnqTabsAdapter(childFragmentManager, context!!)
+        tabLayout.setupWithViewPager(viewPager)
+        TransactionsHistoryRenderer.configurePanelListener(slidingLayout, panelHint)
     }
 }

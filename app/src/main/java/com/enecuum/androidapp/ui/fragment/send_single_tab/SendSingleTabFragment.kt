@@ -11,6 +11,8 @@ import com.enecuum.androidapp.presentation.view.send_single_tab.SendSingleTabVie
 import com.enecuum.androidapp.presentation.presenter.send_single_tab.SendSingleTabPresenter
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.models.SendReceiveMode
+import com.enecuum.androidapp.models.Transaction
+import com.enecuum.androidapp.ui.activity.transaction_details.TransactionDetailsActivity.Companion.TRANSACTION
 import com.enecuum.androidapp.utils.SimpleTextWatcher
 import kotlinx.android.synthetic.main.fragment_send_single_tab.*
 
@@ -18,11 +20,12 @@ class SendSingleTabFragment : MvpAppCompatFragment(), SendSingleTabView {
     companion object {
         const val TAG = "SendSingleTabFragment"
         const val SEND_MODE = "sendMode"
-        fun newInstance(sendMode: SendReceiveMode): SendSingleTabFragment {
+        fun newInstance(sendMode: SendReceiveMode, transaction: Transaction?): SendSingleTabFragment {
             val fragment = SendSingleTabFragment()
             val args = Bundle()
             fragment.arguments = args
             args.putSerializable(SEND_MODE, sendMode)
+            args.putSerializable(TRANSACTION, transaction)
             return fragment
         }
     }
@@ -69,5 +72,11 @@ class SendSingleTabFragment : MvpAppCompatFragment(), SendSingleTabView {
 
     override fun changeAddress(newValue: String) {
         addressText.setText(newValue)
+    }
+
+    override fun setupWithTransaction(transaction: Transaction) {
+        addressText.setText(transaction.address)
+        amountText.setText(transaction.amount.toString())
+        presenter.refreshButtonState(addressText.text.toString(), amountText.text.toString())
     }
 }
