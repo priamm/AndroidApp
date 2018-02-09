@@ -5,6 +5,7 @@ import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.events.ChangeButtonState
+import com.enecuum.androidapp.events.DonePressed
 import com.enecuum.androidapp.events.PinChanged
 import com.enecuum.androidapp.navigation.ScreenType
 import com.enecuum.androidapp.persistent_data.PersistentStorage
@@ -17,6 +18,7 @@ import org.greenrobot.eventbus.Subscribe
 class ForgotPinPresenter : MvpPresenter<ForgotPinView>() {
     private var currentText = ""
     private var firstPin = ""
+    private var currentItem = 0
 
     fun onCreate() {
         EventBusUtils.register(this)
@@ -51,9 +53,16 @@ class ForgotPinPresenter : MvpPresenter<ForgotPinView>() {
                 } else {
                     EnecuumApplication.cicerone().router.showSystemMessage(
                             EnecuumApplication.applicationContext().getString(R.string.pin_not_equals))
+                    return
                 }
             }
         }
+        this.currentItem++
+    }
+
+    @Subscribe
+    fun onDonePressed(event: DonePressed) {
+        onNextClick(currentItem)
     }
 
 }

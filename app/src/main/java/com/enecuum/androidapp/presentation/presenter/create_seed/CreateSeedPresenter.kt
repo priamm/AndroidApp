@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.events.ChangeButtonState
+import com.enecuum.androidapp.events.DonePressed
 import com.enecuum.androidapp.ui.base_ui_primitives.FileOpeningFragment
 import com.enecuum.androidapp.events.SeedBackupFinished
 import com.enecuum.androidapp.presentation.view.create_seed.CreateSeedView
@@ -16,6 +17,8 @@ import org.greenrobot.eventbus.EventBus
 @InjectViewState
 class CreateSeedPresenter : MvpPresenter<CreateSeedView>(), FileOpeningFragment.FileOpeningPresenter {
     private var isRestoreMode = false
+    private var text: String = ""
+
     override fun onSelectedFilePaths(files: Array<out String>?) {
         if(files != null && files.isNotEmpty()) {
             EventBus.getDefault().post(SeedBackupFinished())
@@ -23,6 +26,7 @@ class CreateSeedPresenter : MvpPresenter<CreateSeedView>(), FileOpeningFragment.
     }
 
     fun validateSeed(text: String) {
+        this.text = text
         viewState.displayRemainWords(Validator.seedRemainCount(text))
         val isValid = Validator.validateSeed(text)
         if(isRestoreMode) {
@@ -47,6 +51,14 @@ class CreateSeedPresenter : MvpPresenter<CreateSeedView>(), FileOpeningFragment.
                 viewState.setupRestoreMode()
             }
         }
+    }
+
+    fun onDonePressed(): Boolean {
+        if(Validator.validateSeed(text)) {
+            EventBus.getDefault().post(DonePressed())
+            return true
+        }
+        return false
     }
 
 }

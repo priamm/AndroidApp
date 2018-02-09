@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.view.inputmethod.EditorInfo
 import com.enecuum.androidapp.ui.base_ui_primitives.BackActivity
 
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -40,6 +41,12 @@ class SignInActivity : BackActivity(), SignInView {
         }
         forgot.setOnClickListener {
             presenter.onForgotClick()
+        }
+        pin1.setOnEditorActionListener { v, actionId, event ->
+            if(actionId == EditorInfo.IME_ACTION_DONE) {
+                return@setOnEditorActionListener presenter.onDonePressed()
+            }
+            true
         }
     }
 

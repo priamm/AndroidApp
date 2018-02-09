@@ -5,6 +5,7 @@ import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.events.ChangeButtonState
+import com.enecuum.androidapp.events.DonePressed
 import com.enecuum.androidapp.events.PinChanged
 import com.enecuum.androidapp.persistent_data.Constants
 import com.enecuum.androidapp.persistent_data.PersistentStorage
@@ -19,6 +20,7 @@ class ChangePinPresenter : MvpPresenter<ChangePinView>() {
 
     private var currentText = ""
     private var firstPin = ""
+    private var currentItem = 0
 
     fun onBackPressed() {
         EnecuumApplication.cicerone().router.exit()
@@ -32,6 +34,7 @@ class ChangePinPresenter : MvpPresenter<ChangePinView>() {
                 } else {
                     EnecuumApplication.cicerone().router.showSystemMessage(
                             EnecuumApplication.applicationContext().getString(R.string.wrong_pin))
+                    return
                 }
             }
             1 -> {
@@ -47,9 +50,11 @@ class ChangePinPresenter : MvpPresenter<ChangePinView>() {
                 } else {
                     EnecuumApplication.cicerone().router.showSystemMessage(
                             EnecuumApplication.applicationContext().getString(R.string.pin_not_equals))
+                    return
                 }
             }
         }
+        this.currentItem++
     }
 
     @Subscribe
@@ -60,6 +65,11 @@ class ChangePinPresenter : MvpPresenter<ChangePinView>() {
     @Subscribe
     fun onPinChanged(event: PinChanged) {
         currentText = event.value
+    }
+
+    @Subscribe
+    fun onDonePressed(event: DonePressed) {
+        onNextClick(currentItem)
     }
 
     fun onCreate() {

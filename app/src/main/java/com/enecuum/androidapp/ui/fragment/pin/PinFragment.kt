@@ -5,6 +5,7 @@ import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.presentation.view.pin.PinView
@@ -41,6 +42,12 @@ class PinFragment : MvpAppCompatFragment(), PinView {
                 presenter.onPinTextChanged(pin1.text.toString())
             }
         })
+        pin1.setOnEditorActionListener { v, actionId, event ->
+            if(actionId == EditorInfo.IME_ACTION_DONE) {
+                return@setOnEditorActionListener presenter.onDonePressed()
+            }
+            true
+        }
     }
 
     override fun displayPin(length: Int) {

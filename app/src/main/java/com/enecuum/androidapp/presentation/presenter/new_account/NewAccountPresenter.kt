@@ -25,8 +25,10 @@ class NewAccountPresenter : MvpPresenter<NewAccountView>(), DialogInterface.OnCl
     override fun onClick(dialog: DialogInterface?, which: Int) {
         when(which) {
             DialogInterface.BUTTON_POSITIVE -> {
-                if(currentPage < 3)
+                if(currentPage < 3) {
                     viewState.moveNext()
+                    currentPage++
+                }
                 else
                     openNextScreen()
             }
@@ -55,6 +57,7 @@ class NewAccountPresenter : MvpPresenter<NewAccountView>(), DialogInterface.OnCl
                     EnecuumApplication.cicerone().router.showSystemMessage(
                             EnecuumApplication.applicationContext().getString(R.string.pin_not_equals)
                     )
+                    return
                 } else {
                     PersistentStorage.setPin(pin)
                     viewState.moveNext()
@@ -65,6 +68,7 @@ class NewAccountPresenter : MvpPresenter<NewAccountView>(), DialogInterface.OnCl
                     viewState.moveNext()
                 } else {
                     viewState.displaySkipDialog()
+                    return
                 }
             }
             3 -> {
@@ -72,10 +76,11 @@ class NewAccountPresenter : MvpPresenter<NewAccountView>(), DialogInterface.OnCl
                     openNextScreen()
                 } else {
                     viewState.displaySkipDialog()
+                    return
                 }
             }
         }
-        currentPage = currentScreen
+        currentPage++
     }
 
     private fun openNextScreen() {
@@ -96,6 +101,11 @@ class NewAccountPresenter : MvpPresenter<NewAccountView>(), DialogInterface.OnCl
     @Subscribe
     fun onSeedBackupFinished(event: SeedBackupFinished) {
         isSeedBackedUp = true
+    }
+
+    @Subscribe
+    fun onDonePressed(event: DonePressed) {
+        onNextClick(currentPage)
     }
 
     @Subscribe
