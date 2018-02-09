@@ -34,8 +34,15 @@ class MiningInProgressPresenter : MvpPresenter<MiningInProgressView>() {
         viewState.displayTransactionsHistory(transactionsList)
         //TODO: obtain member status from network
         val random = Random(Date().time)
-        val isTeamLead = random.nextInt()%2 == 0
-        val status = if(isTeamLead) PoaMemberStatus.TeamLead else PoaMemberStatus.PoaMember
+        val variable = random.nextInt()%3
+        val status = when(variable) {
+            0 -> PoaMemberStatus.TeamLead
+            1 -> PoaMemberStatus.Verificator
+            2 -> PoaMemberStatus.PoaMember
+            else -> {
+                PoaMemberStatus.PoaMember
+            }
+        }
         viewState.setupWithStatus(status)
         //TODO: get hashrate from mining algorithm
         val hashRate = random.nextInt(10)

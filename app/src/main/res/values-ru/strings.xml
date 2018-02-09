@@ -83,12 +83,13 @@
     <string name="mining_has_ended">Майнинг остановлен</string>
     <string name="start">Старт</string>
     <string name="join">Присоединиться</string>
-    <string name="poa_member">Вы член команды</string>
-    <string name="team_lead">Вы лидер команды</string>
+    <string name="poa_member">Член команды</string>
+    <string name="team_lead">Лидер команды</string>
     <string name="hash_rate">Частота %d/сек</string>
     <string name="total_balance">Полный баланс %d ENQ</string>
     <string name="stop">Стоп</string>
     <string name="mining_history">История майнинга</string>
+    <string name="verificator">Верификатор</string>
     <plurals name="team_members">
         <item quantity="zero">команда не найдена</item>
         <item quantity="one">%1$d член команды</item>

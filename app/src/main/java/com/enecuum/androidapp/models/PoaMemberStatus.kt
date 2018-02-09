@@ -5,5 +5,6 @@ package com.enecuum.androidapp.models
  */
 enum class PoaMemberStatus {
     TeamLead,
-    PoaMember
+    PoaMember,
+    Verificator
 }

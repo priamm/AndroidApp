@@ -89,8 +89,18 @@ class MiningInProgressFragment : MvpAppCompatFragment(), MiningInProgressView {
 
     override fun setupWithStatus(status: PoaMemberStatus) {
         when(status) {
-            PoaMemberStatus.PoaMember -> memberStatus.text = getString(R.string.poa_member)
-            PoaMemberStatus.TeamLead -> memberStatus.text = getString(R.string.team_lead)
+            PoaMemberStatus.PoaMember -> {
+                memberStatus.text = getString(R.string.poa_member)
+                statusIcon.setImageResource(R.drawable.member)
+            }
+            PoaMemberStatus.TeamLead -> {
+                memberStatus.text = getString(R.string.team_lead)
+                statusIcon.setImageResource(R.drawable.team_lead)
+            }
+            PoaMemberStatus.Verificator -> {
+                memberStatus.text = getString(R.string.verificator)
+                statusIcon.setImageResource(R.drawable.verificator)
+            }
         }
     }
 

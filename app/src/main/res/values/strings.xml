@@ -78,12 +78,13 @@
     <string name="mining_has_ended">Mining has ended</string>
     <string name="start">Start</string>
     <string name="join">Join</string>
-    <string name="poa_member">You are a PoA member</string>
-    <string name="team_lead">You are a team leader</string>
+    <string name="poa_member">Team Member</string>
+    <string name="team_lead">Team Leader</string>
     <string name="hash_rate">Rate %d/sec</string>
     <string name="total_balance">Total Balance %d ENQ</string>
     <string name="stop">Stop</string>
     <string name="mining_history">Mining History</string>
+    <string name="verificator">Back Verificator</string>
     <plurals name="team_members">
         <item quantity="other">%1$d team members</item>
     </plurals>
