@@ -2,6 +2,7 @@ package com.enecuum.androidapp.ui.fragment.mining_in_progress
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.view.*
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.enecuum.androidapp.R
@@ -45,6 +46,8 @@ class MiningInProgressFragment : MvpAppCompatFragment(), MiningInProgressView {
         setupGraph()
         setHasOptionsMenu(true)
         TransactionsHistoryRenderer.configurePanelListener(slidingLayout, panelHint)
+        val supportActivity = activity as AppCompatActivity?
+        supportActivity?.supportActionBar?.setBackgroundDrawable(ContextCompat.getDrawable(context!!, R.color.navy))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -67,7 +70,7 @@ class MiningInProgressFragment : MvpAppCompatFragment(), MiningInProgressView {
         graph.viewport.setMaxX(40.0)
         graph.viewport.isYAxisBoundsManual = true
         graph.viewport.setMinY(0.0)
-        graph.viewport.setMaxY(5000.0)
+        graph.viewport.setMaxY(100.0)
         graph.legendRenderer.isVisible = false
         graph.gridLabelRenderer.isVerticalLabelsVisible = false
         graph.gridLabelRenderer.isHorizontalLabelsVisible = false

@@ -6,14 +6,11 @@ import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.application.EnecuumApplication
-import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.navigation.FragmentNavigator
 import com.enecuum.androidapp.presentation.presenter.mining.MiningPresenter
 import com.enecuum.androidapp.presentation.view.mining.MiningView
 import com.enecuum.androidapp.ui.base_ui_primitives.BackActivity
-import com.enecuum.androidapp.utils.MiningUtils
-import kotlinx.android.synthetic.main.activity_mining.*
-import kotlinx.android.synthetic.main.mining_toolbar.*
+import kotlinx.android.synthetic.main.transparent_toolbar.*
 
 
 class MiningActivity : BackActivity(), MiningView {
@@ -29,6 +26,8 @@ class MiningActivity : BackActivity(), MiningView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mining)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         presenter.onCreate()
     }
 

@@ -7,12 +7,12 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp">
 <EditText
-    android:layout_marginTop="14dp"
+    android:layout_marginTop="16dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:focusedByDefault="false"
     android:textColor="@android:color/white"
-    android:textColorHint="@color/white_87"
+    android:textColorHint="@android:color/white"
     android:hint="@android:string/search_go"
     android:id="@+id/searchField"
     android:textSize="16sp"

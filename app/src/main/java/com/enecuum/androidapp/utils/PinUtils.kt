@@ -1,9 +1,7 @@
 package com.enecuum.androidapp.utils
 
-import android.view.View
 import android.widget.ImageView
 import com.enecuum.androidapp.R
-import kotlinx.android.synthetic.main.fragment_new_account_pin.*
 
 /**
  * Created by oleg on 26.01.18.

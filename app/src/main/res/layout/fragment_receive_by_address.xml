@@ -55,7 +55,7 @@ app:umanoPanelHeight="127dp">
         <ImageView
             android:layout_toRightOf="@+id/historyTitle"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/show_history"

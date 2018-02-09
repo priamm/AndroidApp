@@ -5,5 +5,21 @@
     android:background="@color/navy"
     tools:context="com.enecuum.androidapp.ui.activity.mining.MiningActivity"
     android:orientation="vertical"
-    android:id="@+id/container" />
+    >
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/group"
+        android:scaleType="centerCrop"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <include layout="@layout/transparent_toolbar"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/container"/>
+    </LinearLayout>
+</FrameLayout>
 

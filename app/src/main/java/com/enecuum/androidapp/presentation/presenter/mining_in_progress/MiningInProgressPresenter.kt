@@ -51,11 +51,11 @@ class MiningInProgressPresenter : MvpPresenter<MiningInProgressView>() {
     }
 
     private fun getNewGraphData() : Array<DataPoint> {
-        val count = 40
+        val count = 41
         maxX = 0.0
         val random = Random(Date().time)
         val values = Array<DataPoint>(count, {
-            val v = DataPoint(maxX, 5000.0*random.nextDouble())
+            val v = DataPoint(maxX, 50.0*random.nextDouble())
             maxX += 1.0
             return@Array v
         })

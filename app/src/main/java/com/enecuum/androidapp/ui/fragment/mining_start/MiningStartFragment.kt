@@ -1,6 +1,8 @@
 package com.enecuum.androidapp.ui.fragment.mining_start
 
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,5 +39,7 @@ class MiningStartFragment : MvpAppCompatFragment(), MiningStartView {
         start.setOnClickListener {
             presenter.onStartClick()
         }
+        val supportActivity = activity as AppCompatActivity?
+        supportActivity?.supportActionBar?.setBackgroundDrawable(null)
     }
 }

@@ -3,12 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.enecuum.androidapp.ui.fragment.mining_start.MiningStartFragment"
-    android:orientation="vertical">
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.444"
-        />
+    android:orientation="vertical"
+    android:paddingTop="300dp">
     <Button
         android:text="@string/start"
         android:id="@+id/start"
@@ -21,10 +17,5 @@
         android:textSize="14sp"
         android:letterSpacing="0.04"
         android:background="@drawable/standard_button_background"
-        android:fontFamily="sans-serif"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.328"
-        />
+        android:fontFamily="sans-serif" />
 </LinearLayout>
