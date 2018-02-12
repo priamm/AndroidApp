@@ -55,7 +55,7 @@
         android:layout_marginRight="27dp"
         android:textColor="@color/blue_button_text"
         android:fontFamily="sans-serif"
-        android:layout_height="44dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textSize="14sp"
         android:letterSpacing="0.04"

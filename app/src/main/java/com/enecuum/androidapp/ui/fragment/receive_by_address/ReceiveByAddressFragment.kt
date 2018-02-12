@@ -38,6 +38,9 @@ class ReceiveByAddressFragment : NoBackFragment(), ReceiveByAddressView {
         super.onViewCreated(view, savedInstanceState)
         presenter.onCreate(arguments)
         setHasOptionsMenu(true)
+        receive.setOnClickListener {
+            presenter.onReceiveClick(activity is MainActivity)
+        }
     }
 
     override fun getTitle(): String = getString(R.string.receive)
@@ -46,23 +49,10 @@ class ReceiveByAddressFragment : NoBackFragment(), ReceiveByAddressView {
         TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.qr_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item?.itemId == R.id.qr) {
-            presenter.onQrClick(activity is MainActivity)
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     override fun onResume() {
         super.onResume()
-        if(menu != null && !menu!!.hasVisibleItems()) {
-            menuInflater?.inflate(R.menu.qr_menu, menu)
-        }
+        menu?.clear()
+
     }
 
     override fun setupForTransaction(transaction: Transaction) {
@@ -81,5 +71,9 @@ class ReceiveByAddressFragment : NoBackFragment(), ReceiveByAddressView {
         viewPager.adapter = ReceiveEnqTabsAdapter(childFragmentManager, context!!)
         tabLayout.setupWithViewPager(viewPager)
         TransactionsHistoryRenderer.configurePanelListener(slidingLayout, panelHint)
+    }
+
+    override fun changeButtonState(enable: Boolean) {
+        receive.isEnabled = enable
     }
 }

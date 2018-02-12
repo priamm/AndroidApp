@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     tools:context="com.enecuum.androidapp.ui.fragment.mining_start.MiningStartFragment"
     android:orientation="vertical"
-    android:paddingTop="300dp">
+    android:paddingTop="350dp">
     <Button
         android:text="@string/start"
         android:id="@+id/start"
@@ -12,7 +12,7 @@
         android:layout_marginLeft="27dp"
         android:layout_marginRight="27dp"
         android:textColor="@color/standard_button_text"
-        android:layout_height="44dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textSize="14sp"
         android:letterSpacing="0.04"

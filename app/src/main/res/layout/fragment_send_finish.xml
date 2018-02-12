@@ -29,7 +29,7 @@ app:umanoPanelHeight="127dp"
         android:layout_gravity="center"
         />
     <TextView
-        android:layout_marginTop="38dp"
+        android:layout_marginTop="25dp"
         android:paddingLeft="19dp"
         android:paddingRight="19dp"
         android:layout_width="wrap_content"
@@ -54,7 +54,7 @@ app:umanoPanelHeight="127dp"
         android:id="@+id/addressText"
         />
     <TextView
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="17dp"
         android:paddingLeft="19dp"
         android:paddingRight="19dp"
         android:layout_width="wrap_content"
@@ -104,19 +104,35 @@ app:umanoPanelHeight="127dp"
     android:orientation="vertical"
     android:gravity="center|top"
     android:background="@android:color/white">
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:fontFamily="sans-serif-medium"
-        android:textStyle="normal"
-        android:textColor="@color/black_87"
-        android:lineSpacingExtra="10sp"
-        android:text="@string/send_history"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:layout_marginBottom="7dp"
-        />
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif-medium"
+            android:textStyle="normal"
+            android:textColor="@color/black_87"
+            android:lineSpacingExtra="14sp"
+            android:text="@string/send_history"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:layout_marginBottom="16dp"
+            android:paddingBottom="1dp"
+            android:layout_centerInParent="true"
+            android:id="@+id/historyTitle"
+            />
+        <ImageView
+            android:layout_toRightOf="@+id/historyTitle"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/show_history"
+            android:id="@+id/panelHint"/>
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"

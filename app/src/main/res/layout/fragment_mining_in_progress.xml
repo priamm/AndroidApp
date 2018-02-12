@@ -32,6 +32,7 @@ app:umanoPanelHeight="127dp"
             android:lineSpacingExtra="8sp"
             tools:text="Rate 5000/sec"
             android:id="@+id/hashRateText"
+            android:layout_gravity="center_vertical"
             />
         <View
             android:layout_width="0dp"
@@ -47,6 +48,7 @@ app:umanoPanelHeight="127dp"
             android:lineSpacingExtra="8sp"
             tools:text="You are a team lead"
             android:id="@+id/memberStatus"
+            android:layout_gravity="center_vertical"
             />
         <ImageView
             android:layout_width="wrap_content"
@@ -58,7 +60,7 @@ app:umanoPanelHeight="127dp"
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.033"/>
+        android:layout_weight="0.03"/>
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -70,7 +72,7 @@ app:umanoPanelHeight="127dp"
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.034"/>
+        android:layout_weight="0.037"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

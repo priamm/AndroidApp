@@ -50,7 +50,7 @@ class ReceiveByAddressPresenter : MvpPresenter<ReceiveByAddressView>() {
         EventBusUtils.unregister(this)
     }
 
-    fun onQrClick(isMainScreen: Boolean) {
+    fun onReceiveClick(isMainScreen: Boolean) {
         val bundle = Bundle()
         val realAddress = if(address.isEmpty()) PersistentStorage.getAddress() else address
         bundle.putString(ReceiveQrFragment.ADDRESS, realAddress)
@@ -65,5 +65,6 @@ class ReceiveByAddressPresenter : MvpPresenter<ReceiveByAddressView>() {
     @Subscribe
     fun onAddressChanged(event: ReceiveAddressChanged) {
         address = event.newValue
+        viewState.changeButtonState(!address.isEmpty())
     }
 }

@@ -27,8 +27,10 @@ class ReceiveSingleTabPresenter : MvpPresenter<ReceiveSingleTabView>() {
         val totalAmount = PersistentStorage.getCurrencyAmount(currency)
         viewState.setupWithAmount(totalAmount)
         val transaction = arguments.getSerializable(TRANSACTION) as Transaction?
-        if(transaction != null)
+        if(transaction != null) {
             viewState.setupWithTransaction(transaction)
+            onAddressTextChanged(transaction.address)
+        }
     }
 
     fun onCopyClicked(text: String) {

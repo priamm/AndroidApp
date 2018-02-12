@@ -16,7 +16,8 @@ app:umanoPanelHeight="127dp">
     android:orientation="vertical">
     <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:id="@+id/viewPager">
         <android.support.design.widget.TabLayout
             android:layout_width="match_parent"
@@ -26,6 +27,22 @@ app:umanoPanelHeight="127dp">
             app:tabTextColor="@color/white__70"
             app:tabIndicatorColor="@color/cerulian"/>
     </android.support.v4.view.ViewPager>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_marginLeft="27dp"
+        android:layout_marginRight="27dp"
+        android:textColor="@color/standard_button_text"
+        android:fontFamily="sans-serif"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="14sp"
+        android:text="@string/receive"
+        android:letterSpacing="0.04"
+        android:enabled="false"
+        android:id="@+id/receive"
+        android:background="@drawable/standard_button_background"
+        android:layout_marginBottom="22dp"
+        />
 </LinearLayout>
 <LinearLayout
     android:layout_width="match_parent"

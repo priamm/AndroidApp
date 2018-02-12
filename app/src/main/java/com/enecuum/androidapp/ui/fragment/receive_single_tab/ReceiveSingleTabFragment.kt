@@ -30,6 +30,8 @@ class ReceiveSingleTabFragment : MvpAppCompatFragment(), ReceiveSingleTabView {
         }
     }
 
+    private var isSetupFinished = false
+
     @InjectPresenter
     lateinit var presenter: ReceiveSingleTabPresenter
 
@@ -53,9 +55,17 @@ class ReceiveSingleTabFragment : MvpAppCompatFragment(), ReceiveSingleTabView {
 
     override fun setupWithAmount(totalAmount: Float) {
         balanceAmount.text = String.format("%s %.8f", getString(R.string.your_balance), totalAmount)
+        isSetupFinished = true
     }
 
     override fun setupWithTransaction(transaction: Transaction) {
         addressText.setText(transaction.address)
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if(isVisibleToUser && isSetupFinished) {
+            presenter.onAddressTextChanged(addressText.text.toString())
+        }
     }
 }

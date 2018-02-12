@@ -5,7 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.support.v4.content.ContextCompat
+import android.widget.TextView
 import android.widget.Toast
+import com.enecuum.androidapp.R
 import com.enecuum.androidapp.ui.activity.change_pin.ChangePinActivity
 import com.enecuum.androidapp.ui.activity.forgot.ForgotPinActivity
 import com.enecuum.androidapp.ui.activity.main.MainActivity
@@ -104,6 +107,10 @@ class ActivityNavigator(private val currentActivity : Activity?) : Navigator {
             val handler = Handler(Looper.getMainLooper())
             handler.post {
                 val toast = Toast.makeText(currentActivity, text, Toast.LENGTH_SHORT)
+                val view = toast.view
+                view.setBackgroundResource(R.drawable.toast_bg)
+                val message = view.findViewById<TextView>(android.R.id.message)
+                message.setTextColor(ContextCompat.getColor(currentActivity, android.R.color.white))
                 toast.show()
             }
             handler.postDelayed({
