@@ -28,7 +28,7 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
     <style name="Theme.AppCompat.Light.Mining" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/navy</item>
         <item name="colorPrimaryDark">@color/background_white</item>
         <item name="colorAccent">@color/dark_indigo</item>
         <item name="android:windowContentOverlay">@null</item>

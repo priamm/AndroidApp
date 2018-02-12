@@ -5,7 +5,10 @@
     tools:context="com.enecuum.androidapp.ui.activity.transaction_details.TransactionDetailsActivity"
     android:orientation="vertical">
     <include layout="@layout/mining_toolbar"/>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dark_indigo_four"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

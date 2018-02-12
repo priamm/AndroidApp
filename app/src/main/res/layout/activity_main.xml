@@ -7,19 +7,26 @@
     android:background="@color/navy"
     android:orientation="vertical">
     <include layout="@layout/mining_toolbar"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dark_indigo_four"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:id="@+id/container"/>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dark_indigo_four"/>
     <com.enecuum.androidapp.ui.view.BottomNavigationViewEx
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         app:menu="@menu/bottom_menu"
         android:id="@+id/bottomNavigation"
         app:itemIconTint="@color/tab_icon"
-        android:background="@color/midnight"
+        android:background="@color/navy"
         android:foregroundGravity="center"
         />
 

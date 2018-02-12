@@ -4,7 +4,11 @@
     android:layout_height="match_parent"
     tools:context="com.enecuum.androidapp.ui.fragment.mining_start.MiningStartFragment"
     android:orientation="vertical"
-    android:paddingTop="350dp">
+    android:paddingBottom="206dp">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
     <Button
         android:text="@string/start"
         android:id="@+id/start"

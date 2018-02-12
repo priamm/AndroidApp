@@ -52,8 +52,8 @@ tools:context="com.enecuum.androidapp.ui.fragment.pin.PinFragment"
                 android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin1_1"
-                android:layout_marginLeft="9dp"
-                android:layout_marginRight="9dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 />
             <ImageView
                 android:layout_width="wrap_content"
@@ -61,8 +61,8 @@ tools:context="com.enecuum.androidapp.ui.fragment.pin.PinFragment"
                 android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin1_2"
-                android:layout_marginLeft="9dp"
-                android:layout_marginRight="9dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 />
             <ImageView
                 android:layout_width="wrap_content"
@@ -70,8 +70,8 @@ tools:context="com.enecuum.androidapp.ui.fragment.pin.PinFragment"
                 android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin1_3"
-                android:layout_marginLeft="9dp"
-                android:layout_marginRight="9dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 />
             <ImageView
                 android:layout_width="wrap_content"
@@ -79,8 +79,8 @@ tools:context="com.enecuum.androidapp.ui.fragment.pin.PinFragment"
                 android:src="@drawable/dot_2"
                 android:layout_gravity="center"
                 android:id="@+id/pin1_4"
-                android:layout_marginLeft="9dp"
-                android:layout_marginRight="9dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 />
         </LinearLayout>
     </FrameLayout>

@@ -31,7 +31,7 @@
         android:id="@+id/tokensList"/>
     <Button
         android:layout_marginTop="28dp"
-        android:layout_marginBottom="14dp"
+        android:layout_marginBottom="22dp"
         android:text="@string/send"
         android:id="@+id/send"
         android:layout_width="match_parent"
@@ -48,7 +48,7 @@
     <Button
         android:text="@string/receive"
         android:id="@+id/receive"
-        android:layout_marginBottom="14dp"
+        android:layout_marginBottom="22dp"
         android:enabled="false"
         android:layout_width="match_parent"
         android:layout_marginLeft="27dp"

@@ -16,10 +16,13 @@ app:umanoPanelHeight="127dp"
     android:paddingRight="16dp"
     android:paddingLeft="16dp"
     tools:background="@color/navy">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.01"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginBottom="21dp"
         android:orientation="horizontal">
         <TextView
@@ -55,12 +58,12 @@ app:umanoPanelHeight="127dp"
             android:layout_height="wrap_content"
             android:id="@+id/statusIcon"
             android:layout_marginLeft="8dp"
-            tools:src="@drawable/member"/>
+            tools:src="@drawable/team_lead"/>
     </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.03"/>
+        android:layout_weight="0.01"/>
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -72,7 +75,7 @@ app:umanoPanelHeight="127dp"
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.037"/>
+        android:layout_weight="0.043"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,7 +90,7 @@ app:umanoPanelHeight="127dp"
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.048"/>
+        android:layout_weight="0.043"/>
 </LinearLayout>
 <LinearLayout
     android:layout_width="match_parent"
