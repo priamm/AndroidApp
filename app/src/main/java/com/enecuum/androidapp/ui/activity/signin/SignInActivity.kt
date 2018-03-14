@@ -42,7 +42,7 @@ class SignInActivity : BackActivity(), SignInView {
         forgot.setOnClickListener {
             presenter.onForgotClick()
         }
-        pin1.setOnEditorActionListener { v, actionId, event ->
+        pin1.setOnEditorActionListener { _, actionId, _ ->
             if(actionId == EditorInfo.IME_ACTION_DONE) {
                 return@setOnEditorActionListener presenter.onDonePressed()
             }

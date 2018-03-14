@@ -20,22 +20,22 @@ class TokenSendListAdapter(private val data: List<TokenInfo>, private val mode: 
     private val selectedIds = mutableListOf<String>()
     private var currentData = data
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TokenViewHolder =
-            TokenViewHolder(LayoutInflater.from(parent?.context).inflate(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TokenViewHolder =
+            TokenViewHolder(LayoutInflater.from(parent.context).inflate(
                     R.layout.item_tokens_list,
                     parent,
                     false))
 
     override fun getItemCount(): Int = currentData.size
 
-    override fun onBindViewHolder(holder: TokenViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: TokenViewHolder, position: Int) {
         val tokenInfo = currentData[position]
         if(mode == TokensSingleFragment.Companion.Mode.JettonMode) {
-            holder?.itemView?.checkBox?.visibility = View.INVISIBLE
+            holder.itemView?.checkBox?.visibility = View.INVISIBLE
         } else {
-            holder?.itemView?.checkBox?.visibility = View.VISIBLE
-            holder?.itemView?.checkBox?.setOnCheckedChangeListener(null)
-            holder?.itemView?.checkBox?.setOnCheckedChangeListener { _, isChecked ->
+            holder.itemView?.checkBox?.visibility = View.VISIBLE
+            holder.itemView?.checkBox?.setOnCheckedChangeListener(null)
+            holder.itemView?.checkBox?.setOnCheckedChangeListener { _, isChecked ->
                 if(isChecked) {
                     selectedIds.add(tokenInfo.id)
                 } else {
@@ -44,8 +44,8 @@ class TokenSendListAdapter(private val data: List<TokenInfo>, private val mode: 
                 EventBus.getDefault().post(TokensSelected(selectedIds))
             }
         }
-        holder?.itemView?.amount?.text = String.format("%.8f", tokenInfo.amount)
-        holder?.itemView?.tokenType?.text = tokenInfo.tokenType
+        holder.itemView?.amount?.text = String.format("%.8f", tokenInfo.amount)
+        holder.itemView?.tokenType?.text = tokenInfo.tokenType
     }
 
     fun filter(filterText: String) {
