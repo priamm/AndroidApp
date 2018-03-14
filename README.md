@@ -1,5 +1,6 @@
 # AndroidApp
 Main Android app with UI. Other Android related projects will be merged here when become ready for use.
+[](/docs/static_files/Screenshot_20180314-173148.png) [](/docs/static_files/Screenshot_20180314-173503.png)  [](/docs/static_files/Screenshot_20180314-173613.png)
 ## Architecture
 This project uses [Moxy](https://github.com/Arello-Mobile/Moxy) library to structure UI objects related code(kind of [MVP](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) as part of the Android adaptation of the [Clean Architecture](https://github.com/android10/Android-CleanArchitecture)). [Cicerone](https://github.com/terrakok/Cicerone) library is used to provide better Activity, Fragment & Tab navigation structure. [Greenrobot EventBus](http://greenrobot.org/eventbus/) library is used for passing events between different objects. So, including all of these, there is a macro-level structure of the application by source code packages:
  1. "application" holds system-level singletones, such as application context and Cicerone navigators.
