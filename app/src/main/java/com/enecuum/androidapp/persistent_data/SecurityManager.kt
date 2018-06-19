@@ -7,6 +7,7 @@ import com.yakivmospan.scytale.Crypto
 import com.yakivmospan.scytale.Options
 import com.yakivmospan.scytale.Store
 import java.io.IOException
+import java.nio.charset.Charset
 import java.security.KeyStore
 import java.security.KeyStoreException
 import java.security.NoSuchAlgorithmException
@@ -80,6 +81,10 @@ class SecurityManager(context: Context) {
 
     fun putString(key: String, value: String?) {
         putValue(key, value.toString())
+    }
+
+    fun putByteArray(key: String, value: ByteArray) {
+        putString(key, String(value, Charset.forName("UTF-8")))
     }
 
     fun putInt(key: String, value: Int) {

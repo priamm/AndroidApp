@@ -8,11 +8,11 @@ import com.enecuum.androidapp.navigation.ScreenType
 import com.enecuum.androidapp.navigation.TabType
 import com.enecuum.androidapp.persistent_data.SecurityManager
 import com.enecuum.androidapp.utils.EventBusUtils
+import com.google.crypto.tink.Config
+import com.google.crypto.tink.config.TinkConfig
 import org.greenrobot.eventbus.Subscribe
-import org.spongycastle.jce.provider.BouncyCastleProvider
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.Router
-import java.security.Security
 
 
 /**
@@ -108,7 +108,7 @@ class EnecuumApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
-        Security.insertProviderAt(BouncyCastleProvider(), 1)
+        Config.register(TinkConfig.TINK_1_1_0);
         cicerone = Cicerone.create()
         fragmentCicerone = Cicerone.create()
         tabCicerone = Cicerone.create()

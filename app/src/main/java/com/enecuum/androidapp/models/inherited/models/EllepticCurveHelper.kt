@@ -1,21 +1,24 @@
 package com.enecuum.androidapp.models.inherited.models
 
-import org.spongycastle.jce.ECNamedCurveTable
-import java.security.KeyFactory
-import java.security.KeyPairGenerator
-import java.security.SecureRandom
-import java.security.spec.PKCS8EncodedKeySpec
-import java.security.spec.X509EncodedKeySpec
+import com.google.crypto.tink.BinaryKeysetWriter
+import com.google.crypto.tink.CleartextKeysetHandle
+import com.google.crypto.tink.KeysetHandle
+import com.google.crypto.tink.signature.SignatureKeyTemplates
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.security.GeneralSecurityException
 
-class EllepticCurveHelper {
-    fun generatePublicAndPrivate() {
-        val ecSpec = ECNamedCurveTable.getParameterSpec("prime192v1")
-        val g = KeyPairGenerator.getInstance("ECDSA", "BC")
-        g.initialize(ecSpec, SecureRandom())
-        val pair = g.generateKeyPair()
-        val fact = KeyFactory.getInstance("ECDSA", "BC");
-        val public = fact.generatePublic(X509EncodedKeySpec(pair.getPublic().getEncoded()));
-        val private = fact.generatePrivate(PKCS8EncodedKeySpec(pair.getPrivate().getEncoded()));
-        Pair(public, private)
+object EcdsaKeyPairGenerator {
+    private val SIGNATURE_KEY_TEMPLATE = SignatureKeyTemplates.ECDSA_P256
+
+    @Throws(GeneralSecurityException::class, IOException::class)
+    public fun generateEcdsaKeyPair(): Pair<ByteArrayOutputStream, ByteArrayOutputStream> {
+        val privatekeyFileOutputStream = ByteArrayOutputStream()
+        val publickeyFileOutputStream = ByteArrayOutputStream()
+        val privateKeyHandle = KeysetHandle.generateNew(SIGNATURE_KEY_TEMPLATE)
+        CleartextKeysetHandle.write(privateKeyHandle, BinaryKeysetWriter.withOutputStream(privatekeyFileOutputStream))
+        val publicKeyHandle = privateKeyHandle.getPublicKeysetHandle()
+        CleartextKeysetHandle.write(publicKeyHandle, BinaryKeysetWriter.withOutputStream(publickeyFileOutputStream))
+        return Pair(privatekeyFileOutputStream, publickeyFileOutputStream)
     }
 }
