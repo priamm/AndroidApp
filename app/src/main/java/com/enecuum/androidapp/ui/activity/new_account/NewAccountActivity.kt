@@ -7,13 +7,12 @@ import android.support.v7.app.AlertDialog
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.application.EnecuumApplication
-import com.enecuum.androidapp.models.inherited.models.EcdsaKeyPairGenerator
 import com.enecuum.androidapp.presentation.presenter.new_account.NewAccountPresenter
 import com.enecuum.androidapp.presentation.view.new_account.NewAccountView
 import com.enecuum.androidapp.ui.adapters.NewAccountPagerAdapter
 import com.enecuum.androidapp.ui.base_ui_primitives.BackActivity
+import com.google.crypto.tink.signature.SignatureKeyTemplates
 import kotlinx.android.synthetic.main.activity_new_account.*
-import java.io.ByteArrayOutputStream
 
 class NewAccountActivity : BackActivity(), NewAccountView {
     companion object {
@@ -29,8 +28,8 @@ class NewAccountActivity : BackActivity(), NewAccountView {
         super.onCreate(savedInstanceState)
         presenter.onCreate()
         setContentView(R.layout.activity_new_account)
-        val pairPrivatePublic = EcdsaKeyPairGenerator.generateEcdsaKeyPair()
-        saveMyKey(pairPrivatePublic)
+
+        generateNewKey()
 
         val adapter = NewAccountPagerAdapter(supportFragmentManager)
         pager.adapter = adapter
@@ -41,9 +40,8 @@ class NewAccountActivity : BackActivity(), NewAccountView {
         title = getString(R.string.pin_creation)
     }
 
-    private fun saveMyKey(pubPrivPair: Pair<ByteArrayOutputStream, ByteArrayOutputStream>) {
-        EnecuumApplication.securityManager().putByteArray("private", pubPrivPair.first.toByteArray())
-        EnecuumApplication.securityManager().putByteArray("public", pubPrivPair.second.toByteArray())
+    private fun generateNewKey() {
+        EnecuumApplication.keysetManager().add(SignatureKeyTemplates.ECDSA_P256)
     }
 
     override fun moveNext() {

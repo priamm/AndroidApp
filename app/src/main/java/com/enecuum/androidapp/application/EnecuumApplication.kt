@@ -6,10 +6,12 @@ import com.enecuum.androidapp.events.MainActivityStopped
 import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.navigation.ScreenType
 import com.enecuum.androidapp.navigation.TabType
-import com.enecuum.androidapp.persistent_data.SecurityManager
 import com.enecuum.androidapp.utils.EventBusUtils
 import com.google.crypto.tink.Config
 import com.google.crypto.tink.config.TinkConfig
+import com.google.crypto.tink.integration.android.AndroidKeysetManager
+import com.google.crypto.tink.signature.PublicKeySignFactory
+import com.google.crypto.tink.signature.SignatureKeyTemplates
 import org.greenrobot.eventbus.Subscribe
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.Router
@@ -36,8 +38,8 @@ class EnecuumApplication : Application() {
         private var currentTab = TabType.Home
         private val backStack = mutableMapOf<TabType, Int>()
 
-        private lateinit var securityManager: SecurityManager
-        fun securityManager(): SecurityManager = securityManager
+        private lateinit var keysetManager: AndroidKeysetManager
+        fun keysetManager(): AndroidKeysetManager = keysetManager
 
         fun navigateToActivity(screenType: ScreenType, transitionData: Any? = null) {
             if (screenType == ScreenType.Main) {
@@ -109,10 +111,18 @@ class EnecuumApplication : Application() {
         super.onCreate()
         appContext = applicationContext
         Config.register(TinkConfig.TINK_1_1_0);
+
+        keysetManager = AndroidKeysetManager.Builder()
+                .withSharedPref(appContext, "my_keyset_name", "my_pref_file_name")
+                .withMasterKeyUri("android-keystore://my_master_key_id")
+                .withKeyTemplate(SignatureKeyTemplates.ECDSA_P256)
+                .build()
+//        val signer = PublicKeySignFactory.getPrimitive(keysetManager.getKeysetHandle())
+
         cicerone = Cicerone.create()
         fragmentCicerone = Cicerone.create()
         tabCicerone = Cicerone.create()
-        securityManager = com.enecuum.androidapp.persistent_data.SecurityManager(appContext)
+
         EventBusUtils.register(this)
     }
 
