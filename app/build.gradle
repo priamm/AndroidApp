@@ -46,15 +46,15 @@ dependencies {
     implementation "com.android.support:support-v4:$support_version"
     compile "com.android.support:design:$support_version"
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     compile "com.arello-mobile:moxy-app-compat:$moxy_version"
     compile "com.android.support:appcompat-v7:$support_version"
     kapt "com.arello-mobile:moxy-compiler:$moxy_version"
     compile 'org.greenrobot:eventbus:3.1.1'
     compile 'ru.terrakok.cicerone:cicerone:3.0.0'
-    compile 'com.squareup.okhttp3:okhttp:3.9.1'
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.okhttp3:okhttp:3.10.0'
+    compile 'com.squareup.retrofit2:retrofit:2.4.0'
     compile(name: 'circleindicator', ext: 'aar')
     compile group: 'com.google.zxing', name: 'core', version: '3.3.1'
     compile group: 'com.google.zxing', name: 'android-core', version: '3.3.0'
@@ -66,6 +66,13 @@ dependencies {
     }
     compile 'com.sothree.slidinguppanel:library:3.4.0'
     compile 'com.jjoe64:graphview:4.2.1'
+
+    compile group: 'com.jakewharton.timber', name: 'timber', version: '4.7.0'
+    compile 'com.jraska:console:0.4.3'
+    compile 'com.jraska:console-timber-tree:0.4.3'
+
+    implementation 'com.google.code.gson:gson:2.8.4'
+    implementation "io.reactivex.rxjava2:rxjava:2.1.13"
 }
 
 

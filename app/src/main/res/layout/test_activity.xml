@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:orientation="vertical">
+    <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:orientation="vertical">
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/enterjson"
+                  android:text="Enter your id json"/>
+
+        <EditText android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/jsonPath"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="My number"/>
+        <EditText android:layout_width="wrap_content"
+                  android:id="@+id/myNumber"
+                  android:layout_height="wrap_content"
+                  android:text="1"
+                  android:digits="1234567890"/>
+
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start"
+                android:id="@+id/start"/>
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start event"
+                android:id="@+id/start_event"/>
+        <com.jraska.console.Console
+                android:layout_width="match_parent"
+                android:layout_height="600dp"/>
+    </LinearLayout>
+</ScrollView>
