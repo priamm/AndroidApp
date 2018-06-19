@@ -6,34 +6,41 @@ import com.enecuum.androidapp.events.MainActivityStopped
 import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.navigation.ScreenType
 import com.enecuum.androidapp.navigation.TabType
+import com.enecuum.androidapp.persistent_data.SecurityManager
 import com.enecuum.androidapp.utils.EventBusUtils
-import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import org.spongycastle.jce.provider.BouncyCastleProvider
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.Router
+import java.security.Security
+
 
 /**
  * Created by oleg on 22.01.18.
  */
 class EnecuumApplication : Application() {
+
     companion object {
         private lateinit var appContext: Context
-        fun applicationContext() : Context = appContext
+        fun applicationContext(): Context = appContext
 
         private lateinit var cicerone: Cicerone<Router>
-        fun cicerone() : Cicerone<Router> = cicerone
+        fun cicerone(): Cicerone<Router> = cicerone
 
         private lateinit var fragmentCicerone: Cicerone<Router>
-        fun fragmentCicerone() : Cicerone<Router> = fragmentCicerone
+        fun fragmentCicerone(): Cicerone<Router> = fragmentCicerone
 
         private lateinit var tabCicerone: Cicerone<Router>
-        fun tabCicerone() : Cicerone<Router> = tabCicerone
+        fun tabCicerone(): Cicerone<Router> = tabCicerone
 
         private var currentTab = TabType.Home
         private val backStack = mutableMapOf<TabType, Int>()
 
+        private lateinit var securityManager: SecurityManager
+        fun securityManager(): SecurityManager = securityManager
+
         fun navigateToActivity(screenType: ScreenType, transitionData: Any? = null) {
-            if(screenType == ScreenType.Main) {
+            if (screenType == ScreenType.Main) {
                 cicerone.router.newRootScreen(screenType.toString(), transitionData)
                 return
             }
@@ -42,29 +49,29 @@ class EnecuumApplication : Application() {
 
         fun navigateToFragment(screenType: FragmentType, tabType: TabType, transitionData: Any? = null) {
             currentTab = tabType
-            if(backStack.containsKey(tabType)) {
+            if (backStack.containsKey(tabType)) {
                 var newVal = backStack[tabType]!!
                 newVal++
                 backStack[tabType] = newVal
             } else {
                 backStack[tabType] = 1
             }
-            if(isRoot(screenType, tabType))
+            if (isRoot(screenType, tabType))
                 newRootScreen(screenType, transitionData)
             fragmentCicerone.router.navigateTo(screenType.toString(), transitionData)
         }
 
-        private fun isRoot(screenType: FragmentType, tabType: TabType) : Boolean {
-            if(screenType == FragmentType.Balance && tabType == TabType.Home) {
+        private fun isRoot(screenType: FragmentType, tabType: TabType): Boolean {
+            if (screenType == FragmentType.Balance && tabType == TabType.Home) {
                 return true
             }
-            if(screenType == FragmentType.SendOptions && tabType == TabType.Send) {
+            if (screenType == FragmentType.SendOptions && tabType == TabType.Send) {
                 return true
             }
-            if(screenType == FragmentType.ReceiveByAddress && tabType == TabType.Receive) {
+            if (screenType == FragmentType.ReceiveByAddress && tabType == TabType.Receive) {
                 return true
             }
-            if(screenType == FragmentType.SettingsMain && tabType == TabType.Settings) {
+            if (screenType == FragmentType.SettingsMain && tabType == TabType.Settings) {
                 return true
             }
             return false
@@ -75,10 +82,10 @@ class EnecuumApplication : Application() {
         }
 
         fun exitFromCurrentFragment() {
-            if(backStack.containsKey(currentTab)) {
+            if (backStack.containsKey(currentTab)) {
                 var newVal = backStack[currentTab]!!
                 newVal--
-                if(newVal < 0)
+                if (newVal < 0)
                     newVal = 0
                 backStack[currentTab] = newVal
             }
@@ -91,8 +98,8 @@ class EnecuumApplication : Application() {
             tabCicerone.router.navigateTo(tabType.toString())
         }
 
-        fun getCurrentBackStackCount() : Int {
-            if(backStack.containsKey(currentTab))
+        fun getCurrentBackStackCount(): Int {
+            if (backStack.containsKey(currentTab))
                 return backStack[currentTab]!!
             return 0
         }
@@ -101,9 +108,11 @@ class EnecuumApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
+        Security.insertProviderAt(BouncyCastleProvider(), 1)
         cicerone = Cicerone.create()
         fragmentCicerone = Cicerone.create()
         tabCicerone = Cicerone.create()
+        securityManager = com.enecuum.androidapp.persistent_data.SecurityManager(appContext)
         EventBusUtils.register(this)
     }
 
