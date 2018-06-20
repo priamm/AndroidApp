@@ -10,7 +10,6 @@ import com.enecuum.androidapp.utils.EventBusUtils
 import com.google.crypto.tink.Config
 import com.google.crypto.tink.config.TinkConfig
 import com.google.crypto.tink.integration.android.AndroidKeysetManager
-import com.google.crypto.tink.signature.PublicKeySignFactory
 import com.google.crypto.tink.signature.SignatureKeyTemplates
 import org.greenrobot.eventbus.Subscribe
 import ru.terrakok.cicerone.Cicerone
@@ -117,7 +116,6 @@ class EnecuumApplication : Application() {
                 .withMasterKeyUri("android-keystore://my_master_key_id")
                 .withKeyTemplate(SignatureKeyTemplates.ECDSA_P256)
                 .build()
-//        val signer = PublicKeySignFactory.getPrimitive(keysetManager.getKeysetHandle())
 
         cicerone = Cicerone.create()
         fragmentCicerone = Cicerone.create()
