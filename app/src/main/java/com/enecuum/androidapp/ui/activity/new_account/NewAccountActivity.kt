@@ -6,12 +6,11 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
-import com.enecuum.androidapp.application.EnecuumApplication
+import com.enecuum.androidapp.models.inherited.models.EcdsaKeyPairManager
 import com.enecuum.androidapp.presentation.presenter.new_account.NewAccountPresenter
 import com.enecuum.androidapp.presentation.view.new_account.NewAccountView
 import com.enecuum.androidapp.ui.adapters.NewAccountPagerAdapter
 import com.enecuum.androidapp.ui.base_ui_primitives.BackActivity
-import com.google.crypto.tink.signature.SignatureKeyTemplates
 import kotlinx.android.synthetic.main.activity_new_account.*
 
 class NewAccountActivity : BackActivity(), NewAccountView {
@@ -29,8 +28,6 @@ class NewAccountActivity : BackActivity(), NewAccountView {
         presenter.onCreate()
         setContentView(R.layout.activity_new_account)
 
-        generateNewKey()
-
         val adapter = NewAccountPagerAdapter(supportFragmentManager)
         pager.adapter = adapter
         indicator.setViewPager(pager)
@@ -38,10 +35,6 @@ class NewAccountActivity : BackActivity(), NewAccountView {
             presenter.onNextClick(pager.currentItem)
         }
         title = getString(R.string.pin_creation)
-    }
-
-    private fun generateNewKey() {
-        EnecuumApplication.keysetManager().add(SignatureKeyTemplates.ECDSA_P256)
     }
 
     override fun moveNext() {

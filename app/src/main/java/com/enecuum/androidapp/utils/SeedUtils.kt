@@ -5,6 +5,7 @@ import android.widget.TextView
 import com.enecuum.androidapp.R
 import io.github.novacrypto.bip39.MnemonicGenerator
 import io.github.novacrypto.bip39.MnemonicValidator
+import io.github.novacrypto.bip39.SeedCalculator
 import io.github.novacrypto.bip39.Validation.InvalidChecksumException
 import io.github.novacrypto.bip39.Validation.InvalidWordCountException
 import io.github.novacrypto.bip39.Validation.UnexpectedWhiteSpaceException
@@ -53,4 +54,5 @@ object SeedUtils {
 //            //e.getSuggestion2()
 //        }
     }
+
 }

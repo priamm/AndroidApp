@@ -26,7 +26,7 @@ object EcdsaKeyPairManager {
         return Pair(privatekeyFileOutputStream, publickeyFileOutputStream)
     }
 
-    fun addKey() {
+    fun generateAndStoreKey() {
         EnecuumApplication.keysetManager().add(SignatureKeyTemplates.ECDSA_P256)
     }
 

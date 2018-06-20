@@ -14,6 +14,10 @@ import com.enecuum.androidapp.ui.base_ui_primitives.FileOpeningFragment
 import com.enecuum.androidapp.utils.SeedUtils
 import com.enecuum.androidapp.utils.SimpleTextWatcher
 import kotlinx.android.synthetic.main.fragment_create_seed.*
+import io.github.novacrypto.bip39.wordlists.English
+import io.github.novacrypto.bip39.SeedCalculator
+
+
 
 class CreateSeedFragment : FileOpeningFragment(), CreateSeedView {
     companion object {
@@ -37,6 +41,8 @@ class CreateSeedFragment : FileOpeningFragment(), CreateSeedView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val generateMnemonic = SeedUtils.generateMnemonic()
+
+
         seed.setText(generateMnemonic)
         seed.addTextChangedListener(object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable?) {
