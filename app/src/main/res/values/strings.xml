@@ -31,10 +31,10 @@
         <item quantity="other">Percent %1$f</item>
     </plurals>
     <string name="karma_percent">Karma percent</string>
-    <string name="tokens_and_jettons">Tokens and Jettons</string>
+    <string name="tokens_and_tickets">Tokens and Tickets</string>
     <string name="transactions_history">Transactions History</string>
     <string name="tokens">Tokens</string>
-    <string name="jettons">Jettons</string>
+    <string name="jettons">Tickets</string>
     <string name="send">Send</string>
     <string name="receive">Receive</string>
     <string name="address">Address</string>

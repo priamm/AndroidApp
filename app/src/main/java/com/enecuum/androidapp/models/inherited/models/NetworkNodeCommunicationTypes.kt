@@ -32,8 +32,8 @@ data class BroadcastPoAMessage(val tag: String = Tags.Request.name,
                                val msg: String)
 
 data class ReceivedBroadcastMessage(val tag: String = Tags.Msg.name,
-                                    val type: String = CommunicationSubjects.BroadcastMsg.name,
-                                    val messages: String,
+                                    val type: String = CommunicationSubjects.Broadcast.name,
+                                    val msg: String,
                                     val idFrom: String)
 
 data class PowsRequest(val tag: String = Tags.Request.name,
@@ -51,7 +51,7 @@ data class AddressedMessageRequest(val tag: String = Tags.Msg.name,
 data class AddressedMessageResponse(val tag: String = Tags.Msg.name,
                                     val type: String = CommunicationSubjects.MsgTo.name,
                                     val sender: String,
-                                    val messages: String)
+                                    val msg: String)
 
 
 data class TransactionRequest(val tag: String = Tags.Request.name,

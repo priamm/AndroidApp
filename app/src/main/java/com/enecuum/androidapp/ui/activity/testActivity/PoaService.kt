@@ -1,24 +1,21 @@
 package com.enecuum.androidapp.ui.activity.testActivity
 
+import android.content.Context
 import android.os.Build
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.util.Base64
 import android.widget.Toast
-import com.enecuum.androidapp.R
 import com.enecuum.androidapp.models.inherited.models.*
 import com.enecuum.androidapp.models.inherited.models.Sha.hash256
 import com.enecuum.androidapp.network.RxWebSocket
 import com.enecuum.androidapp.network.WebSocketEvent
 import com.google.gson.Gson
-import com.jraska.console.timber.ConsoleTree
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.flowables.ConnectableFlowable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.test_activity.*
 import okhttp3.Request
 import okhttp3.WebSocket
 import timber.log.Timber
@@ -26,12 +23,12 @@ import java.nio.charset.Charset
 import java.util.*
 
 
-class TestActivity : AppCompatActivity() {
+class PoaService(val context: Context) {
 
     val blockSize = 512 * 1024;
     private val BN_PATH = "195.201.226.28"
     private val BN_PORT = "1554"
-    private val NN_PATH = "88.99.86.129"//"195.201.226.25"
+    private val NN_PATH = "195.201.226.24"//"195.201.226.25"
     private val NN_PORT = "1554"
 
     val TRANSACTION_COUNT_FOR_REQUEST = 1
@@ -43,12 +40,13 @@ class TestActivity : AppCompatActivity() {
     val gson = Gson()
     val string1mb = create()
     var composite = CompositeDisposable()
-    var webs: WebSocket? = null;
+    var websocket: WebSocket? = null;
     var nodes: Nodes = gson.fromJson(testGson, Nodes::class.java);
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.test_activity)
-        Timber.plant(ConsoleTree());
+    private val websocketEvents: ConnectableFlowable<WebSocketEvent>;
+    val webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>;
+
+    init {
+
         //for generate purposes
 //        val arrayList = ArrayList<String>()
 //        for (i in 8 downTo 1) arrayList.add(UUID.randomUUID().toString())
@@ -56,14 +54,13 @@ class TestActivity : AppCompatActivity() {
 //        val testGson = gson.toJson(nodes1);
 
         testGson = testGson.replace("-", "");
-        jsonPath.setText(testGson)
         Timber.d("Start testing")
 
-        val websocketEvents = getWebSocket(NN_PATH, NN_PORT).observe()
-                .doOnNext { webs = it.webSocket }
+        websocketEvents = getWebSocket(NN_PATH, NN_PORT).observe()
+                .doOnNext { websocket = it.webSocket }
                 .publish()
 
-        val webSocketStringMessageEvents = websocketEvents
+        webSocketStringMessageEvents = websocketEvents
                 .filter { it is WebSocketEvent.StringMessageEvent }
                 .cast(WebSocketEvent.StringMessageEvent::class.java)
                 .map {
@@ -75,41 +72,45 @@ class TestActivity : AppCompatActivity() {
                 is WebSocketEvent.StringMessageEvent -> Timber.i("Recieved message");
                 is WebSocketEvent.OpenedEvent -> Timber.i("WS Opened Event");
                 is WebSocketEvent.ClosedEvent -> Timber.i("WS Closed Event");
-                is WebSocketEvent.FailureEvent -> Timber.e("WS Failue Event :${it.t?.localizedMessage}, ${it.response.toString()}");
+                is WebSocketEvent.FailureEvent -> {
+                    val s = "WS Failue Event :${it.t?.localizedMessage}, ${it.response.toString()}"
+                    Timber.e(s)
+                    Handler(Looper.getMainLooper()).post { Toast.makeText(context, s, Toast.LENGTH_SHORT).show() }
+                };
             }
         }).subscribe());
 
-        start.setOnClickListener({
-            nodes = gson.fromJson(jsonPath.text.toString(), Nodes::class.java)
-            val index = Integer.valueOf(myNumber.text.toString())
-            if (index > poa_count) {
-                throw IllegalArgumentException("id number should be below or equal poa count")
-            }
-            val myId = nodes.node.get(index - 1)
 
-            val nodeIdRequest = webSocketStringMessageEvents
-                    .filter { it.second is PoANodeUUIDRequest }
-                    .doOnNext {
-                        Timber.d("Got NodeId request")
-                        val nodeId = gson.toJson(PoANodeUUIDResponse(nodeId = myId))
-                        it.first?.send(nodeId)
-                        Timber.d("Sent NodeId response")
-                        startWork(myId, webSocketStringMessageEvents, it.first)
-                    }
+    }
 
-            composite.add(nodeIdRequest.subscribe())
+    fun connectAs(index: Int) {
+        nodes = gson.fromJson(testGson, Nodes::class.java)
+        if (index > poa_count) {
+            throw IllegalArgumentException("id number should be below or equal poa count")
+        }
+        val myId = nodes.node.get(index - 1)
 
+        val nodeIdRequest = webSocketStringMessageEvents
+                .filter { it.second is PoANodeUUIDRequest }
+                .doOnNext {
+                    Timber.d("Got NodeId request")
+                    val nodeId = gson.toJson(PoANodeUUIDResponse(nodeId = myId))
+                    it.first?.send(nodeId)
+                    Timber.d("Sent NodeId response")
+                    startWork(myId, webSocketStringMessageEvents, it.first)
+                }
 
-            Timber.d("My id: $myId")
-
-            websocketEvents.connect()
-        })
+        composite.add(nodeIdRequest.subscribe())
 
 
-        start_event.setOnClickListener({
-            val keyblockResponse = gson.toJson(KeyblockResponse(keyblock = Keyblock("eHh4")))
-            webs?.send(gson.toJson(BroadcastPoAMessage(msg = keyblockResponse)))
-        })
+        Timber.d("My id: $myId")
+
+        websocketEvents.connect()
+    }
+
+    fun startEvent() {
+        val keyblockResponse = gson.toJson(KeyblockResponse(keyblock = Keyblock("eHh4")))
+        websocket?.send(gson.toJson(BroadcastPoAMessage(msg = keyblockResponse)))
     }
 
     var currentTransaction: String? = null;
@@ -129,7 +130,7 @@ class TestActivity : AppCompatActivity() {
         composite.add(addressedMessageResponse
                 .map {
                     val addressedMessageResponse = it.second as AddressedMessageResponse;
-                    val decode64 = decode64(addressedMessageResponse.messages)
+                    val decode64 = decode64(addressedMessageResponse.msg)
                     gson.fromJson(decode64, ResponseSignature::class.java);
                 }
                 .filter {
@@ -142,7 +143,7 @@ class TestActivity : AppCompatActivity() {
                 .doOnNext({
                     Timber.i("Signed all successfully")
                     Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(this, "Sending", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Sending", Toast.LENGTH_LONG).show()
                     }
 
                     val base64String = "SoMeBaSe64StRinG=="
@@ -191,12 +192,13 @@ class TestActivity : AppCompatActivity() {
                         .doOnNext {
                             val before = System.currentTimeMillis();
                             val response = it.second as ReceivedBroadcastMessage;
-                            if (response.messages.contains("eHh4")) {
-                                keyblockResponse = gson.fromJson(response.messages, KeyblockResponse::class.java)
+                            if (response.msg.contains("eHh4")) {
+                                Timber.d("Got key block, ask for transactions")
+                                keyblockResponse = gson.fromJson(response.msg, KeyblockResponse::class.java)
                                 askForNewTransactions(websocket)
                                 return@doOnNext
                             }
-                            val string = decode64(response.messages)
+                            val string = decode64(response.msg)
 
                             val requestForSignature = gson.fromJson(string, RequestForSignature::class.java);
                             Timber.d("Request for signature from: ${response.idFrom} ")
@@ -228,9 +230,9 @@ class TestActivity : AppCompatActivity() {
     private fun showDoneDialog() {
         val builder: AlertDialog.Builder
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
+            builder = AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert)
         } else {
-            builder = AlertDialog.Builder(this)
+            builder = AlertDialog.Builder(context)
         }
         builder.setTitle("Done")
                 .setMessage("All signed")
@@ -271,11 +273,14 @@ class TestActivity : AppCompatActivity() {
     }
 
     private fun parse(type: String, text: String?): Any? {
+        Timber.d("Parsing: ${text}")
         val any = when (type) {
             CommunicationSubjects.Connects.name -> gson.fromJson(text, ConnectResponse::class.java)
             CommunicationSubjects.Connect.name -> gson.fromJson(text, ReconnectNotification::class.java)
-            CommunicationSubjects.BroadcastMsg.name -> gson.fromJson(text, ReceivedBroadcastMessage::class.java)
-            CommunicationSubjects.MsgTo.name -> gson.fromJson(text, AddressedMessageResponse::class.java)
+            CommunicationSubjects.Broadcast.name -> gson.fromJson(text, ReceivedBroadcastMessage::class.java)
+            CommunicationSubjects.MsgTo.name -> {
+                gson.fromJson(text, AddressedMessageResponse::class.java)
+            }
             CommunicationSubjects.PoWList.name -> gson.fromJson(text, PowsResponse::class.java)
             CommunicationSubjects.NodeId.name -> if (text!!.contains("Response")) gson.fromJson(text, PoANodeUUIDResponse::class.java) else gson.fromJson(text, PoANodeUUIDRequest::class.java);
             CommunicationSubjects.Transaction.name -> gson.fromJson(text, TransactionResponse::class.java);

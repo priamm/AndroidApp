@@ -39,7 +39,7 @@ class TokensAndJettonsFragment : BackTitleFragment(), TokensAndJettonsView {
         setHasOptionsMenu(true)
     }
 
-    override fun getTitle(): String = getString(R.string.tokens_and_jettons)
+    override fun getTitle(): String = getString(R.string.tokens_and_tickets)
 
     override fun onResume() {
         super.onResume()

@@ -172,7 +172,7 @@
                 android:fontFamily="sans-serif"
                 android:textStyle="normal"
                 android:textColor="@android:color/white"
-                android:text="@string/tokens_and_jettons"
+                android:text="@string/tokens_and_tickets"
                 android:layout_centerInParent="true"
                 android:id="@+id/tokensText"
                 android:paddingBottom="2dp"/>

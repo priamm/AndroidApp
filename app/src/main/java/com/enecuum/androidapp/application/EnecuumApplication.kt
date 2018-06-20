@@ -11,9 +11,11 @@ import com.google.crypto.tink.Config
 import com.google.crypto.tink.config.TinkConfig
 import com.google.crypto.tink.integration.android.AndroidKeysetManager
 import com.google.crypto.tink.signature.SignatureKeyTemplates
+import com.jraska.console.timber.ConsoleTree
 import org.greenrobot.eventbus.Subscribe
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.Router
+import timber.log.Timber
 
 
 /**
@@ -116,6 +118,9 @@ class EnecuumApplication : Application() {
                 .withMasterKeyUri("android-keystore://my_master_key_id")
                 .withKeyTemplate(SignatureKeyTemplates.ECDSA_P256)
                 .build()
+
+        Timber.plant(ConsoleTree());
+        Timber.plant()
 
         cicerone = Cicerone.create()
         fragmentCicerone = Cicerone.create()

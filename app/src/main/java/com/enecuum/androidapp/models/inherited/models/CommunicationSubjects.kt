@@ -4,7 +4,6 @@ enum class CommunicationSubjects {
     Connects,
     Connect,
     NodeId,
-    BroadcastMsg,
     Broadcast,
     PoWList,
     MsgTo,

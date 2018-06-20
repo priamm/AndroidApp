@@ -5,14 +5,13 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.*
 import com.arellomobile.mvp.MvpAppCompatFragment
-import com.enecuum.androidapp.R
-import com.enecuum.androidapp.presentation.view.mining_in_progress.MiningInProgressView
-import com.enecuum.androidapp.presentation.presenter.mining_in_progress.MiningInProgressPresenter
-
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.enecuum.androidapp.R
 import com.enecuum.androidapp.models.MiningHistoryItem
 import com.enecuum.androidapp.models.PoaMemberStatus
-import com.enecuum.androidapp.models.Transaction
+import com.enecuum.androidapp.presentation.presenter.mining_in_progress.MiningInProgressPresenter
+import com.enecuum.androidapp.presentation.view.mining_in_progress.MiningInProgressView
+import com.enecuum.androidapp.ui.activity.testActivity.PoaService
 import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
 import com.jjoe64.graphview.GridLabelRenderer
 import com.jjoe64.graphview.series.DataPoint
@@ -35,6 +34,8 @@ class MiningInProgressFragment : MvpAppCompatFragment(), MiningInProgressView {
     lateinit var presenter: MiningInProgressPresenter
     private val graphData = LineGraphSeries<DataPoint>()
 
+    private var poaService: PoaService? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_mining_in_progress, container, false)
@@ -42,6 +43,15 @@ class MiningInProgressFragment : MvpAppCompatFragment(), MiningInProgressView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        poaService = PoaService(view.context)
+        btConnect.setOnClickListener {
+            poaService?.connectAs(nodeNum.text.toString().toInt())
+        }
+
+        btStartEvent.setOnClickListener {
+            poaService?.startEvent()
+        }
+
         presenter.onCreate()
         setupGraph()
         setHasOptionsMenu(true)
@@ -88,7 +98,7 @@ class MiningInProgressFragment : MvpAppCompatFragment(), MiningInProgressView {
     }
 
     override fun setupWithStatus(status: PoaMemberStatus) {
-        when(status) {
+        when (status) {
             PoaMemberStatus.PoaMember -> {
                 memberStatus.text = getString(R.string.poa_member)
                 statusIcon.setImageResource(R.drawable.member)

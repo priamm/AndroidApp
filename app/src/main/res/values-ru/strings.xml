@@ -37,7 +37,7 @@
         <item quantity="other">%1$f процентов</item>
     </plurals>
     <string name="karma_percent">Процент кармы</string>
-    <string name="tokens_and_jettons">Токены и жетоны</string>
+    <string name="tokens_and_tickets">Токены и жетоны</string>
     <string name="transactions_history">История транзакций</string>
     <string name="tokens">Токены</string>
     <string name="jettons">Жетоны</string>

@@ -1,137 +1,164 @@
-<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.enecuum.androidapp.ui.fragment.mining_in_progress.MiningInProgressFragment"
-android:orientation="vertical"
-android:gravity="bottom"
-app:umanoPanelHeight="127dp"
-    android:id="@+id/slidingLayout"
-    android:background="@color/navy">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingRight="16dp"
-    android:paddingLeft="16dp"
-    tools:background="@color/navy">
-    <View
+<com.sothree.slidinguppanel.SlidingUpPanelLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.01"/>
+        android:layout_height="match_parent"
+        tools:context="com.enecuum.androidapp.ui.fragment.mining_in_progress.MiningInProgressFragment"
+        android:orientation="vertical"
+        android:gravity="bottom"
+        app:umanoPanelHeight="127dp"
+        android:id="@+id/slidingLayout"
+        android:background="@color/navy">
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="21dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="@color/white_87"
-            android:lineSpacingExtra="8sp"
-            tools:text="Rate 5000/sec"
-            android:id="@+id/hashRateText"
-            android:layout_gravity="center_vertical"
-            />
-        <View
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="#ffffff"
-            android:lineSpacingExtra="8sp"
-            tools:text="You are a team lead"
-            android:id="@+id/memberStatus"
-            android:layout_gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingRight="16dp"
+            android:paddingLeft="16dp"
+            tools:background="@color/navy">
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.01"/>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="21dp"
+                android:orientation="horizontal">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="normal"
+                    android:textColor="@color/white_87"
+                    android:lineSpacingExtra="8sp"
+                    tools:text="Rate 5000/sec"
+                    android:id="@+id/hashRateText"
+                    android:layout_gravity="center_vertical"
             />
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/statusIcon"
-            android:layout_marginLeft="8dp"
-            tools:src="@drawable/team_lead"/>
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.01"/>
-    <com.jjoe64.graphview.GraphView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.352"
-        android:id="@+id/graph"
-        android:background="@color/dark_indigo_three"
-        android:padding="14dp"
-        app:seriesType="line" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.043"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:fontFamily="sans-serif"
-        android:textStyle="normal"
-        android:textColor="#ffffff"
-        tools:text="Total Balance 5000 ENQ"
-        android:layout_gravity="center"
-        android:id="@+id/totalBalanceText"
+            <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="normal"
+                    android:textColor="#ffffff"
+                    android:lineSpacingExtra="8sp"
+                    tools:text="You are a team lead"
+                    android:id="@+id/memberStatus"
+                    android:layout_gravity="center_vertical"
+            />
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/statusIcon"
+                    android:layout_marginLeft="8dp"
+                    tools:src="@drawable/team_lead"/>
+        </LinearLayout>
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.01"/>
+        <com.jjoe64.graphview.GraphView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.352"
+                android:id="@+id/graph"
+                android:background="@color/dark_indigo_three"
+                android:padding="14dp"
+                app:seriesType="line"
+                android:visibility="gone"/>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+            <Button android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btStartEvent"
+                    android:text="Key block"/>
+            <Button android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btConnect"
+                    android:text="Connect"/>
+            <EditText
+                    android:id="@+id/nodeNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/background_white"
+                    android:text="1"/>
+        </LinearLayout>
+
+        <com.jraska.console.Console android:layout_width="match_parent"
+                                    android:layout_height="360dp"
+                                    android:id="@+id/console">
+
+        </com.jraska.console.Console>
+
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.043"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:textColor="#ffffff"
+                tools:text="Total Balance 5000 ENQ"
+                android:layout_gravity="center"
+                android:id="@+id/totalBalanceText"
         />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.043"/>
-</LinearLayout>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center|top"
-    android:background="@android:color/white">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif-medium"
-            android:textStyle="normal"
-            android:textColor="@color/black_87"
-            android:lineSpacingExtra="14sp"
-            android:text="@string/mining_history"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:layout_marginBottom="16dp"
-            android:paddingBottom="1dp"
-            android:layout_centerInParent="true"
-            android:id="@+id/historyTitle"
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.043"/>
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center|top"
+            android:background="@android:color/white">
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="normal"
+                    android:textColor="@color/black_87"
+                    android:lineSpacingExtra="14sp"
+                    android:text="@string/mining_history"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:layout_marginBottom="16dp"
+                    android:paddingBottom="1dp"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/historyTitle"
             />
-        <ImageView
-            android:layout_toRightOf="@+id/historyTitle"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/show_history"
-            android:id="@+id/panelHint"/>
-    </RelativeLayout>
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/transactionsHistory"/>
-</LinearLayout>
+            <ImageView
+                    android:layout_toRightOf="@+id/historyTitle"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/show_history"
+                    android:id="@+id/panelHint"/>
+        </RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:id="@+id/transactionsHistory"/>
+    </LinearLayout>
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
