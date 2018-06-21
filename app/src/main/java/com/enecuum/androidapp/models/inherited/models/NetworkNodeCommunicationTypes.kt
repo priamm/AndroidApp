@@ -36,6 +36,11 @@ data class ReceivedBroadcastMessage(val tag: String = Tags.Msg.name,
                                     val msg: String,
                                     val idFrom: String)
 
+data class ReceivedBroadcastKeyblockMessage(val tag: String = Tags.Msg.name,
+                                    val type: String = CommunicationSubjects.Broadcast.name,
+                                    val msg: Keyblock,
+                                    val idFrom: String)
+
 data class PowsRequest(val tag: String = Tags.Request.name,
                        val type: String = CommunicationSubjects.PoWList.name)
 
@@ -67,14 +72,14 @@ data class MicroblockResponse(val tag: String = Tags.Msg.name,
                               val type: String = CommunicationSubjects.Microblock.name,
                               val microblock: Microblock)
 
-data class KeyblockResponse(val tag: String = Tags.Response.name,
-                            val type: String = CommunicationSubjects.Keyblock.name,
-                            val keyblock: Keyblock)
+//data class KeyblockResponse(val tag: String = Tags.Response.name,
+//                            val type: String = CommunicationSubjects.Keyblock.name,
+//                            val keyblock: Keyblock)
 
 data class Microblock(val msg: MicroblockMsg,
                       val sign: MicroblockSignature)
 
-data class Keyblock(val body: String)
+data class Keyblock(val body: String, val verb: String)
 
 data class TransactionOut(val from: String, val to: String, val amount: Int, val uuid: String)
 

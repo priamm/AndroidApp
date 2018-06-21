@@ -58,7 +58,7 @@ class AutoManagedWebSocket(request: Request,
                 e.onNext(WebSocketEvent.ClosedEvent(webSocket, code, reason))
             }
         })
-        val real = RealWebSocket(request, listener, SecureRandom(), pingInterval.toLong())
+        val real = RealWebSocket(request, listener, SecureRandom(), 0)
         real.connect(client)
         webSocket = real
     }, BackpressureStrategy.BUFFER)

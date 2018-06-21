@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.support.v7.app.AlertDialog
 import android.util.Base64
+import android.util.Log
 import android.widget.Toast
 import com.enecuum.androidapp.models.inherited.models.*
 import com.enecuum.androidapp.models.inherited.models.Sha.hash256
@@ -28,10 +29,10 @@ class PoaService(val context: Context) {
     val blockSize = 512 * 1024;
     private val BN_PATH = "195.201.226.28"
     private val BN_PORT = "1554"
-    private val NN_PATH = "195.201.226.24"//"195.201.226.25"
+    private val NN_PATH = "95.216.150.206"//"195.201.226.25"
     private val NN_PORT = "1554"
 
-    val TRANSACTION_COUNT_FOR_REQUEST = 1
+    val TRANSACTION_COUNT_FOR_REQUEST = 5
 
     val StartMsg = "{\"verb\":\"block\",\"body\":Img\"\"}";
 
@@ -106,20 +107,26 @@ class PoaService(val context: Context) {
         Timber.d("My id: $myId")
 
         websocketEvents.connect()
+
     }
 
+    //    {"tag":"Msg","idFrom":"33333333333333333333333333333333","msg":{"body":"W3sidGltZSI6MTUyOTU5NDA5OSwibm9uY2UiOjI0NTE1MSwibnVtYmVyIjozLCJ0eXBlIjowLCJwcmV2X2hhc2giOiJBQUFBQVJ3RzRJVEtuR2lNNEx5VVNvSHhBYnpNWGNiMmdqVmxOZVJSQjJrPSJ9XQ==","verb":"block"},"type":"Broadcast"}
     fun startEvent() {
-        val keyblockResponse = gson.toJson(KeyblockResponse(keyblock = Keyblock("eHh4")))
-        websocket?.send(gson.toJson(BroadcastPoAMessage(msg = keyblockResponse)))
+//        {"body":"W3sidGltZSI6MTUyOTU5NDA5OSwibm9uY2UiOjI0NTE1MSwibnVtYmVyIjozLCJ0eXBlIjowLCJwcmV2X2hhc2giOiJBQUFBQVJ3RzRJVEtuR2lNNEx5VVNvSHhBYnpNWGNiMmdqVmxOZVJSQjJrPSJ9XQ==","verb":"block"}
+//        val keyblockResponse = gson.toJson(keyblock = Keyblock("eHh4"))
+//        websocket?.send(gson.toJson(BroadcastPoAMessage(msg = keyblockResponse)))
     }
 
     var currentTransaction: String? = null;
 
-    private var keyblockResponse: KeyblockResponse? = null
+    private var keyblockResponse: Keyblock? = null
 
     private fun startWork(myId: String, webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>, websocket: WebSocket?) {
         val broadcastMessage = webSocketStringMessageEvents
                 .filter { it.second is ReceivedBroadcastMessage }
+
+        val broadcastKeyBlockMessage = webSocketStringMessageEvents
+                .filter { it.second is ReceivedBroadcastKeyblockMessage }
 
         val addressedMessageResponse = webSocketStringMessageEvents
                 .filter { it.second is AddressedMessageResponse }
@@ -150,7 +157,7 @@ class PoaService(val context: Context) {
                     val transaction = TransactionOut(from = base64String, to = base64String, amount = 1, uuid = myId)
 
                     val microblockMsg = MicroblockMsg(Tx = listOf(transaction),
-                            K_hash = keyblockResponse?.keyblock?.body!!,
+                            K_hash = keyblockResponse?.body!!,
                             wallets = listOf(1, 2),
                             i = Random().nextInt())
 
@@ -167,6 +174,7 @@ class PoaService(val context: Context) {
                 transactionResponses
                         .filter { it.second is TransactionResponse }
                         .map { it.second }
+                        .doOnNext { Timber.d("Got transaction: ${it}") }
                         .cast(TransactionResponse::class.java)
                         .map { it.transaction }
                         .buffer(TRANSACTION_COUNT_FOR_REQUEST)
@@ -187,16 +195,22 @@ class PoaService(val context: Context) {
 
 
         composite.add(
+                broadcastKeyBlockMessage
+                        .doOnNext {
+                            val response = it.second as ReceivedBroadcastKeyblockMessage;
+                            Timber.d("Got key block, start asking for transactions")
+                            keyblockResponse = response.msg
+                            askForNewTransactions(websocket)
+                        }.subscribeOn(Schedulers.io()).subscribe())
+
+        composite.add(
                 broadcastMessage
                         .doOnComplete({ Timber.e("Complete!!!") })
                         .doOnNext {
                             val before = System.currentTimeMillis();
                             val response = it.second as ReceivedBroadcastMessage;
-                            if (response.msg.contains("eHh4")) {
-                                Timber.d("Got key block, ask for transactions")
-                                keyblockResponse = gson.fromJson(response.msg, KeyblockResponse::class.java)
-                                askForNewTransactions(websocket)
-                                return@doOnNext
+                            if (response.idFrom == myId) {
+                                Timber.d("Message from me, skipping...")
                             }
                             val string = decode64(response.msg)
 
@@ -273,11 +287,16 @@ class PoaService(val context: Context) {
     }
 
     private fun parse(type: String, text: String?): Any? {
-        Timber.d("Parsing: ${text}")
+//        Timber.d("Parsing: ${text}")
         val any = when (type) {
             CommunicationSubjects.Connects.name -> gson.fromJson(text, ConnectResponse::class.java)
             CommunicationSubjects.Connect.name -> gson.fromJson(text, ReconnectNotification::class.java)
-            CommunicationSubjects.Broadcast.name -> gson.fromJson(text, ReceivedBroadcastMessage::class.java)
+            CommunicationSubjects.Broadcast.name -> {
+                if (text!!.contains("\"verb\":\"block\"")) {
+                    gson.fromJson(text, ReceivedBroadcastKeyblockMessage::class.java)
+                } else
+                    gson.fromJson(text, ReceivedBroadcastMessage::class.java)
+            }
             CommunicationSubjects.MsgTo.name -> {
                 gson.fromJson(text, AddressedMessageResponse::class.java)
             }

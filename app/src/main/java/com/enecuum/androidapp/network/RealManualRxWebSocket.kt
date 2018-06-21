@@ -15,9 +15,8 @@ class RealManualRxWebSocket(request: Request,
                             private val client: OkHttpClient = OkHttpClient()) : ManualRxWebSocket {
     private val baseListener = RxMultipleWebSocketListener()
 
-    private val pingInterval = 10000
 
-    private val webSocket = RealWebSocket(request, baseListener, SecureRandom(), pingInterval.toLong())
+    private val webSocket = RealWebSocket(request, baseListener, SecureRandom(), 0)
 
     override fun connect() {
         webSocket.connect(client)

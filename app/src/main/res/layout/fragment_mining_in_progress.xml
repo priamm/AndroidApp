@@ -86,14 +86,14 @@
                     android:text="Connect"/>
             <EditText
                     android:id="@+id/nodeNum"
-                    android:layout_width="wrap_content"
+                    android:layout_width="72dp"
                     android:layout_height="wrap_content"
                     android:textColor="@color/background_white"
                     android:text="1"/>
         </LinearLayout>
 
         <com.jraska.console.Console android:layout_width="match_parent"
-                                    android:layout_height="360dp"
+                                    android:layout_height="220dp"
                                     android:id="@+id/console">
 
         </com.jraska.console.Console>
