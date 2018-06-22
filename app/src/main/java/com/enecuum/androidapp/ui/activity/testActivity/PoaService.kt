@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import android.support.v7.app.AlertDialog
 import android.util.Base64
-import android.util.Log
 import android.widget.Toast
 import com.enecuum.androidapp.models.inherited.models.*
 import com.enecuum.androidapp.models.inherited.models.Sha.hash256
@@ -20,6 +19,7 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.Request
 import okhttp3.WebSocket
 import timber.log.Timber
+import java.math.BigInteger
 import java.nio.charset.Charset
 import java.util.*
 
@@ -29,10 +29,10 @@ class PoaService(val context: Context) {
     val blockSize = 512 * 1024;
     private val BN_PATH = "195.201.226.28"
     private val BN_PORT = "1554"
-    private val NN_PATH = "95.216.150.206"//"195.201.226.25"
+    private val NN_PATH = "195.201.226.30"//"195.201.226.25"
     private val NN_PORT = "1554"
 
-    val TRANSACTION_COUNT_FOR_REQUEST = 5
+    val TRANSACTION_COUNT_FOR_REQUEST = 2
 
     val StartMsg = "{\"verb\":\"block\",\"body\":Img\"\"}";
 
@@ -115,9 +115,10 @@ class PoaService(val context: Context) {
 //        {"body":"W3sidGltZSI6MTUyOTU5NDA5OSwibm9uY2UiOjI0NTE1MSwibnVtYmVyIjozLCJ0eXBlIjowLCJwcmV2X2hhc2giOiJBQUFBQVJ3RzRJVEtuR2lNNEx5VVNvSHhBYnpNWGNiMmdqVmxOZVJSQjJrPSJ9XQ==","verb":"block"}
 //        val keyblockResponse = gson.toJson(keyblock = Keyblock("eHh4"))
 //        websocket?.send(gson.toJson(BroadcastPoAMessage(msg = keyblockResponse)))
+        askForNewTransactions(websocket)
     }
 
-    var currentTransaction: String? = null;
+    var currentTransactions: List<Transaction>? = null;
 
     private var keyblockResponse: Keyblock? = null
 
@@ -141,9 +142,9 @@ class PoaService(val context: Context) {
                     gson.fromJson(decode64, ResponseSignature::class.java);
                 }
                 .filter {
-                    if (currentTransaction == null) false;
+                    if (currentTransactions == null) false;
                     else
-                        hash256(currentTransaction!!).equals(it.signature.hash)
+                        hash256(currentTransactions!!.toString()).equals(it.signature.hash)
                 }
                 .distinctUntilChanged()
                 .buffer(poa_count)
@@ -154,16 +155,15 @@ class PoaService(val context: Context) {
                     }
 
                     val base64String = "SoMeBaSe64StRinG=="
-                    val transaction = TransactionOut(from = base64String, to = base64String, amount = 1, uuid = myId)
 
-                    val microblockMsg = MicroblockMsg(Tx = listOf(transaction),
-                            K_hash = keyblockResponse?.body!!,
-                            wallets = listOf(1, 2),
-                            i = Random().nextInt())
+                    val microblockMsg = MicroblockMsg(Tx = currentTransactions!!,
+                            K_hash = keyblockResponse?.body ?: "eHh4",
+                            wallets = listOf("1", "2")
+                    )
 
 
                     val microblockResponse = MicroblockResponse(
-                            microblock = Microblock(microblockMsg, sign = MicroblockSignature(34, 43)))
+                            microblock = Microblock(microblockMsg, sign = MicroblockSignature(BigInteger.TEN, BigInteger.TEN)))
 
                     Timber.i("Sending to NN")
                     websocket?.send(gson.toJson(microblockResponse))
@@ -183,9 +183,9 @@ class PoaService(val context: Context) {
                             for (s in it) {
                                 sb.append(s)
                             }
-                            currentTransaction = sb.toString()
+                            currentTransactions = it
                             Timber.i("START message")
-                            val flowMessage = RequestForSignature(data = currentTransaction!!)
+                            val flowMessage = RequestForSignature(data = currentTransactions!!.toString())
                             val message = encode64(gson.toJson(flowMessage))
                             val toJson = gson.toJson(BroadcastPoAMessage(msg = message))
                             websocket?.send(toJson)

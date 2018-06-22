@@ -37,9 +37,9 @@ data class ReceivedBroadcastMessage(val tag: String = Tags.Msg.name,
                                     val idFrom: String)
 
 data class ReceivedBroadcastKeyblockMessage(val tag: String = Tags.Msg.name,
-                                    val type: String = CommunicationSubjects.Broadcast.name,
-                                    val msg: Keyblock,
-                                    val idFrom: String)
+                                            val type: String = CommunicationSubjects.Broadcast.name,
+                                            val msg: Keyblock,
+                                            val idFrom: String)
 
 data class PowsRequest(val tag: String = Tags.Request.name,
                        val type: String = CommunicationSubjects.PoWList.name)
@@ -63,32 +63,32 @@ data class TransactionRequest(val tag: String = Tags.Request.name,
                               val type: String = CommunicationSubjects.Transaction.name,
                               val number: Int)
 
-//{"tag":"Response","transaction":{"time":40003.379301859,"public_key":210576718018067624383380546555546727660745677996553622007287955533001812694701,"start_balance":30},"type":"Transaction"}
 data class TransactionResponse(val tag: String = Tags.Response.name,
                                val type: String = CommunicationSubjects.Transaction.name,
-                               val transaction: TransactionIn)
+                               val transaction: Transaction)
 
 data class MicroblockResponse(val tag: String = Tags.Msg.name,
                               val type: String = CommunicationSubjects.Microblock.name,
                               val microblock: Microblock)
-
-//data class KeyblockResponse(val tag: String = Tags.Response.name,
-//                            val type: String = CommunicationSubjects.Keyblock.name,
-//                            val keyblock: Keyblock)
 
 data class Microblock(val msg: MicroblockMsg,
                       val sign: MicroblockSignature)
 
 data class Keyblock(val body: String, val verb: String)
 
-data class TransactionOut(val from: String, val to: String, val amount: Int, val uuid: String)
 
-data class TransactionIn(val time: Double, val public_key: BigInteger, val start_balance: BigInteger)
+data class Transaction(
+        val owner: String,
+        val receiver: String,
+        val amount: Int,
+        val currency: String,
+        val timestamp: Long,
+        val sign: MicroblockSignature,
+        val uuid: Int)
 
 data class MicroblockMsg(val K_hash: String,
-                         val wallets: List<Int> = listOf(),
-                         val Tx: List<TransactionOut> = listOf(),
-                         val i: Int = 0)
+                         val wallets: List<String> = listOf(),
+                         val Tx: List<Transaction> = listOf())
 
-data class MicroblockSignature(val sign_r: Int, val sign_s: Int);
+data class MicroblockSignature(val sign_r: BigInteger, val sign_s: BigInteger);
 
