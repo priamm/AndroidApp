@@ -7,6 +7,7 @@ import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.navigation.ScreenType
 import com.enecuum.androidapp.navigation.TabType
 import com.enecuum.androidapp.utils.EventBusUtils
+import com.enecuum.androidapp.utils.Shoup
 import com.google.crypto.tink.Config
 import com.google.crypto.tink.config.TinkConfig
 import com.google.crypto.tink.integration.android.AndroidKeysetManager
@@ -112,7 +113,8 @@ class EnecuumApplication : Application() {
         super.onCreate()
         appContext = applicationContext
         Config.register(TinkConfig.TINK_1_1_0);
-
+        val shoup = Shoup()
+        shoup.shoup()
         keysetManager = AndroidKeysetManager.Builder()
                 .withSharedPref(appContext, "my_keyset_name", "my_pref_file_name")
                 .withMasterKeyUri("android-keystore://my_master_key_id")

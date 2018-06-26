@@ -29,7 +29,7 @@ class PoaService(val context: Context) {
     val blockSize = 512 * 1024;
     private val BN_PATH = "195.201.226.28"
     private val BN_PORT = "1554"
-    private val NN_PATH = "195.201.226.30"//"195.201.226.25"
+    private val NN_PATH = "95.216.150.210"//"195.201.226.30"//"195.201.226.25"
     private val NN_PORT = "1554"
 
     val TRANSACTION_COUNT_FOR_REQUEST = 2
@@ -45,6 +45,7 @@ class PoaService(val context: Context) {
     var nodes: Nodes = gson.fromJson(testGson, Nodes::class.java);
     private val websocketEvents: ConnectableFlowable<WebSocketEvent>;
     val webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>;
+    var bootNodeWebsocket: ConnectableFlowable<WebSocketEvent>;
 
     init {
 
@@ -57,9 +58,43 @@ class PoaService(val context: Context) {
         testGson = testGson.replace("-", "");
         Timber.d("Start testing")
 
-        websocketEvents = getWebSocket(NN_PATH, NN_PORT).observe()
-                .doOnNext { websocket = it.webSocket }
+        bootNodeWebsocket = getWebSocket(BN_PATH, BN_PORT).observe()
                 .publish()
+
+        composite.add(bootNodeWebsocket
+                .filter { it is WebSocketEvent.OpenedEvent }
+                .doOnNext({
+                    Timber.d("Connected to BN, sending request")
+                    it.webSocket?.send(gson.toJson(ConnectRequest()))
+                }).subscribe())
+
+
+        composite.add(bootNodeWebsocket
+                .filter { it is WebSocketEvent.StringMessageEvent }
+                .cast(WebSocketEvent.StringMessageEvent::class.java)
+                .map { parse(it.text!!) }
+                .doOnNext {
+                    Timber.d("NN nodes from BN")
+                    Timber.d(it.toString())
+                }.subscribe())
+
+
+        websocketEvents =
+                bootNodeWebsocket
+                        .filter { it is WebSocketEvent.StringMessageEvent }
+                        .cast(WebSocketEvent.StringMessageEvent::class.java)
+                        .map { parse(it.text!!) }
+                        .cast(ConnectResponse::class.java)
+                        .map {
+                            val nextInt = Random().nextInt(it.connects.size)
+                            return@map it.connects.get(nextInt)
+                        }
+                        .flatMap {
+//                            it.port
+                            getWebSocket(it.ip, "1554").observe()
+                        }
+                        .doOnNext { websocket = it.webSocket }
+                        .publish()
 
         webSocketStringMessageEvents = websocketEvents
                 .filter { it is WebSocketEvent.StringMessageEvent }
@@ -107,6 +142,8 @@ class PoaService(val context: Context) {
         Timber.d("My id: $myId")
 
         websocketEvents.connect()
+
+        bootNodeWebsocket.connect()
 
     }
 
