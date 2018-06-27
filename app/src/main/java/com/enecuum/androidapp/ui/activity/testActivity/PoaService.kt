@@ -27,7 +27,7 @@ import java.util.*
 class PoaService(val context: Context) {
 
     val blockSize = 512 * 1024;
-    private val BN_PATH = "195.201.226.28"
+    private val BN_PATH = "195.201.226.25"
     private val BN_PORT = "1554"
     private val NN_PATH = "95.216.150.210"//"195.201.226.30"//"195.201.226.25"
     private val NN_PORT = "1554"
@@ -68,17 +68,6 @@ class PoaService(val context: Context) {
                     it.webSocket?.send(gson.toJson(ConnectRequest()))
                 }).subscribe())
 
-
-        composite.add(bootNodeWebsocket
-                .filter { it is WebSocketEvent.StringMessageEvent }
-                .cast(WebSocketEvent.StringMessageEvent::class.java)
-                .map { parse(it.text!!) }
-                .doOnNext {
-                    Timber.d("NN nodes from BN")
-                    Timber.d(it.toString())
-                }.subscribe())
-
-
         websocketEvents =
                 bootNodeWebsocket
                         .filter { it is WebSocketEvent.StringMessageEvent }
@@ -86,11 +75,12 @@ class PoaService(val context: Context) {
                         .map { parse(it.text!!) }
                         .cast(ConnectResponse::class.java)
                         .map {
+                            Timber.d("Got NN nodes:" + it.toString())
                             val nextInt = Random().nextInt(it.connects.size)
                             return@map it.connects.get(nextInt)
                         }
                         .flatMap {
-//                            it.port
+                            //                            it.port
                             getWebSocket(it.ip, "1554").observe()
                         }
                         .doOnNext { websocket = it.webSocket }
