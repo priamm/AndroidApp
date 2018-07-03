@@ -27,12 +27,12 @@ import java.util.*
 class PoaService(val context: Context) {
 
     val blockSize = 512 * 1024;
-    private val BN_PATH = "195.201.226.25"
+    private val BN_PATH = "88.99.86.200"
     private val BN_PORT = "1554"
     private val NN_PATH = "95.216.150.210"//"195.201.226.30"//"195.201.226.25"
     private val NN_PORT = "1554"
 
-    val TRANSACTION_COUNT_FOR_REQUEST = 2
+    val TRANSACTION_COUNT_FOR_REQUEST = 1
 
     val StartMsg = "{\"verb\":\"block\",\"body\":Img\"\"}";
 
@@ -76,7 +76,12 @@ class PoaService(val context: Context) {
                         .cast(ConnectResponse::class.java)
                         .map {
                             Timber.d("Got NN nodes:" + it.toString())
-                            val nextInt = Random().nextInt(it.connects.size)
+                            val size = it.connects.size
+                            if (size == 0) {
+                                Timber.e("There is no NN")
+                                return@map ConnectPointDescription(BN_PATH, BN_PORT);
+                            }
+                            val nextInt = Random().nextInt(size)
                             return@map it.connects.get(nextInt)
                         }
                         .flatMap {
