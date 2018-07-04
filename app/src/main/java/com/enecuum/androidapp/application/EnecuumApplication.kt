@@ -113,8 +113,8 @@ class EnecuumApplication : Application() {
         super.onCreate()
         appContext = applicationContext
         Config.register(TinkConfig.TINK_1_1_0);
-        val shoup = Shoup()
-        shoup.shoup()
+//        val shoup = Shoup()
+//        shoup.shoup()
         keysetManager = AndroidKeysetManager.Builder()
                 .withSharedPref(appContext, "my_keyset_name", "my_pref_file_name")
                 .withMasterKeyUri("android-keystore://my_master_key_id")

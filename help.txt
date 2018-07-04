@@ -1,0 +1,2 @@
+generate Transactions
+stack exec LightClient-exe -- --addr=195.201.226.25

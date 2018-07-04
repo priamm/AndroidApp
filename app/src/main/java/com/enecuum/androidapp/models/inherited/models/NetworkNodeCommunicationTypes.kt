@@ -1,10 +1,13 @@
 package com.enecuum.androidapp.models.inherited.models
 
-import java.math.BigInteger
-
 data class BasePoAMessage(val type: String)
 data class ConnectRequest(val tag: String = Tags.Request.name,
                           val type: String = CommunicationSubjects.Connects.name)
+
+data class ErrorResponse(val tag: String = Tags.Response.name,
+                         val type: String = CommunicationSubjects.Error.name,
+                         val reason: String,
+                         val Msg: String)
 
 data class ConnectResponse(val tag: String = Tags.Response.name,
                            val type: String = CommunicationSubjects.Connects.name,
@@ -81,7 +84,7 @@ data class Transaction(
         val owner: String,
         val receiver: String,
         val amount: Int,
-        val currency: String,
+        val currency: String = "ENQ",
         val timestamp: Long,
         val sign: MicroblockSignature,
         val uuid: Int)
@@ -90,5 +93,5 @@ data class MicroblockMsg(val K_hash: String,
                          val wallets: List<String> = listOf(),
                          val Tx: List<Transaction> = listOf())
 
-data class MicroblockSignature(val sign_r: BigInteger, val sign_s: BigInteger);
+data class MicroblockSignature(val sign_r: String = "NDU=", val sign_s: String = "NDU=");
 

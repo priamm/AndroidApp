@@ -5,13 +5,14 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.support.v7.app.AlertDialog
-import android.util.Base64
 import android.widget.Toast
 import com.enecuum.androidapp.models.inherited.models.*
 import com.enecuum.androidapp.models.inherited.models.Sha.hash256
 import com.enecuum.androidapp.network.RxWebSocket
 import com.enecuum.androidapp.network.WebSocketEvent
+import com.google.common.io.BaseEncoding
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.flowables.ConnectableFlowable
@@ -20,29 +21,28 @@ import okhttp3.Request
 import okhttp3.WebSocket
 import timber.log.Timber
 import java.math.BigInteger
-import java.nio.charset.Charset
 import java.util.*
 
 
 class PoaService(val context: Context) {
 
     val blockSize = 512 * 1024;
-    private val BN_PATH = "88.99.86.200"
+    private val BN_PATH = "195.201.226.28"//"88.99.86.200"
     private val BN_PORT = "1554"
     private val NN_PATH = "95.216.150.210"//"195.201.226.30"//"195.201.226.25"
     private val NN_PORT = "1554"
 
     val TRANSACTION_COUNT_FOR_REQUEST = 1
 
-    val StartMsg = "{\"verb\":\"block\",\"body\":Img\"\"}";
-
     var testGson = "{\"node\":[\"5c300af5-641d-4981-ac24-69c9c33d76db\",\"0e00718d-d067-4c05-b897-4a23051862da\",\"b373b275-30e1-49ad-bbeb-6055943b3de7\",\"c045482b-8ea1-4f53-a2b4-8dc33dee6682\",\"9d964f2b-0417-4975-bd57-8e320d3e52eb\",\"4c6ee73b-43de-4adc-be41-2a07711efc82\",\"3ef45d69-1a5a-4f43-9a61-3e7116044c31\",\"4a22c9f1-f0b7-4e8c-bf41-ce4589e4a441\"]}"
     val poa_count = 2;
-    val gson = Gson()
-    val string1mb = create()
+
     var composite = CompositeDisposable()
     var websocket: WebSocket? = null;
-    var nodes: Nodes = gson.fromJson(testGson, Nodes::class.java);
+
+    val string1mb = create()
+    var gson: Gson = GsonBuilder().disableHtmlEscaping().create();
+    lateinit var nodes: Nodes
     private val websocketEvents: ConnectableFlowable<WebSocketEvent>;
     val webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>;
     var bootNodeWebsocket: ConnectableFlowable<WebSocketEvent>;
@@ -55,6 +55,7 @@ class PoaService(val context: Context) {
 //        val nodes1 = Nodes(arrayList)
 //        val testGson = gson.toJson(nodes1);
 
+        nodes = gson.fromJson(testGson, Nodes::class.java);
         testGson = testGson.replace("-", "");
         Timber.d("Start testing")
 
@@ -127,7 +128,7 @@ class PoaService(val context: Context) {
                     Timber.d("Got NodeId request")
                     val nodeId = gson.toJson(PoANodeUUIDResponse(nodeId = myId))
                     it.first?.send(nodeId)
-                    Timber.d("Sent NodeId response")
+                    Timber.d("Sent NodeId reason")
                     startWork(myId, webSocketStringMessageEvents, it.first)
                 }
 
@@ -167,6 +168,19 @@ class PoaService(val context: Context) {
         val transactionResponses = webSocketStringMessageEvents
                 .filter({ it.second is TransactionResponse })
 
+        val errorMessageResponse = webSocketStringMessageEvents
+                .filter { it.second is ErrorResponse }
+
+        composite.add(
+                errorMessageResponse
+                        .doOnNext {
+                            val errorResponse = it.second as ErrorResponse
+                            Timber.e("Error: ${errorResponse.reason}")
+                            Timber.e("Error: ${errorResponse.Msg}")
+                        }
+                        .subscribe()
+        )
+
         composite.add(addressedMessageResponse
                 .map {
                     val addressedMessageResponse = it.second as AddressedMessageResponse;
@@ -194,9 +208,13 @@ class PoaService(val context: Context) {
                     )
 
 
+                    val sign_r = BigInteger.TEN;
+                    val sign_s = BigInteger.TEN;
                     val microblockResponse = MicroblockResponse(
-                            microblock = Microblock(microblockMsg, sign = MicroblockSignature(BigInteger.TEN, BigInteger.TEN)))
-
+                            microblock = Microblock(microblockMsg, sign =
+                            MicroblockSignature(
+                                    sign_r = "NDU=",//encode64(sign_r.toByteArray()),
+                                    sign_s = "NDU=")))//encode64(sign_s.toByteArray()))))
                     Timber.i("Sending to NN")
                     websocket?.send(gson.toJson(microblockResponse))
                 })
@@ -217,8 +235,8 @@ class PoaService(val context: Context) {
                             }
                             currentTransactions = it
                             Timber.i("START message")
-                            val flowMessage = RequestForSignature(data = currentTransactions!!.toString())
-                            val message = encode64(gson.toJson(flowMessage))
+                            val requestForSignature = RequestForSignature(data = currentTransactions!!.toString())
+                            val message = encode64(gson.toJson(requestForSignature))
                             val toJson = gson.toJson(BroadcastPoAMessage(msg = message))
                             websocket?.send(toJson)
                             Timber.d("Sending broadcast")
@@ -289,12 +307,12 @@ class PoaService(val context: Context) {
                 .show()
     }
 
-    private fun encode64(toJson: String) =
-            Base64.encodeToString(toJson.toByteArray(Charset.forName("UTF-8")), Base64.DEFAULT)
+    private fun encode64(src: String) =
+            BaseEncoding.base64().encode(String(src.toByteArray(Charsets.US_ASCII), Charsets.US_ASCII).toByteArray())
 
     private fun decode64(messages1: String): String {
-        val messages = Base64.decode(messages1, Base64.DEFAULT)
-        val string = String(messages, Charset.forName("UTF-8"))
+        val messages = BaseEncoding.base64().decode(messages1)
+        val string = String(messages, Charsets.US_ASCII)
         return string
     }
 
@@ -337,6 +355,7 @@ class PoaService(val context: Context) {
             CommunicationSubjects.Transaction.name -> gson.fromJson(text, TransactionResponse::class.java);
             PoACommunicationSubjects.Keyblock.name -> gson.fromJson(text, PoANodeCommunicationTypes.PoWTailResponse::class.java)
             PoACommunicationSubjects.Peek.name -> gson.fromJson(text, PoANodeCommunicationTypes.PoWPeekResponse::class.java)
+            CommunicationSubjects.Error.name -> gson.fromJson(text, ErrorResponse::class.java)
             else -> {
                 throw IllegalArgumentException("Can't parse type: $type with messages: $text")
             };
