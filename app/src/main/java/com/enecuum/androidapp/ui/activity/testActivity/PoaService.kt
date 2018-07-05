@@ -29,7 +29,7 @@ class PoaService(val context: Context) {
     val blockSize = 512 * 1024;
     private val BN_PATH = "195.201.226.28"//"88.99.86.200"
     private val BN_PORT = "1554"
-    private val NN_PATH = "95.216.150.210"//"195.201.226.30"//"195.201.226.25"
+    private val NN_PATH = "195.201.226.26"//"195.201.226.30"//"195.201.226.25"
     private val NN_PORT = "1554"
 
     val TRANSACTION_COUNT_FOR_REQUEST = 1
@@ -67,7 +67,8 @@ class PoaService(val context: Context) {
                 .doOnNext({
                     Timber.d("Connected to BN, sending request")
                     it.webSocket?.send(gson.toJson(ConnectRequest()))
-                }).subscribe())
+                })
+                .subscribe())
 
         websocketEvents =
                 bootNodeWebsocket
@@ -78,12 +79,10 @@ class PoaService(val context: Context) {
                         .map {
                             Timber.d("Got NN nodes:" + it.toString())
                             val size = it.connects.size
-                            if (size == 0) {
-                                Timber.e("There is no NN")
-                                return@map ConnectPointDescription(BN_PATH, BN_PORT);
-                            }
-                            val nextInt = Random().nextInt(size)
-                            return@map it.connects.get(nextInt)
+                            return@map ConnectPointDescription(NN_PATH, NN_PORT);
+//                            val nextInt = Random().nextInt(size)
+//                            return@map it.connects.get(nextInt)
+
                         }
                         .flatMap {
                             //                            it.port
