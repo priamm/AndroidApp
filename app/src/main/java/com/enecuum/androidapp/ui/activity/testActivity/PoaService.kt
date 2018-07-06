@@ -24,18 +24,18 @@ import java.math.BigInteger
 import java.util.*
 
 
-class PoaService(val context: Context) {
+class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String, val NN_PATH: String, val NN_PORT: String,val poaCount:Int) {
 
     val blockSize = 512 * 1024;
-    private val BN_PATH = "195.201.226.28"//"88.99.86.200"
-    private val BN_PORT = "1554"
-    private val NN_PATH = "195.201.226.26"//"195.201.226.30"//"195.201.226.25"
-    private val NN_PORT = "1554"
+//    private val BN_PATH = "195.201.226.28"//"88.99.86.200"
+//    private val BN_PORT = "1554"
+//    private val NN_PATH = "195.201.226.26"//"195.201.226.30"//"195.201.226.25"
+//    private val NN_PORT = "1554"
 
     val TRANSACTION_COUNT_FOR_REQUEST = 1
 
     var testGson = "{\"node\":[\"5c300af5-641d-4981-ac24-69c9c33d76db\",\"0e00718d-d067-4c05-b897-4a23051862da\",\"b373b275-30e1-49ad-bbeb-6055943b3de7\",\"c045482b-8ea1-4f53-a2b4-8dc33dee6682\",\"9d964f2b-0417-4975-bd57-8e320d3e52eb\",\"4c6ee73b-43de-4adc-be41-2a07711efc82\",\"3ef45d69-1a5a-4f43-9a61-3e7116044c31\",\"4a22c9f1-f0b7-4e8c-bf41-ce4589e4a441\"]}"
-    val poa_count = 2;
+//    val poaCount = 2;
 
     var composite = CompositeDisposable()
     var websocket: WebSocket? = null;
@@ -116,7 +116,7 @@ class PoaService(val context: Context) {
 
     fun connectAs(index: Int) {
         nodes = gson.fromJson(testGson, Nodes::class.java)
-        if (index > poa_count) {
+        if (index > poaCount) {
             throw IllegalArgumentException("id number should be below or equal poa count")
         }
         val myId = nodes.node.get(index - 1)
@@ -192,7 +192,7 @@ class PoaService(val context: Context) {
                         hash256(currentTransactions!!.toString()).equals(it.signature.hash)
                 }
                 .distinctUntilChanged()
-                .buffer(poa_count)
+                .buffer(poaCount)
                 .doOnNext({
                     Timber.i("Signed all successfully")
                     Handler(Looper.getMainLooper()).post {

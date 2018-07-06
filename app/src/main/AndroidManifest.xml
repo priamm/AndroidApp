@@ -1,81 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.enecuum.androidapp">
+          package="com.enecuum.androidapp">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name=".application.EnecuumApplication"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+            android:name=".application.EnecuumApplication"
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme">
+        <!--android:name=".ui.activity.splash.SplashActivity"-->
         <activity
-            android:name=".ui.activity.splash.SplashActivity"
-            android:noHistory="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+                android:name=".ui.activity.testActivity.TestActivity"
+                android:noHistory="true"
+                android:screenOrientation="portrait"
+                android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.registration.RegistrationActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+                android:name=".ui.activity.registration.RegistrationActivity"
+                android:screenOrientation="portrait"
+                android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
-            android:name=".ui.activity.main.MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.Mining"
-            android:windowSoftInputMode="adjustPan" />
+                android:name=".ui.activity.main.MainActivity"
+                android:screenOrientation="portrait"
+                android:theme="@style/Theme.AppCompat.Light.Mining"
+                android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".ui.activity.new_account.NewAccountActivity"
-            android:label=""
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
-            android:windowSoftInputMode="adjustResize|stateVisible" />
+                android:name=".ui.activity.new_account.NewAccountActivity"
+                android:label=""
+                android:screenOrientation="portrait"
+                android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
+                android:windowSoftInputMode="adjustResize|stateVisible"/>
         <activity
-            android:name=".ui.activity.signin.SignInActivity"
-            android:label="@string/enter_your_pin"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+                android:name=".ui.activity.signin.SignInActivity"
+                android:label="@string/enter_your_pin"
+                android:screenOrientation="portrait"
+                android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
+                android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity
-            android:name=".ui.activity.registration_finished.RegistrationFinishedActivity"
-            android:label="@string/new_account"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.TransparentActionBar" />
+                android:name=".ui.activity.registration_finished.RegistrationFinishedActivity"
+                android:label="@string/new_account"
+                android:screenOrientation="portrait"
+                android:theme="@style/Theme.AppCompat.Light.TransparentActionBar"/>
         <activity
-            android:name=".ui.activity.forgot.ForgotPinActivity"
-            android:label="@string/forgot_pin"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
-            android:windowSoftInputMode="stateVisible|adjustResize" />
+                android:name=".ui.activity.forgot.ForgotPinActivity"
+                android:label="@string/forgot_pin"
+                android:screenOrientation="portrait"
+                android:theme="@style/Theme.AppCompat.Light.NavyActionBar"
+                android:windowSoftInputMode="stateVisible|adjustResize"/>
         <activity
-            android:name=".ui.activity.change_pin.ChangePinActivity"
-            android:label="@string/change_pin"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.Mining"
-            android:windowSoftInputMode="stateVisible|adjustResize" />
+                android:name=".ui.activity.change_pin.ChangePinActivity"
+                android:label="@string/change_pin"
+                android:screenOrientation="portrait"
+                android:theme="@style/Theme.AppCompat.Light.Mining"
+                android:windowSoftInputMode="stateVisible|adjustResize"/>
         <activity
-            android:name=".ui.activity.scan.ScanActivity"
-            android:label="@string/scan"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NavyActionBar" />
+                android:name=".ui.activity.scan.ScanActivity"
+                android:label="@string/scan"
+                android:screenOrientation="portrait"
+                android:theme="@style/Theme.AppCompat.Light.NavyActionBar"/>
         <activity
-            android:name=".ui.activity.mining.MiningActivity"
-            android:label="@string/mining"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.TransparentActionBar" />
+                android:name=".ui.activity.mining.MiningActivity"
+                android:label="@string/mining"
+                android:screenOrientation="portrait"
+                android:theme="@style/Theme.AppCompat.Light.TransparentActionBar"/>
         <activity android:name=".ui.activity.transaction_details.TransactionDetailsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.Mining"
-            android:windowSoftInputMode="adjustResize|stateVisible"/>
+                  android:screenOrientation="portrait"
+                  android:theme="@style/Theme.AppCompat.Light.Mining"
+                  android:windowSoftInputMode="adjustResize|stateVisible"/>
     </application>
 
 </manifest>
