@@ -70,6 +70,7 @@ data class TransactionResponse(val tag: String = Tags.Response.name,
                                val type: String = CommunicationSubjects.Transaction.name,
                                val transaction: Transaction)
 
+
 data class MicroblockResponse(val tag: String = Tags.Msg.name,
                               val type: String = CommunicationSubjects.Microblock.name,
                               val microblock: Microblock)
@@ -91,7 +92,9 @@ data class Transaction(
 
 data class MicroblockMsg(val K_hash: String,
                          val wallets: List<String> = listOf(),
-                         val Tx: List<Transaction> = listOf())
+                         val Tx: List<Transaction> = listOf(),
+                         val publisher: String = "QYy3AT4a3Z88MpEoGDixRgxtWW8v3RfSbJLFQEyFZwMe",
+                         val sign: MicroblockSignature = MicroblockSignature())
 
 data class MicroblockSignature(val sign_r: String = "NDU=", val sign_s: String = "NDU=");
 
