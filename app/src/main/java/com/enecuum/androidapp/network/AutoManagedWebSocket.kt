@@ -15,7 +15,7 @@ class AutoManagedWebSocket(request: Request,
                            client: OkHttpClient = OkHttpClient()) : RxWebSocket {
 
     private lateinit var webSocket: WebSocket
-    private val pingInterval = 10000
+    private val pingInterval = 30000
 
     override fun cancel() {
         webSocket.cancel()

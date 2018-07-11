@@ -11,4 +11,5 @@ enum class CommunicationSubjects {
     Microblock,
     Keyblock,
     Error,
+    Team
 }

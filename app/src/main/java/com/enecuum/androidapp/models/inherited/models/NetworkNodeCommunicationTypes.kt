@@ -62,6 +62,10 @@ data class AddressedMessageResponse(val tag: String = Tags.Msg.name,
                                     val msg: String)
 
 
+data class TeamResponse(val tag: String = Tags.Response.name,
+                                            val type: String = CommunicationSubjects.Team.name,
+                                            val data: List<String>)
+
 data class TransactionRequest(val tag: String = Tags.Request.name,
                               val type: String = CommunicationSubjects.Transaction.name,
                               val number: Int)

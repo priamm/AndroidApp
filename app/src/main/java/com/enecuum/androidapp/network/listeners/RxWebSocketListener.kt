@@ -14,6 +14,7 @@ class RxWebSocketListener(private val emitter: FlowableEmitter<WebSocketEvent>) 
 
     override fun onFailure(webSocket: WebSocket?, t: Throwable?, response: Response?) {
         emitter.onNext(WebSocketEvent.FailureEvent(webSocket, t, response))
+//        emitter.onError(Throwable(t!!.localizedMessage))
     }
 
     override fun onClosing(webSocket: WebSocket?, code: Int, reason: String?) {
