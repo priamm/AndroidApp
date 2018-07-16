@@ -262,14 +262,14 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                             }
                             currentTransactions = it
                             Timber.i("START message")
-                            if (team.size>1){
-
+                            if (team.size > 1) {
+                                for (teamMember in team) {
+                                    val requestForSignature = RequestForSignature(data = currentTransactions!!.toString())
+                                    val message = encode64(gson.toJson(requestForSignature))
+                                    val toJson = gson.toJson(AddressedMessageRequest(msg = message, destination = teamMember))
+                                    websocket?.send(toJson)
+                                }
                             }
-                            val requestForSignature = RequestForSignature(data = currentTransactions!!.toString())
-                            val message = encode64(gson.toJson(requestForSignature))
-                            val toJson = gson.toJson(BroadcastPoAMessage(msg = message))
-                            websocket?.send(toJson)
-                            Timber.d("Sending broadcast")
                         }).subscribe()
         )
 
@@ -284,18 +284,18 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                         }.subscribeOn(Schedulers.io()).subscribe())
 
         composite.add(
-                broadcastMessage
+                addressedMessageResponse
                         .doOnComplete({ Timber.e("Complete!!!") })
                         .doOnNext {
                             val before = System.currentTimeMillis();
-                            val response = it.second as ReceivedBroadcastMessage;
-                            if (response.idFrom == myId) {
+                            val response = it.second as AddressedMessageResponse;
+                            if (response.sender == myId) {
                                 Timber.d("Message from me, skipping...")
                             }
                             val string = decode64(response.msg)
 
                             val requestForSignature = gson.fromJson(string, RequestForSignature::class.java);
-                            Timber.d("Request for signature from: ${response.idFrom} ")
+                            Timber.d("Request for signature from: ${response.sender} ")
 
                             val hash256 = hash256(requestForSignature.data);
                             Timber.d("Processing hash: ${System.currentTimeMillis() - before} millis ")
@@ -307,8 +307,8 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                             Timber.d("Processing total time: $period millis ")
                             val toJson = gson.toJson(responseSignature)
                             val message = encode64(toJson)
-                            val addressedMessageRequest = AddressedMessageRequest(destination = response.idFrom, msg = message)
-                            Timber.d("Signed message from: ${response.idFrom} by ${myId} ")
+                            val addressedMessageRequest = AddressedMessageRequest(destination = response.sender, msg = message)
+                            Timber.d("Signed message from: ${response.sender} by ${myId} ")
                             it.first?.send(gson.toJson(addressedMessageRequest))
                         }
                         .subscribeOn(Schedulers.io())
