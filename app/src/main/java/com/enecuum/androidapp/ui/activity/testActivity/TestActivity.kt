@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import com.enecuum.androidapp.R
-import com.jakewharton.rxbinding2.widget.RxTextView
+import com.jakewharton.rxbinding2.widget.RxTextView.textChanges
 import kotlinx.android.synthetic.main.test_activity.*
 
 class TestActivity : Activity() {
@@ -28,6 +28,17 @@ class TestActivity : Activity() {
         val customNNIP = "networkNodeIp"
 
 
+
+        bootNodePort.setText(sharedPreferences.getString(customBNPORT, BN_PORT))
+        bootNodeIp.setText(sharedPreferences.getString(customBNIP, BN_PATH))
+        networkNodePort.setText(sharedPreferences.getString(customNNPORT, NN_PORT))
+        networkNodeIp.setText(sharedPreferences.getString(customNNIP, NN_PATH))
+
+        textChanges(bootNodePort).subscribe { s -> sharedPreferences.edit { putString(customBNPORT, s.toString()) } }
+        textChanges(bootNodeIp).subscribe { s -> sharedPreferences.edit { putString(customBNIP, s.toString()) } }
+        textChanges(networkNodePort).subscribe { s -> sharedPreferences.edit { putString(customNNPORT, s.toString()) } }
+        textChanges(networkNodeIp).subscribe { s -> sharedPreferences.edit { putString(customNNIP, s.toString()) } }
+
         cbNN.setOnCheckedChangeListener { buttonView, isChecked ->
             networkNodePort.isEnabled = isChecked
             networkNodeIp.isEnabled = isChecked
@@ -41,18 +52,15 @@ class TestActivity : Activity() {
             sharedPreferences.edit { putBoolean(customBN, isChecked) }
         }
 
-        bootNodePort.setText(sharedPreferences.getString(customBNPORT, BN_PORT))
-        bootNodeIp.setText(sharedPreferences.getString(customBNIP, BN_PATH))
-        networkNodePort.setText(sharedPreferences.getString(customNNPORT, NN_PORT))
-        networkNodeIp.setText(sharedPreferences.getString(customNNIP, NN_PATH))
+        val customNNEnabled = sharedPreferences.getBoolean(customNN, false)
+        cbNN.isChecked = customNNEnabled
+        val customBnEnabled = sharedPreferences.getBoolean(customBN, false)
+        cbBN.isChecked = customBnEnabled
 
-        RxTextView.textChanges(bootNodePort).subscribe { s -> sharedPreferences.edit { putString(customBNPORT, s.toString()) } }
-        RxTextView.textChanges(bootNodeIp).subscribe { s -> sharedPreferences.edit { putString(customBNIP, s.toString()) } }
-        RxTextView.textChanges(networkNodePort).subscribe { s -> sharedPreferences.edit { putString(customNNPORT, s.toString()) } }
-        RxTextView.textChanges(networkNodeIp).subscribe { s -> sharedPreferences.edit { putString(customNNIP, s.toString()) } }
-
-        cbNN.isChecked = sharedPreferences.getBoolean(customNN, false)
-        cbBN.isChecked = sharedPreferences.getBoolean(customBN, false)
+        networkNodePort.isEnabled = customNNEnabled
+        networkNodeIp.isEnabled = customNNEnabled
+        bootNodePort.isEnabled = customBnEnabled
+        bootNodeIp.isEnabled = customBnEnabled
 
         connect.setOnClickListener {
             val teamSize = teamSize.text.toString()
@@ -61,7 +69,13 @@ class TestActivity : Activity() {
                     if (cbBN.isChecked) bootNodePort.text.toString() else BN_PORT,
                     if (cbNN.isChecked) networkNodeIp.text.toString() else NN_PATH,
                     if (cbNN.isChecked) networkNodePort.text.toString() else NN_PORT,
-                    teamSize.toInt())
+                    teamSize.toInt(),
+                    onTeamSize = object : PoaService.onTeamListener {
+                        override fun onTeamSize(size: Int) {
+                            team.setText(size.toString())
+                        }
+                    }
+            )
 
             poaService.connectAs(myNumber.text.toString().toInt())
         }

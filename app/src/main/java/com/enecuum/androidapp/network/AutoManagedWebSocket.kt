@@ -15,7 +15,7 @@ class AutoManagedWebSocket(request: Request,
                            client: OkHttpClient = OkHttpClient()) : RxWebSocket {
 
     private lateinit var webSocket: WebSocket
-    private val pingInterval = 30000
+    private val pingInterval = 10000
 
     override fun cancel() {
         webSocket.cancel()
@@ -58,7 +58,7 @@ class AutoManagedWebSocket(request: Request,
                 e.onNext(WebSocketEvent.ClosedEvent(webSocket, code, reason))
             }
         })
-        val real = RealWebSocket(request, listener, SecureRandom(), 0)
+        val real = RealWebSocket(request, listener, SecureRandom(), pingInterval.toLong())
         real.connect(client)
         webSocket = real
     }, BackpressureStrategy.BUFFER)

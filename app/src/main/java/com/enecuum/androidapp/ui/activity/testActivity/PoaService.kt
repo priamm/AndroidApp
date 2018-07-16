@@ -24,7 +24,7 @@ import java.math.BigInteger
 import java.util.*
 
 
-class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String, val NN_PATH: String, val NN_PORT: String, val poaCount: Int) {
+class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String, val NN_PATH: String, val NN_PORT: String, val poaCount: Int, val onTeamSize: onTeamListener) {
 
     val blockSize = 512 * 1024;
 //    private val BN_PATH = "195.201.226.28"//"88.99.86.200"
@@ -60,6 +60,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
         Timber.d("Start testing")
 
         bootNodeWebsocket = getWebSocket(BN_PATH, BN_PORT).observe()
+//                .retry()
                 .publish()
 
         composite.add(bootNodeWebsocket
@@ -87,6 +88,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                         .flatMap {
                             //                            it.port
                             getWebSocket(it.ip, "1554").observe()
+//                                    .retry()
                         }
                         .doOnNext { websocket = it.webSocket }
                         .publish()
@@ -124,7 +126,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
         }
         val myId = nodes.node.get(index - 1)
 
-        val observe = getWebSocket("master-network-api-node-ru31337.buddy.show", "80")
+        val teamWs = getWebSocket("master-network-api-node-ru31337.buddy.show", "80")
                 .observe()
                 .share()
         val nodeIdRequest = webSocketStringMessageEvents
@@ -135,22 +137,21 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     val nnWS = it.first
                     nnWS?.send(nodeId)
                     Timber.d("Sent NodeId reason")
-                    observe
+                    teamWs
                             .doOnError { Timber.e(it.localizedMessage) }
                             .filter { it is WebSocketEvent.OpenedEvent }
                             .subscribe {
                                 it.webSocket?.send(nodeId)
                             }
 
-
-
-
-                    observe.doOnError { Timber.e(it.localizedMessage) }
+                    teamWs.doOnError { Timber.e(it.localizedMessage) }
                             .filter { it is WebSocketEvent.StringMessageEvent }
                             .cast(WebSocketEvent.StringMessageEvent::class.java)
                             .map { parse(it.text!!) }
                             .cast(TeamResponse::class.java)
                             .subscribe {
+                                Timber.i("Command size: " + it.data.size)
+                                onTeamSize.run { }
                                 team = it.data
                                 if (team.size > 1) {
                                     startWork(myId, webSocketStringMessageEvents, nnWS)
@@ -392,5 +393,9 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
             };
         }
         return any
+    }
+
+    public interface onTeamListener {
+        fun onTeamSize(size: Int)
     }
 }

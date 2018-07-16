@@ -83,6 +83,10 @@
                       android:id="@+id/networkNodePort"
                       android:layout_height="wrap_content"
                       android:digits="1234567890"/>
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                      android:layout_weight="1"
+                      android:id="@+id/team"
+            />
         </LinearLayout>
 
 
