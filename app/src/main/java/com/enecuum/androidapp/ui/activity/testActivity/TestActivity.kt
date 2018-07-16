@@ -72,7 +72,7 @@ class TestActivity : Activity() {
                     teamSize.toInt(),
                     onTeamSize = object : PoaService.onTeamListener {
                         override fun onTeamSize(size: Int) {
-                            team.setText(size.toString())
+                            team.text = "Team size: ${size.toString()}"
                         }
                     }
             )

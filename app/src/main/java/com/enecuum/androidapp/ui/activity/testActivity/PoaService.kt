@@ -150,10 +150,11 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                             .map { parse(it.text!!) }
                             .cast(TeamResponse::class.java)
                             .subscribe {
-                                Timber.i("Command size: " + it.data.size)
-                                onTeamSize.run { }
+                                val size = it.data.size
+                                Timber.i("Command size: " + size)
+                                onTeamSize.onTeamSize(size)
                                 team = it.data
-                                if (team.size > 1) {
+                                if (size > 1) {
                                     startWork(myId, webSocketStringMessageEvents, nnWS)
                                 }
                             }

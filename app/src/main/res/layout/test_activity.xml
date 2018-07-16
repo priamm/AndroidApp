@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:orientation="vertical"
+            android:layout_height="match_parent" xmlns:tools="http://schemas.android.com/tools"
+            android:orientation="vertical"
             android:paddingLeft="16dp">
 
     <LinearLayout
@@ -83,10 +84,7 @@
                       android:id="@+id/networkNodePort"
                       android:layout_height="wrap_content"
                       android:digits="1234567890"/>
-            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                      android:layout_weight="1"
-                      android:id="@+id/team"
-            />
+
         </LinearLayout>
 
 
@@ -104,6 +102,13 @@
                     android:text="Disconnect"
                     android:padding="16dp"
                     android:id="@+id/diconnect"/>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      tools:text="Team size: 0"
+                      android:padding="16dp"
+                      android:textColor="@android:color/black"
+                      android:id="@+id/team"
+            />
         </LinearLayout>
 
 
