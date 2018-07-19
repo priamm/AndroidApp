@@ -58,6 +58,7 @@ data class PowsResponse(val tag: String = Tags.Response.name,
 
 data class AddressedMessageRequest(val tag: String = Tags.Msg.name,
                                    val type: String = CommunicationSubjects.MsgTo.name,
+                                   val from: String,
                                    val to: String,
                                    val msg: String)
 

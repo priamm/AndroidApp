@@ -99,9 +99,9 @@
 
             <Button android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Disconnect"
+                    android:text="K-Block"
                     android:padding="16dp"
-                    android:id="@+id/diconnect"/>
+                    android:id="@+id/kblock"/>
 
             <Button android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

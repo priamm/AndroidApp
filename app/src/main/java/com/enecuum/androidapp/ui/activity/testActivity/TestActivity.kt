@@ -66,6 +66,11 @@ class TestActivity : Activity() {
         askForTransactions.setOnClickListener {
             poaService?.askForNewTransactions()
         }
+
+        kblock.setOnClickListener {
+            poaService?.startEvent()
+        }
+
         connect.setOnClickListener {
             val teamSize = teamSize.text.toString()
             poaService = PoaService(this,

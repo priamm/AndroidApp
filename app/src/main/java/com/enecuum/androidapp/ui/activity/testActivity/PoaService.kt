@@ -117,6 +117,8 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
     private lateinit var team: List<String>
 
+    private lateinit var myId: String
+
     fun connect() {
 
 
@@ -132,6 +134,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     Timber.d("Joining to team")
 //                    val nodeId = gson.toJson(PoANodeUUIDResponse(nodeId = myNodeId))
 //                    ws?.send(nodeId)
+                    myId = myNodeId
                     Timber.d("Sent NodeId reason")
                     teamWs
                             .doOnError { Timber.e(it.localizedMessage) }
@@ -168,13 +171,9 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
     }
 
 
-//    {"tag":"Msg","from":"33333333333333333333333333333333","msg":{"body":"W3sidGltZSI6MTUyOTU5NDA5OSwibm9uY2UiOjI0NTE1MSwibnVtYmVyIjozLCJ0eXBlIjowLCJwcmV2X2hhc2giOiJBQUFBQVJ3RzRJVEtuR2lNNEx5VVNvSHhBYnpNWGNiMmdqVmxOZVJSQjJrPSJ9XQ==","verb":"block"},"type":"Broadcast"}
-//    fun startEvent() {
-//        {"body":"W3sidGltZSI6MTUyOTU5NDA5OSwibm9uY2UiOjI0NTE1MSwibnVtYmVyIjozLCJ0eXBlIjowLCJwcmV2X2hhc2giOiJBQUFBQVJ3RzRJVEtuR2lNNEx5VVNvSHhBYnpNWGNiMmdqVmxOZVJSQjJrPSJ9XQ==","verb":"block"}
-//        val keyblockResponse = gson.toJson(keyblock = Keyblock("eHh4"))
-//        websocket?.send(gson.toJson(BroadcastPoAMessage(msg = keyblockResponse)))
-//        askForNewTransactions(websocket)
-//    }
+    fun startEvent() {
+        gotKeyBlock(ReceivedBroadcastKeyblockMessage(msg = Keyblock(body = "fdf", verb = "dfs"), idFrom = "fsd"), websocket = websocket!!)
+    }
 
     var currentTransactions: List<Transaction> = listOf();
 
@@ -212,9 +211,12 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     val decode64 = decode64(addressedMessageResponse.msg)
                     gson.fromJson(decode64, ResponseSignature::class.java);
                 }
-                .filter {
-                    hash256(currentTransactions.toString()) == it.signature.hash
-                }
+//                .filter {
+//                    if (currentTransactions.isEmpty())
+//                        return@filter false
+//
+//                    hash256(currentTransactions.toString()) == it.signature.hash
+//                }
                 .distinctUntilChanged()
                 .buffer(team.size - 1)  //we need singns from all teams memeber except himself
                 .doOnNext({
@@ -225,7 +227,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
                     val base64String = "SoMeBaSe64StRinG=="
 
-                    val microblockMsg = MicroblockMsg(Tx = currentTransactions!!,
+                    val microblockMsg = MicroblockMsg(Tx = currentTransactions,
                             K_hash = keyblockResponse?.body ?: "eHh4",
                             wallets = listOf("1", "2")
                     )
@@ -261,9 +263,12 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                                 Timber.i("START asking for sign")
                                 if (team.size > 1) {
                                     for (teamMember in team) {
+                                        if (teamMember == myId) {
+                                            continue
+                                        }
                                         val requestForSignature = RequestForSignature(data = currentTransactions.toString())
                                         val message = encode64(gson.toJson(requestForSignature))
-                                        val toJson = gson.toJson(AddressedMessageRequest(msg = message, to = teamMember))
+                                        val toJson = gson.toJson(AddressedMessageRequest(msg = message, to = teamMember, from = myId))
                                         websocket?.send(toJson)
                                     }
                                 } else {
@@ -280,14 +285,13 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                 broadcastKeyBlockMessage
                         .doOnNext {
                             val response = it.second as ReceivedBroadcastKeyblockMessage;
-                            Timber.d("Got key block, start asking for transactions")
-                            keyblockResponse = response.msg
-                            askForNewTransactions(websocket)
+                            gotKeyBlock(response, websocket)
                         }.subscribeOn(Schedulers.io()).subscribe())
 
         composite.add(
                 addressedMessageResponse
                         .doOnComplete({ Timber.e("Complete!!!") })
+
                         .doOnNext {
                             val before = System.currentTimeMillis();
                             val response = it.second as AddressedMessageResponse;
@@ -309,7 +313,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                             Timber.d("Processing total time: $period millis ")
                             val toJson = gson.toJson(responseSignature)
                             val message = encode64(toJson)
-                            val addressedMessageRequest = AddressedMessageRequest(to = response.from, msg = message)
+                            val addressedMessageRequest = AddressedMessageRequest(to = response.from, msg = message, from = myId)
                             Timber.d("Signed message from: ${response.from} by ${myId} ")
                             it.first?.send(gson.toJson(addressedMessageRequest))
                         }
@@ -318,6 +322,13 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
 
     }
+
+    private fun gotKeyBlock(response: ReceivedBroadcastKeyblockMessage, websocket: WebSocket?) {
+        Timber.d("Got key block, start asking for transactions")
+        keyblockResponse = response.msg
+        askForNewTransactions(websocket)
+    }
+
 
     public fun askForNewTransactions(websocket: WebSocket?) {
         websocket?.send(gson.toJson(TransactionRequest()));
@@ -366,7 +377,17 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
     }
 
     private fun parse(text: String): Any? {
-        Timber.d("Parse: "+ text)
+        if (!JsonUtils.isJSONValid(text)) {
+            Timber.e("String is not JSON: " + text)
+            return Object()
+        }
+
+//        var fixedString: String? = null
+//        if (text.contains("\"reason\":\"Error in \$: key \"from\" not present\"")) {
+//            fixedString = text.replace("reason\":\"Error in \$: key \"from\" not present",
+//                    "reason\":\"Error in \$: key from not present")
+//        }
+
         val fromJson = gson.fromJson(text, BasePoAMessage::class.java);
         val type = fromJson.type
         return parse(type, text)
@@ -404,4 +425,5 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
     public interface onTeamListener {
         fun onTeamSize(size: Int)
     }
+
 }
