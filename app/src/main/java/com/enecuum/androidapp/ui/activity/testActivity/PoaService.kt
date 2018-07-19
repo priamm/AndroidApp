@@ -259,7 +259,6 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                             currentTransactions += it.transactions
 
                             if (currentTransactions.size >= TRANSACTION_COUNT_IN_MICROBLOCK) {
-
                                 Timber.i("START asking for sign")
                                 if (team.size > 1) {
                                     for (teamMember in team) {

@@ -27,8 +27,6 @@ class TestActivity : Activity() {
         val customNNPORT = "networkNodePort"
         val customNNIP = "networkNodeIp"
 
-
-
         bootNodePort.setText(sharedPreferences.getString(customBNPORT, BN_PORT))
         bootNodeIp.setText(sharedPreferences.getString(customBNIP, BN_PATH))
         networkNodePort.setText(sharedPreferences.getString(customNNPORT, NN_PORT))
@@ -72,7 +70,6 @@ class TestActivity : Activity() {
         }
 
         connect.setOnClickListener {
-            val teamSize = teamSize.text.toString()
             poaService = PoaService(this,
                     if (cbBN.isChecked) bootNodeIp.text.toString() else BN_PATH,
                     if (cbBN.isChecked) bootNodePort.text.toString() else BN_PORT,

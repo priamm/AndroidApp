@@ -8,31 +8,13 @@
     <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:orientation="vertical">
+            android:layout_height="match_parent" android:orientation="vertical"
+    >
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:text="TEST PANEL"
                   android:gravity="center"
                   android:padding="16dp"/>
-
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:text="My number (min 1  - max 8)"/>
-
-        <EditText android:layout_width="match_parent"
-                  android:id="@+id/myNumber"
-                  android:layout_height="wrap_content"
-                  android:text="1"
-                  android:digits="1234567890"/>
-
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:text="Team size (min 2 - max 8)"/>
-
-        <EditText android:layout_width="match_parent"
-                  android:id="@+id/teamSize"
-                  android:layout_height="wrap_content"
-                  android:text="2"
-                  android:digits="1234567890"/>
-
 
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                   android:text="Boot node ip and port"/>
