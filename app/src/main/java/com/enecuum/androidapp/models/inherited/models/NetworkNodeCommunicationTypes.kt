@@ -1,17 +1,17 @@
 package com.enecuum.androidapp.models.inherited.models
 
 data class BasePoAMessage(val type: String)
-data class ConnectRequest(val tag: String = Tags.Request.name,
-                          val type: String = CommunicationSubjects.Connects.name)
+data class ConnectBNRequest(val tag: String = Tags.Request.name,
+                            val type: String = CommunicationSubjects.PotentialConnects.name)
+
+data class ConnectBNResponse(val tag: String = Tags.Response.name,
+                             val type: String = CommunicationSubjects.PotentialConnects.name,
+                             val connects: List<ConnectPointDescription>)
 
 data class ErrorResponse(val tag: String = Tags.Response.name,
                          val type: String = CommunicationSubjects.Error.name,
                          val reason: String,
                          val Msg: String)
-
-data class ConnectResponse(val tag: String = Tags.Response.name,
-                           val type: String = CommunicationSubjects.Connects.name,
-                           val connects: List<ConnectPointDescription>)
 
 data class ConnectPointDescription(val ip: String,
                                    val port: String)
@@ -24,20 +24,25 @@ data class PoANodeUUIDResponse(val tag: String = Tags.Response.name,
                                val nodeId: String,
                                val nodeType: String = NodeTypes.PoA.name)
 
-data class ReconnectNotification(val tag: String = Tags.Msg.name,
+data class ReconnectNotification(val tag: String = Tags.Action.name,
                                  val type: String = CommunicationSubjects.Connect.name,
-                                 val ip: String,
-                                 val port: String)
+                                 val node_type: String = "PoA")
+
+data class ReconnectResponse(val tag: String = Tags.Response.name,
+                             val type: String = CommunicationSubjects.NodeId.name,
+                             val node_id: String)
 
 data class BroadcastPoAMessage(val tag: String = Tags.Request.name,
                                val type: String = CommunicationSubjects.Broadcast.name,
-                               val recipientType: String = NodeTypes.PoA.name,
-                               val msg: String)
+                               val node_type: String = "All",
+                               val msg: String,
+                               val from: String)
 
 data class ReceivedBroadcastMessage(val tag: String = Tags.Msg.name,
                                     val type: String = CommunicationSubjects.Broadcast.name,
+                                    val node_type: String = "All",
                                     val msg: String,
-                                    val idFrom: String)
+                                    val from: String)
 
 data class ReceivedBroadcastKeyblockMessage(val tag: String = Tags.Msg.name,
                                             val type: String = CommunicationSubjects.Broadcast.name,
@@ -53,26 +58,26 @@ data class PowsResponse(val tag: String = Tags.Response.name,
 
 data class AddressedMessageRequest(val tag: String = Tags.Msg.name,
                                    val type: String = CommunicationSubjects.MsgTo.name,
-                                   val destination: String,
+                                   val to: String,
                                    val msg: String)
 
 data class AddressedMessageResponse(val tag: String = Tags.Msg.name,
                                     val type: String = CommunicationSubjects.MsgTo.name,
-                                    val sender: String,
+                                    val from: String,
                                     val msg: String)
 
 
 data class TeamResponse(val tag: String = Tags.Response.name,
-                                            val type: String = CommunicationSubjects.Team.name,
-                                            val data: List<String>)
+                        val type: String = CommunicationSubjects.Team.name,
+                        val data: List<String>)
 
 data class TransactionRequest(val tag: String = Tags.Request.name,
-                              val type: String = CommunicationSubjects.Transaction.name,
-                              val number: Int)
+                              val type: String = CommunicationSubjects.Transactions.name,
+                              val number: Int = 3)
 
 data class TransactionResponse(val tag: String = Tags.Response.name,
-                               val type: String = CommunicationSubjects.Transaction.name,
-                               val transaction: Transaction)
+                               val type: String = CommunicationSubjects.Transactions.name,
+                               val transactions: List<Transaction> = emptyList())
 
 
 data class MicroblockResponse(val tag: String = Tags.Msg.name,

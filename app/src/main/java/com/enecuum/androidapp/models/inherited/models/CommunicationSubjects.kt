@@ -1,13 +1,17 @@
 package com.enecuum.androidapp.models.inherited.models
 
 enum class CommunicationSubjects {
-    Connects,
+    PotentialConnects,
+//    Connects,
+
+    Pending,
     Connect,
     NodeId,
     Broadcast,
     PoWList,
     MsgTo,
-    Transaction,
+//    Transaction,
+    Transactions,
     Microblock,
     Keyblock,
     Error,

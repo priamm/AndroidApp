@@ -44,13 +44,13 @@ class MiningInProgressFragment : MvpAppCompatFragment(), MiningInProgressView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        poaService = PoaService(view.context)
-        btConnect.setOnClickListener {
-            poaService?.connectAs(nodeNum.text.toString().toInt())
-        }
-
-        btStartEvent.setOnClickListener {
-            poaService?.startEvent()
-        }
+//        btConnect.setOnClickListener {
+//            poaService?.connectAs(nodeNum.text.toString().toInt())
+//        }
+//
+//        btStartEvent.setOnClickListener {
+//            poaService?.startEvent()
+//        }
 
         presenter.onCreate()
         setupGraph()

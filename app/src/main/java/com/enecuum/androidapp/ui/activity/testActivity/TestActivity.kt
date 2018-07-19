@@ -62,22 +62,27 @@ class TestActivity : Activity() {
         bootNodePort.isEnabled = customBnEnabled
         bootNodeIp.isEnabled = customBnEnabled
 
+        var poaService: PoaService? = null;
+        askForTransactions.setOnClickListener {
+            poaService?.askForNewTransactions()
+        }
         connect.setOnClickListener {
             val teamSize = teamSize.text.toString()
-            var poaService = PoaService(this,
+            poaService = PoaService(this,
                     if (cbBN.isChecked) bootNodeIp.text.toString() else BN_PATH,
                     if (cbBN.isChecked) bootNodePort.text.toString() else BN_PORT,
                     if (cbNN.isChecked) networkNodeIp.text.toString() else NN_PATH,
                     if (cbNN.isChecked) networkNodePort.text.toString() else NN_PORT,
-                    teamSize.toInt(),
                     onTeamSize = object : PoaService.onTeamListener {
                         override fun onTeamSize(size: Int) {
-                            team.text = "Team size: ${size.toString()}"
+                            team.postDelayed({
+                                team.text = "Team size: ${size.toString()}"
+                            }, 0)
                         }
                     }
             )
 
-            poaService.connectAs(myNumber.text.toString().toInt())
+            poaService?.connect()
         }
     }
 }
