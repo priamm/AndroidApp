@@ -38,16 +38,19 @@ data class BroadcastPoAMessage(val tag: String = Tags.Request.name,
                                val msg: String,
                                val from: String)
 
+
 data class ReceivedBroadcastMessage(val tag: String = Tags.Msg.name,
                                     val type: String = CommunicationSubjects.Broadcast.name,
                                     val node_type: String = "All",
                                     val msg: String,
                                     val from: String)
 
+////{"node_type":"All","tag":"Msg","from":"01234567891011121314151617181920","msg":{"body":"W3sidGltZSI6MTUzMjAxNDA1OSwibm9uY2UiOjM1MzE3LCJudW1iZXIiOjQsInR5cGUiOjAsInByZXZfaGFzaCI6IkFBQUFGZDl0a2VsSHpQTlphOVpQMWFHYzhwTDdjR0NFV1kxNmlML3JYbkk9In1d","verb":"kblock"},"type":"Broadcast"}
+
 data class ReceivedBroadcastKeyblockMessage(val tag: String = Tags.Msg.name,
                                             val type: String = CommunicationSubjects.Broadcast.name,
                                             val msg: Keyblock,
-                                            val idFrom: String)
+                                            val from: String)
 
 data class PowsRequest(val tag: String = Tags.Request.name,
                        val type: String = CommunicationSubjects.PoWList.name)

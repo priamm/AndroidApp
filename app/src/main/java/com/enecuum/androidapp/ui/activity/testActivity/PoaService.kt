@@ -173,7 +173,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
 
     fun startEvent() {
-        gotKeyBlock(ReceivedBroadcastKeyblockMessage(msg = Keyblock(body = "fdf", verb = "dfs"), idFrom = "fsd"), websocket = websocket!!)
+        gotKeyBlock(ReceivedBroadcastKeyblockMessage(msg = Keyblock(body = "fdf", verb = "dfs"), from = "fsd"), websocket = websocket!!)
     }
 
     var currentTransactions: List<Transaction> = listOf();
@@ -209,8 +209,8 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
         composite.add(addressedMessageResponse
                 .map {
                     val addressedMessageResponse = it.second as AddressedMessageResponse;
-                    val decode64 = decode64(addressedMessageResponse.msg)
-                    gson.fromJson(decode64, ResponseSignature::class.java);
+//                    val decode64 = decode64()
+                    gson.fromJson(addressedMessageResponse.msg, ResponseSignature::class.java);
                 }
 //                .filter {
 //                    if (currentTransactions.isEmpty())
@@ -266,8 +266,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                                         if (teamMember == myId) {
                                             continue
                                         }
-                                        val requestForSignature = RequestForSignature(data = currentTransactions.toString())
-                                        val message = encode64(gson.toJson(requestForSignature))
+                                        val message = gson.toJson(RequestForSignature(data = currentTransactions.toString()))
                                         val toJson = gson.toJson(AddressedMessageRequest(msg = message, to = teamMember, from = myId))
                                         websocket?.send(toJson)
                                     }
@@ -298,24 +297,27 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                             if (response.from == myId) {
                                 Timber.d("Message from me, skipping...")
                             }
-                            val string = decode64(response.msg)
 
-                            val requestForSignature = gson.fromJson(string, RequestForSignature::class.java);
-                            Timber.d("Request for signature from: ${response.from} ")
+                            val requestForSignature = gson.fromJson(response.msg, RequestForSignature::class.java)
+                            //we have request For Signature
+                            if (requestForSignature.data != null) {
+                                Timber.d("Request for signature from: ${response.from} ")
+                                val hash256 = hash256(requestForSignature.data!!);
+                                Timber.d("Processing hash: ${System.currentTimeMillis() - before} millis ")
+                                val enc = RSACipher().encrypt(hash256);
+                                val period = System.currentTimeMillis() - before;
 
-                            val hash256 = hash256(requestForSignature.data);
-                            Timber.d("Processing hash: ${System.currentTimeMillis() - before} millis ")
-                            val enc = RSACipher().encrypt(hash256);
-                            val period = System.currentTimeMillis() - before;
+                                val responseSignature = ResponseSignature(signature = Signature(myId, hash256, enc))
 
-                            val responseSignature = ResponseSignature(signature = Signature(myId, hash256, enc))
+                                Timber.d("Processing total time: $period millis ")
+                                val addressedMessageRequest = AddressedMessageRequest(
+                                        to = response.from,
+                                        msg = gson.toJson(responseSignature),
+                                        from = myId)
+                                Timber.d("Signed message from: ${response.from} by ${myId} ")
+                                it.first?.send(gson.toJson(addressedMessageRequest))
+                            }
 
-                            Timber.d("Processing total time: $period millis ")
-                            val toJson = gson.toJson(responseSignature)
-                            val message = encode64(toJson)
-                            val addressedMessageRequest = AddressedMessageRequest(to = response.from, msg = message, from = myId)
-                            Timber.d("Signed message from: ${response.from} by ${myId} ")
-                            it.first?.send(gson.toJson(addressedMessageRequest))
                         }
                         .subscribeOn(Schedulers.io())
                         .subscribe());
@@ -354,7 +356,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                 .show()
     }
 
-    private fun encode64(src: String) =
+    private fun encode64(src: String): String =
             BaseEncoding.base64().encode(String(src.toByteArray(Charsets.US_ASCII), Charsets.US_ASCII).toByteArray())
 
     private fun decode64(messages1: String): String {
@@ -400,7 +402,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
             CommunicationSubjects.PotentialConnects.name -> gson.fromJson(text, ConnectBNResponse::class.java)
             CommunicationSubjects.Connect.name -> gson.fromJson(text, ReconnectNotification::class.java)
             CommunicationSubjects.Broadcast.name -> {
-                if (text!!.contains("\"verb\":\"block\"")) {
+                if (text!!.contains("\"verb\":\"kblock\"")) {
                     gson.fromJson(text, ReceivedBroadcastKeyblockMessage::class.java)
                 } else
                     gson.fromJson(text, ReceivedBroadcastMessage::class.java)
