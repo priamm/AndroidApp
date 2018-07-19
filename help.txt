@@ -1,2 +1,4 @@
 generate Transactions
 stack exec LightClient-exe -- --addr=195.201.226.25
+
+stack exec Tester-exe t 195.201.217.30

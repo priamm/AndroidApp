@@ -84,7 +84,8 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                             return@map it.connects.get(nextInt)
                         }
                         .flatMap {
-                            getWebSocket(it.ip, "1554").observe()
+                            Timber.d("Connecting to: ${it.ip}:${it.port}")
+                            getWebSocket(it.ip, it.port).observe()
                         }
                         .doOnNext {
                             it.webSocket?.send(gson.toJson(ReconnectNotification()))
