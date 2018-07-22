@@ -173,7 +173,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
 
     fun startEvent() {
-        gotKeyBlock(ReceivedBroadcastKeyblockMessage(msg = Keyblock(body = "fdf", verb = "dfs"), from = "fsd"), websocket = websocket!!)
+        gotKeyBlock(ReceivedBroadcastKeyblockMessage(msg = Keyblock(body = "fdf", verb = "dfs")), websocket = websocket!!)
     }
 
     var currentTransactions: List<Transaction> = listOf();
@@ -401,15 +401,9 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
             CommunicationSubjects.Team.name -> gson.fromJson(text, TeamResponse::class.java)
             CommunicationSubjects.PotentialConnects.name -> gson.fromJson(text, ConnectBNResponse::class.java)
             CommunicationSubjects.Connect.name -> gson.fromJson(text, ReconnectNotification::class.java)
-            CommunicationSubjects.Broadcast.name -> {
-                if (text!!.contains("\"verb\":\"kblock\"")) {
-                    gson.fromJson(text, ReceivedBroadcastKeyblockMessage::class.java)
-                } else
-                    gson.fromJson(text, ReceivedBroadcastMessage::class.java)
-            }
-            CommunicationSubjects.MsgTo.name -> {
-                gson.fromJson(text, AddressedMessageResponse::class.java)
-            }
+            CommunicationSubjects.Broadcast.name -> gson.fromJson(text, ReceivedBroadcastMessage::class.java)
+            CommunicationSubjects.KeyBlock.name -> gson.fromJson(text, ReceivedBroadcastKeyblockMessage::class.java)
+            CommunicationSubjects.MsgTo.name -> gson.fromJson(text, AddressedMessageResponse::class.java)
             CommunicationSubjects.PoWList.name -> gson.fromJson(text, PowsResponse::class.java)
             CommunicationSubjects.NodeId.name -> gson.fromJson(text, ReconnectResponse::class.java)
 //        CommunicationSubjects.NodeId.name -> if (text!!.contains("Response")) gson.fromJson(text, ReconnectResponse::class.java) else gson.fromJson(text, PoANodeUUIDRequest::class.java);
