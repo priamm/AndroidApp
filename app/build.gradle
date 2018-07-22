@@ -25,6 +25,8 @@ android {
                 cppFlags "-fexceptions"
             }
         }
+
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -45,6 +47,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$support_version"
     implementation "com.android.support:support-v4:$support_version"
     compile "com.android.support:design:$support_version"
+    implementation 'com.android.support:multidex:1.0.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

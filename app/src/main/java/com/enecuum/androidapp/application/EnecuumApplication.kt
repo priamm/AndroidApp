@@ -2,6 +2,7 @@ package com.enecuum.androidapp.application
 
 import android.app.Application
 import android.content.Context
+import android.support.multidex.MultiDexApplication
 import com.enecuum.androidapp.events.MainActivityStopped
 import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.navigation.ScreenType
@@ -22,7 +23,7 @@ import timber.log.Timber
 /**
  * Created by oleg on 22.01.18.
  */
-class EnecuumApplication : Application() {
+class EnecuumApplication : MultiDexApplication() {
 
     companion object {
         private lateinit var appContext: Context
