@@ -20,7 +20,10 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.Request
 import okhttp3.WebSocket
 import timber.log.Timber
+import java.io.ByteArrayOutputStream
 import java.math.BigInteger
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import java.util.*
 
 
@@ -29,40 +32,22 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
     val blockSize = 512 * 1024;
     val TEAM_WS_IP = "195.201.217.44"
     val TEAM_WS_PORT = "8080"
-//    private val BN_PATH = "195.201.226.28"//"88.99.86.200"
-//    private val BN_PORT = "1554"
-//    private val NN_PATH = "195.201.226.26"//"195.201.226.30"//"195.201.226.25"
-//    private val NN_PORT = "1554"
 
     val TRANSACTION_COUNT_IN_MICROBLOCK = 1
-
-    var testGson = "{\"node\":[\"5c300af5-641d-4981-ac24-69c9c33d76db\",\"0e00718d-d067-4c05-b897-4a23051862da\",\"b373b275-30e1-49ad-bbeb-6055943b3de7\",\"c045482b-8ea1-4f53-a2b4-8dc33dee6682\",\"9d964f2b-0417-4975-bd57-8e320d3e52eb\",\"4c6ee73b-43de-4adc-be41-2a07711efc82\",\"3ef45d69-1a5a-4f43-9a61-3e7116044c31\",\"4a22c9f1-f0b7-4e8c-bf41-ce4589e4a441\"]}"
-//    val poaCount = 2;
 
     var composite = CompositeDisposable()
     var websocket: WebSocket? = null;
 
-    val string1mb = create()
     var gson: Gson = GsonBuilder().disableHtmlEscaping().create();
-    lateinit var nodes: Nodes
     private val websocketEvents: ConnectableFlowable<WebSocketEvent>;
     val webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>;
     var bootNodeWebsocket: ConnectableFlowable<WebSocketEvent>;
 
     init {
-
-        //for generate purposes
-//        val arrayList = ArrayList<String>()
-//        for (i in 8 downTo 1) arrayList.add(UUID.randomUUID().toString())
-//        val nodes1 = Nodes(arrayList)
-//        val testGson = gson.toJson(nodes1);
-
-        nodes = gson.fromJson(testGson, Nodes::class.java);
-        testGson = testGson.replace("-", "");
         Timber.d("Start testing")
+        val s1 = "W3sidGltZSI6MTUzMjM3MTk0Miwibm9uY2UiOjE5NTQ2NiwibnVtYmVyIjoxOTksInR5cGUiOjAsInByZXZfaGFzaCI6IkFBQUJSd3daNkhXTWVOQ3NWdUtUZCtmK2p5dW41K0NrM3oxL1duR1V6S0k9Iiwic29sdmVyIjoiT3ZTOExtbWNNYTRtdEVXYmlmTzVaRmtxVDZBWVJpenpRNm1Fb2JNTWh6ND0ifV0="
 
         bootNodeWebsocket = getWebSocket(BN_PATH, BN_PORT).observe()
-//                .retry()
                 .publish()
 
         composite.add(bootNodeWebsocket
@@ -175,7 +160,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
 
     fun startEvent() {
-        gotKeyBlock(ReceivedBroadcastKeyblockMessage(msg = Keyblock(body = "fdf", verb = "dfs")), websocket = websocket!!)
+        gotKeyBlock(ReceivedBroadcastKeyblockMessage(keyBlock = Keyblock(body = "fdf", verb = "dfs")), websocket = websocket!!)
     }
 
     var currentTransactions: List<Transaction> = listOf();
@@ -211,7 +196,6 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
         composite.add(addressedMessageResponse
                 .map {
                     val addressedMessageResponse = it.second as AddressedMessageResponse;
-//                    val decode64 = decode64()
                     gson.fromJson(addressedMessageResponse.msg, ResponseSignature::class.java);
                 }
                 .distinctUntilChanged()
@@ -222,16 +206,24 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                         Toast.makeText(context, "Sending", Toast.LENGTH_LONG).show()
                     }
 
-                    val base64String = "SoMeBaSe64StRinG=="
-
-//                    val keyblockBodyJson = decode64(keyblockResponse?.body!!)
-//                    val kBlockStructure =  gson.fromJson(keyblockBodyJson,KBlockStructure::class.java)
+                    val keyblockBodyJson = decode64(keyblockResponse?.body!!)
+                    val kBlockStructure = gson.fromJson(keyblockBodyJson, Array<KBlockStructure>::class.java)
+                    val kBlockStructure1 = kBlockStructure.get(0)
+                    val bb = ByteArrayOutputStream()
+                    bb.write(intToLittleEndian(kBlockStructure1.time))
+                    bb.write(intToLittleEndian(kBlockStructure1.nonce))
+                    bb.write(intToLittleEndian(kBlockStructure1.number.toLong()))
+                    bb.write(intToLittleEndian(kBlockStructure1.type.toLong()))
+                    bb.write(kBlockStructure1.prev_hash.toByteArray())
+                    bb.write(kBlockStructure1.solver.toByteArray())
+                    val toByteArray = bb.toByteArray()
+                    val hash256 = hash256(toByteArray)
+                    val encode64 = encode64(hash256)
 
                     val microblockMsg = MicroblockMsg(Tx = currentTransactions,
-                            K_hash = keyblockResponse?.body ?: "eHh4",
+                            K_hash = encode64,
                             wallets = listOf("1", "2")
                     )
-
 
                     val sign_r = BigInteger.TEN;
                     val sign_s = BigInteger.TEN;
@@ -326,7 +318,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
     private fun gotKeyBlock(response: ReceivedBroadcastKeyblockMessage, websocket: WebSocket?) {
         Timber.d("Got key block, start asking for transactions")
-        keyblockResponse = response.msg
+        keyblockResponse = response.keyBlock
         askForNewTransactions(websocket)
     }
 
@@ -358,6 +350,9 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
     private fun encode64(src: String): String =
             BaseEncoding.base64().encode(String(src.toByteArray(Charsets.US_ASCII), Charsets.US_ASCII).toByteArray())
 
+    private fun encode64(src: ByteArray): String =
+            BaseEncoding.base64().encode(src)
+
     private fun decode64(messages1: String): String {
         val messages = BaseEncoding.base64().decode(messages1)
         val string = String(messages, Charsets.US_ASCII)
@@ -383,12 +378,6 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
             return Object()
         }
 
-//        var fixedString: String? = null
-//        if (text.contains("\"reason\":\"Error in \$: key \"from\" not present\"")) {
-//            fixedString = text.replace("reason\":\"Error in \$: key \"from\" not present",
-//                    "reason\":\"Error in \$: key from not present")
-//        }
-
         val fromJson = gson.fromJson(text, BasePoAMessage::class.java);
         val type = fromJson.type
         return parse(type, text)
@@ -407,7 +396,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
             CommunicationSubjects.NodeId.name -> gson.fromJson(text, ReconnectResponse::class.java)
 //        CommunicationSubjects.NodeId.name -> if (text!!.contains("Response")) gson.fromJson(text, ReconnectResponse::class.java) else gson.fromJson(text, PoANodeUUIDRequest::class.java);
             CommunicationSubjects.Transactions.name -> gson.fromJson(text, TransactionResponse::class.java);
-            PoACommunicationSubjects.Keyblock.name -> gson.fromJson(text, PoANodeCommunicationTypes.PoWTailResponse::class.java)
+//            PoACommunicationSubjects.Keyblock.name -> gson.fromJson(text, PoANodeCommunicationTypes.PoWTailResponse::class.java)
             PoACommunicationSubjects.Peek.name -> gson.fromJson(text, PoANodeCommunicationTypes.PoWPeekResponse::class.java)
             CommunicationSubjects.Error.name -> gson.fromJson(text, ErrorResponse::class.java)
             else -> {
@@ -419,6 +408,14 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
     public interface onTeamListener {
         fun onTeamSize(size: Int)
+    }
+
+
+    private fun intToLittleEndian(numero: Long): ByteArray {
+        val bb = ByteBuffer.allocate(4)
+        bb.order(ByteOrder.LITTLE_ENDIAN)
+        bb.putInt(numero.toInt())
+        return bb.array()
     }
 
 }

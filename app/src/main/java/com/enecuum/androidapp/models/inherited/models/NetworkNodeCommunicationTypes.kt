@@ -49,7 +49,7 @@ data class ReceivedBroadcastMessage(val tag: String = Tags.Msg.name,
 
 data class ReceivedBroadcastKeyblockMessage(val tag: String = Tags.Msg.name,
                                             val type: String = CommunicationSubjects.KeyBlock.name,
-                                            val msg: Keyblock)
+                                            val keyBlock: Keyblock)
 
 data class PowsRequest(val tag: String = Tags.Request.name,
                        val type: String = CommunicationSubjects.PoWList.name)
