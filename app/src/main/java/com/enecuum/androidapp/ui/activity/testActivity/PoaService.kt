@@ -27,6 +27,8 @@ import java.util.*
 class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String, val NN_PATH: String, val NN_PORT: String, val onTeamSize: onTeamListener) {
 
     val blockSize = 512 * 1024;
+    val TEAM_WS_IP = "195.201.217.44"
+    val TEAM_WS_PORT = "8080"
 //    private val BN_PATH = "195.201.226.28"//"88.99.86.200"
 //    private val BN_PORT = "1554"
 //    private val NN_PATH = "195.201.226.26"//"195.201.226.30"//"195.201.226.25"
@@ -126,7 +128,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
         val myId = webSocketStringMessageEvents
                 .filter { it.second is ReconnectResponse }
                 .doOnNext {
-                    val teamWs = getWebSocket("master-network-api-node-ru31337.buddy.show", "80")
+                    val teamWs = getWebSocket(TEAM_WS_IP, TEAM_WS_PORT)
                             .observe()
                             .share()
                     val myNodeId = (it.second as ReconnectResponse).node_id
@@ -212,12 +214,6 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 //                    val decode64 = decode64()
                     gson.fromJson(addressedMessageResponse.msg, ResponseSignature::class.java);
                 }
-//                .filter {
-//                    if (currentTransactions.isEmpty())
-//                        return@filter false
-//
-//                    hash256(currentTransactions.toString()) == it.signature.hash
-//                }
                 .distinctUntilChanged()
                 .buffer(team.size - 1)  //we need singns from all teams memeber except himself
                 .doOnNext({
@@ -227,6 +223,9 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     }
 
                     val base64String = "SoMeBaSe64StRinG=="
+
+//                    val keyblockBodyJson = decode64(keyblockResponse?.body!!)
+//                    val kBlockStructure =  gson.fromJson(keyblockBodyJson,KBlockStructure::class.java)
 
                     val microblockMsg = MicroblockMsg(Tx = currentTransactions,
                             K_hash = keyblockResponse?.body ?: "eHh4",

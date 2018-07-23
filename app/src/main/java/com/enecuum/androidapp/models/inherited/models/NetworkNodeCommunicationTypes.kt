@@ -110,3 +110,4 @@ data class MicroblockMsg(val K_hash: String,
 
 data class MicroblockSignature(val sign_r: String = "NDU=", val sign_s: String = "NDU=");
 
+data class KBlockStructure(val time: Long, val nonce: Long, val number: Int, val type: Int, val prev_hash: String, val solver: String)
