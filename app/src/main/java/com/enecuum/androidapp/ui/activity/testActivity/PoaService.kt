@@ -45,7 +45,6 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
     init {
         Timber.d("Start testing")
-        val s1 = "W3sidGltZSI6MTUzMjM3MTk0Miwibm9uY2UiOjE5NTQ2NiwibnVtYmVyIjoxOTksInR5cGUiOjAsInByZXZfaGFzaCI6IkFBQUJSd3daNkhXTWVOQ3NWdUtUZCtmK2p5dW41K0NrM3oxL1duR1V6S0k9Iiwic29sdmVyIjoiT3ZTOExtbWNNYTRtdEVXYmlmTzVaRmtxVDZBWVJpenpRNm1Fb2JNTWh6ND0ifV0="
 
         bootNodeWebsocket = getWebSocket(BN_PATH, BN_PORT).observe()
                 .publish()
@@ -206,22 +205,10 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                         Toast.makeText(context, "Sending", Toast.LENGTH_LONG).show()
                     }
 
-                    val keyblockBodyJson = decode64(keyblockResponse?.body!!)
-                    val kBlockStructure = gson.fromJson(keyblockBodyJson, Array<KBlockStructure>::class.java)
-                    val kBlockStructure1 = kBlockStructure.get(0)
-                    val bb = ByteArrayOutputStream()
-                    bb.write(intToLittleEndian(kBlockStructure1.time))
-                    bb.write(intToLittleEndian(kBlockStructure1.nonce))
-                    bb.write(intToLittleEndian(kBlockStructure1.number.toLong()))
-                    bb.write(intToLittleEndian(kBlockStructure1.type.toLong()))
-                    bb.write(kBlockStructure1.prev_hash.toByteArray())
-                    bb.write(kBlockStructure1.solver.toByteArray())
-                    val toByteArray = bb.toByteArray()
-                    val hash256 = hash256(toByteArray)
-                    val encode64 = encode64(hash256)
+                    val k_hash = getKeyBlockHash()
 
                     val microblockMsg = MicroblockMsg(Tx = currentTransactions,
-                            K_hash = encode64,
+                            K_hash = k_hash,
                             wallets = listOf("1", "2")
                     )
 
@@ -314,6 +301,23 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                         .subscribe());
 
 
+    }
+
+    private fun getKeyBlockHash(): String {
+        val keyblockBodyJson = decode64(keyblockResponse?.body!!)
+        val kBlockStructure = gson.fromJson(keyblockBodyJson, Array<KBlockStructure>::class.java)
+        val kBlockStructure1 = kBlockStructure.get(0)
+        val bb = ByteArrayOutputStream()
+        bb.write(intToLittleEndian(kBlockStructure1.time))
+        bb.write(intToLittleEndian(kBlockStructure1.nonce))
+        bb.write(intToLittleEndian(kBlockStructure1.number.toLong()))
+        bb.write(intToLittleEndian(kBlockStructure1.type.toLong()))
+        bb.write(kBlockStructure1.prev_hash.toByteArray())
+        bb.write(kBlockStructure1.solver.toByteArray())
+        val toByteArray = bb.toByteArray()
+        val hash256 = hash256(toByteArray)
+        val encode64 = encode64(hash256)
+        return encode64
     }
 
     private fun gotKeyBlock(response: ReceivedBroadcastKeyblockMessage, websocket: WebSocket?) {
