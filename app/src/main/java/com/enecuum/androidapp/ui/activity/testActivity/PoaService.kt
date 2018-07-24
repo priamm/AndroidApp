@@ -29,6 +29,7 @@ import java.util.*
 
 class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String, val NN_PATH: String, val NN_PORT: String, val onTeamSize: onTeamListener) {
 
+    private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
     val blockSize = 512 * 1024;
     val TEAM_WS_IP = "195.201.217.44"
     val TEAM_WS_PORT = "8080"
@@ -164,7 +165,9 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
     var currentTransactions: List<Transaction> = listOf();
 
-    private var keyblockResponse: Keyblock? = null
+    private var keyblockHash: String? = null
+
+    private lateinit var prev_hash: String
 
     private fun startWork(myId: String, webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>, websocket: WebSocket?) {
         val broadcastMessage = webSocketStringMessageEvents
@@ -205,10 +208,10 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                         Toast.makeText(context, "Sending", Toast.LENGTH_LONG).show()
                     }
 
-                    val k_hash = getKeyBlockHash()
+                    val k_hash = keyblockHash
 
                     val microblockMsg = MicroblockMsg(Tx = currentTransactions,
-                            K_hash = k_hash,
+                            K_hash = k_hash!!,
                             wallets = listOf("1", "2")
                     )
 
@@ -260,6 +263,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
         composite.add(
                 broadcastKeyBlockMessage
+                        .doOnError({ Timber.e(it) })
                         .doOnNext {
                             val response = it.second as ReceivedBroadcastKeyblockMessage;
                             gotKeyBlock(response, websocket)
@@ -303,26 +307,22 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
     }
 
-    private fun getKeyBlockHash(): String {
-        val keyblockBodyJson = decode64(keyblockResponse?.body!!)
-        val kBlockStructure = gson.fromJson(keyblockBodyJson, Array<KBlockStructure>::class.java)
-        val kBlockStructure1 = kBlockStructure.get(0)
-        val bb = ByteArrayOutputStream()
-        bb.write(intToLittleEndian(kBlockStructure1.time))
-        bb.write(intToLittleEndian(kBlockStructure1.nonce))
-        bb.write(intToLittleEndian(kBlockStructure1.number.toLong()))
-        bb.write(intToLittleEndian(kBlockStructure1.type.toLong()))
-        bb.write(kBlockStructure1.prev_hash.toByteArray())
-        bb.write(kBlockStructure1.solver.toByteArray())
-        val toByteArray = bb.toByteArray()
+    private fun getKeyBlockHash(kBlockStructure: KBlockStructure): String {
+        val toByteArray = toByteArray(kBlockStructure)
         val hash256 = hash256(toByteArray)
-        val encode64 = encode64(hash256)
-        return encode64
+        return encode64(hash256)
     }
+
 
     private fun gotKeyBlock(response: ReceivedBroadcastKeyblockMessage, websocket: WebSocket?) {
         Timber.d("Got key block, start asking for transactions")
-        keyblockResponse = response.keyBlock
+
+        val keyBlock = response.keyBlock;
+        val keyblockBodyJson = decode64(keyBlock.body)
+        val kBlockStructure = gson.fromJson(keyblockBodyJson, Array<KBlockStructure>::class.java)
+        keyblockHash = getKeyBlockHash(kBlockStructure.get(0))
+
+        prev_hash = keyblockHash!!
         askForNewTransactions(websocket)
     }
 
@@ -416,10 +416,56 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
 
     private fun intToLittleEndian(numero: Long): ByteArray {
+
         val bb = ByteBuffer.allocate(4)
         bb.order(ByteOrder.LITTLE_ENDIAN)
         bb.putInt(numero.toInt())
         return bb.array()
+    }
+
+    private fun toByteArray(numero: KBlockStructure): ByteArray {
+        val bb = ByteBuffer.allocate(256);
+        bb.order(ByteOrder.LITTLE_ENDIAN)
+        bb.put(numero.type)
+        bb.putInt(numero.number)
+        bb.putInt(numero.time)
+        bb.putInt(numero.nonce)
+        bb.put(decode64(numero.prev_hash).toByteArray())
+        bb.put(decode64(numero.solver).toByteArray())
+        val position = bb.position()
+        val out = mutableListOf<Byte>()
+        for (index: Int in 0..(position - 1)) {
+            out.add(bb.get(index))
+        }
+        return out.toByteArray()
+    }
+
+    fun getArray(buffer: ByteBuffer): ByteArray {
+        val length = buffer.remaining()
+        if (buffer.hasArray()) {
+            val boff = buffer.arrayOffset() + buffer.position()
+            return Arrays.copyOfRange(buffer.array(), boff, boff + length)
+        }
+        // else, DirectByteBuffer.get() is the fastest route
+        val bytes = ByteArray(length)
+        buffer.duplicate().get(bytes)
+
+        return bytes
+    }
+
+
+    fun ByteArray.toHex(): String {
+        val result = StringBuffer()
+
+        forEach {
+            val octet = it.toInt()
+            val firstIndex = (octet and 0xF0).ushr(4)
+            val secondIndex = octet and 0x0F
+            result.append(HEX_CHARS[firstIndex])
+            result.append(HEX_CHARS[secondIndex])
+        }
+
+        return result.toString()
     }
 
 }
