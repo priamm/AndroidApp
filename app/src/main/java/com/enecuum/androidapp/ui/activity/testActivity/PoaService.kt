@@ -20,7 +20,6 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.Request
 import okhttp3.WebSocket
 import timber.log.Timber
-import java.io.ByteArrayOutputStream
 import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -318,7 +317,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
         Timber.d("Got key block, start asking for transactions")
 
         val keyBlock = response.keyBlock;
-        val keyblockBodyJson = decode64(keyBlock.body)
+        val keyblockBodyJson = decode64(keyBlock.body).toString(Charsets.US_ASCII)
         val kBlockStructure = gson.fromJson(keyblockBodyJson, Array<KBlockStructure>::class.java)
         keyblockHash = getKeyBlockHash(kBlockStructure.get(0))
 
@@ -352,15 +351,13 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
     }
 
     private fun encode64(src: String): String =
-            BaseEncoding.base64().encode(String(src.toByteArray(Charsets.US_ASCII), Charsets.US_ASCII).toByteArray())
+            BaseEncoding.base64().encode(src.toByteArray())
 
     private fun encode64(src: ByteArray): String =
             BaseEncoding.base64().encode(src)
 
-    private fun decode64(messages1: String): String {
-        val messages = BaseEncoding.base64().decode(messages1)
-        val string = String(messages, Charsets.US_ASCII)
-        return string
+    private fun decode64(messages1: String): ByteArray {
+       return BaseEncoding.base64().decode(messages1)
     }
 
     private fun create(): String {
@@ -430,8 +427,8 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
         bb.putInt(numero.number)
         bb.putInt(numero.time)
         bb.putInt(numero.nonce)
-        bb.put(decode64(numero.prev_hash).toByteArray())
-        bb.put(decode64(numero.solver).toByteArray())
+        bb.put(decode64(numero.prev_hash))
+        bb.put(decode64(numero.solver))
         val position = bb.position()
         val out = mutableListOf<Byte>()
         for (index: Int in 0..(position - 1)) {
