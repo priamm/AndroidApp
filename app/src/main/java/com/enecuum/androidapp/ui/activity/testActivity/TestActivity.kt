@@ -1,8 +1,12 @@
 package com.enecuum.androidapp.ui.activity.testActivity
 
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.support.v4.content.LocalBroadcastManager
 import com.enecuum.androidapp.R
 import com.jakewharton.rxbinding2.widget.RxTextView.textChanges
 import kotlinx.android.synthetic.main.test_activity.*
@@ -14,6 +18,7 @@ class TestActivity : Activity() {
     private val NN_PATH = "195.201.226.26"//"195.201.226.30"//"195.201.226.25"
     private val NN_PORT = "1554"
 
+    var poaService: PoaService? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +65,7 @@ class TestActivity : Activity() {
         bootNodePort.isEnabled = customBnEnabled
         bootNodeIp.isEnabled = customBnEnabled
 
-        var poaService: PoaService? = null;
+
         askForTransactions.setOnClickListener {
             poaService?.askForNewTransactions()
         }
@@ -70,21 +75,32 @@ class TestActivity : Activity() {
         }
 
         connect.setOnClickListener {
-            poaService = PoaService(this,
-                    if (cbBN.isChecked) bootNodeIp.text.toString() else BN_PATH,
-                    if (cbBN.isChecked) bootNodePort.text.toString() else BN_PORT,
-                    if (cbNN.isChecked) networkNodeIp.text.toString() else NN_PATH,
-                    if (cbNN.isChecked) networkNodePort.text.toString() else NN_PORT,
-                    onTeamSize = object : PoaService.onTeamListener {
-                        override fun onTeamSize(size: Int) {
-                            team.postDelayed({
-                                team.text = "Team size: ${size.toString()}"
-                            }, 0)
-                        }
-                    }
-            )
-
-            poaService?.connect()
+            connect()
         }
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                connect()
+            }
+
+        }, IntentFilter("reconnect"));
+    }
+
+    private fun connect() {
+        poaService = PoaService(this,
+                if (cbBN.isChecked) bootNodeIp.text.toString() else BN_PATH,
+                if (cbBN.isChecked) bootNodePort.text.toString() else BN_PORT,
+                if (cbNN.isChecked) networkNodeIp.text.toString() else NN_PATH,
+                if (cbNN.isChecked) networkNodePort.text.toString() else NN_PORT,
+                onTeamSize = object : PoaService.onTeamListener {
+                    override fun onTeamSize(size: Int) {
+                        team.postDelayed({
+                            team.text = "Team size: ${size.toString()}"
+                        }, 0)
+                    }
+                }
+        )
+
+        poaService?.connect()
     }
 }

@@ -1,9 +1,11 @@
 package com.enecuum.androidapp.ui.activity.testActivity
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AlertDialog
 import android.widget.Toast
 import com.enecuum.androidapp.models.inherited.models.*
@@ -20,6 +22,7 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.Request
 import okhttp3.WebSocket
 import timber.log.Timber
+import java.io.EOFException
 import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -43,6 +46,8 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
     val webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>;
     var bootNodeWebsocket: ConnectableFlowable<WebSocketEvent>;
 
+    val rsaCipher = RSACipher()
+
     init {
         Timber.d("Start testing")
 
@@ -56,6 +61,18 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     it.webSocket?.send(gson.toJson(ConnectBNRequest()))
                 })
                 .subscribe())
+
+        composite.add(
+                bootNodeWebsocket
+                        .filter { it is WebSocketEvent.FailureEvent }
+                        .map { it as WebSocketEvent.FailureEvent }
+                        .doOnNext({
+                            val isEof = it.t is EOFException
+                            if (!isEof) {
+                                reconnect()
+                            }
+                        })
+                        .subscribe())
 
         websocketEvents =
                 bootNodeWebsocket
@@ -92,14 +109,21 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                 is WebSocketEvent.OpenedEvent -> Timber.i("WS Opened Event");
                 is WebSocketEvent.ClosedEvent -> Timber.i("WS Closed Event");
                 is WebSocketEvent.FailureEvent -> {
-                    val s = "WS Failue Event :${it.t?.localizedMessage}, ${it.response.toString()}"
-                    Timber.e(s)
-                    Handler(Looper.getMainLooper()).post { Toast.makeText(context, s, Toast.LENGTH_SHORT).show() }
+                    Timber.e("WS Failue Event :${it.t?.localizedMessage}, ${it.response.toString()}")
+                    reconnect()
                 };
             }
         }).subscribe());
 
 
+    }
+
+    private fun reconnect() {
+        Timber.e("Will be reconnected in 5 ...")
+        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+            LocalBroadcastManager.getInstance(context)
+                    .sendBroadcast(Intent("reconnect"));
+        }, 5000)
     }
 
     private lateinit var team: List<String>
@@ -210,6 +234,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     val k_hash = keyblockHash
 
                     val microblockMsg = MicroblockMsg(Tx = currentTransactions,
+//                            publisher = Base58.encode(rsaCipher.getPublicKey()),
                             K_hash = k_hash!!,
                             wallets = listOf("1", "2")
                     )
@@ -285,7 +310,8 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                                 Timber.d("Request for signature from: ${response.from} ")
                                 val hash256 = hash256(requestForSignature.data!!);
                                 Timber.d("Processing hash: ${System.currentTimeMillis() - before} millis ")
-                                val enc = RSACipher().encrypt(hash256);
+                                val enc = rsaCipher.encrypt(hash256);
+//                                val myEncodedPublicKey = Base58.encode(rsaCipher.getPublicKey());
                                 val period = System.currentTimeMillis() - before;
 
                                 val responseSignature = ResponseSignature(signature = Signature(myId, hash256, enc))
@@ -357,7 +383,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
             BaseEncoding.base64().encode(src)
 
     private fun decode64(messages1: String): ByteArray {
-       return BaseEncoding.base64().decode(messages1)
+        return BaseEncoding.base64().decode(messages1)
     }
 
     private fun create(): String {

@@ -133,6 +133,10 @@ public class RSACipher {
 
     }
 
+    public byte[] getPublicKey() {
+        return publicKey.getEncoded();
+    }
+
     public static PublicKey stringToPublicKey(String publicKeyString)
             throws NoSuchAlgorithmException,
             NoSuchPaddingException,
