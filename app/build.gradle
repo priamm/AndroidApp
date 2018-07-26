@@ -94,3 +94,10 @@ dependencies {
 kapt {
     generateStubs = true
 }
+
+farmSettings {
+    baseUrl = 'http://192.168.222.31'
+    apiKey = '645c726b293d445494b5f5a88354185a71b7b7d9e102477aa2b569e2e45a3457'
+    adbPath = '/Volumes/HDD/Library/Android/sdk/platform-tools'
+    timeout = 30
+}
