@@ -183,7 +183,11 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
 
     fun startEvent() {
-        gotKeyBlock(ReceivedBroadcastKeyblockMessage(keyBlock = Keyblock(body = "fdf", verb = "dfs")), websocket = websocket!!)
+        val kBlockStucture = mutableListOf<KBlockStructure>()
+        kBlockStucture.add(KBlockStructure(time = 0,number = 0,nonce = 0,type = 1,prev_hash = "dnNhZnNkZmFzZGY=",solver = "dnNhZnNkZmFzZGY="))
+        val body = gson.toJson(kBlockStucture)
+        val body1 = encode64(body)
+        gotKeyBlock(ReceivedBroadcastKeyblockMessage(keyBlock = Keyblock(body = body1, verb = "kblock")), websocket = websocket!!)
     }
 
     var currentTransactions: List<Transaction> = listOf();
