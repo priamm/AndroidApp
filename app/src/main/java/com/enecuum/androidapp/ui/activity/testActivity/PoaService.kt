@@ -230,13 +230,17 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     Handler(Looper.getMainLooper()).post {
                         Toast.makeText(context, "Sending", Toast.LENGTH_LONG).show()
                     }
+                    val publicKeys = mutableListOf<String>()
+                    for (responseSignature in it) {
+                        publicKeys.add(responseSignature.signature.publicKeyEncoded58)
+                    }
 
                     val k_hash = keyblockHash
 
                     val microblockMsg = MicroblockMsg(Tx = currentTransactions,
-//                            publisher = Base58.encode(rsaCipher.getPublicKey()),
+                            publisher = Base58.encode(rsaCipher.getPublicKey()),
                             K_hash = k_hash!!,
-                            wallets = listOf("1", "2")
+                            wallets = publicKeys
                     )
 
                     val sign_r = BigInteger.TEN;
@@ -311,10 +315,10 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                                 val hash256 = hash256(requestForSignature.data!!);
                                 Timber.d("Processing hash: ${System.currentTimeMillis() - before} millis ")
                                 val enc = rsaCipher.encrypt(hash256);
-//                                val myEncodedPublicKey = Base58.encode(rsaCipher.getPublicKey());
+                                val myEncodedPublicKey = Base58.encode(rsaCipher.getPublicKey());
                                 val period = System.currentTimeMillis() - before;
 
-                                val responseSignature = ResponseSignature(signature = Signature(myId, hash256, enc))
+                                val responseSignature = ResponseSignature(signature = Signature(myId, hash256, enc, myEncodedPublicKey))
 
                                 Timber.d("Processing total time: $period millis ")
                                 val addressedMessageRequest = AddressedMessageRequest(

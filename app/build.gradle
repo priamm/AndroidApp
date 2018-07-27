@@ -6,6 +6,9 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+
+apply plugin: "com.bonborunote.stf-android-test-client"
+
 android {
     signingConfigs {
         config {
@@ -95,9 +98,18 @@ kapt {
     generateStubs = true
 }
 
-farmSettings {
-    baseUrl = 'http://192.168.222.31'
-    apiKey = '645c726b293d445494b5f5a88354185a71b7b7d9e102477aa2b569e2e45a3457'
-    adbPath = '/Volumes/HDD/Library/Android/sdk/platform-tools'
-    timeout = 30
+//farmSettings {
+//    baseUrl = 'http://192.168.222.31'
+//    apiKey = '645c726b293d445494b5f5a88354185a71b7b7d9e102477aa2b569e2e45a3457'
+//    adbPath = '/Volumes/HDD/Library/Android/sdk/platform-tools'
+//    timeout = 30
+//}
+
+stfConfig {
+    stfHostUrl = "http://192.168.222.31"
+    stfAuthToken = "645c726b293d445494b5f5a88354185a71b7b7d9e102477aa2b569e2e45a3457"
+//    testTargets = [new TestTarget(serial:"5b8bccac", name:"Nexus5", unlockPattern:new SwipePattern(start:new Point(400, 800), end:new Point(400, 200)))]
+    testTimeoutMillis = 30000
+    outputDir = new File(project.buildDir, "stf")
+//    testWithScreenRecord = true
 }
