@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AlertDialog
+import android.text.TextUtils
 import android.widget.Toast
 import com.enecuum.androidapp.models.inherited.models.*
 import com.enecuum.androidapp.models.inherited.models.Sha.hash256
@@ -83,8 +84,11 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                         .map {
                             Timber.d("Got NN nodes:" + it.toString())
                             val size = it.connects.size
-                            val nextInt = Random().nextInt(size)
-                            return@map it.connects.get(nextInt)
+                            if (size > 0) {
+                                return@map it.connects.get(Random().nextInt(size))
+                            } else {
+                                return@map ConnectPointDescription(NN_PATH, NN_PORT)
+                            }
                         }
                         .flatMap {
                             Timber.d("Connecting to: ${it.ip}:${it.port}")
@@ -184,7 +188,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
     fun startEvent() {
         val kBlockStucture = mutableListOf<KBlockStructure>()
-        kBlockStucture.add(KBlockStructure(time = 0,number = 0,nonce = 0,type = 1,prev_hash = "dnNhZnNkZmFzZGY=",solver = "dnNhZnNkZmFzZGY="))
+        kBlockStucture.add(KBlockStructure(time = 0, number = 0, nonce = 0, type = 1, prev_hash = "dnNhZnNkZmFzZGY=", solver = "dnNhZnNkZmFzZGY="))
         val body = gson.toJson(kBlockStucture)
         val body1 = encode64(body)
         gotKeyBlock(ReceivedBroadcastKeyblockMessage(keyBlock = Keyblock(body = body1, verb = "kblock")), websocket = websocket!!)
@@ -227,6 +231,10 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     val addressedMessageResponse = it.second as AddressedMessageResponse;
                     gson.fromJson(addressedMessageResponse.msg, ResponseSignature::class.java);
                 }
+                .filter {
+                    //check if it is ResponseSignature actually
+                    it.signature != null
+                }
                 .distinctUntilChanged()
                 .buffer(team.size - 1)  //we need singns from all teams memeber except himself
                 .doOnNext({
@@ -236,7 +244,9 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     }
                     val publicKeys = mutableListOf<String>()
                     for (responseSignature in it) {
-                        publicKeys.add(responseSignature.signature.publicKeyEncoded58)
+                        if (!TextUtils.isEmpty(responseSignature.signature?.publicKeyEncoded58)) {
+                            responseSignature.signature?.publicKeyEncoded58?.let { it1 -> publicKeys.add(it1) }
+                        }
                     }
 
                     val k_hash = keyblockHash

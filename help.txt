@@ -9,3 +9,11 @@ stack exec Tester-exe t 195.201.226.24
 ssh root@195.201.217.90
 cd PoW
 ./PoW
+
+
+#run nn
+ssh root@195.201.226.26
+ps ax | grep Simple - найти PID процесса по имени (линукс)
+kill PID
+stack exec SimpleNode-exe &>/dev/null &
+Через скрипт лучше - оно прописывает файлик для логов в процессе работы ноды.
