@@ -75,28 +75,32 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                         })
                         .subscribe())
 
+        val connectionPointDescriptions = bootNodeWebsocket
+                .filter { it is WebSocketEvent.StringMessageEvent }
+                .cast(WebSocketEvent.StringMessageEvent::class.java)
+                .map { parse(it.text!!) }
+                .filter({ it is ConnectBNResponse })
+                .cast(ConnectBNResponse::class.java)
+                .map {
+                    Timber.d("Got NN nodes:" + it.toString())
+                    val size = it.connects.size
+                    if (size > 0) {
+                        return@map it.connects.get(Random().nextInt(size))
+                    } else {
+                        return@map ConnectPointDescription(NN_PATH, NN_PORT)
+                    }
+                }
         websocketEvents =
-                bootNodeWebsocket
-                        .filter { it is WebSocketEvent.StringMessageEvent }
-                        .cast(WebSocketEvent.StringMessageEvent::class.java)
-                        .map { parse(it.text!!) }
-                        .cast(ConnectBNResponse::class.java)
-                        .map {
-                            Timber.d("Got NN nodes:" + it.toString())
-                            val size = it.connects.size
-                            if (size > 0) {
-                                return@map it.connects.get(Random().nextInt(size))
-                            } else {
-                                return@map ConnectPointDescription(NN_PATH, NN_PORT)
-                            }
-                        }
+                connectionPointDescriptions
                         .flatMap {
                             Timber.d("Connecting to: ${it.ip}:${it.port}")
                             getWebSocket(it.ip, it.port).observe()
                         }
                         .doOnNext {
-                            it.webSocket?.send(gson.toJson(ReconnectNotification()))
-                            websocket = it.webSocket
+                            if (it is WebSocketEvent.OpenedEvent) {
+                                it.webSocket?.send(gson.toJson(ReconnectRequest()))
+                                websocket = it.webSocket
+                            }
                         }
                         .publish()
 
@@ -433,7 +437,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
         val any = when (type) {
             CommunicationSubjects.Team.name -> gson.fromJson(text, TeamResponse::class.java)
             CommunicationSubjects.PotentialConnects.name -> gson.fromJson(text, ConnectBNResponse::class.java)
-            CommunicationSubjects.Connect.name -> gson.fromJson(text, ReconnectNotification::class.java)
+            CommunicationSubjects.Connect.name -> gson.fromJson(text, ReconnectRequest::class.java)
             CommunicationSubjects.Broadcast.name -> gson.fromJson(text, ReceivedBroadcastMessage::class.java)
             CommunicationSubjects.KeyBlock.name -> gson.fromJson(text, ReceivedBroadcastKeyblockMessage::class.java)
             CommunicationSubjects.MsgTo.name -> gson.fromJson(text, AddressedMessageResponse::class.java)

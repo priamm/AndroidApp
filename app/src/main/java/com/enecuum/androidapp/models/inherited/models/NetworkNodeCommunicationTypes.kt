@@ -24,9 +24,9 @@ data class PoANodeUUIDResponse(val tag: String = Tags.Response.name,
                                val nodeId: String,
                                val nodeType: String = NodeTypes.PoA.name)
 
-data class ReconnectNotification(val tag: String = Tags.Action.name,
-                                 val type: String = CommunicationSubjects.Connect.name,
-                                 val node_type: String = "PoA")
+data class ReconnectRequest(val tag: String = Tags.Action.name,
+                            val type: String = CommunicationSubjects.Connect.name,
+                            val node_type: String = "PoA")
 
 data class ReconnectResponse(val tag: String = Tags.Response.name,
                              val type: String = CommunicationSubjects.NodeId.name,
