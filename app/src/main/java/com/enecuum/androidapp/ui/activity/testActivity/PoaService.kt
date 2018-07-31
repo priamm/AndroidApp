@@ -30,7 +30,7 @@ import java.nio.ByteOrder
 import java.util.*
 
 
-class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String, val NN_PATH: String, val NN_PORT: String, val onTeamSize: onTeamListener, val onMicroblockCountListerer: onMicroblockCountListener) {
+class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String, val onTeamSize: onTeamListener, val onMicroblockCountListerer: onMicroblockCountListener) {
 
     private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
     val blockSize = 512 * 1024;
@@ -87,7 +87,8 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     if (size > 0) {
                         return@map it.connects.get(Random().nextInt(size))
                     } else {
-                        return@map ConnectPointDescription(NN_PATH, NN_PORT)
+                        //TODO decide what to do if response empty
+                        return@map ConnectPointDescription(BN_PATH, BN_PORT)
                     }
                 }
         websocketEvents =

@@ -21,6 +21,9 @@ class CustomBootNodeFragment : BackTitleFragment() {
         val customBNPORT = "bootNodePort"
         val customBNIP = "bootNodeIp"
 
+        val BN_PATH_DEFAULT = "195.201.226.28"//"88.99.86.200"
+        val BN_PORT_DEFAULT = "1554"
+
         fun newInstance(): CustomBootNodeFragment {
             val fragment = CustomBootNodeFragment()
             val args = Bundle()
@@ -29,8 +32,7 @@ class CustomBootNodeFragment : BackTitleFragment() {
         }
     }
 
-    private val BN_PATH = "195.201.226.28"//"88.99.86.200"
-    private val BN_PORT = "1554"
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -41,8 +43,8 @@ class CustomBootNodeFragment : BackTitleFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val sharedPreferences = activity?.getSharedPreferences("pref", Context.MODE_PRIVATE);
-        bootNodePort.setText(sharedPreferences?.getString(customBNPORT, BN_PORT))
-        bootNodeIp.setText(sharedPreferences?.getString(customBNIP, BN_PATH))
+        bootNodePort.setText(sharedPreferences?.getString(customBNPORT, BN_PORT_DEFAULT))
+        bootNodeIp.setText(sharedPreferences?.getString(customBNIP, BN_PATH_DEFAULT))
 
         textChanges(bootNodePort).subscribe { s -> sharedPreferences?.edit { putString(customBNPORT, s.toString()) } }
         textChanges(bootNodeIp).subscribe { s -> sharedPreferences?.edit { putString(customBNIP, s.toString()) } }

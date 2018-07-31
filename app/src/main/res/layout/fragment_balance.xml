@@ -205,17 +205,28 @@
                 android:fontFamily="sans-serif" />
 
         <RelativeLayout android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
+                      android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp"
+        >
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
+                      tools:text="You has mined: 10000 ENQ"
+                      android:layout_alignParentLeft="true"
+                      android:textColor="@color/background_white"
                       android:id="@+id/minedText"
             />
 
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
+                      android:textSize="10dp"
+                      android:textColor="@color/steel_grey"
+                      android:layout_alignParentRight="true"
+                      tools:text="Rate 5000/sec"
                       android:id="@+id/hashRateText"
             />
         </RelativeLayout>
+
         <ProgressBar
                 android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyleHorizontal"
