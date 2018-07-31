@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.fragment_balance.*
 class BalanceFragment : NoBackFragment(), BalanceView {
 
 
-
     companion object {
         const val FORMAT = "%s %.8f"
         const val TAG = "BalanceFragment"
@@ -78,7 +77,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     }
 
     override fun displayTeamSize(teamSize: Int) {
-        //show team size
+        minedText.post { minedText.text = "Joining, team size is: $teamSize"; }
     }
 
     override fun displayTransactionsHistory(transactionsList: List<Transaction>) {
@@ -86,13 +85,14 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     }
 
     override fun getTitle(): String {
-        if(activity == null)
+        if (activity == null)
             return ""
         return activity!!.getString(R.string.my_wallet)
     }
 
     override fun showProgress() {
         progressBar.visibility = View.VISIBLE
+
     }
 
     override fun hideProgress() {
@@ -101,10 +101,9 @@ class BalanceFragment : NoBackFragment(), BalanceView {
 
     override fun changeButtonState(isStart: Boolean) {
         if (isStart) {
-            start.text = "START"
-        }
-        else{
-            start.text= "STOP"
+            start.text = getText(R.string.start_mining)
+        } else {
+            start.text = getText(R.string.stop_mining)
         }
     }
 
