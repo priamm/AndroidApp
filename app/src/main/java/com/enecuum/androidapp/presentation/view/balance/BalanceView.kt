@@ -14,4 +14,18 @@ interface BalanceView : HistoryView<Transaction> {
     fun displayPoints(pointsValue: Double)
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun displayKarma(karmaValue: Double)
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun displayTeamSize(teamSize: Int)
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun displayMicroblocks(count: Int)
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun showProgress()
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun hideProgress()
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun changeButtonState(isStart:Boolean)
 }

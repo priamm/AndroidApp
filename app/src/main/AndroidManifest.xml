@@ -15,7 +15,7 @@
             android:theme="@style/AppTheme">
         <!--android:name=".ui.activity.splash.SplashActivity"-->
         <activity
-                android:name=".ui.activity.testActivity.TestActivity"
+                android:name=".ui.activity.splash.SplashActivity"
                 android:noHistory="true"
                 android:screenOrientation="portrait"
                 android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">

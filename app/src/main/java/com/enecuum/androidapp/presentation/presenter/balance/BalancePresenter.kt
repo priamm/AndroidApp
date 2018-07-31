@@ -9,9 +9,13 @@ import com.enecuum.androidapp.models.TransactionType
 import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.navigation.TabType
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
+import com.enecuum.androidapp.ui.activity.testActivity.PoaService
 
 @InjectViewState
 class BalancePresenter : MvpPresenter<BalanceView>() {
+
+    var poaService: PoaService? = null;
+
     fun onCreate() {
         //TODO: fill with real values
         viewState.displayCurrencyRates(7.999999, 7.999999)
@@ -35,5 +39,38 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
 
     fun onTokensClick() {
         EnecuumApplication.navigateToFragment(FragmentType.Tokens, TabType.Home)
+    }
+
+    fun onMiningToggle() {
+
+        if (poaService == null) {
+            poaService = PoaService(EnecuumApplication.applicationContext(),
+                    "",
+                    "",
+                    "",
+                    "",
+                    onTeamSize = object : PoaService.onTeamListener {
+                        override fun onTeamSize(size: Int) {
+                            viewState.displayTeamSize(size);
+                        }
+                    },
+                    onMicroblockCountListerer = object : PoaService.onMicroblockCountListener {
+                        override fun onMicroblockCount(count: Int) {
+                            viewState.displayMicroblocks(count);
+                        }
+                    }
+            )
+
+            poaService?.connect()
+            viewState.showProgress()
+        } else {
+            viewState.hideProgress()
+
+
+        }
+
+        viewState.changeButtonState(poaService == null)
+
+
     }
 }

@@ -85,6 +85,7 @@
     <string name="stop">Stop</string>
     <string name="mining_history">Mining History</string>
     <string name="verificator">Back Verificator</string>
+    <string name="custom_bn">Custom Boot Node</string>
     <plurals name="team_members">
         <item quantity="other">%1$d team members</item>
     </plurals>

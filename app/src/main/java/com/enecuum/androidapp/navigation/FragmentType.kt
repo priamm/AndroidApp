@@ -17,5 +17,6 @@ enum class FragmentType {
     MiningStart,
     MiningProgress,
     MiningLoading,
-    MiningJoinTeam
+    MiningJoinTeam,
+    CustomBootNode
 }

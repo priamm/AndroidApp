@@ -21,4 +21,8 @@ class SettingsMainPresenter : MvpPresenter<SettingsMainView>() {
     fun onAboutAppClick() {
         EnecuumApplication.navigateToFragment(FragmentType.SettingsAboutApp, TabType.Settings)
     }
+
+    fun onCustomBNAppClick() {
+        EnecuumApplication.navigateToFragment(FragmentType.CustomBootNode, TabType.Settings)
+    }
 }

@@ -15,6 +15,8 @@ import kotlinx.android.synthetic.main.fragment_balance.*
 
 class BalanceFragment : NoBackFragment(), BalanceView {
 
+
+
     companion object {
         const val FORMAT = "%s %.8f"
         const val TAG = "BalanceFragment"
@@ -37,9 +39,17 @@ class BalanceFragment : NoBackFragment(), BalanceView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        start.setOnClickListener {
+            presenter.onMiningToggle();
+        }
         tokens.setOnClickListener({
             presenter.onTokensClick()
         })
+        progressBar.getIndeterminateDrawable().setColorFilter(
+                getResources().getColor(R.color.turquoise_blue_three),
+                android.graphics.PorterDuff.Mode.SRC_IN);
+
         presenter.onCreate()
         setHasOptionsMenu(true)
         TransactionsHistoryRenderer.configurePanelListener(slidingLayout, panelHint)
@@ -59,8 +69,16 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         points.text = String.format(FORMAT, getString(R.string.points), pointsValue)
     }
 
+    override fun displayMicroblocks(count: Int) {
+        minedText.text = "You has mined: $count ENQ";
+    }
+
     override fun displayKarma(karmaValue: Double) {
         karma.text = String.format(FORMAT, getString(R.string.karma), karmaValue)
+    }
+
+    override fun displayTeamSize(teamSize: Int) {
+        //show team size
     }
 
     override fun displayTransactionsHistory(transactionsList: List<Transaction>) {
@@ -71,6 +89,23 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         if(activity == null)
             return ""
         return activity!!.getString(R.string.my_wallet)
+    }
+
+    override fun showProgress() {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideProgress() {
+        progressBar.visibility = View.INVISIBLE
+    }
+
+    override fun changeButtonState(isStart: Boolean) {
+        if (isStart) {
+            start.text = "START"
+        }
+        else{
+            start.text= "STOP"
+        }
     }
 
     override fun onResume() {

@@ -14,12 +14,14 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:id="@+id/miningPanel"
+        android:visibility="gone"
         >
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:id="@+id/miningStatusChanger"
+            android:visibility="gone"
             >
             <TextView
                 android:layout_width="wrap_content"

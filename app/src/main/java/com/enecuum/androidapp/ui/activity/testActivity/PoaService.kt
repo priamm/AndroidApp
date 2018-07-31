@@ -30,7 +30,7 @@ import java.nio.ByteOrder
 import java.util.*
 
 
-class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String, val NN_PATH: String, val NN_PORT: String, val onTeamSize: onTeamListener) {
+class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String, val NN_PATH: String, val NN_PORT: String, val onTeamSize: onTeamListener, val onMicroblockCountListerer: onMicroblockCountListener) {
 
     private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
     val blockSize = 512 * 1024;
@@ -204,6 +204,8 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
     private lateinit var prev_hash: String
 
+    private var microblocksSoFar = 0
+
     private fun startWork(myId: String, webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>, websocket: WebSocket?) {
         val broadcastMessage = webSocketStringMessageEvents
                 .filter { it.second is ReceivedBroadcastMessage }
@@ -271,6 +273,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     Timber.i("Sending to NN")
                     websocket?.send(gson.toJson(microblockResponse))
 
+                    onMicroblockCountListerer.onMicroblockCount(++microblocksSoFar)
                     currentTransactions = listOf()
                     askForNewTransactions(websocket);
                 })
@@ -459,6 +462,9 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
         fun onTeamSize(size: Int)
     }
 
+    public interface onMicroblockCountListener{
+        fun onMicroblockCount(count : Int)
+    }
 
     private fun intToLittleEndian(numero: Long): ByteArray {
 
