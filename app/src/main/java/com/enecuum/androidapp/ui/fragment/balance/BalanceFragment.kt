@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.fragment_balance.*
 class BalanceFragment : NoBackFragment(), BalanceView {
 
 
+
     companion object {
         const val FORMAT = "%s %.8f"
         const val TAG = "BalanceFragment"
@@ -88,6 +89,10 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         if (activity == null)
             return ""
         return activity!!.getString(R.string.my_wallet)
+    }
+
+    override fun setBalance(balance: String) {
+        enqBalance.text = balance;
     }
 
     override fun showProgress() {

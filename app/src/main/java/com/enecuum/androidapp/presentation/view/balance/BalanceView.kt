@@ -20,6 +20,7 @@ interface BalanceView : HistoryView<Transaction> {
 
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun displayMicroblocks(count: Int)
+
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun showProgress()
 
@@ -28,4 +29,7 @@ interface BalanceView : HistoryView<Transaction> {
 
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun changeButtonState(isStart:Boolean)
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun setBalance(balance:String)
 }

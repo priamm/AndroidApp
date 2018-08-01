@@ -68,8 +68,10 @@ dependencies {
     kapt "com.arello-mobile:moxy-compiler:$moxy_version"
     compile 'org.greenrobot:eventbus:3.1.1'
     compile 'ru.terrakok.cicerone:cicerone:3.0.0'
-    compile 'com.squareup.okhttp3:okhttp:3.10.0'
+    compile 'com.squareup.okhttp3:okhttp:3.11.0'
     compile 'com.squareup.retrofit2:retrofit:2.4.0'
+    compile 'com.segment.retrofit.jsonrpc:jsonrpc:1.0.0-SNAPSHOT'
+    compile 'com.squareup.retrofit2:converter-moshi:2.3.0'
     compile(name: 'circleindicator', ext: 'aar')
     compile group: 'com.google.zxing', name: 'core', version: '3.3.1'
     compile group: 'com.google.zxing', name: 'android-core', version: '3.3.0'
@@ -78,6 +80,7 @@ dependencies {
     compile 'me.dm7.barcodescanner:zxing:1.9.8'
     repositories {
         mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
     api 'com.google.guava:guava:25.1-android'
     compile group: 'commons-codec', name: 'commons-codec', version: '1.10'

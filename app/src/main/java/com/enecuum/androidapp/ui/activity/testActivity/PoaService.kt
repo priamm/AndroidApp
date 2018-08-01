@@ -91,6 +91,10 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                         return@map ConnectPointDescription(BN_PATH, BN_PORT)
                     }
                 }
+
+//        composite.add(
+//                connectionPointDescriptions.f
+//        )
         websocketEvents =
                 connectionPointDescriptions
                         .flatMap {
