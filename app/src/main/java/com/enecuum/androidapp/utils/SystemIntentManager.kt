@@ -1,6 +1,7 @@
 package com.enecuum.androidapp.utils
 
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.net.Uri
 import com.enecuum.androidapp.application.EnecuumApplication
 
@@ -13,6 +14,7 @@ object SystemIntentManager {
         intent.action = Intent.ACTION_SEND
         intent.putExtra(Intent.EXTRA_TEXT, text)
         intent.type = "text/plain"
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
         EnecuumApplication.applicationContext().startActivity(intent)
     }
 

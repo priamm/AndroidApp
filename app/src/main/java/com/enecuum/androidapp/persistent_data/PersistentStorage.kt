@@ -19,7 +19,6 @@ object PersistentStorage {
     private const val JETTON_AMOUNT = "JETTON_AMOUNT"
     private const val ADDRESS = "ADDRESS"
     private const val IS_MINING_IN_PROGRESS = "IS_MINING_IN_PROGRESS"
-
     private fun getPrefs() : SharedPreferences = EnecuumApplication.applicationContext()
             .getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
 

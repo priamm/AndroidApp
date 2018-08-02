@@ -61,14 +61,14 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build()
 
-        val service = retrofit.create(MultiplicationService::class.java);
-        Flowable.interval(1000, 5000, TimeUnit.MILLISECONDS)
-                .switchMap { Flowable.fromCallable { return@fromCallable service.multiply(MultiplicationArgs(3)).execute().body() }
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread()) }
-                .subscribe({
-                    viewState.setBalance(it.toString())
-                })
+//        val service = retrofit.create(MultiplicationService::class.java);
+//        Flowable.interval(1000, 5000, TimeUnit.MILLISECONDS)
+//                .switchMap { Flowable.fromCallable { return@fromCallable service.multiply(MultiplicationArgs(3)).execute().body() }
+//                        .subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread()) }
+//                .subscribe({
+//                    viewState.setBalance(it.toString())
+//                })
     }
 
     fun onMiningToggle() {

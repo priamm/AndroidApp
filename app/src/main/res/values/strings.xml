@@ -16,7 +16,7 @@
     <string name="enter_your_pin">Enter your PIN</string>
     <string name="forgot_pin">Forgot PIN?</string>
     <string name="enter_your_seed_phrase">Enter your seed phrase:</string>
-    <string name="seed_phrase">Enter 12 words</string>
+    <string name="seed_phrase">Remember words</string>
     <string name="change_pin">Change PIN</string>
     <string name="restore_pin">Restore PIN</string>
     <string name="words_left">words left:</string>
