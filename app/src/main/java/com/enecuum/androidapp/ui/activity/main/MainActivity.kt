@@ -43,8 +43,8 @@ class MainActivity : BaseActivity(), MainView {
             override fun onNavigationItemSelected(item: MenuItem): Boolean {
                 when(item.itemId) {
                     R.id.actionHome -> presenter.onHomeClicked()
-                    R.id.actionSend -> presenter.onSendClicked()
-                    R.id.actionReceive -> presenter.onReceiveClicked()
+//                    R.id.actionSend -> presenter.onSendClicked()
+//                    R.id.actionReceive -> presenter.onReceiveClicked()
                     R.id.actionSettings -> presenter.onSettingsClicked()
                 }
                 return true
