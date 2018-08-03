@@ -22,7 +22,7 @@
     <string name="words_left">words left:</string>
     <string name="save">Save</string>
     <string name="create_seed_title">Seed creation</string>
-    <string name="create_seed">Create your seed phrase:</string>
+    <string name="remember_seed">Remember your seed phrase:</string>
     <string name="my_wallet">My wallet</string>
     <string name="balance">balance</string>
     <string name="karma">Karma</string>

@@ -43,10 +43,10 @@ class NewAccountActivity : BackActivity(), NewAccountView {
             1 -> {
                 title = getString(R.string.pin_creation)
             }
+//            2 -> {
+//                title = getString(R.string.backup_file)
+//            }
             2 -> {
-                title = getString(R.string.backup_file)
-            }
-            3 -> {
                 title = getString(R.string.seed_phrase)
             }
         }

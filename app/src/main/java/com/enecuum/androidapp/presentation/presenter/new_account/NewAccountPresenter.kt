@@ -25,7 +25,7 @@ class NewAccountPresenter : MvpPresenter<NewAccountView>(), DialogInterface.OnCl
     override fun onClick(dialog: DialogInterface?, which: Int) {
         when(which) {
             DialogInterface.BUTTON_POSITIVE -> {
-                if(currentPage < 3) {
+                if(currentPage < 2) {
                     viewState.moveNext()
                     currentPage++
                 }

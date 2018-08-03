@@ -26,13 +26,13 @@ class NewAccountPagerAdapter(fm : FragmentManager) : FragmentPagerAdapter(fm) {
                 args.putString(PinFragment.TITLE, EnecuumApplication.applicationContext().getString(R.string.confirm_new_pin))
                 return PinFragment.newInstance(args)
             }
-            2 -> {
-                return NewAccountQrFragment.newInstance()
-            }
-            3 -> return CreateSeedFragment.newInstance(Bundle.EMPTY)
+//            2 -> {
+//                return NewAccountQrFragment.newInstance()
+//            }
+            2 -> return CreateSeedFragment.newInstance(Bundle.EMPTY)
         }
         return Fragment()
     }
 
-    override fun getCount(): Int = 4
+    override fun getCount(): Int = 3
 }
