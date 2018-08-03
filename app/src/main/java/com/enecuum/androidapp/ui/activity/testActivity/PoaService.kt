@@ -13,15 +13,20 @@ import com.enecuum.androidapp.models.inherited.models.*
 import com.enecuum.androidapp.models.inherited.models.Sha.hash256
 import com.enecuum.androidapp.network.RxWebSocket
 import com.enecuum.androidapp.network.WebSocketEvent
+import com.enecuum.androidapp.presentation.presenter.balance.Params
+import com.enecuum.androidapp.presentation.presenter.balance.RPCService
 import com.google.common.io.BaseEncoding
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.segment.jsonrpc.JsonRPCConverterFactory
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.flowables.ConnectableFlowable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.Request
 import okhttp3.WebSocket
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
 import java.io.EOFException
 import java.math.BigInteger
@@ -92,11 +97,16 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     }
                 }
 
-//        composite.add(
-//                connectionPointDescriptions.f
-//        )
+
         websocketEvents =
                 connectionPointDescriptions
+                        .doOnNext {
+//                            val rpc = getRpc(it)
+//                            val rpcService = rpc.create(RPCService::class.java)
+//                            composite.add(
+//                                    rpcService.getBalance(Params())
+//                            )
+                        }
                         .flatMap {
                             Timber.d("Connecting to: ${it.ip}:${it.port}")
                             getWebSocket(it.ip, it.port).observe()
@@ -467,8 +477,8 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
         fun onTeamSize(size: Int)
     }
 
-    public interface onMicroblockCountListener{
-        fun onMicroblockCount(count : Int)
+    public interface onMicroblockCountListener {
+        fun onMicroblockCount(count: Int)
     }
 
     private fun intToLittleEndian(numero: Long): ByteArray {
@@ -524,4 +534,11 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
         return result.toString()
     }
 
+    fun getRpc( connectPointDescription: ConnectPointDescription): Retrofit {
+        return Retrofit.Builder()
+                .baseUrl(connectPointDescription.ip+":"+connectPointDescription.port)
+                .addConverterFactory(JsonRPCConverterFactory.create())
+                .addConverterFactory(MoshiConverterFactory.create())
+                .build();
+    }
 }

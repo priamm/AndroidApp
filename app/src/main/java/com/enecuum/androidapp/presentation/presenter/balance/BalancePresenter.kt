@@ -61,9 +61,9 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build()
 
-//        val service = retrofit.create(MultiplicationService::class.java);
+//        val service = retrofit.create(RPCService::class.java);
 //        Flowable.interval(1000, 5000, TimeUnit.MILLISECONDS)
-//                .switchMap { Flowable.fromCallable { return@fromCallable service.multiply(MultiplicationArgs(3)).execute().body() }
+//                .switchMap { Flowable.fromCallable { return@fromCallable service.multiply(Params(3)).execute().body() }
 //                        .subscribeOn(Schedulers.io())
 //                        .observeOn(AndroidSchedulers.mainThread()) }
 //                .subscribe({
