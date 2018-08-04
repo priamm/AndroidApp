@@ -8,7 +8,7 @@ apply plugin: 'kotlin-kapt'
 
 
 apply plugin: "com.bonborunote.stf-android-test-client"
-
+apply plugin: 'io.fabric'
 android {
 //    signingConfigs {
 //        config {
@@ -81,6 +81,7 @@ dependencies {
     repositories {
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        maven { url 'https://maven.fabric.io/public' }
     }
     api 'com.google.guava:guava:25.1-android'
     compile group: 'commons-codec', name: 'commons-codec', version: '1.10'
@@ -103,6 +104,9 @@ dependencies {
     implementation 'com.yakivmospan:scytale:1.0.1'
 
     implementation 'io.github.novacrypto:BIP39:0.1.9'
+    compile('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
+        transitive = true;
+    }
 }
 
 

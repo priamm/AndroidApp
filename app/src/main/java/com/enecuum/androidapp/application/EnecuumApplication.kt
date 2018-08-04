@@ -3,6 +3,7 @@ package com.enecuum.androidapp.application
 import android.app.Application
 import android.content.Context
 import android.support.multidex.MultiDexApplication
+import com.crashlytics.android.Crashlytics
 import com.enecuum.androidapp.events.MainActivityStopped
 import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.navigation.ScreenType
@@ -14,10 +15,13 @@ import com.google.crypto.tink.config.TinkConfig
 import com.google.crypto.tink.integration.android.AndroidKeysetManager
 import com.google.crypto.tink.signature.SignatureKeyTemplates
 import com.jraska.console.timber.ConsoleTree
+import io.fabric.sdk.android.Fabric
 import org.greenrobot.eventbus.Subscribe
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
+
+
 
 
 /**
@@ -113,6 +117,7 @@ class EnecuumApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
+        Fabric.with(this, Crashlytics())
         Config.register(TinkConfig.TINK_1_1_0);
 //        val shoup = Shoup()
 //        shoup.shoup()
