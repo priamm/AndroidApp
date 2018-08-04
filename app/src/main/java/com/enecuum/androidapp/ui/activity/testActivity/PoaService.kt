@@ -17,6 +17,7 @@ import com.google.common.io.BaseEncoding
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.reactivex.Flowable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.flowables.ConnectableFlowable
 import io.reactivex.schedulers.Schedulers
@@ -53,6 +54,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
         Timber.d("Start testing")
 
         bootNodeWebsocket = getWebSocket(BN_PATH, BN_PORT).observe()
+                .observeOn(AndroidSchedulers.mainThread())
                 .publish()
 
         composite.add(bootNodeWebsocket
@@ -99,15 +101,16 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                             val connectPointDescription = it
                             Timber.d("Connecting to: ${connectPointDescription.ip}:${connectPointDescription.port}")
                             getWebSocket(connectPointDescription.ip, connectPointDescription.port).observe()
+                                    .observeOn(AndroidSchedulers.mainThread())
                                     .doOnNext {
-                                        if (it is WebSocketEvent.OpenedEvent) {
-                                            getWebSocket(connectPointDescription.ip, "1555").observe()
-                                                    .doOnNext {
-                                                        if (it is WebSocketEvent.OpenedEvent) {
-//                                                            it.webSocket.askForBalance();
-                                                        }
-                                                    }
-                                        }
+//                                        if (it is WebSocketEvent.OpenedEvent) {
+//                                            getWebSocket(connectPointDescription.ip, "1555").observe()
+//                                                    .doOnNext {
+//                                                        if (it is WebSocketEvent.OpenedEvent) {
+////                                                            it.webSocket.askForBalance();
+//                                                        }
+//                                                    }
+//                                        }
 
                                     }
                         }
@@ -467,6 +470,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 //            PoACommunicationSubjects.Keyblock.name -> gson.fromJson(text, PoANodeCommunicationTypes.PoWTailResponse::class.java)
             PoACommunicationSubjects.Peek.name -> gson.fromJson(text, PoANodeCommunicationTypes.PoWPeekResponse::class.java)
             CommunicationSubjects.ErrorOfConnect.name -> gson.fromJson(text, ErrorResponse::class.java)
+            CommunicationSubjects.Microblock.name -> gson.fromJson(text, MicroblockResponse::class.java)
             else -> {
                 throw IllegalArgumentException("Can't parse type: $type with messages: $text")
             };
