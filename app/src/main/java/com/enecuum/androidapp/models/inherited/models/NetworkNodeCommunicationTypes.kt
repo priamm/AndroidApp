@@ -7,10 +7,10 @@ data class ConnectBNRequest(val tag: String = Tags.Request.name,
 data class ConnectBNResponse(val tag: String = Tags.Response.name,
                              val type: String = CommunicationSubjects.PotentialConnects.name,
                              val connects: List<ConnectPointDescription>)
-
+//{"tag":"Response","type":"ErrorOfConnect", "Msg":"{\"tag\":\"Request\",\"type\":\"PotentialConnects\"}", "comment" : "not a connect msg"}
 data class ErrorResponse(val tag: String = Tags.Response.name,
-                         val type: String = CommunicationSubjects.Error.name,
-                         val reason: String,
+                         val type: String = CommunicationSubjects.ErrorOfConnect.name,
+                         val comment: String,
                          val Msg: String)
 
 data class ConnectPointDescription(val ip: String,

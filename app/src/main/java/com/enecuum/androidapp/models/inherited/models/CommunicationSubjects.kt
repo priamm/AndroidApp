@@ -14,6 +14,6 @@ enum class CommunicationSubjects {
     Transactions,
     Microblock,
     Keyblock,
-    Error,
+    ErrorOfConnect,
     Team
 }

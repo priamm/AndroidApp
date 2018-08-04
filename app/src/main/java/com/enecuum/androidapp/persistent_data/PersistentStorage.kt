@@ -19,6 +19,7 @@ object PersistentStorage {
     private const val JETTON_AMOUNT = "JETTON_AMOUNT"
     private const val ADDRESS = "ADDRESS"
     private const val IS_MINING_IN_PROGRESS = "IS_MINING_IN_PROGRESS"
+    private const val CURRENT_NN = "CURRENT_NN"
     private fun getPrefs() : SharedPreferences = EnecuumApplication.applicationContext()
             .getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
 
@@ -102,4 +103,13 @@ object PersistentStorage {
 
     fun isMiningInProgress() : Boolean =
             getPrefs().getBoolean(IS_MINING_IN_PROGRESS, false)
+
+
+    fun getCurrentNNAddress():  String = getPrefs().getString(CURRENT_NN, "")
+
+    fun setCurrentNNAddress(address : String) {
+        if(address.isEmpty())
+            return
+        setString(CURRENT_NN, address)
+    }
 }

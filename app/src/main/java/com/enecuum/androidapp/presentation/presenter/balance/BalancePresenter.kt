@@ -10,6 +10,7 @@ import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.models.TransactionType
 import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.navigation.TabType
+import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
 import com.enecuum.androidapp.ui.activity.testActivity.CustomBootNodeFragment
 import com.enecuum.androidapp.ui.activity.testActivity.PoaService
@@ -19,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 
@@ -47,28 +49,35 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
         )
         viewState.displayTransactionsHistory(transactionsList)
 
-        startLoadingBalance()
     }
 
     fun onTokensClick() {
         EnecuumApplication.navigateToFragment(FragmentType.Tokens, TabType.Home)
     }
 
-    fun startLoadingBalance() {
+    fun startLoadingBalance(ip: String, port: String) {
+
+        Timber.i("Starting listening balance at: " + ip + ":" + port)
         val retrofit = Retrofit.Builder()
-                .baseUrl("http://localhost:1234")
+                .baseUrl("http://$ip:$port")
                 .addConverterFactory(JsonRPCConverterFactory.create())
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build()
 
-//        val service = retrofit.create(RPCService::class.java);
-//        Flowable.interval(1000, 5000, TimeUnit.MILLISECONDS)
-//                .switchMap { Flowable.fromCallable { return@fromCallable service.multiply(Params(3)).execute().body() }
-//                        .subscribeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread()) }
-//                .subscribe({
-//                    viewState.setBalance(it.toString())
-//                })
+        val service = retrofit.create(RPCService::class.java);
+        Flowable.interval(1000, 5000, TimeUnit.MILLISECONDS)
+                .switchMap {
+                    Flowable.fromCallable { return@fromCallable service.getBalance(Params(Address(PersistentStorage.getAddress()))).execute().body() }
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                }
+                .subscribe({
+                    val result = it?.result
+                    Timber.i("Got balance: $result")
+                    viewState.setBalance(result)
+                }, {
+                    Timber.e(it)
+                })
     }
 
     fun onMiningToggle() {
@@ -93,6 +102,11 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                         onMicroblockCountListerer = object : PoaService.onMicroblockCountListener {
                             override fun onMicroblockCount(count: Int) {
                                 viewState.displayMicroblocks(count);
+                            }
+                        },
+                        onConnectedListener1 = object : PoaService.onConnectedListener {
+                            override fun onConnected(ip: String, port: String) {
+                                startLoadingBalance(ip, "1555")
                             }
                         }
                 )

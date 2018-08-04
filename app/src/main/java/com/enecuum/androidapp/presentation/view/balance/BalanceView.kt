@@ -31,5 +31,5 @@ interface BalanceView : HistoryView<Transaction> {
     fun changeButtonState(isStart:Boolean)
 
     @StateStrategyType(AddToEndSingleStrategy::class)
-    fun setBalance(balance:String)
+    fun setBalance(balance: Int?)
 }

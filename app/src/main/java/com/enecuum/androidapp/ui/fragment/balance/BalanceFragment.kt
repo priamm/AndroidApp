@@ -91,8 +91,8 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         return activity!!.getString(R.string.my_wallet)
     }
 
-    override fun setBalance(balance: String) {
-        enqBalance.text = balance;
+    override fun setBalance(balance: Int?) {
+        enqBalance.text = balance.toString();
     }
 
     override fun showProgress() {

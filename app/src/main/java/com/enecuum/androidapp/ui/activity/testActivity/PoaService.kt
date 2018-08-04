@@ -13,20 +13,15 @@ import com.enecuum.androidapp.models.inherited.models.*
 import com.enecuum.androidapp.models.inherited.models.Sha.hash256
 import com.enecuum.androidapp.network.RxWebSocket
 import com.enecuum.androidapp.network.WebSocketEvent
-import com.enecuum.androidapp.presentation.presenter.balance.Params
-import com.enecuum.androidapp.presentation.presenter.balance.RPCService
 import com.google.common.io.BaseEncoding
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.segment.jsonrpc.JsonRPCConverterFactory
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.flowables.ConnectableFlowable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.Request
 import okhttp3.WebSocket
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
 import java.io.EOFException
 import java.math.BigInteger
@@ -35,7 +30,7 @@ import java.nio.ByteOrder
 import java.util.*
 
 
-class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String, val onTeamSize: onTeamListener, val onMicroblockCountListerer: onMicroblockCountListener) {
+class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String, val onTeamSize: onTeamListener, val onMicroblockCountListerer: onMicroblockCountListener, val onConnectedListener1: onConnectedListener) {
 
     private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
     val blockSize = 512 * 1024;
@@ -90,7 +85,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     Timber.d("Got NN nodes:" + it.toString())
                     val size = it.connects.size
                     if (size > 0) {
-                        return@map it.connects.get(Random().nextInt(size))
+                        return@map it.connects.get(0)
                     } else {
                         //TODO decide what to do if response empty
                         return@map ConnectPointDescription(BN_PATH, BN_PORT)
@@ -100,19 +95,25 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
         websocketEvents =
                 connectionPointDescriptions
-                        .doOnNext {
-//                            val rpc = getRpc(it)
-//                            val rpcService = rpc.create(RPCService::class.java)
-//                            composite.add(
-//                                    rpcService.getBalance(Params())
-//                            )
-                        }
                         .flatMap {
-                            Timber.d("Connecting to: ${it.ip}:${it.port}")
-                            getWebSocket(it.ip, it.port).observe()
+                            val connectPointDescription = it
+                            Timber.d("Connecting to: ${connectPointDescription.ip}:${connectPointDescription.port}")
+                            getWebSocket(connectPointDescription.ip, connectPointDescription.port).observe()
+                                    .doOnNext {
+                                        if (it is WebSocketEvent.OpenedEvent) {
+                                            getWebSocket(connectPointDescription.ip, "1555").observe()
+                                                    .doOnNext {
+                                                        if (it is WebSocketEvent.OpenedEvent) {
+//                                                            it.webSocket.askForBalance();
+                                                        }
+                                                    }
+                                        }
+
+                                    }
                         }
                         .doOnNext {
                             if (it is WebSocketEvent.OpenedEvent) {
+
                                 it.webSocket?.send(gson.toJson(ReconnectRequest()))
                                 websocket = it.webSocket
                             }
@@ -169,7 +170,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 //                    val nodeId = gson.toJson(PoANodeUUIDResponse(nodeId = myNodeId))
 //                    ws?.send(nodeId)
                     myId = myNodeId
-                    Timber.d("Sent NodeId reason")
+                    Timber.d("Sent NodeId comment")
                     teamWs
                             .doOnError { Timber.e(it.localizedMessage) }
                             .filter { it is WebSocketEvent.OpenedEvent }
@@ -241,7 +242,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                 errorMessageResponse
                         .doOnNext {
                             val errorResponse = it.second as ErrorResponse
-                            Timber.e("Error: ${errorResponse.reason}")
+                            Timber.e("Error: ${errorResponse.comment}")
                             Timber.e("Error: ${errorResponse.Msg}")
                         }
                         .subscribe()
@@ -465,7 +466,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
             CommunicationSubjects.Transactions.name -> gson.fromJson(text, TransactionResponse::class.java);
 //            PoACommunicationSubjects.Keyblock.name -> gson.fromJson(text, PoANodeCommunicationTypes.PoWTailResponse::class.java)
             PoACommunicationSubjects.Peek.name -> gson.fromJson(text, PoANodeCommunicationTypes.PoWPeekResponse::class.java)
-            CommunicationSubjects.Error.name -> gson.fromJson(text, ErrorResponse::class.java)
+            CommunicationSubjects.ErrorOfConnect.name -> gson.fromJson(text, ErrorResponse::class.java)
             else -> {
                 throw IllegalArgumentException("Can't parse type: $type with messages: $text")
             };
@@ -479,6 +480,10 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
     public interface onMicroblockCountListener {
         fun onMicroblockCount(count: Int)
+    }
+
+    public interface onConnectedListener {
+        fun onConnected(ip: String, port: String);
     }
 
     private fun intToLittleEndian(numero: Long): ByteArray {
@@ -534,11 +539,5 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
         return result.toString()
     }
 
-    fun getRpc( connectPointDescription: ConnectPointDescription): Retrofit {
-        return Retrofit.Builder()
-                .baseUrl(connectPointDescription.ip+":"+connectPointDescription.port)
-                .addConverterFactory(JsonRPCConverterFactory.create())
-                .addConverterFactory(MoshiConverterFactory.create())
-                .build();
-    }
+
 }
