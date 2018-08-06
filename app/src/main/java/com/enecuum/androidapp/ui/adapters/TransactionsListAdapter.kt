@@ -1,25 +1,17 @@
 package com.enecuum.androidapp.ui.adapters
 
-import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.enecuum.androidapp.R
-import com.enecuum.androidapp.application.EnecuumApplication
-import com.enecuum.androidapp.models.Transaction
-import com.enecuum.androidapp.models.TransactionType
 import com.enecuum.androidapp.models.inherited.models.MicroblockResponse
-import com.enecuum.androidapp.navigation.ScreenType
-import com.enecuum.androidapp.ui.activity.transaction_details.TransactionDetailsActivity.Companion.TRANSACTION
 import com.enecuum.androidapp.ui.adapters.holders.TransactionViewHolder
 import kotlinx.android.synthetic.main.item_transactions_list.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * Created by oleg on 30.01.18.
  */
-class TransactionsListAdapter(private val data : List<MicroblockResponse>) : RecyclerView.Adapter<TransactionViewHolder>() {
+class TransactionsListAdapter(private val data: List<MicroblockResponse>) : RecyclerView.Adapter<TransactionViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder =
             TransactionViewHolder(LayoutInflater.from(parent.context).inflate(
@@ -38,7 +30,7 @@ class TransactionsListAdapter(private val data : List<MicroblockResponse>) : Rec
 //        holder.itemView.timeText?.text = timeFormatter.format(date)
 //        "http://82.202.212.120/?#/explorer/wallet/LB4JCsuWPqYuB99qe9cCS8bucpCWHrx5qg8PvLFpTfhU"
         holder.itemView.address?.text = transaction.microblock.msg.K_hash
-        holder.itemView.amount?.text = String.format("%.8f ENQ", 10)
+        holder.itemView.amount?.text = "10 ENQ"
 //        when(transaction.transactionType) {
 //            TransactionType.Send -> {
 //                holder.itemView.icon?.setImageResource(R.drawable.send_little)
