@@ -5,9 +5,7 @@ import android.widget.Toast
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.application.EnecuumApplication
-import com.enecuum.androidapp.models.SendReceiveMode
-import com.enecuum.androidapp.models.Transaction
-import com.enecuum.androidapp.models.TransactionType
+import com.enecuum.androidapp.models.inherited.models.MicroblockResponse
 import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.navigation.TabType
 import com.enecuum.androidapp.persistent_data.PersistentStorage
@@ -29,25 +27,26 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
 
     var poaService: PoaService? = null;
 
+    val microblockList = mutableListOf<MicroblockResponse>()
     fun onCreate() {
         //TODO: fill with real values
         viewState.displayCurrencyRates(7.999999, 7.999999)
         viewState.displayBalances(30.0, 30.0)
         viewState.displayPoints(1.0)
         viewState.displayKarma(1.0)
-        val transactionsList = listOf(
-                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.EnqPlus),
-                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
-                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
-                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
-                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
-                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
-                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
-                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
-                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
-                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq)
-        )
-        viewState.displayTransactionsHistory(transactionsList)
+//        val microblockList = listOf(
+//                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.EnqPlus),
+//                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
+//                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
+//                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
+//                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
+//                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
+//                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
+//                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
+//                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
+//                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq)
+//        )
+//        viewState.displayTransactionsHistory(microblockList)
 
     }
 
@@ -100,7 +99,9 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                             }
                         },
                         onMicroblockCountListerer = object : PoaService.onMicroblockCountListener {
-                            override fun onMicroblockCount(count: Int) {
+                            override fun onMicroblockCountAndLast(count: Int, microblockResponse: MicroblockResponse) {
+                                microblockList += microblockResponse;
+                                viewState.displayTransactionsHistory(microblockList)
                                 viewState.displayMicroblocks(count);
                             }
                         },

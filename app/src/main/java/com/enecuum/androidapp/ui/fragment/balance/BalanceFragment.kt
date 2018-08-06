@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.models.Transaction
+import com.enecuum.androidapp.models.inherited.models.MicroblockResponse
 import com.enecuum.androidapp.presentation.presenter.balance.BalancePresenter
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
 import com.enecuum.androidapp.ui.base_ui_primitives.NoBackFragment
@@ -81,7 +82,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         minedText.post { minedText.text = "Joining, team size is: $teamSize"; }
     }
 
-    override fun displayTransactionsHistory(transactionsList: List<Transaction>) {
+    override fun displayTransactionsHistory(transactionsList: List<MicroblockResponse>) {
         TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
     }
 

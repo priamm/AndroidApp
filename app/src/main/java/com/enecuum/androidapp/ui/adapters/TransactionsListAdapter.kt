@@ -8,6 +8,7 @@ import com.enecuum.androidapp.R
 import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.models.TransactionType
+import com.enecuum.androidapp.models.inherited.models.MicroblockResponse
 import com.enecuum.androidapp.navigation.ScreenType
 import com.enecuum.androidapp.ui.activity.transaction_details.TransactionDetailsActivity.Companion.TRANSACTION
 import com.enecuum.androidapp.ui.adapters.holders.TransactionViewHolder
@@ -18,7 +19,7 @@ import java.util.*
 /**
  * Created by oleg on 30.01.18.
  */
-class TransactionsListAdapter(private val data : List<Transaction>) : RecyclerView.Adapter<TransactionViewHolder>() {
+class TransactionsListAdapter(private val data : List<MicroblockResponse>) : RecyclerView.Adapter<TransactionViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder =
             TransactionViewHolder(LayoutInflater.from(parent.context).inflate(
@@ -30,25 +31,26 @@ class TransactionsListAdapter(private val data : List<Transaction>) : RecyclerVi
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         val transaction = data[position]
-        val dateFormatter = SimpleDateFormat("dd.MM", Locale.getDefault())
-        val timeFormatter = SimpleDateFormat("HH.mm", Locale.getDefault())
-        val date = Date(transaction.timestamp)
-        holder.itemView.dateText?.text = dateFormatter.format(date)
-        holder.itemView.timeText?.text = timeFormatter.format(date)
-        holder.itemView.address?.text = transaction.address
-        holder.itemView.amount?.text = String.format("%.8f ENQ", transaction.amount)
-        when(transaction.transactionType) {
-            TransactionType.Send -> {
-                holder.itemView.icon?.setImageResource(R.drawable.send_little)
-            }
-            TransactionType.Receive -> {
-                holder.itemView.icon?.setImageResource(R.drawable.receive_little)
-            }
-        }
-        holder.itemView.repeatTransaction?.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putSerializable(TRANSACTION, transaction)
-            EnecuumApplication.navigateToActivity(ScreenType.TransactionDetails, bundle)
-        }
+//        val dateFormatter = SimpleDateFormat("dd.MM", Locale.getDefault())
+//        val timeFormatter = SimpleDateFormat("HH.mm", Locale.getDefault())
+//        val date = Date(transaction.timestamp)
+//        holder.itemView.dateText?.text = dateFormatter.format(date)
+//        holder.itemView.timeText?.text = timeFormatter.format(date)
+//        "http://82.202.212.120/?#/explorer/wallet/LB4JCsuWPqYuB99qe9cCS8bucpCWHrx5qg8PvLFpTfhU"
+        holder.itemView.address?.text = transaction.microblock.msg.K_hash
+        holder.itemView.amount?.text = String.format("%.8f ENQ", 10)
+//        when(transaction.transactionType) {
+//            TransactionType.Send -> {
+//                holder.itemView.icon?.setImageResource(R.drawable.send_little)
+//            }
+//            TransactionType.Receive -> {
+//                holder.itemView.icon?.setImageResource(R.drawable.receive_little)
+//            }
+//        }
+//        holder.itemView.repeatTransaction?.setOnClickListener {
+//            val bundle = Bundle()
+//            bundle.putSerializable(TRANSACTION, transaction)
+//            EnecuumApplication.navigateToActivity(ScreenType.TransactionDetails, bundle)
+//        }
     }
 }

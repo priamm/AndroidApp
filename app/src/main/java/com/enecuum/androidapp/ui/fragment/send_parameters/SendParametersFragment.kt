@@ -48,7 +48,7 @@ class SendParametersFragment : NoBackFragment(), SendParametersView {
     override fun getTitle(): String = getString(R.string.send)
 
     override fun displayTransactionsHistory(transactionsList: List<Transaction>) {
-        TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
+//        TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
     }
 
     override fun changeButtonState(enable: Boolean) {

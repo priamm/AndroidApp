@@ -275,7 +275,6 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     }
 
                     val k_hash = keyblockHash
-
                     val microblockMsg = MicroblockMsg(Tx = currentTransactions,
                             publisher = Base58.encode(rsaCipher.getPublicKey()),
                             K_hash = k_hash!!,
@@ -292,7 +291,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     Timber.i("Sending to NN")
                     websocket?.send(gson.toJson(microblockResponse))
 
-                    onMicroblockCountListerer.onMicroblockCount(++microblocksSoFar)
+                    onMicroblockCountListerer.onMicroblockCountAndLast(++microblocksSoFar,microblockResponse)
                     currentTransactions = listOf()
                     askForNewTransactions(websocket);
                 })
@@ -483,7 +482,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
     }
 
     public interface onMicroblockCountListener {
-        fun onMicroblockCount(count: Int)
+        fun onMicroblockCountAndLast(count: Int, microblockResponse: MicroblockResponse)
     }
 
     public interface onConnectedListener {

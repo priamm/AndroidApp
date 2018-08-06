@@ -32,7 +32,7 @@
     </plurals>
     <string name="karma_percent">Karma percent</string>
     <string name="tokens_and_tickets">Tokens and Tickets</string>
-    <string name="transactions_history">Transactions History</string>
+    <string name="transactions_history">Microblocks history</string>
     <string name="tokens">Tokens</string>
     <string name="jettons">Tickets</string>
     <string name="send">Send</string>

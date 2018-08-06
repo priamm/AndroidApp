@@ -8,6 +8,7 @@ import android.widget.ImageView
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.models.MiningHistoryItem
 import com.enecuum.androidapp.models.Transaction
+import com.enecuum.androidapp.models.inherited.models.MicroblockResponse
 import com.enecuum.androidapp.ui.adapters.MiningHistoryAdapter
 import com.enecuum.androidapp.ui.adapters.TransactionsListAdapter
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -16,7 +17,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
  * Created by oleg on 31.01.18.
  */
 object TransactionsHistoryRenderer {
-    fun displayTransactionsInRecyclerView(transactionsList : List<Transaction>, recyclerView: RecyclerView) {
+    fun displayTransactionsInRecyclerView(transactionsList : List<MicroblockResponse>, recyclerView: RecyclerView) {
         val adapter = TransactionsListAdapter(transactionsList)
         val layoutManager = LinearLayoutManager(recyclerView.context)
         recyclerView.layoutManager = layoutManager

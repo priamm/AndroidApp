@@ -46,7 +46,7 @@ class SendFinishFragment : BackTitleFragment(), SendFinishView {
     override fun getTitle(): String = getString(R.string.confirm_send)
 
     override fun displayTransactionsHistory(transactionsList: List<Transaction>) {
-        TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
+//        TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
     }
 
     override fun setupWithData(address: String?, amount: Float?, currency: Currency) {

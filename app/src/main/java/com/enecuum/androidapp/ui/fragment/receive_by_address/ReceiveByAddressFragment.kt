@@ -46,7 +46,7 @@ class ReceiveByAddressFragment : NoBackFragment(), ReceiveByAddressView {
     override fun getTitle(): String = getString(R.string.receive)
 
     override fun displayTransactionsHistory(transactionsList: List<Transaction>) {
-        TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
+//        TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
     }
 
     override fun onResume() {
