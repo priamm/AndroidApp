@@ -29,7 +29,8 @@ class TransactionsListAdapter(private val data: List<MicroblockResponse>) : Recy
 //        holder.itemView.dateText?.text = dateFormatter.format(date)
 //        holder.itemView.timeText?.text = timeFormatter.format(date)
 //        "http://82.202.212.120/?#/explorer/wallet/LB4JCsuWPqYuB99qe9cCS8bucpCWHrx5qg8PvLFpTfhU"
-        holder.itemView.address?.text = transaction.microblock.msg.K_hash
+
+        holder.itemView.address?.text = "http://82.202.212.120/?#/explorer/block/" + transaction.microblock.msg.K_hash;
         holder.itemView.amount?.text = "10 ENQ"
 //        when(transaction.transactionType) {
 //            TransactionType.Send -> {
