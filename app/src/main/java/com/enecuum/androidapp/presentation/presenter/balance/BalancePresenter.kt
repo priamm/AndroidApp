@@ -8,16 +8,17 @@ import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.models.inherited.models.MicroblockResponse
 import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.navigation.TabType
+import com.enecuum.androidapp.network.RxWebSocket
+import com.enecuum.androidapp.network.WebSocketEvent
 import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
+import com.enecuum.androidapp.ui.activity.testActivity.Base58
 import com.enecuum.androidapp.ui.activity.testActivity.CustomBootNodeFragment
 import com.enecuum.androidapp.ui.activity.testActivity.PoaService
-import com.segment.jsonrpc.JsonRPCConverterFactory
+import com.google.gson.Gson
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import okhttp3.Request
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -54,30 +55,48 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
         EnecuumApplication.navigateToFragment(FragmentType.Tokens, TabType.Home)
     }
 
+    private fun getWebSocket(ip: String,
+                             port: String): RxWebSocket {
+        val request = Request.Builder().url("ws://$ip:$port").build()
+        val webSocket = RxWebSocket.createAutoManagedRxWebSocket(request)
+        return webSocket
+    }
+
+    val gson = Gson()
+
     fun startLoadingBalance(ip: String, port: String) {
 
         Timber.i("Starting listening balance at: " + ip + ":" + port)
-        val retrofit = Retrofit.Builder()
-                .baseUrl("http://$ip:$port")
-                .addConverterFactory(JsonRPCConverterFactory.create())
-                .addConverterFactory(MoshiConverterFactory.create())
-                .build()
+        val publish = getWebSocket(ip, port).observe()
+                .observeOn(AndroidSchedulers.mainThread())
+                .publish()
 
-        val service = retrofit.create(RPCService::class.java);
-        Flowable.interval(1000, 5000, TimeUnit.MILLISECONDS)
-                .switchMap {
-                    Flowable.fromCallable { return@fromCallable service.getBalance(Params(Address(PersistentStorage.getAddress()))).execute().body() }
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
+        val address = Base58.encode(PersistentStorage.getAddress())
+        val query = "{\"jsonrpc\":\"2.0\",\"params\":{\"address\":\"$address\"},\"method\":\"enq_getBalance\",\"id\":1}"
+
+        val autoConnect = publish.autoConnect(2)
+        autoConnect
+                .filter { it is WebSocketEvent.OpenedEvent }
+                .subscribe {
+                    it.webSocket?.send(query)
                 }
-                .subscribe({
-                    val result = it?.result
-                    Timber.i("Got balance: $result")
-                    viewState.setBalance(result)
-                }, {
-                    Timber.e(it)
-                })
+
+        autoConnect
+                .filter { it is WebSocketEvent.StringMessageEvent }
+                .subscribe {
+                    val stringMessageEvent = it as WebSocketEvent.StringMessageEvent
+                    val responseRpc = gson.fromJson(stringMessageEvent.text, ResponseRpc::class.java)
+                    if (responseRpc.result != null) {
+                        Timber.i("Got balance: ${responseRpc.result.balance}")
+                        viewState.setBalance(responseRpc.result.balance)
+                    }
+                }
     }
+
+    //    {"jsonrpc":"2.0","result":{"balance":44540},"id":1}
+    data class ResponseRpc(val jsonrpc: String, val result: Result?, val id: Int)
+
+    data class Result(val balance: Int)
 
     fun onMiningToggle() {
         val sharedPreferences = EnecuumApplication.applicationContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
@@ -107,7 +126,12 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                         },
                         onConnectedListener1 = object : PoaService.onConnectedListener {
                             override fun onConnected(ip: String, port: String) {
-                                startLoadingBalance(ip, "1555")
+
+                                Flowable.interval(1000, 5000, TimeUnit.MILLISECONDS)
+                                        .subscribe {
+                                            startLoadingBalance(ip, "1555")
+                                        }
+
                             }
                         }
                 )
