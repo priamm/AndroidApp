@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import com.enecuum.androidapp.ui.activity.testActivity.CustomBootNodeFragment
+import com.enecuum.androidapp.ui.activity.myWallet.MyWalletFragment
 import com.enecuum.androidapp.ui.fragment.balance.BalanceFragment
 import com.enecuum.androidapp.ui.fragment.mining_in_progress.MiningInProgressFragment
 import com.enecuum.androidapp.ui.fragment.mining_join_team.MiningJoinTeamFragment
@@ -56,6 +57,7 @@ class FragmentNavigator(activity: FragmentActivity?,
             FragmentType.MiningLoading -> return MiningLoadingFragment.newInstance()
             FragmentType.MiningJoinTeam -> return MiningJoinTeamFragment.newInstance(safeData as Bundle)
             FragmentType.CustomBootNode -> return CustomBootNodeFragment.newInstance()
+            FragmentType.MyWallet -> return MyWalletFragment.newInstance()
         }
     }
 }
