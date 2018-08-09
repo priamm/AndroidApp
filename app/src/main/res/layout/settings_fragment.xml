@@ -38,6 +38,23 @@
                       android:digits="1234567890"/>
         </LinearLayout>
 
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+        >
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:text="Count transaction for request"
+                      android:textColor="@color/background_white"/>
+            <EditText android:layout_width="0dp"
+                      android:layout_weight="2"
+                      android:id="@+id/countTransactions"
+                      android:layout_height="wrap_content"
+                      android:textColor="@color/background_white"
+                      android:digits="1234567890."/>
+
+        </LinearLayout>
+
 
         <LinearLayout
                 android:layout_width="wrap_content"
@@ -50,25 +67,25 @@
                     android:id="@+id/restart"/>
 
             <!--<Button android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="K-Block"-->
-                    <!--android:padding="16dp"-->
-                    <!--android:id="@+id/kblock"/>-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="K-Block"-->
+            <!--android:padding="16dp"-->
+            <!--android:id="@+id/kblock"/>-->
 
             <!--<Button android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="TX"-->
-                    <!--android:padding="16dp"-->
-                    <!--android:id="@+id/askForTransactions"/>-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="TX"-->
+            <!--android:padding="16dp"-->
+            <!--android:id="@+id/askForTransactions"/>-->
 
 
         </LinearLayout>
 
         <!--<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"-->
-                  <!--android:text="Team size: 0"-->
-                  <!--android:padding="16dp"-->
-                  <!--android:textColor="@android:color/black"-->
-                  <!--android:id="@+id/team"-->
+        <!--android:text="Team size: 0"-->
+        <!--android:padding="16dp"-->
+        <!--android:textColor="@android:color/black"-->
+        <!--android:id="@+id/team"-->
         <!--/>-->
 
         <com.jraska.console.Console

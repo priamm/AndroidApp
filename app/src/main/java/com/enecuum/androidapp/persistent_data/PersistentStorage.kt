@@ -6,6 +6,8 @@ import com.enecuum.androidapp.BuildConfig
 import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.models.Currency
 
+private val i = 3
+
 /**
  * Created by oleg on 22.01.18.
  */
@@ -19,6 +21,7 @@ object PersistentStorage {
     private const val JETTON_AMOUNT = "JETTON_AMOUNT"
     private const val ADDRESS = "ADDRESS"
     private const val IS_MINING_IN_PROGRESS = "IS_MINING_IN_PROGRESS"
+    private const val COUNT_TRANSACTIONS = "COUNT_TRANSACTIONS"
     private const val CURRENT_NN = "CURRENT_NN"
     private fun getPrefs() : SharedPreferences = EnecuumApplication.applicationContext()
             .getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
@@ -32,6 +35,12 @@ object PersistentStorage {
     private fun setString(key: String, value: String) {
         val editor = getPrefs().edit()
         editor.putString(key, value)
+        editor.apply()
+    }
+
+    private fun setInt(key: String, value: Int) {
+        val editor = getPrefs().edit()
+        editor.putInt(key, value)
         editor.apply()
     }
 
@@ -111,5 +120,12 @@ object PersistentStorage {
         if(address.isEmpty())
             return
         setString(CURRENT_NN, address)
+    }
+
+    private val DEFAULT_TRANSACTIONS_COUNT = 3
+
+    fun getCountTransactionForRequest(): Int =getPrefs().getInt(COUNT_TRANSACTIONS, DEFAULT_TRANSACTIONS_COUNT)
+    fun setCountTransactionForRequest(value: Int) {
+        setInt(IS_MINING_IN_PROGRESS, value)
     }
 }

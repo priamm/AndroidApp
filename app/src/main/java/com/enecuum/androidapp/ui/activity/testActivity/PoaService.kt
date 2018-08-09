@@ -13,6 +13,7 @@ import com.enecuum.androidapp.models.inherited.models.*
 import com.enecuum.androidapp.models.inherited.models.Sha.hash256
 import com.enecuum.androidapp.network.RxWebSocket
 import com.enecuum.androidapp.network.WebSocketEvent
+import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.google.common.io.BaseEncoding
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -396,7 +397,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
 
     public fun askForNewTransactions(websocket: WebSocket?) {
-        websocket?.send(gson.toJson(TransactionRequest()));
+        websocket?.send(gson.toJson(TransactionRequest(number = PersistentStorage.getCountTransactionForRequest())));
     }
 
     public fun askForNewTransactions() {

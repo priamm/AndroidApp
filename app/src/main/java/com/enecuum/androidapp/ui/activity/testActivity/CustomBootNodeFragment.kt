@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.enecuum.androidapp.R
+import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.ui.base_ui_primitives.BackTitleFragment
 import com.jakewharton.rxbinding2.widget.RxTextView.textChanges
 import kotlinx.android.synthetic.main.settings_fragment.*
@@ -33,7 +34,6 @@ class CustomBootNodeFragment : BackTitleFragment() {
     }
 
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.settings_fragment, container, false)
@@ -49,6 +49,8 @@ class CustomBootNodeFragment : BackTitleFragment() {
         textChanges(bootNodePort).subscribe { s -> sharedPreferences?.edit { putString(customBNPORT, s.toString()) } }
         textChanges(bootNodeIp).subscribe { s -> sharedPreferences?.edit { putString(customBNIP, s.toString()) } }
 
+        countTransactions.setText(PersistentStorage.getCountTransactionForRequest().toString())
+        textChanges(countTransactions).subscribe { s -> PersistentStorage.setCountTransactionForRequest(Integer.parseInt(s.toString())) }
 
         cbBN.setOnCheckedChangeListener { buttonView, isChecked ->
             bootNodePort.isEnabled = isChecked
