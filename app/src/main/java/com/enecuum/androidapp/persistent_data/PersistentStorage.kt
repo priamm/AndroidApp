@@ -23,7 +23,7 @@ object PersistentStorage {
     private const val IS_MINING_IN_PROGRESS = "IS_MINING_IN_PROGRESS"
     private const val COUNT_TRANSACTIONS = "COUNT_TRANSACTIONS"
     private const val CURRENT_NN = "CURRENT_NN"
-    private fun getPrefs() : SharedPreferences = EnecuumApplication.applicationContext()
+    private fun getPrefs(): SharedPreferences = EnecuumApplication.applicationContext()
             .getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
 
     private fun setBoolean(key: String, value: Boolean) {
@@ -54,29 +54,29 @@ object PersistentStorage {
         setBoolean(IS_REGISTRATION_FINISHED, true)
     }
 
-    fun isRegistrationFinished() : Boolean =
+    fun isRegistrationFinished(): Boolean =
             getPrefs().getBoolean(IS_REGISTRATION_FINISHED, false)
 
-    fun getKeyPath() : String = getPrefs().getString(KEY_PATH, "")
+    fun getKeyPath(): String = getPrefs().getString(KEY_PATH, "")
 
     fun setKeyPath(keyPath: String) {
         setString(KEY_PATH, keyPath)
     }
 
-    fun getPin() : String = getPrefs().getString(PIN, "")
+    fun getPin(): String = getPrefs().getString(PIN, "")
 
-    fun setPin(pin : String) {
-        if(pin.isEmpty())
+    fun setPin(pin: String) {
+        if (pin.isEmpty())
             return
         setString(PIN, pin)
     }
 
     fun deletePin() {
-        setString(PIN,"")
+        setString(PIN, "")
     }
 
-    fun getCurrencyAmount(currency: Currency): Float = when(currency) {
-        //TODO: fill with 0 default
+    fun getCurrencyAmount(currency: Currency): Float = when (currency) {
+    //TODO: fill with 0 default
         Currency.Enq -> getPrefs().getFloat(ENQ_AMOUNT, 1000f)
         Currency.EnqPlus -> getPrefs().getFloat(ENQ_PLUS_AMOUNT, 2000f)
         Currency.Token -> getPrefs().getFloat(TOKEN_AMOUNT, 3000f)
@@ -84,7 +84,7 @@ object PersistentStorage {
     }
 
     fun setCurrencyAmount(currency: Currency, amount: Float) {
-        when(currency) {
+        when (currency) {
             Currency.Enq -> setFloat(ENQ_AMOUNT, amount)
             Currency.EnqPlus -> setFloat(ENQ_PLUS_AMOUNT, amount)
             Currency.Token -> setFloat(TOKEN_AMOUNT, amount)
@@ -92,10 +92,10 @@ object PersistentStorage {
         }
     }
 
-    fun getAddress() : String = getPrefs().getString(ADDRESS, "5Kb8kLL6TsZZY36hWXMssSzNydYXYB9")
+    fun getAddress(): String = getPrefs().getString(ADDRESS, "5Kb8kLL6TsZZY36hWXMssSzNydYXYB9")
 
-    fun setAddress(address : String) {
-        if(address.isEmpty())
+    fun setAddress(address: String) {
+        if (address.isEmpty())
             return
         setString(ADDRESS, address)
     }
@@ -110,22 +110,22 @@ object PersistentStorage {
         setBoolean(IS_MINING_IN_PROGRESS, value)
     }
 
-    fun isMiningInProgress() : Boolean =
+    fun isMiningInProgress(): Boolean =
             getPrefs().getBoolean(IS_MINING_IN_PROGRESS, false)
 
 
-    fun getCurrentNNAddress():  String = getPrefs().getString(CURRENT_NN, "")
+    fun getCurrentNNAddress(): String = getPrefs().getString(CURRENT_NN, "")
 
-    fun setCurrentNNAddress(address : String) {
-        if(address.isEmpty())
+    fun setCurrentNNAddress(address: String) {
+        if (address.isEmpty())
             return
         setString(CURRENT_NN, address)
     }
 
     private val DEFAULT_TRANSACTIONS_COUNT = 3
 
-    fun getCountTransactionForRequest(): Int =getPrefs().getInt(COUNT_TRANSACTIONS, DEFAULT_TRANSACTIONS_COUNT)
+    fun getCountTransactionForRequest(): Int = getPrefs().getInt(COUNT_TRANSACTIONS, DEFAULT_TRANSACTIONS_COUNT)
     fun setCountTransactionForRequest(value: Int) {
-        setInt(IS_MINING_IN_PROGRESS, value)
+        setInt(COUNT_TRANSACTIONS, value)
     }
 }

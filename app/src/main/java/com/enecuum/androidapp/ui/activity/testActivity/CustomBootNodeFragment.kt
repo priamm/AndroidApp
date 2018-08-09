@@ -50,7 +50,7 @@ class CustomBootNodeFragment : BackTitleFragment() {
         textChanges(bootNodeIp).subscribe { s -> sharedPreferences?.edit { putString(customBNIP, s.toString()) } }
 
         countTransactions.setText(PersistentStorage.getCountTransactionForRequest().toString())
-        textChanges(countTransactions).subscribe { s -> PersistentStorage.setCountTransactionForRequest(Integer.parseInt(s.toString())) }
+        textChanges(countTransactions).filter { isInteger(it.toString()) }.subscribe { PersistentStorage.setCountTransactionForRequest(Integer.parseInt(it.toString())) }
 
         cbBN.setOnCheckedChangeListener { buttonView, isChecked ->
             bootNodePort.isEnabled = isChecked
@@ -68,5 +68,23 @@ class CustomBootNodeFragment : BackTitleFragment() {
             android.os.Process.killProcess(android.os.Process.myPid())
         }
 
+    }
+
+    fun isInteger(s: String): Boolean {
+        return isInteger(s, 10)
+    }
+
+    fun isInteger(s: String, radix: Int): Boolean {
+        if (s.isEmpty()) return false
+        for (i in 0 until s.length) {
+            if (i == 0 && s[i] == '-') {
+                return if (s.length == 1)
+                    false
+                else
+                    continue
+            }
+            if (Character.digit(s[i], radix) < 0) return false
+        }
+        return true
     }
 }
