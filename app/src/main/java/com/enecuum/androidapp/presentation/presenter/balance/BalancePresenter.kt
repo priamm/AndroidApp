@@ -144,6 +144,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
 
 
         } else {
+            poaService?.disconnect()
             poaService = null
             viewState.hideProgress()
 

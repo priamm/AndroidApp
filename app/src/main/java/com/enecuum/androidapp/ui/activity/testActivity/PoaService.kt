@@ -41,7 +41,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
     val TRANSACTION_COUNT_IN_MICROBLOCK = 1
 
-    var composite = CompositeDisposable()
+    var composite: CompositeDisposable = CompositeDisposable()
     var websocket: WebSocket? = null;
 
     var gson: Gson = GsonBuilder().disableHtmlEscaping().create();
@@ -104,7 +104,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                             getWebSocket(connectPointDescription.ip, connectPointDescription.port).observe()
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .doOnNext {
-//                                        if (it is WebSocketEvent.OpenedEvent) {
+                                        //                                        if (it is WebSocketEvent.OpenedEvent) {
 //                                            getWebSocket(connectPointDescription.ip, "1555").observe()
 //                                                    .doOnNext {
 //                                                        if (it is WebSocketEvent.OpenedEvent) {
@@ -157,6 +157,11 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
     private lateinit var team: List<String>
 
     private lateinit var myId: String
+
+    fun disconnect() {
+        websocket?.close(1000,"Client close");
+        composite.clear()
+    }
 
     fun connect() {
 
@@ -292,10 +297,11 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     Timber.i("Sending to NN")
                     websocket?.send(gson.toJson(microblockResponse))
 
-                    onMicroblockCountListerer.onMicroblockCountAndLast(++microblocksSoFar,microblockResponse)
+                    onMicroblockCountListerer.onMicroblockCountAndLast(++microblocksSoFar, microblockResponse)
                     currentTransactions = listOf()
                     askForNewTransactions(websocket);
                 })
+                .subscribeOn(Schedulers.io())
                 .subscribe())
 
         composite.add(
