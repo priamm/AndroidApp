@@ -57,10 +57,10 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
         LocalBroadcastManager.getInstance(EnecuumApplication.applicationContext())
                 .registerReceiver(broadCastReceiver, IntentFilter("reconnect"))
 
-        viewState.displayCurrencyRates(7.999999, 7.999999)
-        viewState.displayBalances(30.0, 30.0)
-        viewState.displayPoints(1.0)
-        viewState.displayKarma(1.0)
+//        viewState.displayCurrencyRates(7.999999, 7.999999)
+//        viewState.displayBalances(30.0, 30.0)
+//        viewState.displayPoints(1.0)
+//        viewState.displayKarma(1.0)
 //        val microblockList = listOf(
 //                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.EnqPlus),
 //                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
