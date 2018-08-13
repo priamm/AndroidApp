@@ -122,7 +122,7 @@ object PersistentStorage {
         setString(CURRENT_NN, address)
     }
 
-    private val DEFAULT_TRANSACTIONS_COUNT = 3
+    private val DEFAULT_TRANSACTIONS_COUNT = 300
 
     fun getCountTransactionForRequest(): Int = getPrefs().getInt(COUNT_TRANSACTIONS, DEFAULT_TRANSACTIONS_COUNT)
     fun setCountTransactionForRequest(value: Int) {

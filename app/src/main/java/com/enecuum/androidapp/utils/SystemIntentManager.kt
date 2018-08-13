@@ -25,6 +25,7 @@ object SystemIntentManager {
         else
             text
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(realAddress))
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
         EnecuumApplication.applicationContext().startActivity(intent)
     }
 }

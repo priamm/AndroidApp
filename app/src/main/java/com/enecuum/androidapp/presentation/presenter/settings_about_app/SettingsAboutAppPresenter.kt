@@ -23,15 +23,15 @@ class SettingsAboutAppPresenter : MvpPresenter<SettingsAboutAppView>() {
     }
 
     fun onTermsClick() {
-        EnecuumApplication.navigateToFragment(FragmentType.SettingsTerms, TabType.Settings)
+        SystemIntentManager.openSite("https://enecuum.com/docs/terms.pdf")
     }
 
     fun onPrivacyClick() {
-        SystemIntentManager.openSite("https://enecuum.com/privacy.html") //TODO: add real address
+        SystemIntentManager.openSite("https://enecuum.com/docs/privacy.pdf") //TODO: add real address
     }
 
     fun onWhitePaperClick() {
-        SystemIntentManager.openSite("https://enecuum.com/whitepaper.html") //TODO: add real address
+        SystemIntentManager.openSite("https://enecuum.com/docs/Enecuum_WP.pdf") //TODO: add real address
     }
 
 
