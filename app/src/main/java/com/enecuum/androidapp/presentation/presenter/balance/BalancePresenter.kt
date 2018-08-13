@@ -67,21 +67,20 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
     fun startLoadingBalance(ip: String, port: String) {
 
         Timber.i("Starting listening balance at: " + ip + ":" + port)
-        val publish = getWebSocket(ip, port).observe()
+        val webSocket = getWebSocket(ip, port).observe()
                 .observeOn(AndroidSchedulers.mainThread())
                 .publish()
 
         val address = Base58.encode(PersistentStorage.getAddress())
-        val query = "{\"jsonrpc\":\"2.0\",\"params\":{\"address\":\"$address\"},\"method\":\"enq_getBalance\",\"id\":1}"
-
-        val autoConnect = publish.autoConnect(2)
-        autoConnect
+        val query = "{\"jsonrpc\":\"2.0\",\"method\":\"getWallet\",\"params\":{\"hash\":\"$address\",\"page\":1},\"id\":4}"
+        val webSocketAutoconnect = webSocket.autoConnect(2)
+        webSocketAutoconnect
                 .filter { it is WebSocketEvent.OpenedEvent }
                 .subscribe {
                     it.webSocket?.send(query)
                 }
 
-        autoConnect
+        webSocketAutoconnect
                 .filter { it is WebSocketEvent.StringMessageEvent }
                 .subscribe {
                     val stringMessageEvent = it as WebSocketEvent.StringMessageEvent
