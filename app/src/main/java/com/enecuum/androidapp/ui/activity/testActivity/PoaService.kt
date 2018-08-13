@@ -307,11 +307,9 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
         composite.add(
                 transactionResponses
                         .filter { it.second is TransactionResponse }
-                        .map { it.second }
-                        .doOnNext { Timber.d("Got transaction: ${it}") }
-                        .cast(TransactionResponse::class.java)
+                        .map({it.second as TransactionResponse})
+                        .doOnNext { Timber.d("Got : ${it.transactions.size} transactions") }
                         .doOnNext({
-
                             currentTransactions += it.transactions
 
                             if (currentTransactions.size >= TRANSACTION_COUNT_IN_MICROBLOCK) {
