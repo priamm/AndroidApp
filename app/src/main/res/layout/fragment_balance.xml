@@ -80,7 +80,7 @@
             android:textStyle="bold"
             android:textColor="@android:color/white"
             android:lineSpacingExtra="8sp"
-            tools:text="ENQ   30,00000000  "
+            tools:text="ENQ 0"
             android:id="@+id/enqBalance"
             android:gravity="center"
             />
@@ -211,7 +211,7 @@
         >
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      tools:text="You has mined: 10000 ENQ"
+                      tools:text="You has mined: 10 ENQ"
                       android:layout_alignParentLeft="true"
                       android:textColor="@color/background_white"
                       android:id="@+id/minedText"

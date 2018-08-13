@@ -104,6 +104,8 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                             getWebSocket(connectPointDescription.ip, connectPointDescription.port).observe()
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .doOnNext {
+
+                                        onConnectedListener1.onConnected(connectPointDescription.ip,connectPointDescription.port)
                                         //                                        if (it is WebSocketEvent.OpenedEvent) {
 //                                            getWebSocket(connectPointDescription.ip, "1555").observe()
 //                                                    .doOnNext {
@@ -176,8 +178,6 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     val ws = it.first
                     Timber.d("My id: $myNodeId")
                     Timber.d("Joining to team")
-//                    val nodeId = gson.toJson(PoANodeUUIDResponse(nodeId = myNodeId))
-//                    ws?.send(nodeId)
                     myId = myNodeId
                     Timber.d("Sent NodeId comment")
                     teamWs
@@ -257,6 +257,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                         .subscribe()
         )
 
+        val publisher = Base58.encode(PersistentStorage.getAddress().toByteArray())
         composite.add(addressedMessageResponse
                 .map {
                     val addressedMessageResponse = it.second as AddressedMessageResponse;
@@ -282,7 +283,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
                     val k_hash = keyblockHash
                     val microblockMsg = MicroblockMsg(Tx = currentTransactions,
-                            publisher = Base58.encode(rsaCipher.getPublicKey()),
+                            publisher = publisher,
                             K_hash = k_hash!!,
                             wallets = publicKeys
                     )
@@ -359,7 +360,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                                 val hash256 = hash256(requestForSignature.data!!);
                                 Timber.d("Processing hash: ${System.currentTimeMillis() - before} millis ")
                                 val enc = rsaCipher.encrypt(hash256);
-                                val myEncodedPublicKey = Base58.encode(rsaCipher.getPublicKey());
+                                val myEncodedPublicKey = Base58.encode(PersistentStorage.getAddress().toByteArray());
                                 val period = System.currentTimeMillis() - before;
 
                                 val responseSignature = ResponseSignature(signature = Signature(myId, hash256, enc, myEncodedPublicKey))

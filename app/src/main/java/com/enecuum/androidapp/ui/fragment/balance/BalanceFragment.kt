@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
-import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.models.inherited.models.MicroblockResponse
 import com.enecuum.androidapp.presentation.presenter.balance.BalancePresenter
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
@@ -15,7 +14,6 @@ import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
 import kotlinx.android.synthetic.main.fragment_balance.*
 
 class BalanceFragment : NoBackFragment(), BalanceView {
-
 
 
     companion object {
@@ -71,7 +69,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     }
 
     override fun displayMicroblocks(count: Int) {
-        minedText.text = "You has mined: $count ENQ";
+        minedText.text = "You has mined: $count  ENQ";
     }
 
     override fun displayKarma(karmaValue: Double) {
@@ -93,7 +91,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     }
 
     override fun setBalance(balance: Int?) {
-        enqBalance.text = balance.toString();
+        enqBalance.text = "ENQ " + balance?.toString();
     }
 
     override fun showProgress() {

@@ -22,6 +22,7 @@ import com.enecuum.androidapp.ui.activity.testActivity.PoaService
 import com.google.gson.Gson
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import okhttp3.Request
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -32,6 +33,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
 
     var poaService: PoaService? = null;
 
+    var composite: CompositeDisposable = CompositeDisposable()
 
     val broadCastReceiver = object : BroadcastReceiver() {
         override fun onReceive(contxt: Context?, intent: Intent?) {
@@ -90,25 +92,28 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
 
     fun startLoadingBalance(ip: String, port: String) {
 
+        composite.clear()
+
         Timber.i("Starting listening balance at: " + ip + ":" + port)
         val webSocket = getWebSocket(ip, port).observe()
                 .observeOn(AndroidSchedulers.mainThread())
                 .publish()
 
-        val address = Base58.encode(PersistentStorage.getAddress())
-        val query = "{\"jsonrpc\":\"2.0\",\"method\":\"getWallet\",\"params\":{\"hash\":\"$address\",\"page\":1},\"id\":4}"
-        val webSocketAutoconnect = webSocket.autoConnect(2)
-        webSocketAutoconnect
+        val address = Base58.encode(PersistentStorage.getAddress().toByteArray())
+        val query = "{\"jsonrpc\":\"2.0\",\"method\":\"getWallet\",\"params\":{\"hash\":\"$address\",\"limit\":-1},\"id\":4}"
+        val webSocketForBalance = webSocket.autoConnect(2)
+        composite.add(webSocketForBalance
                 .filter { it is WebSocketEvent.OpenedEvent }
                 .subscribe {
                     val webSocket = it.webSocket;
                     Flowable.interval(1000, 5000, TimeUnit.MILLISECONDS)
                             .subscribe {
+//                                Timber.d("Asking for balance: "+ query)
                                 webSocket?.send(query)
                             }
-                }
+                })
 
-        webSocketAutoconnect
+        composite.add(webSocketForBalance
                 .filter { it is WebSocketEvent.StringMessageEvent }
                 .subscribe {
                     val stringMessageEvent = it as WebSocketEvent.StringMessageEvent
@@ -116,8 +121,10 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                     if (responseRpc.result != null) {
                         Timber.i("Got balance: ${responseRpc.result.balance}")
                         viewState.setBalance(responseRpc.result.balance)
+                    } else{
+                        viewState.setBalance(0);
                     }
-                }
+                })
     }
 
     //    {"jsonrpc":"2.0","result":{"balance":44540},"id":1}
@@ -169,7 +176,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                     override fun onMicroblockCountAndLast(count: Int, microblockResponse: MicroblockResponse) {
                         microblockList += microblockResponse;
                         viewState.displayTransactionsHistory(microblockList)
-                        viewState.displayMicroblocks(count);
+                        viewState.displayMicroblocks(10*count);
                     }
                 },
                 onConnectedListener1 = object : PoaService.onConnectedListener {
