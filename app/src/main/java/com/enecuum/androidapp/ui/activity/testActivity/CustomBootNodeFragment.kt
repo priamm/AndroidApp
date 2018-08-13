@@ -22,7 +22,7 @@ class CustomBootNodeFragment : BackTitleFragment() {
         val customBNPORT = "bootNodePort"
         val customBNIP = "bootNodeIp"
 
-        val BN_PATH_DEFAULT = "195.201.226.28"//"88.99.86.200"
+        val BN_PATH_DEFAULT = "212.92.98.141"//"88.99.86.200"
         val BN_PORT_DEFAULT = "1554"
 
         fun newInstance(): CustomBootNodeFragment {

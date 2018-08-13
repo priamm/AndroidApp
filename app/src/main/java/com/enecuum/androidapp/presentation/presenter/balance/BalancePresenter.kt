@@ -1,6 +1,10 @@
 package com.enecuum.androidapp.presentation.presenter.balance
 
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.support.v4.content.LocalBroadcastManager
 import android.widget.Toast
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
@@ -28,9 +32,29 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
 
     var poaService: PoaService? = null;
 
+
+    val broadCastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(contxt: Context?, intent: Intent?) {
+
+            if (poaService != null) {
+                onMiningToggle()
+                onMiningToggle()
+            }
+
+            if (poaService == null) {
+                onMiningToggle()
+            }
+
+        }
+    }
+
     val microblockList = mutableListOf<MicroblockResponse>()
     fun onCreate() {
         //TODO: fill with real values
+
+        LocalBroadcastManager.getInstance(EnecuumApplication.applicationContext())
+                .registerReceiver(broadCastReceiver, IntentFilter("reconnect"))
+
         viewState.displayCurrencyRates(7.999999, 7.999999)
         viewState.displayBalances(30.0, 30.0)
         viewState.displayPoints(1.0)
@@ -112,29 +136,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
             val path = if (custom) customPath else CustomBootNodeFragment.BN_PATH_DEFAULT
             val port = if (custom) customPort else CustomBootNodeFragment.BN_PORT_DEFAULT
             try {
-                poaService = PoaService(EnecuumApplication.applicationContext(),
-                        path,
-                        port,
-                        onTeamSize = object : PoaService.onTeamListener {
-                            override fun onTeamSize(size: Int) {
-                                viewState.displayTeamSize(size);
-                            }
-                        },
-                        onMicroblockCountListerer = object : PoaService.onMicroblockCountListener {
-                            override fun onMicroblockCountAndLast(count: Int, microblockResponse: MicroblockResponse) {
-                                microblockList += microblockResponse;
-                                viewState.displayTransactionsHistory(microblockList)
-                                viewState.displayMicroblocks(count);
-                            }
-                        },
-                        onConnectedListener1 = object : PoaService.onConnectedListener {
-                            override fun onConnected(ip: String, port: String) {
-                                startLoadingBalance(ip, "1555")
-                            }
-                        }
-                )
-
-                poaService?.connect()
+                reconnect(path, port)
                 viewState.showProgress()
             } catch (t: Throwable) {
                 Toast.makeText(EnecuumApplication.applicationContext(), t.localizedMessage, Toast.LENGTH_LONG).show()
@@ -152,5 +154,38 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
         viewState.changeButtonState(poaService == null)
 
 
+    }
+
+    private fun reconnect(path: String, port: String) {
+        poaService = PoaService(EnecuumApplication.applicationContext(),
+                path,
+                port,
+                onTeamSize = object : PoaService.onTeamListener {
+                    override fun onTeamSize(size: Int) {
+                        viewState.displayTeamSize(size);
+                    }
+                },
+                onMicroblockCountListerer = object : PoaService.onMicroblockCountListener {
+                    override fun onMicroblockCountAndLast(count: Int, microblockResponse: MicroblockResponse) {
+                        microblockList += microblockResponse;
+                        viewState.displayTransactionsHistory(microblockList)
+                        viewState.displayMicroblocks(count);
+                    }
+                },
+                onConnectedListener1 = object : PoaService.onConnectedListener {
+                    override fun onConnected(ip: String, port: String) {
+                        startLoadingBalance(ip, "1555")
+                    }
+                }
+        )
+
+        poaService?.connect()
+    }
+
+    override fun onDestroy() {
+        LocalBroadcastManager.getInstance(EnecuumApplication.applicationContext())
+                .unregisterReceiver(broadCastReceiver)
+
+        super.onDestroy()
     }
 }

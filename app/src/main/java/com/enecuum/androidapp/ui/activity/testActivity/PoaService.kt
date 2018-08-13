@@ -459,7 +459,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
     }
 
     private fun parse(type: String, text: String?): Any? {
->>//        Timber.d("Parsing: ${text}")
+//        Timber.d("Parsing: ${text}")
         val any = when (type) {
             CommunicationSubjects.Team.name -> gson.fromJson(text, TeamResponse::class.java)
             CommunicationSubjects.PotentialConnects.name -> gson.fromJson(text, ConnectBNResponse::class.java)
