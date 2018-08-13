@@ -77,7 +77,11 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
         webSocketAutoconnect
                 .filter { it is WebSocketEvent.OpenedEvent }
                 .subscribe {
-                    it.webSocket?.send(query)
+                    val webSocket = it.webSocket;
+                    Flowable.interval(1000, 5000, TimeUnit.MILLISECONDS)
+                            .subscribe {
+                                webSocket?.send(query)
+                            }
                 }
 
         webSocketAutoconnect
@@ -125,12 +129,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                         },
                         onConnectedListener1 = object : PoaService.onConnectedListener {
                             override fun onConnected(ip: String, port: String) {
-
-                                Flowable.interval(1000, 5000, TimeUnit.MILLISECONDS)
-                                        .subscribe {
-                                            startLoadingBalance(ip, "1555")
-                                        }
-
+                                startLoadingBalance(ip, "1555")
                             }
                         }
                 )
