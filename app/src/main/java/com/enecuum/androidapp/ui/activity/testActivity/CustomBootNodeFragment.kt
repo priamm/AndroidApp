@@ -45,11 +45,11 @@ class CustomBootNodeFragment : BackTitleFragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        timer.schedule(object :TimerTask(){
-            override fun run() {
-                Console.clear()
-            }
-        },1000,10000)
+//        timer.schedule(object :TimerTask(){
+//            override fun run() {
+//
+//            }
+//        },1000,30000)
 
         val sharedPreferences = activity?.getSharedPreferences("pref", Context.MODE_PRIVATE);
         bootNodePort.setText(sharedPreferences?.getString(customBNPORT, BN_PORT_DEFAULT))
@@ -76,6 +76,10 @@ class CustomBootNodeFragment : BackTitleFragment() {
         restart.setOnClickListener {
             android.os.Process.killProcess(android.os.Process.myPid())
         }
+
+        clean.setOnClickListener({
+            Console.clear()
+        })
 
     }
 

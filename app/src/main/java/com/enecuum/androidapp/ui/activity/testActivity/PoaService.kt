@@ -45,11 +45,13 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
     var websocket: WebSocket? = null;
 
     var gson: Gson = GsonBuilder().disableHtmlEscaping().create();
-    private val websocketEvents: ConnectableFlowable<WebSocketEvent>;
     val webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>;
     var bootNodeWebsocket: ConnectableFlowable<WebSocketEvent>;
 
+    val websocketEvents:ConnectableFlowable<WebSocketEvent>
     val rsaCipher = RSACipher()
+
+    var currentNodes: List<ConnectPointDescription>? = listOf()
 
     init {
         Timber.d("Start testing")
@@ -73,12 +75,12 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                         .doOnNext({
                             val isEof = it.t is EOFException
                             if (!isEof) {
-                                reconnect()
+                                reconnectAll()
                             }
                         })
                         .subscribe())
 
-        val connectionPointDescriptions = bootNodeWebsocket
+        websocketEvents = bootNodeWebsocket
                 .filter { it is WebSocketEvent.StringMessageEvent }
                 .cast(WebSocketEvent.StringMessageEvent::class.java)
                 .map { parse(it.text!!) }
@@ -86,6 +88,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                 .cast(ConnectBNResponse::class.java)
                 .map {
                     Timber.d("Got NN nodes:" + it.toString())
+                    currentNodes = it.connects;
                     val size = it.connects.size
                     if (size > 0) {
                         return@map it.connects.get(0)
@@ -93,28 +96,12 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                         //TODO decide what to do if response empty
                         return@map ConnectPointDescription(BN_PATH, BN_PORT)
                     }
+                }.flatMap {
+                    val connectPointDescription = it
+                    Timber.d("Connecting to: ${connectPointDescription.ip}:${connectPointDescription.port}")
+                    reconnectToNN(connectPointDescription)
                 }
-
-
-        websocketEvents =
-                connectionPointDescriptions
-                        .flatMap {
-                            val connectPointDescription = it
-                            Timber.d("Connecting to: ${connectPointDescription.ip}:${connectPointDescription.port}")
-                            getWebSocket(connectPointDescription.ip, connectPointDescription.port).observe()
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .doOnNext {
-                                        onConnectedListener1.onConnected(connectPointDescription.ip,connectPointDescription.port)
-                                    }
-                        }
-                        .doOnNext {
-                            if (it is WebSocketEvent.OpenedEvent) {
-
-                                it.webSocket?.send(gson.toJson(ReconnectRequest()))
-                                websocket = it.webSocket
-                            }
-                        }
-                        .publish()
+                .publish()
 
         webSocketStringMessageEvents = websocketEvents
                 .filter { it is WebSocketEvent.StringMessageEvent }
@@ -130,7 +117,16 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                 is WebSocketEvent.ClosedEvent -> Timber.i("WS Closed Event");
                 is WebSocketEvent.FailureEvent -> {
                     Timber.e("WS Failue Event :${it.t?.localizedMessage}, ${it.response.toString()}")
-                    reconnect()
+                    if (currentNN != null && currentNodes!=null) {
+                        val indexOf = currentNodes?.indexOf(currentNN!!)
+                        if (indexOf != -1 && (indexOf!! + 1) < currentNodes!!.size) {
+                            reconnectToNN(currentNodes?.get(indexOf + 1)!!)
+                        } else {
+                            reconnectAll()
+                        }
+                    } else{
+                        reconnectAll()
+                    }
                 };
             }
         }).subscribe());
@@ -138,11 +134,27 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
     }
 
-    private fun reconnect() {
+    private var currentNN: ConnectPointDescription? = null
+
+    private fun reconnectToNN(connectPointDescription: ConnectPointDescription): Flowable<WebSocketEvent>? {
+        return getWebSocket(connectPointDescription.ip, connectPointDescription.port).observe()
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext {
+                    if (it is WebSocketEvent.OpenedEvent) {
+                        currentNN = connectPointDescription;
+                        onConnectedListener1.onConnected(connectPointDescription.ip, connectPointDescription.port)
+
+                        it.webSocket?.send(gson.toJson(ReconnectRequest()))
+                        websocket = it.webSocket
+                    }
+                }
+    }
+
+    private fun reconnectAll() {
         Timber.e("Will be reconnected in 5 ...")
         Handler(Looper.getMainLooper()).postDelayed(Runnable {
             LocalBroadcastManager.getInstance(context)
-                    .sendBroadcast(Intent("reconnect"));
+                    .sendBroadcast(Intent("reconnectAll"));
         }, 5000)
     }
 
@@ -151,7 +163,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
     private lateinit var myId: String
 
     fun disconnect() {
-        websocket?.close(1000,"Client close");
+        websocket?.close(1000, "Client close");
         composite.clear()
     }
 
@@ -288,7 +300,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
         composite.add(
                 transactionResponses
                         .filter { it.second is TransactionResponse }
-                        .map({it.second as TransactionResponse})
+                        .map({ it.second as TransactionResponse })
                         .doOnNext { Timber.d("Got : ${it.transactions.size} transactions") }
                         .doOnNext({
                             currentTransactions += it.transactions
