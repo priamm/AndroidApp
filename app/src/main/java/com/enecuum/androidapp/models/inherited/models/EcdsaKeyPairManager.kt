@@ -26,20 +26,20 @@ object EcdsaKeyPairManager {
         return Pair(privatekeyFileOutputStream, publickeyFileOutputStream)
     }
 
-    fun generateAndStoreKey() {
-        EnecuumApplication.keysetManager().add(SignatureKeyTemplates.ECDSA_P256)
-    }
+//    fun generateAndStoreKey() {
+//        EnecuumApplication.keysetManager().add(SignatureKeyTemplates.ECDSA_P256)
+//    }
+//
+//    public fun sign(src: ByteArray): ByteArray {
+//        val signer = PublicKeySignFactory.getPrimitive(
+//                EnecuumApplication.keysetManager().keysetHandle)
+//        return signer.sign(src)
+//    }
 
-    public fun sign(src: ByteArray): ByteArray {
-        val signer = PublicKeySignFactory.getPrimitive(
-                EnecuumApplication.keysetManager().keysetHandle)
-        return signer.sign(src)
-    }
-
-    @Throws(java.security.GeneralSecurityException::class)
-    public fun verify(signature: ByteArray, data: ByteArray) {
-        val verifier = PublicKeyVerifyFactory.getPrimitive(
-                EnecuumApplication.keysetManager().keysetHandle)
-        verifier.verify(signature, data)
-    }
+//    @Throws(java.security.GeneralSecurityException::class)
+//    public fun verify(signature: ByteArray, data: ByteArray) {
+//        val verifier = PublicKeyVerifyFactory.getPrimitive(
+//                EnecuumApplication.keysetManager().keysetHandle)
+//        verifier.verify(signature, data)
+//    }
 }

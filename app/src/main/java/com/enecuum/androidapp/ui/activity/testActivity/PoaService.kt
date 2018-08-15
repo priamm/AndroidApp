@@ -319,7 +319,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                         .doOnError({ Timber.e(it) })
                         .doOnNext {
                             val response = it.second as ReceivedBroadcastKeyblockMessage;
-                            gotKeyBlock(response, websocket))
+                            gotKeyBlock(response, websocket)
                         }.subscribe())
 
         composite.add(

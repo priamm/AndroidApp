@@ -10,11 +10,6 @@ apply plugin: 'kotlin-kapt'
 apply plugin: "com.bonborunote.stf-android-test-client"
 apply plugin: 'io.fabric'
 android {
-//    signingConfigs {
-//        config {
-//            storeFile file('/home/oleg/Android/enecuum.jks')
-//        }
-//    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.enecuum.androidapp"
@@ -54,6 +49,7 @@ android {
 }
 
 dependencies {
+    compile project(':websockets-rxjava')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation "com.android.support:appcompat-v7:$support_version"
@@ -73,6 +69,7 @@ dependencies {
     compile 'com.segment.retrofit.jsonrpc:jsonrpc:1.0.0-SNAPSHOT'
     compile 'com.squareup.retrofit2:converter-moshi:2.3.0'
     compile(name: 'circleindicator', ext: 'aar')
+
     compile group: 'com.google.zxing', name: 'core', version: '3.3.1'
     compile group: 'com.google.zxing', name: 'android-core', version: '3.3.0'
     compile group: 'com.google.zxing', name: 'android-integration', version: '3.3.0'

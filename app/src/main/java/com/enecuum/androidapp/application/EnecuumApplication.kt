@@ -45,8 +45,8 @@ class EnecuumApplication : MultiDexApplication() {
         private var currentTab = TabType.Home
         private val backStack = mutableMapOf<TabType, Int>()
 
-        private lateinit var keysetManager: AndroidKeysetManager
-        fun keysetManager(): AndroidKeysetManager = keysetManager
+//        private lateinit var keysetManager: AndroidKeysetManager
+//        fun keysetManager(): AndroidKeysetManager = keysetManager
 
         fun navigateToActivity(screenType: ScreenType, transitionData: Any? = null) {
             if (screenType == ScreenType.Main) {
@@ -121,11 +121,11 @@ class EnecuumApplication : MultiDexApplication() {
         Config.register(TinkConfig.TINK_1_1_0);
 //        val shoup = Shoup()
 //        shoup.shoup()
-        keysetManager = AndroidKeysetManager.Builder()
-                .withSharedPref(appContext, "my_keyset_name", "my_pref_file_name")
-                .withMasterKeyUri("android-keystore://my_master_key_id")
-                .withKeyTemplate(SignatureKeyTemplates.ECDSA_P256)
-                .build()
+//        keysetManager = AndroidKeysetManager.Builder()
+//                .withSharedPref(appContext, "my_keyset_name", "my_pref_file_name")
+//                .withMasterKeyUri("android-keystore://my_master_key_id")
+//                .withKeyTemplate(SignatureKeyTemplates.ECDSA_P256)
+//                .build()
 
         Timber.plant(ConsoleTree());
         Timber.plant()
