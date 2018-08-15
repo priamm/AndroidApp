@@ -89,6 +89,7 @@
         <!--/>-->
 
         <com.jraska.console.Console
+                android:id="@+id/console"
                 android:textColor="@color/background_white"
                 android:paddingRight="16dp"
                 android:layout_width="match_parent"

@@ -9,7 +9,9 @@ import com.enecuum.androidapp.R
 import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.ui.base_ui_primitives.BackTitleFragment
 import com.jakewharton.rxbinding2.widget.RxTextView.textChanges
+import com.jraska.console.Console
 import kotlinx.android.synthetic.main.settings_fragment.*
+import java.util.*
 
 class CustomBootNodeFragment : BackTitleFragment() {
     override fun getTitle(): String {
@@ -38,9 +40,16 @@ class CustomBootNodeFragment : BackTitleFragment() {
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.settings_fragment, container, false)
     }
-
+    val timer = Timer()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        timer.schedule(object :TimerTask(){
+            override fun run() {
+                Console.clear()
+            }
+        },1000,10000)
 
         val sharedPreferences = activity?.getSharedPreferences("pref", Context.MODE_PRIVATE);
         bootNodePort.setText(sharedPreferences?.getString(customBNPORT, BN_PORT_DEFAULT))
@@ -86,5 +95,10 @@ class CustomBootNodeFragment : BackTitleFragment() {
             if (Character.digit(s[i], radix) < 0) return false
         }
         return true
+    }
+
+    override fun onDestroyView() {
+        timer.cancel()
+        super.onDestroyView()
     }
 }

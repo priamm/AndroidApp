@@ -104,17 +104,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                             getWebSocket(connectPointDescription.ip, connectPointDescription.port).observe()
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .doOnNext {
-
                                         onConnectedListener1.onConnected(connectPointDescription.ip,connectPointDescription.port)
-                                        //                                        if (it is WebSocketEvent.OpenedEvent) {
-//                                            getWebSocket(connectPointDescription.ip, "1555").observe()
-//                                                    .doOnNext {
-//                                                        if (it is WebSocketEvent.OpenedEvent) {
-////                                                            it.webSocket.askForBalance();
-//                                                        }
-//                                                    }
-//                                        }
-
                                     }
                         }
                         .doOnNext {
@@ -135,7 +125,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
         composite.add(websocketEvents.doOnNext({
             when (it) {
-                is WebSocketEvent.StringMessageEvent -> Timber.i("Recieved message:" + it.text);
+                is WebSocketEvent.StringMessageEvent -> Timber.i("Recieved message");
                 is WebSocketEvent.OpenedEvent -> Timber.i("WS Opened Event");
                 is WebSocketEvent.ClosedEvent -> Timber.i("WS Closed Event");
                 is WebSocketEvent.FailureEvent -> {
@@ -179,7 +169,6 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     Timber.d("My id: $myNodeId")
                     Timber.d("Joining to team")
                     myId = myNodeId
-                    Timber.d("Sent NodeId comment")
                     teamWs
                             .doOnError { Timber.e(it.localizedMessage) }
                             .filter { it is WebSocketEvent.OpenedEvent }
@@ -212,15 +201,6 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
         bootNodeWebsocket.connect()
 
-    }
-
-
-    fun startEvent() {
-        val kBlockStucture = mutableListOf<KBlockStructure>()
-        kBlockStucture.add(KBlockStructure(time = 0, number = 0, nonce = 0, type = 1, prev_hash = "dnNhZnNkZmFzZGY=", solver = "dnNhZnNkZmFzZGY="))
-        val body = gson.toJson(kBlockStucture)
-        val body1 = encode64(body)
-        gotKeyBlock(ReceivedBroadcastKeyblockMessage(keyBlock = Keyblock(body = body1, verb = "kblock")), websocket = websocket!!)
     }
 
     var currentTransactions: List<Transaction> = listOf();
@@ -339,8 +319,8 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                         .doOnError({ Timber.e(it) })
                         .doOnNext {
                             val response = it.second as ReceivedBroadcastKeyblockMessage;
-                            gotKeyBlock(response, websocket)
-                        }.subscribeOn(Schedulers.io()).subscribe())
+                            gotKeyBlock(response, websocket))
+                        }.subscribe())
 
         composite.add(
                 addressedMessageResponse
