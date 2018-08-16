@@ -29,6 +29,7 @@ import java.io.EOFException
 import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.security.SecureRandom
 import java.util.*
 
 
@@ -48,7 +49,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
     val webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>;
     var bootNodeWebsocket: ConnectableFlowable<WebSocketEvent>;
 
-    val websocketEvents:ConnectableFlowable<WebSocketEvent>
+    val websocketEvents: ConnectableFlowable<WebSocketEvent>
     val rsaCipher = RSACipher()
 
     var currentNodes: List<ConnectPointDescription>? = listOf()
@@ -56,6 +57,12 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
     init {
         Timber.d("Start testing")
 
+        if (PersistentStorage.getAddress().isEmpty()) {
+            val random = SecureRandom()
+            val bytes = ByteArray(32)
+            random.nextBytes(bytes)
+            PersistentStorage.setAddress(Base58.encode(bytes))
+        }
         bootNodeWebsocket = getWebSocket(BN_PATH, BN_PORT).observe()
                 .observeOn(AndroidSchedulers.mainThread())
                 .publish()
@@ -117,14 +124,14 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                 is WebSocketEvent.ClosedEvent -> Timber.i("WS Closed Event");
                 is WebSocketEvent.FailureEvent -> {
                     Timber.e("WS Failue Event :${it.t?.localizedMessage}, ${it.response.toString()}")
-                    if (currentNN != null && currentNodes!=null) {
+                    if (currentNN != null && currentNodes != null) {
                         val indexOf = currentNodes?.indexOf(currentNN!!)
                         if (indexOf != -1 && (indexOf!! + 1) < currentNodes!!.size) {
                             reconnectToNN(currentNodes?.get(indexOf + 1)!!)
                         } else {
                             reconnectAll()
                         }
-                    } else{
+                    } else {
                         reconnectAll()
                     }
                 };

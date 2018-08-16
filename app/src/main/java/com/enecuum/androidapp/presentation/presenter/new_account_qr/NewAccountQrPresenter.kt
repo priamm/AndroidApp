@@ -35,15 +35,7 @@ class NewAccountQrPresenter : MvpPresenter<NewAccountQrView>(), FileOpeningFragm
             return
         isGenerationStarted = true
         //TODO: get key from blockchain
-        val generator = KeyPairGenerator.getInstance("RSA")
-        val secureRandom = SecureRandom.getInstance("SHA1PRNG")
-        generator.initialize(512, secureRandom)
-        keys = generator.generateKeyPair()
-        if(keys != null) {
-            val address = keys?.public?.encoded.toString()
-            viewState.showQrCode(address)
-            PersistentStorage.setAddress(address)
-        }
+
     }
 
     fun onSaveClick() {

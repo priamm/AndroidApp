@@ -6,6 +6,8 @@ import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.navigation.ScreenType
 import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.view.registration_finished.RegistrationFinishedView
+import java.security.KeyPairGenerator
+import java.security.SecureRandom
 
 @InjectViewState
 class RegistrationFinishedPresenter : MvpPresenter<RegistrationFinishedView>() {

@@ -92,7 +92,7 @@ object PersistentStorage {
         }
     }
 
-    fun getAddress(): String = getPrefs().getString(ADDRESS, "5Kb8kLL6TsZZY36hWXMssSzNydYXYB9")
+    fun getAddress(): String = getPrefs().getString(ADDRESS, "")
 
     fun setAddress(address: String) {
         if (address.isEmpty())
