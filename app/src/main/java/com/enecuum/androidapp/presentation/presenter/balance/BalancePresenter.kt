@@ -55,7 +55,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
         //TODO: fill with real values
 
         LocalBroadcastManager.getInstance(EnecuumApplication.applicationContext())
-                .registerReceiver(broadCastReceiver, IntentFilter("reconnect"))
+                .registerReceiver(broadCastReceiver, IntentFilter("reconnectAll"))
 
 //        viewState.displayCurrencyRates(7.999999, 7.999999)
 //        viewState.displayBalances(30.0, 30.0)
