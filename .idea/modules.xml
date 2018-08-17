@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AndroidApp.iml" filepath="$PROJECT_DIR$/AndroidApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/websockets-rxjava/websockets-rxjava.iml" filepath="$PROJECT_DIR$/websockets-rxjava/websockets-rxjava.iml" />
     </modules>
   </component>
 </project>
