@@ -40,7 +40,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         super.onViewCreated(view, savedInstanceState)
 
         start.setOnClickListener {
-            presenter.onMiningToggle();
+            presenter.onMiningToggle(null);
         }
         tokens.setOnClickListener({
             presenter.onTokensClick()

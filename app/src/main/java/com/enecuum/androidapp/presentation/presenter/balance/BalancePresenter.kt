@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.application.EnecuumApplication
+import com.enecuum.androidapp.models.inherited.models.ConnectPointDescription
 import com.enecuum.androidapp.models.inherited.models.MicroblockResponse
 import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.navigation.TabType
@@ -39,12 +40,12 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
         override fun onReceive(contxt: Context?, intent: Intent?) {
 
             if (poaService != null) {
-                onMiningToggle()
-                onMiningToggle()
+                onMiningToggle(intent)
+                onMiningToggle(intent)
             }
 
             if (poaService == null) {
-                onMiningToggle()
+                onMiningToggle(intent)
             }
 
         }
@@ -108,7 +109,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                     val webSocket = it.webSocket;
                     Flowable.interval(1000, 5000, TimeUnit.MILLISECONDS)
                             .subscribe {
-//                                Timber.d("Asking for balance: "+ query)
+                                //                                Timber.d("Asking for balance: "+ query)
                                 webSocket?.send(query)
                             }
                 })
@@ -121,7 +122,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                     if (responseRpc.result != null) {
                         Timber.i("Got balance: ${responseRpc.result.balance}")
                         viewState.setBalance(responseRpc.result.balance)
-                    } else{
+                    } else {
                         viewState.setBalance(0);
                     }
                 })
@@ -132,7 +133,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
 
     data class Result(val balance: Int)
 
-    fun onMiningToggle() {
+    fun onMiningToggle(intent: Intent?) {
         val sharedPreferences = EnecuumApplication.applicationContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
 
         if (poaService == null) {
@@ -143,7 +144,12 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
             val path = if (custom) customPath else CustomBootNodeFragment.BN_PATH_DEFAULT
             val port = if (custom) customPort else CustomBootNodeFragment.BN_PORT_DEFAULT
             try {
-                reconnect(path, port)
+                if (intent != null) {
+                    val firstNNToConnect  = intent.getParcelableExtra("reconnectNN") as ConnectPointDescription
+                    reconnect(path, port, firstNNToConnect)
+                } else {
+                    reconnect(path, port, null)
+                }
                 viewState.showProgress()
             } catch (t: Throwable) {
                 Toast.makeText(EnecuumApplication.applicationContext(), t.localizedMessage, Toast.LENGTH_LONG).show()
@@ -163,7 +169,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
 
     }
 
-    private fun reconnect(path: String, port: String) {
+    private fun reconnect(path: String, port: String, nnFirtConnection: ConnectPointDescription?) {
         poaService = PoaService(EnecuumApplication.applicationContext(),
                 path,
                 port,
@@ -176,9 +182,10 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                     override fun onMicroblockCountAndLast(count: Int, microblockResponse: MicroblockResponse) {
                         microblockList += microblockResponse;
                         viewState.displayTransactionsHistory(microblockList)
-                        viewState.displayMicroblocks(10*count);
+                        viewState.displayMicroblocks(10 * count);
                     }
                 },
+                nnFirtConnection = nnFirtConnection,
                 onConnectedListener1 = object : PoaService.onConnectedListener {
                     override fun onConnected(ip: String, port: String) {
                         startLoadingBalance(ip, "1555")

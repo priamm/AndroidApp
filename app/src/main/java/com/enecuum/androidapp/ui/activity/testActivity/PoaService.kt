@@ -34,7 +34,13 @@ import java.text.DateFormat
 import java.util.*
 
 
-class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String, val onTeamSize: onTeamListener, val onMicroblockCountListerer: onMicroblockCountListener, val onConnectedListener1: onConnectedListener) {
+class PoaService(val context: Context,
+                 val BN_PATH: String,
+                 val BN_PORT: String,
+                 val nnFirtConnection: ConnectPointDescription?,
+                 val onTeamSize: onTeamListener,
+                 val onMicroblockCountListerer: onMicroblockCountListener,
+                 val onConnectedListener1: onConnectedListener) {
 
     private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
     val blockSize = 512 * 1024;
@@ -83,7 +89,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                         .doOnNext({
                             val isEof = it.t is EOFException
                             if (!isEof) {
-                                reconnectAll()
+                                reconnectAll(null)
                             }
                         })
                         .subscribe())
@@ -97,6 +103,9 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                 .map {
                     Timber.d("Got NN nodes:" + it.toString())
                     currentNodes = it.connects;
+                    if (nnFirtConnection != null) {
+                        return@map nnFirtConnection
+                    }
                     val size = it.connects.size
                     if (size > 0) {
                         return@map it.connects.get(0)
@@ -104,11 +113,13 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                         //TODO decide what to do if response empty
                         return@map ConnectPointDescription(BN_PATH, BN_PORT)
                     }
-                }.flatMap {
+                }
+                .flatMap {
                     val connectPointDescription = it
                     Timber.d("Connecting to: ${connectPointDescription.ip}:${connectPointDescription.port}")
                     reconnectToNN(connectPointDescription)
                 }
+
                 .publish()
 
         webSocketStringMessageEvents = websocketEvents
@@ -118,26 +129,29 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                     Pair(it.webSocket, parse(it.text!!))
                 }
 
-        composite.add(websocketEvents.doOnNext({
-            when (it) {
-                is WebSocketEvent.StringMessageEvent -> Timber.i("Recieved message at:"+ DateFormat.getDateTimeInstance().format(Date()))
-                is WebSocketEvent.OpenedEvent -> Timber.i("WS Opened Event");
-                is WebSocketEvent.ClosedEvent -> Timber.i("WS Closed Event");
-                is WebSocketEvent.FailureEvent -> {
-                    Timber.e("WS Failue Event :${it.t?.localizedMessage}, ${it.response.toString()}")
-                    if (currentNN != null && currentNodes != null) {
-                        val indexOf = currentNodes?.indexOf(currentNN!!)
-                        if (indexOf != -1 && (indexOf!! + 1) < currentNodes!!.size) {
-                            reconnectToNN(currentNodes?.get(indexOf + 1)!!)
-                        } else {
-                            reconnectAll()
-                        }
-                    } else {
-                        reconnectAll()
-                    }
-                };
-            }
-        }).subscribe());
+        composite.add(
+                websocketEvents
+                        .doOnNext({
+                            when (it) {
+                                is WebSocketEvent.StringMessageEvent -> Timber.i("Recieved message at:" + DateFormat.getDateTimeInstance().format(Date()))
+                                is WebSocketEvent.OpenedEvent -> Timber.i("WS Opened Event");
+                                is WebSocketEvent.ClosedEvent -> Timber.i("WS Closed Event");
+                                is WebSocketEvent.FailureEvent -> {
+                                    Timber.e("WS Failue Event :${it.t?.localizedMessage}, ${it.response.toString()}")
+                                    if (currentNN != null && currentNodes != null) {
+                                        val indexOf = currentNodes?.indexOf(currentNN!!)
+                                        if (indexOf != -1 && (indexOf!! + 1) < currentNodes!!.size) {
+                                            val reconnectTo = currentNodes?.get(indexOf + 1)
+                                            reconnectAll(reconnectTo)
+                                        } else {
+                                            reconnectAll(null)
+                                        }
+                                    } else {
+                                        reconnectAll(null)
+                                    }
+                                };
+                            }
+                        }).subscribe());
 
 
     }
@@ -158,11 +172,13 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
                 }
     }
 
-    private fun reconnectAll() {
+    private fun reconnectAll(firstForReconnect: ConnectPointDescription?) {
         Timber.e("Will be reconnected in 5 ...")
         Handler(Looper.getMainLooper()).postDelayed(Runnable {
+            val intent = Intent("reconnectAll")
+            intent.putExtra("reconnectNN", firstForReconnect)
             LocalBroadcastManager.getInstance(context)
-                    .sendBroadcast(Intent("reconnectAll"));
+                    .sendBroadcast(intent);
         }, 5000)
     }
 

@@ -1,5 +1,8 @@
 package com.enecuum.androidapp.models.inherited.models
 
+import android.os.Parcel
+import android.os.Parcelable
+
 data class BasePoAMessage(val type: String)
 data class ConnectBNRequest(val tag: String = Tags.Request.name,
                             val type: String = CommunicationSubjects.PotentialConnects.name)
@@ -7,6 +10,7 @@ data class ConnectBNRequest(val tag: String = Tags.Request.name,
 data class ConnectBNResponse(val tag: String = Tags.Response.name,
                              val type: String = CommunicationSubjects.PotentialConnects.name,
                              val connects: List<ConnectPointDescription>)
+
 //{"tag":"Response","type":"ErrorOfConnect", "Msg":"{\"tag\":\"Request\",\"type\":\"PotentialConnects\"}", "comment" : "not a connect msg"}
 data class ErrorResponse(val tag: String = Tags.Response.name,
                          val type: String = CommunicationSubjects.ErrorOfConnect.name,
@@ -14,7 +18,31 @@ data class ErrorResponse(val tag: String = Tags.Response.name,
                          val Msg: String)
 
 data class ConnectPointDescription(val ip: String,
-                                   val port: String)
+                                   val port: String) : Parcelable {
+    constructor(parcel: Parcel) : this(
+            parcel.readString(),
+            parcel.readString()) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(ip)
+        parcel.writeString(port)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<ConnectPointDescription> {
+        override fun createFromParcel(parcel: Parcel): ConnectPointDescription {
+            return ConnectPointDescription(parcel)
+        }
+
+        override fun newArray(size: Int): Array<ConnectPointDescription?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
 
 data class PoANodeUUIDRequest(val tag: String = Tags.Request.name,
                               val type: String = CommunicationSubjects.NodeId.name)
