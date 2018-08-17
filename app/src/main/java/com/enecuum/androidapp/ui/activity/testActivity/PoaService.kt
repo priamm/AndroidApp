@@ -30,6 +30,7 @@ import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.security.SecureRandom
+import java.text.DateFormat
 import java.util.*
 
 
@@ -119,7 +120,7 @@ class PoaService(val context: Context, val BN_PATH: String, val BN_PORT: String,
 
         composite.add(websocketEvents.doOnNext({
             when (it) {
-                is WebSocketEvent.StringMessageEvent -> Timber.i("Recieved message");
+                is WebSocketEvent.StringMessageEvent -> Timber.i("Recieved message at:"+ DateFormat.getDateTimeInstance().format(Date()))
                 is WebSocketEvent.OpenedEvent -> Timber.i("WS Opened Event");
                 is WebSocketEvent.ClosedEvent -> Timber.i("WS Closed Event");
                 is WebSocketEvent.FailureEvent -> {
