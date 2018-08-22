@@ -41,18 +41,17 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="@color/black_87"
-            android:lineSpacingExtra="10sp"
-            tools:text="10 ENQ"
-            android:id="@+id/amount"
-            />
+        android:orientation="horizontal">
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textSize="14sp"-->
+            <!--android:fontFamily="sans-serif"-->
+            <!--android:textStyle="normal"-->
+            <!--android:lineSpacingExtra="10sp"-->
+            <!--tools:text="10 ENQ"-->
+            <!--android:id="@+id/amount"-->
+            <!--/>-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -63,7 +62,7 @@
             android:lines="1"
             android:ellipsize="end"
             android:autoLink="web"
-            android:textColor="@color/inactive_text"
+            android:textColor="@color/black21"
             android:id="@+id/address"
             android:layout_marginTop="1dp"
             />

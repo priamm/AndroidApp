@@ -80,7 +80,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         minedText.post { minedText.text = "Joining, team size is: $teamSize"; }
     }
 
-    override fun displayTransactionsHistory(transactionsList: List<MicroblockResponse>) {
+    override fun displayTransactionsHistory(transactionsList: List<String>) {
         TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
     }
 

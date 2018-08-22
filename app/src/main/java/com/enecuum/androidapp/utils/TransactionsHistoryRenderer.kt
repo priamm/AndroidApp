@@ -17,7 +17,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
  * Created by oleg on 31.01.18.
  */
 object TransactionsHistoryRenderer {
-    fun displayTransactionsInRecyclerView(transactionsList : List<MicroblockResponse>, recyclerView: RecyclerView) {
+    fun displayTransactionsInRecyclerView(transactionsList : List<String>, recyclerView: RecyclerView) {
         val adapter = TransactionsListAdapter(transactionsList)
         val layoutManager = LinearLayoutManager(recyclerView.context)
         recyclerView.layoutManager = layoutManager

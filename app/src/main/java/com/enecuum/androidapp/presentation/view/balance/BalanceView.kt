@@ -6,7 +6,7 @@ import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.models.inherited.models.MicroblockResponse
 import com.enecuum.androidapp.presentation.view.HistoryView
 
-interface BalanceView : HistoryView<MicroblockResponse> {
+interface BalanceView : HistoryView<String> {
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun displayCurrencyRates(enq2Usd: Double, enq2Btc: Double)
     @StateStrategyType(AddToEndSingleStrategy::class)

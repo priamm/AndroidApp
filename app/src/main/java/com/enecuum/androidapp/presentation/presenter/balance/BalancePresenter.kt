@@ -51,7 +51,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
         }
     }
 
-    val microblockList = mutableListOf<MicroblockResponse>()
+    val microblockList = hashMapOf<String, MicroblockResponse>()
     fun onCreate() {
         //TODO: fill with real values
 
@@ -145,8 +145,12 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
             val port = if (custom) customPort else CustomBootNodeFragment.BN_PORT_DEFAULT
             try {
                 if (intent != null) {
-                    val firstNNToConnect  = intent.getParcelableExtra("reconnectNN") as ConnectPointDescription
-                    reconnect(path, port, firstNNToConnect)
+                    val reconnectNN: ConnectPointDescription? = intent.getParcelableExtra("reconnectNN")
+                    if (reconnectNN != null) {
+                        reconnect(path, port, reconnectNN)
+                    } else {
+                        reconnect(path, port, null)
+                    }
                 } else {
                     reconnect(path, port, null)
                 }
@@ -179,9 +183,9 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                     }
                 },
                 onMicroblockCountListerer = object : PoaService.onMicroblockCountListener {
-                    override fun onMicroblockCountAndLast(count: Int, microblockResponse: MicroblockResponse) {
-                        microblockList += microblockResponse;
-                        viewState.displayTransactionsHistory(microblockList)
+                    override fun onMicroblockCountAndLast(count: Int, microblockResponse: MicroblockResponse, microblockSignature: String) {
+                        microblockList.put(microblockSignature, microblockResponse);
+                        viewState.displayTransactionsHistory(microblockList.keys.toList())
                         viewState.displayMicroblocks(10 * count);
                     }
                 },

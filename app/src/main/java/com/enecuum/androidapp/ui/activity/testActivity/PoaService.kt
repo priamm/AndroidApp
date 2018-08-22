@@ -8,6 +8,7 @@ import android.os.Looper
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
+import android.util.Base64
 import android.widget.Toast
 import com.enecuum.androidapp.models.inherited.models.*
 import com.enecuum.androidapp.models.inherited.models.Sha.hash256
@@ -312,9 +313,17 @@ class PoaService(val context: Context,
                                     sign_r = "NDU=",//encode64(sign_r.toByteArray()),
                                     sign_s = "NDU=")))//encode64(sign_s.toByteArray()))))
                     Timber.i("Sending to NN")
-                    websocket?.send(gson.toJson(microblockResponse))
 
-                    onMicroblockCountListerer.onMicroblockCountAndLast(++microblocksSoFar, microblockResponse)
+                    val microblockMsgString = gson.toJson(microblockMsg)
+                    val microblockMsgHash = hash256(microblockMsgString.trim().toByteArray())
+                    val microblockMsgHashBase64 = Base64.encodeToString(microblockMsgHash, Base64.DEFAULT)
+
+
+                    val microblockJson = gson.toJson(microblockResponse)
+
+                    websocket?.send(microblockJson)
+
+                    onMicroblockCountListerer.onMicroblockCountAndLast(++microblocksSoFar, microblockResponse, microblockMsgHashBase64)
                     currentTransactions = listOf()
                     askForNewTransactions(websocket);
                 })
@@ -504,7 +513,7 @@ class PoaService(val context: Context,
     }
 
     public interface onMicroblockCountListener {
-        fun onMicroblockCountAndLast(count: Int, microblockResponse: MicroblockResponse)
+        fun onMicroblockCountAndLast(count: Int, microblockResponse: MicroblockResponse, microblockSignature: String)
     }
 
     public interface onConnectedListener {
