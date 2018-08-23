@@ -41,9 +41,9 @@ class TransactionsListAdapter(private val data: List<String>) : RecyclerView.Ada
         val microblockString = data[position].replace("\r", "")
         val encode = URLEncoder.encode(microblockString, "utf-8")
         val url = "http://82.202.212.120/?#/explorer/microblock/$encode"
-        val textToShow = "<a href=\"$url\">$microblockString</a>"
+//        val textToShow = "<a href=\"$url\">$microblockString</a>"
         holder.itemView.address.setClickable(true);
-        holder.itemView.address?.text = Html.fromHtml(textToShow);
+        holder.itemView.address?.text = microblockString//Html.fromHtml(textToShow);
         holder.itemView.setOnClickListener {
             val i = Intent(Intent.ACTION_VIEW,Uri.parse(url.replace("%0A","")))
             startActivity(EnecuumApplication.applicationContext(), i,null);
