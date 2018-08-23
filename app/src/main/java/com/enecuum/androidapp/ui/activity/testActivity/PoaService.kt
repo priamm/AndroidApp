@@ -71,8 +71,7 @@ class PoaService(val context: Context,
             random.nextBytes(bytes)
             PersistentStorage.setAddress(Base58.encode(bytes))
         }
-        bootNodeWebsocket = getWebSocket(BN_PATH, BN_PORT).observe()
-                .observeOn(AndroidSchedulers.mainThread())
+        bootNodeWebsocket = getWebSocket(BN_PATH, BN_PORT)
                 .publish()
 
         composite.add(bootNodeWebsocket
@@ -120,7 +119,7 @@ class PoaService(val context: Context,
                     Timber.d("Connecting to: ${connectPointDescription.ip}:${connectPointDescription.port}")
                     reconnectToNN(connectPointDescription)
                 }
-
+                .subscribeOn(Schedulers.io())
                 .publish()
 
         webSocketStringMessageEvents = websocketEvents
@@ -129,6 +128,7 @@ class PoaService(val context: Context,
                 .map {
                     Pair(it.webSocket, parse(it.text!!))
                 }
+                .subscribeOn(Schedulers.io())
 
         composite.add(
                 websocketEvents
@@ -160,8 +160,7 @@ class PoaService(val context: Context,
     private var currentNN: ConnectPointDescription? = null
 
     private fun reconnectToNN(connectPointDescription: ConnectPointDescription): Flowable<WebSocketEvent>? {
-        return getWebSocket(connectPointDescription.ip, connectPointDescription.port).observe()
-                .observeOn(AndroidSchedulers.mainThread())
+        return getWebSocket(connectPointDescription.ip, connectPointDescription.port)
                 .doOnNext {
                     if (it is WebSocketEvent.OpenedEvent) {
                         currentNN = connectPointDescription;
@@ -171,6 +170,7 @@ class PoaService(val context: Context,
                         websocket = it.webSocket
                     }
                 }
+                .subscribeOn(Schedulers.io())
     }
 
     private fun reconnectAll(firstForReconnect: ConnectPointDescription?) {
@@ -199,7 +199,7 @@ class PoaService(val context: Context,
                 .filter { it.second is ReconnectResponse }
                 .doOnNext {
                     val teamWs = getWebSocket(TEAM_WS_IP, TEAM_WS_PORT)
-                            .observe()
+
                             .share()
                     val myNodeId = (it.second as ReconnectResponse).node_id
                     val ws = it.first
@@ -219,6 +219,8 @@ class PoaService(val context: Context,
                             .cast(WebSocketEvent.StringMessageEvent::class.java)
                             .map { parse(it.text!!) }
                             .cast(TeamResponse::class.java)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe {
                                 Timber.i("Team size updated")
                                 val size = it.data.size
@@ -323,7 +325,10 @@ class PoaService(val context: Context,
 
                     websocket?.send(microblockJson)
 
-                    onMicroblockCountListerer.onMicroblockCountAndLast(++microblocksSoFar, microblockResponse, microblockMsgHashBase64)
+                    Handler(Looper.getMainLooper()).post {
+                        onMicroblockCountListerer.onMicroblockCountAndLast(++microblocksSoFar, microblockResponse, microblockMsgHashBase64)
+                    }
+
                     currentTransactions = listOf()
                     askForNewTransactions(websocket);
                 })
@@ -469,18 +474,15 @@ class PoaService(val context: Context,
     }
 
     private fun getWebSocket(ip: String,
-                             port: String): RxWebSocket {
+                             port: String): Flowable<WebSocketEvent> {
         val request = Request.Builder().url("ws://$ip:$port").build()
         val webSocket = RxWebSocket.createAutoManagedRxWebSocket(request)
+                .observe()
+                .subscribeOn(Schedulers.io())
         return webSocket
     }
 
     private fun parse(text: String): Any? {
-        if (!JsonUtils.isJSONValid(text)) {
-            Timber.e("String is not JSON: " + text)
-            return Object()
-        }
-
         val fromJson = gson.fromJson(text, BasePoAMessage::class.java);
         val type = fromJson.type
         return parse(type, text)

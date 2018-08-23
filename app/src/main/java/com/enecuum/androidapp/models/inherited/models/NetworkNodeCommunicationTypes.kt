@@ -86,11 +86,11 @@ data class PowsResponse(val tag: String = Tags.Response.name,
                         val type: String = CommunicationSubjects.PoWList.name,
                         val poWList: List<String>)
 
-data class AddressedMessageRequest(val tag: String = Tags.Msg.name,
-                                   val type: String = CommunicationSubjects.MsgTo.name,
-                                   val from: String,
-                                   val to: String,
-                                   val msg: String)
+data class AddressedMessageRequest(val tag: String? = Tags.Msg.name,
+                                   val type: String? = CommunicationSubjects.MsgTo.name,
+                                   val from: String?,
+                                   val to: String?,
+                                   val msg: String?)
 
 data class AddressedMessageResponse(val tag: String = Tags.Msg.name,
                                     val type: String = CommunicationSubjects.MsgTo.name,
