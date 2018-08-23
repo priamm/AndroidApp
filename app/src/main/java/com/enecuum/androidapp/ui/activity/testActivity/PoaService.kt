@@ -355,7 +355,9 @@ class PoaService(val context: Context,
 
                             }
 
-                        }).subscribe()
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .subscribe()
         )
 
 
