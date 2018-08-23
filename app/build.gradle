@@ -6,7 +6,6 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
-
 apply plugin: "com.bonborunote.stf-android-test-client"
 apply plugin: 'io.fabric'
 android {
