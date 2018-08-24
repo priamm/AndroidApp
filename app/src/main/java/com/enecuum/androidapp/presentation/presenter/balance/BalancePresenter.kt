@@ -58,24 +58,6 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
         LocalBroadcastManager.getInstance(EnecuumApplication.applicationContext())
                 .registerReceiver(broadCastReceiver, IntentFilter("reconnectAll"))
 
-//        viewState.displayCurrencyRates(7.999999, 7.999999)
-//        viewState.displayBalances(30.0, 30.0)
-//        viewState.displayPoints(1.0)
-//        viewState.displayKarma(1.0)
-//        val microblockList = listOf(
-//                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.EnqPlus),
-//                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
-//                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
-//                Transaction(TransactionType.Send, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
-//                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
-//                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
-//                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
-//                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
-//                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq),
-//                Transaction(TransactionType.Receive, 1517307367, 8.0, "5Kb8kLL6TsZZY36hWXMssSzNyd…", SendReceiveMode.Enq)
-//        )
-//        viewState.displayTransactionsHistory(microblockList)
-
     }
 
     fun onTokensClick() {
@@ -107,7 +89,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                 .filter { it is WebSocketEvent.OpenedEvent }
                 .subscribe {
                     val webSocket = it.webSocket;
-                    Flowable.interval(1000, 5000, TimeUnit.MILLISECONDS)
+                    Flowable.interval(1000, 60000, TimeUnit.MILLISECONDS)
                             .subscribe {
                                 //                                Timber.d("Asking for balance: "+ query)
                                 webSocket?.send(query)
@@ -128,7 +110,6 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                 })
     }
 
-    //    {"jsonrpc":"2.0","result":{"balance":44540},"id":1}
     data class ResponseRpc(val jsonrpc: String, val result: Result?, val id: Int)
 
     data class Result(val balance: Int)

@@ -330,7 +330,6 @@ class PoaService(val context: Context,
                     }
 
                     currentTransactions = listOf()
-                    askForNewTransactions(websocket);
                 })
                 .subscribeOn(Schedulers.io())
                 .subscribe())
@@ -351,8 +350,12 @@ class PoaService(val context: Context,
                                             continue
                                         }
                                         val message = gson.toJson(RequestForSignature(data = currentTransactions.toString()))
-                                        val toJson = gson.toJson(AddressedMessageRequest(msg = message, to = teamMember, from = myId))
-                                        websocket?.send(toJson)
+                                        if (message != null && myId != null && teamMember != null) {
+                                            Timber.d("Sending\nfrom: $myId\nto: $teamMember")
+                                            val toJson = gson.toJson(AddressedMessageRequest(msg = message, to = teamMember, from = myId))
+                                            websocket?.send(toJson)
+                                        }
+
                                     }
                                 } else {
                                     Timber.e("Team is empty")
@@ -433,12 +436,8 @@ class PoaService(val context: Context,
     }
 
 
-    public fun askForNewTransactions(websocket: WebSocket?) {
+    fun askForNewTransactions(websocket: WebSocket?) {
         websocket?.send(gson.toJson(TransactionRequest(number = PersistentStorage.getCountTransactionForRequest())));
-    }
-
-    public fun askForNewTransactions() {
-        websocket?.send(gson.toJson(TransactionRequest()));
     }
 
     private fun showDoneDialog() {
