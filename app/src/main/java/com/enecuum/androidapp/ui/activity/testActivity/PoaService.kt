@@ -436,7 +436,7 @@ class PoaService(val context: Context,
                 .subscribeOn(Schedulers.io())
                 .retryWhen(RetryWithDelay(10000, 10000))
                 .onErrorResumeNext(Flowable.empty())
-                .share()
+                .cache()
         return webSocket
     }
 
