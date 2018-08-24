@@ -118,22 +118,19 @@ class PoaService(val context: Context,
                 .map { parse(it.text!!) }
                 .filter({ it is ConnectBNResponse })
                 .cast(ConnectBNResponse::class.java)
-                .map {
+                .doOnNext {
                     Timber.d("Got NN nodes:" + it.toString())
                     currentNodes = it.connects;
-                    val size = it.connects.size
-                    if (size > 0) {
-                        return@map it.connects.get(0)
-                    } else {
-                        //TODO decide what to do if response empty
-                        return@map ConnectPointDescription(BN_PATH, BN_PORT)
-                    }
                 }
-                .flatMap {
-                    val connectPointDescription = it
-                    Timber.d("Connecting to: ${connectPointDescription.ip}:${connectPointDescription.port}")
-                    reconnectToNN(connectPointDescription)
+                .flatMap { Flowable.fromIterable(it.connects) }
+                .firstOrError()
+                .doOnSuccess {
+                    Timber.d("Connecting to: ${it.ip}:${it.port}")
                 }
+                .flatMapPublisher {
+                    reconnectToNN(it)
+                }
+                .cache()
                 .subscribeOn(Schedulers.io());
 
         webSocketStringMessageEvents = websocketEvents
@@ -434,7 +431,7 @@ class PoaService(val context: Context,
         val webSocket = createAutoManagedRxWebSocket
                 .observe()
                 .subscribeOn(Schedulers.io())
-                .retryWhen(RetryWithDelay(10000, 10000))
+//                .retryWhen(RetryWithDelay(10000, 10000))
                 .onErrorResumeNext(Flowable.empty())
                 .cache()
         return webSocket
