@@ -1,11 +1,9 @@
 package com.enecuum.androidapp.ui.activity.testActivity
 
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.util.Base64
@@ -19,14 +17,11 @@ import com.google.common.io.BaseEncoding
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.flowables.ConnectableFlowable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.Request
 import okhttp3.WebSocket
 import timber.log.Timber
-import java.io.EOFException
 import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -38,14 +33,12 @@ import java.util.*
 class PoaService(val context: Context,
                  val BN_PATH: String,
                  val BN_PORT: String,
-                 val nnFirtConnection: ConnectPointDescription?,
                  val onTeamSize: onTeamListener,
                  val onMicroblockCountListerer: onMicroblockCountListener,
                  val onConnectedListener1: onConnectedListener) {
 
     private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
-    val blockSize = 512 * 1024;
-    val TEAM_WS_IP = "195.201.217.44"
+    val TEAM_WS_IP = "192.168.222.23"
     val TEAM_WS_PORT = "8080"
 
     val TRANSACTION_COUNT_IN_MICROBLOCK = 1
@@ -53,48 +46,73 @@ class PoaService(val context: Context,
     var composite: CompositeDisposable = CompositeDisposable()
     var websocket: WebSocket? = null;
 
-    var gson: Gson = GsonBuilder().disableHtmlEscaping().create();
-    val webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>;
-    var bootNodeWebsocket: ConnectableFlowable<WebSocketEvent>;
-
-    val websocketEvents: ConnectableFlowable<WebSocketEvent>
+    var gson: Gson = GsonBuilder().disableHtmlEscaping().create()
+    private lateinit var webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>
+    private lateinit var bootNodeWebsocketEvents: Flowable<WebSocketEvent>
+    private lateinit var websocketEvents: Flowable<WebSocketEvent>
     val rsaCipher = RSACipher()
-
     var currentNodes: List<ConnectPointDescription>? = listOf()
 
-    init {
-        Timber.d("Start testing")
+    private var bootNodeWebSocket: WebSocket? = null
+    private var isConnectedVal: Boolean = false
 
+
+    private var currentNN: ConnectPointDescription? = null
+
+    private fun reconnectToNN(connectPointDescription: ConnectPointDescription): Flowable<WebSocketEvent>? {
+        return getWebSocket(connectPointDescription.ip, connectPointDescription.port)
+                .doOnNext {
+                    if (it is WebSocketEvent.OpenedEvent) {
+                        currentNN = connectPointDescription;
+                        isConnectedVal = true
+                        onConnectedListener1.onConnected(connectPointDescription.ip, connectPointDescription.port)
+
+                        it.webSocket?.send(gson.toJson(ReconnectRequest()))
+                        websocket = it.webSocket
+                    }
+                }
+                .subscribeOn(Schedulers.io())
+    }
+
+    private lateinit var team: List<String>
+
+    private lateinit var myId: String
+
+    fun disconnect() {
+        isConnectedVal = false
+        websocket?.close(1000, "Client close");
+        bootNodeWebSocket?.close(1000, "Client close");
+        composite.clear()
+        onConnectedListener1.onDisconnected()
+    }
+
+
+    fun isConnected(): Boolean {
+        return isConnectedVal;
+    }
+
+    fun connect() {
+        Timber.d("Connectiong ...")
+        composite = CompositeDisposable()
+        onConnectedListener1.onDisconnected()
         if (PersistentStorage.getAddress().isEmpty()) {
             val random = SecureRandom()
             val bytes = ByteArray(32)
             random.nextBytes(bytes)
             PersistentStorage.setAddress(Base58.encode(bytes))
         }
-        bootNodeWebsocket = getWebSocket(BN_PATH, BN_PORT)
-                .publish()
+        bootNodeWebsocketEvents = getWebSocket(BN_PATH, BN_PORT);
 
-        composite.add(bootNodeWebsocket
+        composite.add(bootNodeWebsocketEvents
                 .filter { it is WebSocketEvent.OpenedEvent }
                 .doOnNext({
+                    bootNodeWebSocket = it.webSocket
                     Timber.d("Connected to BN, sending request")
                     it.webSocket?.send(gson.toJson(ConnectBNRequest()))
                 })
                 .subscribe())
 
-        composite.add(
-                bootNodeWebsocket
-                        .filter { it is WebSocketEvent.FailureEvent }
-                        .map { it as WebSocketEvent.FailureEvent }
-                        .doOnNext({
-                            val isEof = it.t is EOFException
-                            if (!isEof) {
-                                reconnectAll(null)
-                            }
-                        })
-                        .subscribe())
-
-        websocketEvents = bootNodeWebsocket
+        websocketEvents = bootNodeWebsocketEvents
                 .filter { it is WebSocketEvent.StringMessageEvent }
                 .cast(WebSocketEvent.StringMessageEvent::class.java)
                 .map { parse(it.text!!) }
@@ -103,9 +121,6 @@ class PoaService(val context: Context,
                 .map {
                     Timber.d("Got NN nodes:" + it.toString())
                     currentNodes = it.connects;
-                    if (nnFirtConnection != null) {
-                        return@map nnFirtConnection
-                    }
                     val size = it.connects.size
                     if (size > 0) {
                         return@map it.connects.get(0)
@@ -119,8 +134,7 @@ class PoaService(val context: Context,
                     Timber.d("Connecting to: ${connectPointDescription.ip}:${connectPointDescription.port}")
                     reconnectToNN(connectPointDescription)
                 }
-                .subscribeOn(Schedulers.io())
-                .publish()
+                .subscribeOn(Schedulers.io());
 
         webSocketStringMessageEvents = websocketEvents
                 .filter { it is WebSocketEvent.StringMessageEvent }
@@ -139,106 +153,52 @@ class PoaService(val context: Context,
                                 is WebSocketEvent.ClosedEvent -> Timber.i("WS Closed Event");
                                 is WebSocketEvent.FailureEvent -> {
                                     Timber.e("WS Failue Event :${it.t?.localizedMessage}, ${it.response.toString()}")
-                                    if (currentNN != null && currentNodes != null) {
-                                        val indexOf = currentNodes?.indexOf(currentNN!!)
-                                        if (indexOf != -1 && (indexOf!! + 1) < currentNodes!!.size) {
-                                            val reconnectTo = currentNodes?.get(indexOf + 1)
-                                            reconnectAll(reconnectTo)
-                                        } else {
-                                            reconnectAll(null)
-                                        }
-                                    } else {
-                                        reconnectAll(null)
-                                    }
                                 };
                             }
                         }).subscribe());
-
-
-    }
-
-    private var currentNN: ConnectPointDescription? = null
-
-    private fun reconnectToNN(connectPointDescription: ConnectPointDescription): Flowable<WebSocketEvent>? {
-        return getWebSocket(connectPointDescription.ip, connectPointDescription.port)
-                .doOnNext {
-                    if (it is WebSocketEvent.OpenedEvent) {
-                        currentNN = connectPointDescription;
-                        onConnectedListener1.onConnected(connectPointDescription.ip, connectPointDescription.port)
-
-                        it.webSocket?.send(gson.toJson(ReconnectRequest()))
-                        websocket = it.webSocket
-                    }
-                }
-                .subscribeOn(Schedulers.io())
-    }
-
-    private fun reconnectAll(firstForReconnect: ConnectPointDescription?) {
-        Timber.e("Will be reconnected in 5 ...")
-        Handler(Looper.getMainLooper()).postDelayed(Runnable {
-            val intent = Intent("reconnectAll")
-            intent.putExtra("reconnectNN", firstForReconnect)
-            LocalBroadcastManager.getInstance(context)
-                    .sendBroadcast(intent);
-        }, 5000)
-    }
-
-    private lateinit var team: List<String>
-
-    private lateinit var myId: String
-
-    fun disconnect() {
-        websocket?.close(1000, "Client close");
-        composite.clear()
-    }
-
-    fun connect() {
-
 
         val myId = webSocketStringMessageEvents
                 .filter { it.second is ReconnectResponse }
                 .doOnNext {
                     val teamWs = getWebSocket(TEAM_WS_IP, TEAM_WS_PORT)
-
-                            .share()
                     val myNodeId = (it.second as ReconnectResponse).node_id
                     val ws = it.first
                     Timber.d("My id: $myNodeId")
                     Timber.d("Joining to team")
                     myId = myNodeId
-                    teamWs
-                            .doOnError { Timber.e(it.localizedMessage) }
-                            .filter { it is WebSocketEvent.OpenedEvent }
-                            .subscribe {
-                                Timber.d("Sending my id: " + myNodeId)
-                                it.webSocket?.send(gson.toJson(PoANodeUUIDResponse(nodeId = myNodeId)))
-                            }
+                    composite.add(
+                            teamWs
+                                    .doOnError { Timber.e(it.localizedMessage) }
+                                    .filter { it is WebSocketEvent.OpenedEvent }
+                                    .subscribe {
+                                        Timber.d("Sending my id: " + myNodeId)
+                                        it.webSocket?.send(gson.toJson(PoANodeUUIDResponse(nodeId = myNodeId)))
+                                    });
 
-                    teamWs.doOnError { Timber.e(it.localizedMessage) }
-                            .filter { it is WebSocketEvent.StringMessageEvent }
-                            .cast(WebSocketEvent.StringMessageEvent::class.java)
-                            .map { parse(it.text!!) }
-                            .cast(TeamResponse::class.java)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe {
-                                Timber.i("Team size updated")
-                                val size = it.data.size
-                                Timber.d("Command size: " + size)
-                                onTeamSize.onTeamSize(size)
-                                team = it.data
-                                if (size > 1) {
-                                    startWork(myNodeId, webSocketStringMessageEvents, ws)
-                                }
-                            }
+                    composite.add(
+                            teamWs.doOnError { Timber.e(it.localizedMessage) }
+                                    .filter { it is WebSocketEvent.StringMessageEvent }
+                                    .cast(WebSocketEvent.StringMessageEvent::class.java)
+                                    .map { parse(it.text!!) }
+                                    .cast(TeamResponse::class.java)
+                                    .distinctUntilChanged()
+                                    .doOnNext {
+                                        Timber.i("Team size updated")
+                                        val data = it.data.filterNotNull()
+                                        val size = data.size
+                                        Timber.d("Command size: " + size)
+                                        onTeamSize.onTeamSize(size)
+                                        team = data;
+                                        if (size > 1) {
+                                            startWork(myNodeId, webSocketStringMessageEvents, ws)
+                                        }
+                                    }
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe());
 
                 }
 
         composite.add(myId.subscribe())
-
-        websocketEvents.connect()
-
-        bootNodeWebsocket.connect()
 
     }
 
@@ -339,7 +299,7 @@ class PoaService(val context: Context,
                         .filter { it.second is TransactionResponse }
                         .map({ it.second as TransactionResponse })
                         .doOnNext { Timber.d("Got : ${it.transactions.size} transactions") }
-                        .doOnNext({
+                        .doOnNext {
                             currentTransactions += it.transactions
 
                             if (currentTransactions.size >= TRANSACTION_COUNT_IN_MICROBLOCK) {
@@ -363,7 +323,7 @@ class PoaService(val context: Context,
 
                             }
 
-                        })
+                        }
                         .subscribeOn(Schedulers.io())
                         .subscribe()
         )
@@ -466,18 +426,17 @@ class PoaService(val context: Context,
         return BaseEncoding.base64().decode(messages1)
     }
 
-    private fun create(): String {
-        val chars = CharArray(blockSize)
-        Arrays.fill(chars, 'f')
-        return String(chars)
-    }
-
     private fun getWebSocket(ip: String,
                              port: String): Flowable<WebSocketEvent> {
         val request = Request.Builder().url("ws://$ip:$port").build()
-        val webSocket = RxWebSocket.createAutoManagedRxWebSocket(request)
+
+        val createAutoManagedRxWebSocket = RxWebSocket.createAutoManagedRxWebSocket(request)
+        val webSocket = createAutoManagedRxWebSocket
                 .observe()
                 .subscribeOn(Schedulers.io())
+                .retryWhen(RetryWithDelay(10000, 10000))
+                .onErrorResumeNext(Flowable.empty())
+                .share()
         return webSocket
     }
 
@@ -521,14 +480,7 @@ class PoaService(val context: Context,
 
     public interface onConnectedListener {
         fun onConnected(ip: String, port: String);
-    }
-
-    private fun intToLittleEndian(numero: Long): ByteArray {
-
-        val bb = ByteBuffer.allocate(4)
-        bb.order(ByteOrder.LITTLE_ENDIAN)
-        bb.putInt(numero.toInt())
-        return bb.array()
+        fun onDisconnected();
     }
 
     private fun toByteArray(numero: KBlockStructure): ByteArray {
@@ -546,34 +498,6 @@ class PoaService(val context: Context,
             out.add(bb.get(index))
         }
         return out.toByteArray()
-    }
-
-    fun getArray(buffer: ByteBuffer): ByteArray {
-        val length = buffer.remaining()
-        if (buffer.hasArray()) {
-            val boff = buffer.arrayOffset() + buffer.position()
-            return Arrays.copyOfRange(buffer.array(), boff, boff + length)
-        }
-        // else, DirectByteBuffer.get() is the fastest route
-        val bytes = ByteArray(length)
-        buffer.duplicate().get(bytes)
-
-        return bytes
-    }
-
-
-    fun ByteArray.toHex(): String {
-        val result = StringBuffer()
-
-        forEach {
-            val octet = it.toInt()
-            val firstIndex = (octet and 0xF0).ushr(4)
-            val secondIndex = octet and 0x0F
-            result.append(HEX_CHARS[firstIndex])
-            result.append(HEX_CHARS[secondIndex])
-        }
-
-        return result.toString()
     }
 
 

@@ -39,8 +39,10 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        presenter.onCreate()
+
         start.setOnClickListener {
-            presenter.onMiningToggle(null);
+            presenter.onMiningToggle();
         }
         tokens.setOnClickListener({
             presenter.onTokensClick()
@@ -49,7 +51,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
                 getResources().getColor(R.color.turquoise_blue_three),
                 android.graphics.PorterDuff.Mode.SRC_IN);
 
-        presenter.onCreate()
+//        presenter.onCreate()
         setHasOptionsMenu(true)
         TransactionsHistoryRenderer.configurePanelListener(slidingLayout, panelHint)
     }
@@ -114,5 +116,10 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     override fun onResume() {
         super.onResume()
         menu?.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.onDestroy()
     }
 }

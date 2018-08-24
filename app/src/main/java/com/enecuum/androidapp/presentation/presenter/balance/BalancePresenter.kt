@@ -1,15 +1,11 @@
 package com.enecuum.androidapp.presentation.presenter.balance
 
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.support.v4.content.LocalBroadcastManager
-import android.widget.Toast
+import android.os.Handler
+import android.os.Looper
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.application.EnecuumApplication
-import com.enecuum.androidapp.models.inherited.models.ConnectPointDescription
 import com.enecuum.androidapp.models.inherited.models.MicroblockResponse
 import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.navigation.TabType
@@ -21,6 +17,7 @@ import com.enecuum.androidapp.ui.activity.testActivity.Base58
 import com.enecuum.androidapp.ui.activity.testActivity.CustomBootNodeFragment
 import com.enecuum.androidapp.ui.activity.testActivity.PoaService
 import com.google.gson.Gson
+import io.fabric.sdk.android.Fabric.isInitialized
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -32,32 +29,55 @@ import java.util.concurrent.TimeUnit
 @InjectViewState
 class BalancePresenter : MvpPresenter<BalanceView>() {
 
-    var poaService: PoaService? = null;
+    private lateinit var poaService: PoaService
 
     var composite: CompositeDisposable = CompositeDisposable()
 
-    val broadCastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(contxt: Context?, intent: Intent?) {
-
-            if (poaService != null) {
-                onMiningToggle(intent)
-                onMiningToggle(intent)
-            }
-
-            if (poaService == null) {
-                onMiningToggle(intent)
-            }
-
-        }
-    }
+    val sharedPreferences = EnecuumApplication.applicationContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
 
     val microblockList = hashMapOf<String, MicroblockResponse>()
+
+    val custom = sharedPreferences.getBoolean(CustomBootNodeFragment.customBN, false)
+    val customPath = sharedPreferences.getString(CustomBootNodeFragment.customBNIP, CustomBootNodeFragment.BN_PATH_DEFAULT);
+    val customPort = sharedPreferences.getString(CustomBootNodeFragment.customBNPORT, CustomBootNodeFragment.BN_PORT_DEFAULT);
+    val path = if (custom) customPath else CustomBootNodeFragment.BN_PATH_DEFAULT
+    val port = if (custom) customPort else CustomBootNodeFragment.BN_PORT_DEFAULT
+
     fun onCreate() {
-        //TODO: fill with real values
+        poaService = PoaService(EnecuumApplication.applicationContext(),
+                path,
+                port,
+                onTeamSize = object : PoaService.onTeamListener {
+                    override fun onTeamSize(size: Int) {
+                        Handler(Looper.getMainLooper()).post {
+                            viewState.displayTeamSize(size);
+                        }
+                    }
+                },
+                onMicroblockCountListerer = object : PoaService.onMicroblockCountListener {
+                    override fun onMicroblockCountAndLast(count: Int, microblockResponse: MicroblockResponse, microblockSignature: String) {
+                        microblockList.put(microblockSignature, microblockResponse);
+                        viewState.displayTransactionsHistory(microblockList.keys.toList())
+                        viewState.displayMicroblocks(10 * count);
+                    }
+                },
+                onConnectedListener1 = object : PoaService.onConnectedListener {
+                    override fun onDisconnected() {
+                        Handler(Looper.getMainLooper()).post {
+                            viewState.changeButtonState(true)
+                            viewState.hideProgress()
+                        }
+                    }
 
-        LocalBroadcastManager.getInstance(EnecuumApplication.applicationContext())
-                .registerReceiver(broadCastReceiver, IntentFilter("reconnectAll"))
-
+                    override fun onConnected(ip: String, port: String) {
+                        Handler(Looper.getMainLooper()).post {
+                            viewState.changeButtonState(false)
+                            viewState.showProgress()
+                        }
+//                        startLoadingBalance(ip, "1555")
+                    }
+                }
+        )
     }
 
     fun onTokensClick() {
@@ -91,7 +111,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                     val webSocket = it.webSocket;
                     Flowable.interval(1000, 60000, TimeUnit.MILLISECONDS)
                             .subscribe {
-                                //                                Timber.d("Asking for balance: "+ query)
+                                Timber.d("Asking for balance: " + query)
                                 webSocket?.send(query)
                             }
                 })
@@ -108,83 +128,30 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                         viewState.setBalance(0);
                     }
                 })
+
+
     }
 
     data class ResponseRpc(val jsonrpc: String, val result: Result?, val id: Int)
 
     data class Result(val balance: Int)
 
-    fun onMiningToggle(intent: Intent?) {
-        val sharedPreferences = EnecuumApplication.applicationContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
-
-        if (poaService == null) {
-            val custom = sharedPreferences.getBoolean(CustomBootNodeFragment.customBN, false)
-
-            val customPath = sharedPreferences.getString(CustomBootNodeFragment.customBNIP, CustomBootNodeFragment.BN_PATH_DEFAULT);
-            val customPort = sharedPreferences.getString(CustomBootNodeFragment.customBNPORT, CustomBootNodeFragment.BN_PORT_DEFAULT);
-            val path = if (custom) customPath else CustomBootNodeFragment.BN_PATH_DEFAULT
-            val port = if (custom) customPort else CustomBootNodeFragment.BN_PORT_DEFAULT
-            try {
-                if (intent != null) {
-                    val reconnectNN: ConnectPointDescription? = intent.getParcelableExtra("reconnectNN")
-                    if (reconnectNN != null) {
-                        reconnect(path, port, reconnectNN)
-                    } else {
-                        reconnect(path, port, null)
-                    }
-                } else {
-                    reconnect(path, port, null)
-                }
-                viewState.showProgress()
-            } catch (t: Throwable) {
-                Toast.makeText(EnecuumApplication.applicationContext(), t.localizedMessage, Toast.LENGTH_LONG).show()
+    fun onMiningToggle() {
+        if (::poaService.isInitialized) {
+            if (poaService.isConnected()) {
+                poaService.disconnect()
+            } else {
+                poaService.connect()
             }
-
-
-        } else {
-            poaService?.disconnect()
-            poaService = null
-            viewState.hideProgress()
-
-
         }
-
-        viewState.changeButtonState(poaService == null)
-
-
-    }
-
-    private fun reconnect(path: String, port: String, nnFirtConnection: ConnectPointDescription?) {
-        poaService = PoaService(EnecuumApplication.applicationContext(),
-                path,
-                port,
-                onTeamSize = object : PoaService.onTeamListener {
-                    override fun onTeamSize(size: Int) {
-                        viewState.displayTeamSize(size);
-                    }
-                },
-                onMicroblockCountListerer = object : PoaService.onMicroblockCountListener {
-                    override fun onMicroblockCountAndLast(count: Int, microblockResponse: MicroblockResponse, microblockSignature: String) {
-                        microblockList.put(microblockSignature, microblockResponse);
-                        viewState.displayTransactionsHistory(microblockList.keys.toList())
-                        viewState.displayMicroblocks(10 * count);
-                    }
-                },
-                nnFirtConnection = nnFirtConnection,
-                onConnectedListener1 = object : PoaService.onConnectedListener {
-                    override fun onConnected(ip: String, port: String) {
-                        startLoadingBalance(ip, "1555")
-                    }
-                }
-        )
-
-        poaService?.connect()
     }
 
     override fun onDestroy() {
-        LocalBroadcastManager.getInstance(EnecuumApplication.applicationContext())
-                .unregisterReceiver(broadCastReceiver)
-
         super.onDestroy()
+        if (::poaService.isInitialized) {
+            if (poaService.isConnected()) {
+                poaService.disconnect()
+            }
+        }
     }
 }

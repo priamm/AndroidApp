@@ -54,8 +54,11 @@ class AutoManagedWebSocket(request: Request,
             }
 
             override fun dispose() {
-                disposed = webSocket.close(code, reason)
-                e.onNext(WebSocketEvent.ClosedEvent(webSocket, code, reason))
+                val initialized = ::webSocket.isInitialized
+                if (initialized) {
+                    disposed = webSocket.close(code, reason)
+                    e.onNext(WebSocketEvent.ClosedEvent(webSocket, code, reason))
+                }
             }
         })
         val real = RealWebSocket(request, listener, SecureRandom(), 0)
