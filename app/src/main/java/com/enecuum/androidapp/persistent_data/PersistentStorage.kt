@@ -23,6 +23,7 @@ object PersistentStorage {
     private const val IS_MINING_IN_PROGRESS = "IS_MINING_IN_PROGRESS"
     private const val COUNT_TRANSACTIONS = "COUNT_TRANSACTIONS"
     private const val CURRENT_NN = "CURRENT_NN"
+    private const val AUTO_MINING_START = "AUTO_MINING_START"
     private fun getPrefs(): SharedPreferences = EnecuumApplication.applicationContext()
             .getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
 
@@ -30,6 +31,10 @@ object PersistentStorage {
         val editor = getPrefs().edit()
         editor.putBoolean(key, value)
         editor.apply()
+    }
+
+    private fun getBoolean(key: String): Boolean {
+        return getPrefs().getBoolean(key, false)
     }
 
     private fun setString(key: String, value: String) {
@@ -76,7 +81,7 @@ object PersistentStorage {
     }
 
     fun getCurrencyAmount(currency: Currency): Float = when (currency) {
-    //TODO: fill with 0 default
+        //TODO: fill with 0 default
         Currency.Enq -> getPrefs().getFloat(ENQ_AMOUNT, 1000f)
         Currency.EnqPlus -> getPrefs().getFloat(ENQ_PLUS_AMOUNT, 2000f)
         Currency.Token -> getPrefs().getFloat(TOKEN_AMOUNT, 3000f)
@@ -127,5 +132,13 @@ object PersistentStorage {
     fun getCountTransactionForRequest(): Int = getPrefs().getInt(COUNT_TRANSACTIONS, DEFAULT_TRANSACTIONS_COUNT)
     fun setCountTransactionForRequest(value: Int) {
         setInt(COUNT_TRANSACTIONS, value)
+    }
+
+    fun setAutoMiningStart(autoStart: Boolean) {
+        setBoolean(AUTO_MINING_START, autoStart)
+    }
+
+    fun getAutoMiningStart(): Boolean {
+        return getBoolean(AUTO_MINING_START)
     }
 }

@@ -3,14 +3,14 @@ package com.enecuum.androidapp.ui.activity.splash
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.animation.AnimationUtils
+import android.widget.Toast
 import com.enecuum.androidapp.ui.base_ui_primitives.BaseActivity
 
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
+import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.view.splash.SplashView
 import com.enecuum.androidapp.presentation.presenter.splash.SplashPresenter
-import kotlinx.android.synthetic.main.activity_splash.*
 
 
 class SplashActivity : BaseActivity(), SplashView {
@@ -27,5 +27,12 @@ class SplashActivity : BaseActivity(), SplashView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         presenter.onCreate()
+
+        val crashed = getIntent().getBooleanExtra("crash", false)
+        if (crashed) {
+            Toast.makeText(this, "App restarted after crash", Toast.LENGTH_SHORT).show();
+        }
+
+        PersistentStorage.setAutoMiningStart(crashed)
     }
 }

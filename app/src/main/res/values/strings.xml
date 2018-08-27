@@ -76,7 +76,6 @@
     <string name="mining">Mining</string>
     <string name="scan">Scan</string>
     <string name="mining_has_ended">Mining has ended</string>
-    <string name="start">Start</string>
     <string name="join">Join</string>
     <string name="poa_member">Team Member</string>
     <string name="team_lead">Team Leader</string>

@@ -190,7 +190,7 @@
         </RelativeLayout>
 
         <Button
-                android:text="@string/start"
+                android:text="@string/start_mining"
                 android:id="@+id/start"
                 android:layout_width="match_parent"
                 android:layout_marginLeft="27dp"

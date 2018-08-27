@@ -1,12 +1,15 @@
 package com.enecuum.androidapp.application
 
+import android.app.Activity
 import android.content.Context
+import android.os.Bundle
 import android.support.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
 import com.enecuum.androidapp.events.MainActivityStopped
 import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.navigation.ScreenType
 import com.enecuum.androidapp.navigation.TabType
+import com.enecuum.androidapp.ui.activity.testActivity.AppCrashHandler
 import com.enecuum.androidapp.utils.EventBusUtils
 import com.google.crypto.tink.Config
 import com.google.crypto.tink.config.TinkConfig
@@ -130,6 +133,36 @@ class EnecuumApplication : MultiDexApplication() {
         tabCicerone = Cicerone.create()
 
         EventBusUtils.register(this)
+
+        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
+            override fun onActivityPaused(activity: Activity?) {
+            }
+
+            override fun onActivityResumed(activity: Activity?) {
+
+            }
+
+            override fun onActivityStarted(activity: Activity?) {
+
+            }
+
+            override fun onActivityDestroyed(activity: Activity?) {
+
+            }
+
+            override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {
+
+            }
+
+            override fun onActivityStopped(activity: Activity?) {
+
+            }
+
+            override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
+                Thread.setDefaultUncaughtExceptionHandler(AppCrashHandler(activity!!));
+            }
+
+        })
     }
 
     override fun onTerminate() {

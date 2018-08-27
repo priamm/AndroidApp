@@ -1,16 +1,21 @@
 package com.enecuum.androidapp.ui.fragment.balance
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
-import com.enecuum.androidapp.models.inherited.models.MicroblockResponse
+import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.presenter.balance.BalancePresenter
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
 import com.enecuum.androidapp.ui.base_ui_primitives.NoBackFragment
 import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
+import com.enecuum.androidapp.utils.Utils
 import kotlinx.android.synthetic.main.fragment_balance.*
 
 class BalanceFragment : NoBackFragment(), BalanceView {
@@ -44,6 +49,20 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         start.setOnClickListener {
             presenter.onMiningToggle();
         }
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (PersistentStorage.getAutoMiningStart()) {
+                presenter.onMiningToggle();
+                Toast.makeText(view.context,"Restoring after crash",Toast.LENGTH_LONG).show()
+                PersistentStorage.setAutoMiningStart(false)
+            }
+        },10000);
+
+//        //////REMOVE THIS
+//        Handler().postDelayed({
+//            Utils.crashMe()
+//        }, 30000)
+
         tokens.setOnClickListener({
             presenter.onTokensClick()
         })
@@ -54,7 +73,10 @@ class BalanceFragment : NoBackFragment(), BalanceView {
 //        presenter.onCreate()
         setHasOptionsMenu(true)
         TransactionsHistoryRenderer.configurePanelListener(slidingLayout, panelHint)
+
+
     }
+
 
     override fun displayCurrencyRates(enq2Usd: Double, enq2Btc: Double) {
         enqBtc.text = String.format("%f ENQ/BTC", enq2Btc)
