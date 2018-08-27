@@ -40,7 +40,7 @@ class PoaService(val context: Context,
                  val onConnectedListener1: onConnectedListener) {
 
     private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
-    val TEAM_WS_IP = "192.168.222.23"
+    val TEAM_WS_IP = "195.201.217.44"
     val TEAM_WS_PORT = "8080"
 
     val TRANSACTION_COUNT_IN_MICROBLOCK = 1
