@@ -14,6 +14,7 @@ import com.enecuum.androidapp.network.RxWebSocket
 import com.enecuum.androidapp.network.WebSocketEvent
 import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.google.common.io.BaseEncoding
+import com.google.crypto.tink.subtle.EllipticCurves
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.reactivex.Flowable
@@ -21,6 +22,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.Request
 import okhttp3.WebSocket
+import org.web3j.crypto.ECKeyPair
 import timber.log.Timber
 import java.math.BigInteger
 import java.nio.ByteBuffer
@@ -100,6 +102,27 @@ class PoaService(val context: Context,
             val bytes = ByteArray(32)
             random.nextBytes(bytes)
             PersistentStorage.setAddress(Base58.encode(bytes))
+
+//            val generateKeyPair = EllipticCurves.generateKeyPair(EllipticCurves.CurveType.NIST_P256)
+//            val ecKeyPair = ECKeyPair.create(generateKeyPair)
+//            val privKey = ecKeyPair.privateKey
+//            val pubKey = ecKeyPair.publicKey
+//            System.out.println("Public key: " + pubKey.toString(16));
+//            PersistentStorage.setAddress(pubKey.toString(16))
+//            System.out.println("Private key: " + privKey.toString(16));
+
+//            System.out.println("Public key (compressed): " + compressPubKey(pubKey));
+//            EllipticCurves.validatePublicKey()
+//            val msg = "Message for signing";
+//            val msgHash = Hash.sha3(msg.toByteArray());
+//            val signature = Sign.signMessage(msgHash, keyPair, false);
+//            System.out.println("Msg: " + msg);
+//            System.out.println("Msg hash: " + Hex.toHexString(msgHash));
+//            System.out.printf("Signature: [v = %d, r = %s, s = %s]\n",
+//                    signature.getV() - 27,
+//                    Hex.toHexString(signature.getR()),
+//                    Hex.toHexString(signature.getS()));
+
         }
         bootNodeWebsocketEvents = getWebSocket(BN_PATH, BN_PORT);
 

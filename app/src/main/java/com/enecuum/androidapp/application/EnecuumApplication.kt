@@ -1,33 +1,23 @@
 package com.enecuum.androidapp.application
 
-import android.app.Application
 import android.content.Context
 import android.support.multidex.MultiDexApplication
-import android.util.Base64
 import com.crashlytics.android.Crashlytics
 import com.enecuum.androidapp.events.MainActivityStopped
-import com.enecuum.androidapp.models.inherited.models.MicroblockMsg
-import com.enecuum.androidapp.models.inherited.models.Sha.hash256
 import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.navigation.ScreenType
 import com.enecuum.androidapp.navigation.TabType
-import com.enecuum.androidapp.ui.activity.testActivity.Base58
 import com.enecuum.androidapp.utils.EventBusUtils
-import com.enecuum.androidapp.utils.Shoup
 import com.google.crypto.tink.Config
 import com.google.crypto.tink.config.TinkConfig
 import com.google.crypto.tink.integration.android.AndroidKeysetManager
 import com.google.crypto.tink.signature.SignatureKeyTemplates
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.jraska.console.timber.ConsoleTree
 import io.fabric.sdk.android.Fabric
 import org.greenrobot.eventbus.Subscribe
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
-import java.io.BufferedReader
-import java.io.InputStreamReader
 
 
 /**
@@ -125,9 +115,7 @@ class EnecuumApplication : MultiDexApplication() {
         appContext = applicationContext
         Fabric.with(this, Crashlytics())
         Config.register(TinkConfig.TINK_1_1_0);
-
-//        val shoup = Shoup()
-//        shoup.shoup()
+//        Security.addProvider(BouncyCastleProvider())
         keysetManager = AndroidKeysetManager.Builder()
                 .withSharedPref(appContext, "my_keyset_name", "my_pref_file_name")
                 .withMasterKeyUri("android-keystore://my_master_key_id")
