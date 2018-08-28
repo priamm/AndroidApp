@@ -95,11 +95,11 @@
         <!--android:id="@+id/team"-->
         <!--/>-->
 
-        <com.jraska.console.Console
-                android:id="@+id/console"
-                android:textColor="@color/background_white"
-                android:paddingRight="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="600dp"/>
+        <!--<com.jraska.console.Console-->
+                <!--android:id="@+id/console"-->
+                <!--android:textColor="@color/background_white"-->
+                <!--android:paddingRight="16dp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="600dp"/>-->
     </LinearLayout>
 </ScrollView>
