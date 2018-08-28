@@ -369,7 +369,7 @@ class PoaService(val context: Context,
 
         composite.add(
                 addressedMessageResponse
-                        .doOnComplete({ Timber.e("Complete!!!") })
+                        .doOnComplete({ Timber.e("Complete") })
                         .doOnNext {
                             val before = System.currentTimeMillis();
                             val response = it.second as AddressedMessageResponse;
@@ -421,7 +421,7 @@ class PoaService(val context: Context,
                 .subscribeOn(Schedulers.io())
                 .retryWhen(RetryWithDelay(10000, 10000))
                 .cache()
-                .share()
+
         return webSocket
     }
 
