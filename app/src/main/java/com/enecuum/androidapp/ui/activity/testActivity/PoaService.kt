@@ -79,6 +79,7 @@ class PoaService(val context: Context,
                         isConnectedVal = true
                         onConnectedListner.onConnected(connectPointDescription.ip, connectPointDescription.port)
                         it.webSocket?.send(gson.toJson(ReconnectRequest()))
+                        nnWs?.close(1000,"Close");
                         nnWs = it.webSocket
 //                        startAskingForBalance(connectPointDescription.ip, connectPointDescription.port)
                     }
@@ -117,6 +118,7 @@ class PoaService(val context: Context,
         composite.add(bootNodeWebsocketEvents
                 .filter { it is WebSocketEvent.OpenedEvent }
                 .doOnNext {
+                    bootNodeWebSocket?.close(1000,"Close");
                     bootNodeWebSocket = it.webSocket
                     Timber.d("Connected to BN, sending request")
                     it.webSocket?.send(gson.toJson(ConnectBNRequest()))
@@ -180,6 +182,7 @@ class PoaService(val context: Context,
                                     .doOnError { Timber.e(it.localizedMessage) }
                                     .filter { it is WebSocketEvent.OpenedEvent }
                                     .subscribe {
+                                        teamWs?.close(1000,"Close")
                                         teamWs = it.webSocket
                                         Timber.d("Sending my id: " + myNodeId)
                                         it.webSocket?.send(gson.toJson(PoANodeUUIDResponse(nodeId = myNodeId)))
