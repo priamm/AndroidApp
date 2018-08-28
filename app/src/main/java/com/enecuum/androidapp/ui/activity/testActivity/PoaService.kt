@@ -359,7 +359,15 @@ class PoaService(val context: Context,
                         .doOnError({ Timber.e(it) })
                         .doOnNext {
                             val response = it.second as ReceivedBroadcastKeyblockMessage;
-                            gotKeyBlock(response, websocket)
+                            Timber.d("Got key block, start asking for transactions")
+
+                            val keyBlock = response.keyBlock;
+                            val keyblockBodyJson = decode64(keyBlock.body).toString(Charsets.US_ASCII)
+                            val kBlockStructure = gson.fromJson(keyblockBodyJson, Array<KBlockStructure>::class.java)
+                            keyblockHash = getKeyBlockHash(kBlockStructure.get(0))
+
+                            prev_hash = keyblockHash!!
+                            askForNewTransactions(websocket)
                         }.subscribe())
 
         composite.add(
@@ -405,19 +413,6 @@ class PoaService(val context: Context,
         val toByteArray = toByteArray(kBlockStructure)
         val hash256 = hash256(toByteArray)
         return encode64(hash256)
-    }
-
-
-    private fun gotKeyBlock(response: ReceivedBroadcastKeyblockMessage, websocket: WebSocket?) {
-        Timber.d("Got key block, start asking for transactions")
-
-        val keyBlock = response.keyBlock;
-        val keyblockBodyJson = decode64(keyBlock.body).toString(Charsets.US_ASCII)
-        val kBlockStructure = gson.fromJson(keyblockBodyJson, Array<KBlockStructure>::class.java)
-        keyblockHash = getKeyBlockHash(kBlockStructure.get(0))
-
-        prev_hash = keyblockHash!!
-        askForNewTransactions(websocket)
     }
 
 
