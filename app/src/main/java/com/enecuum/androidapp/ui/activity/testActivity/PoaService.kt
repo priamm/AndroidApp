@@ -230,6 +230,8 @@ class PoaService(val context: Context,
 
     private var microblocksSoFar = 0
 
+    private val TRANSACTIONS_LIMIT_TO_PREVENT_OVERFLOW: Int = 1000
+
     private fun startWork(myId: String, webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>, websocket: WebSocket?) {
         val broadcastMessage = webSocketStringMessageEvents
                 .filter { it.second is ReceivedBroadcastMessage }
@@ -320,6 +322,9 @@ class PoaService(val context: Context,
                         .map({ it.second as TransactionResponse })
                         .doOnNext { Timber.d("Got : ${it.transactions.size} transactions") }
                         .doOnNext {
+                            if (currentTransactions.size > TRANSACTIONS_LIMIT_TO_PREVENT_OVERFLOW) {
+                                currentTransactions = listOf()
+                            }
                             currentTransactions += it.transactions
 
                             if (currentTransactions.size >= TRANSACTION_COUNT_IN_MICROBLOCK) {
