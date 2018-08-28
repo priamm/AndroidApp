@@ -139,3 +139,7 @@ data class MicroblockMsg(val K_hash: String,
 data class MicroblockSignature(val sign_r: String = "NDU=", val sign_s: String = "NDU=");
 
 data class KBlockStructure(val time: Int, val nonce: Int, val number: Int, val type: Byte, val prev_hash: String, val solver: String)
+
+data class ResponseRpc(val jsonrpc: String, val result: Result?, val id: Int)
+
+data class Result(val balance: Int)

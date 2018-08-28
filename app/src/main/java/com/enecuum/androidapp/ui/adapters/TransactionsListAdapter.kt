@@ -40,7 +40,8 @@ class TransactionsListAdapter(private val data: List<String>) : RecyclerView.Ada
 
         val microblockString = data[position].replace("\r", "")
         val encode = URLEncoder.encode(microblockString, "utf-8")
-        val url = "http://82.202.212.120/?#/explorer/microblock/$encode"
+
+        val url = "http://genesis.enecuum.com/?#/explorer/microblock/$encode"
 //        val textToShow = "<a href=\"$url\">$microblockString</a>"
         holder.itemView.address.setClickable(true);
         holder.itemView.address?.text = microblockString//Html.fromHtml(textToShow);

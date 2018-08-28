@@ -21,6 +21,8 @@ import org.greenrobot.eventbus.Subscribe
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
+import java.util.*
+import com.jraska.console.Console
 
 
 /**
@@ -134,6 +136,10 @@ class EnecuumApplication : MultiDexApplication() {
 
         EventBusUtils.register(this)
 
+        //run clean log timer
+        val timer = Timer()
+        timer.schedule(CleanTimberTask(), 60000)
+
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityPaused(activity: Activity?) {
             }
@@ -174,5 +180,11 @@ class EnecuumApplication : MultiDexApplication() {
     fun onMainActivityStopped(event: MainActivityStopped) {
         backStack.clear()
     }
+
+    internal inner class CleanTimberTask : TimerTask() {
+        override fun run() {
+            Console.clear()
+        }
+    };
 
 }
