@@ -431,7 +431,7 @@ class PoaClient(val context: Context,
                     disconnect()
                 }
                 .subscribeOn(Schedulers.io())
-//                .retryWhen(RetryWithDelay(10000, 10000))
+                .retryWhen(RetryWithDelay(10000, 10000))
                 .cache()
 
         return webSocket
