@@ -38,14 +38,17 @@ class PoaClient(val context: Context,
     val TEAM_WS_IP = "195.201.217.44"
     val TEAM_WS_PORT = "8080"
 
+    val BALANCE_WS_PORT = "1555"
+
     val TRANSACTION_COUNT_IN_MICROBLOCK = 1
 
-    private val PERIOD_ASK_FOR_BALANCE: Long = 60000
+    private val PERIOD_ASK_FOR_BALANCE: Long = 30000
 
     var composite: CompositeDisposable = CompositeDisposable()
     var nnWs: WebSocket? = null;
     var teamWs: WebSocket? = null;
     var bootNodeWebSocket: WebSocket? = null
+    var balanceWebSocket: WebSocket? = null
 
     var gson: Gson = GsonBuilder().disableHtmlEscaping().create()
     private lateinit var webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>
@@ -81,7 +84,18 @@ class PoaClient(val context: Context,
                         it.webSocket?.send(gson.toJson(ReconnectAction()))
                         nnWs?.close(1000, "Close");
                         nnWs = it.webSocket
-//                        startAskingForBalance(connectPointDescription.ip, connectPointDescription.port)
+
+
+                        val balanceWebSocketEvent = getWebSocket(connectPointDescription.ip, BALANCE_WS_PORT);
+
+
+                        composite.add(balanceWebSocketEvent
+                                .filter { it is WebSocketEvent.OpenedEvent }
+                                .subscribe {
+                                    balanceWebSocket = it.webSocket
+                                    Timber.i("Starting listening balance at: " + connectPointDescription.ip + ":" + BALANCE_WS_PORT)
+                                    startAskingForBalance(balanceWebSocketEvent);
+                                })
                     }
                 }
                 .subscribeOn(Schedulers.io())
@@ -93,7 +107,7 @@ class PoaClient(val context: Context,
 
     fun disconnect() {
         isConnectedVal = false
-        listOf(nnWs, bootNodeWebSocket, teamWs)
+        listOf(nnWs, bootNodeWebSocket, teamWs, balanceWebSocket)
                 .forEach {
                     it?.close(1000, "Client close");
                 }
@@ -109,7 +123,6 @@ class PoaClient(val context: Context,
 
     fun connect() {
         Timber.d("Connecting ...")
-        disconnect()
         composite = CompositeDisposable()
         onConnectedListner.onStartConnecting()
         createKey()
@@ -213,19 +226,6 @@ class PoaClient(val context: Context,
                                     .subscribe());
 
                 }
-
-        composite.add(
-                webSocketStringMessageEvents
-                        .filter { it.second is ResponseRpc }
-                        .cast(ResponseRpc::class.java)
-                        .doOnNext {
-                            if (it.result != null) {
-                                Timber.i("Got balance: ${it.result.balance}")
-                                balanceListener.onBalance(it.result.balance)
-                            } else {
-                                balanceListener.onBalance(0);
-                            }
-                        }.subscribe());
 
         composite.add(myId.subscribe())
 
@@ -431,7 +431,7 @@ class PoaClient(val context: Context,
                     disconnect()
                 }
                 .subscribeOn(Schedulers.io())
-                .retryWhen(RetryWithDelay(10000, 10000))
+//                .retryWhen(RetryWithDelay(10000, 10000))
                 .cache()
 
         return webSocket
@@ -473,8 +473,22 @@ class PoaClient(val context: Context,
         return any
     }
 
-    fun startAskingForBalance(ip: String, port: String) {
-        Timber.i("Starting listening balance at: " + ip + ":" + port)
+    fun startAskingForBalance(balanceWebSocketEvent: Flowable<WebSocketEvent>) {
+        composite.add(
+                balanceWebSocketEvent
+                        .filter { it is WebSocketEvent.StringMessageEvent }
+                        .cast(WebSocketEvent.StringMessageEvent::class.java)
+                        .map { parse(it.text!!) }
+                        .cast(ResponseRpc::class.java)
+                        .doOnNext {
+                            if (it.result != null) {
+                                Timber.i("Got balance: ${it.result.balance}")
+                                balanceListener.onBalance(it.result.balance)
+                            } else {
+                                balanceListener.onBalance(0);
+                            }
+                        }.subscribe());
+
         val address = Base58.encode(PersistentStorage.getAddress().toByteArray())
         val query = "{\"jsonrpc\":\"2.0\",\"method\":\"getWallet\",\"params\":{\"hash\":\"$address\",\"limit\":-1},\"id\":4}"
         composite.add(
@@ -482,8 +496,7 @@ class PoaClient(val context: Context,
                         .subscribe {
                             Timber.d("Asking for balance: " + query)
                             Timber.d("Request sent")
-                            val sent = nnWs?.send(query)
-
+                            val sent = balanceWebSocket?.send(query)
                             sent?.let {
                                 if (!sent) {
                                     Timber.d("Ask for balance did not sent")

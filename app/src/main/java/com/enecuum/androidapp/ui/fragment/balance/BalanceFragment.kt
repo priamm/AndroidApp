@@ -168,7 +168,10 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     }
 
     override fun showConnectionError() {
-        Toast.makeText(context, R.string.connection_error, Toast.LENGTH_LONG).show()
+        Handler(Looper.getMainLooper()).post {
+            Toast.makeText(context, R.string.connection_error, Toast.LENGTH_LONG).show()
+        }
+
     }
 
     override fun hideLoading() {
