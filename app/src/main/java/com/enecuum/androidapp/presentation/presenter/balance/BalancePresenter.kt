@@ -11,13 +11,13 @@ import com.enecuum.androidapp.navigation.FragmentType
 import com.enecuum.androidapp.navigation.TabType
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
 import com.enecuum.androidapp.ui.activity.testActivity.CustomBootNodeFragment
-import com.enecuum.androidapp.ui.activity.testActivity.PoaService
+import com.enecuum.androidapp.ui.activity.testActivity.PoaClient
 
 
 @InjectViewState
 class BalancePresenter : MvpPresenter<BalanceView>() {
 
-    private lateinit var poaService: PoaService
+    private lateinit var poaClient: PoaClient
 
     val sharedPreferences = EnecuumApplication.applicationContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
 
@@ -30,24 +30,24 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
     val port = if (custom) customPort else CustomBootNodeFragment.BN_PORT_DEFAULT
 
     fun onCreate() {
-        poaService = PoaService(EnecuumApplication.applicationContext(),
+        poaClient = PoaClient(EnecuumApplication.applicationContext(),
                 path,
                 port,
-                onTeamSize = object : PoaService.onTeamListener {
+                onTeamSize = object : PoaClient.onTeamListener {
                     override fun onTeamSize(size: Int) {
                         Handler(Looper.getMainLooper()).post {
                             viewState.displayTeamSize(size);
                         }
                     }
                 },
-                onMicroblockCountListerer = object : PoaService.onMicroblockCountListener {
+                onMicroblockCountListerer = object : PoaClient.onMicroblockCountListener {
                     override fun onMicroblockCountAndLast(count: Int, microblockResponse: MicroblockResponse, microblockSignature: String) {
                         microblockList.put(microblockSignature, microblockResponse);
                         viewState.displayTransactionsHistory(microblockList.keys.toList())
                         viewState.displayMicroblocks(10 * count);
                     }
                 },
-                onConnectedListner = object : PoaService.onConnectedListener {
+                onConnectedListner = object : PoaClient.onConnectedListener {
                     override fun onConnectionError() {
                         viewState.showConnectionError()
                     }
@@ -75,7 +75,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                         }
                     }
                 },
-                balanceListener = object : PoaService.BalanceListener {
+                balanceListener = object : PoaClient.BalanceListener {
                     override fun onBalance(amount: Int) {
                         viewState.setBalance(amount)
                     }
@@ -89,20 +89,20 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
 
 
     fun onMiningToggle() {
-        if (::poaService.isInitialized) {
-            if (poaService.isConnected()) {
-                poaService.disconnect()
+        if (::poaClient.isInitialized) {
+            if (poaClient.isConnected()) {
+                poaClient.disconnect()
             } else {
-                poaService.connect()
+                poaClient.connect()
             }
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if (::poaService.isInitialized) {
-            if (poaService.isConnected()) {
-                poaService.disconnect()
+        if (::poaClient.isInitialized) {
+            if (poaClient.isConnected()) {
+                poaClient.disconnect()
             }
         }
     }

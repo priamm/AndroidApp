@@ -27,13 +27,13 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-class PoaService(val context: Context,
-                 val BN_PATH: String,
-                 val BN_PORT: String,
-                 val onTeamSize: onTeamListener,
-                 val onMicroblockCountListerer: onMicroblockCountListener,
-                 val onConnectedListner: onConnectedListener,
-                 val balanceListener: BalanceListener) {
+class PoaClient(val context: Context,
+                val BN_PATH: String,
+                val BN_PORT: String,
+                val onTeamSize: onTeamListener,
+                val onMicroblockCountListerer: onMicroblockCountListener,
+                val onConnectedListner: onConnectedListener,
+                val balanceListener: BalanceListener) {
 
     val TEAM_WS_IP = "195.201.217.44"
     val TEAM_WS_PORT = "8080"
