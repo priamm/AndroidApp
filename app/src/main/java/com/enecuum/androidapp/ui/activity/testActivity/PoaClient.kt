@@ -108,8 +108,8 @@ class PoaClient(val context: Context,
 
     fun connect() {
         Timber.d("Connecting ...")
+        disconnect()
         composite = CompositeDisposable()
-        onConnectedListner.onDisconnected()
         onConnectedListner.onStartConnecting()
         createKey()
 
@@ -260,7 +260,7 @@ class PoaClient(val context: Context,
                             val errorResponse = it.second as ErrorResponse
                             Timber.e("Error: ${errorResponse.comment}")
                             Timber.e("Error: ${errorResponse.Msg}")
-                            onConnectedListner.onDisconnected()
+                            disconnect()
                         }
                         .subscribe()
         )
@@ -425,7 +425,7 @@ class PoaClient(val context: Context,
                 .observe()
                 .doOnError {
                     onConnectedListner.onConnectionError()
-                    onConnectedListner.onDisconnected()
+                    disconnect()
                 }
                 .subscribeOn(Schedulers.io())
                 .retryWhen(RetryWithDelay(10000, 10000))
