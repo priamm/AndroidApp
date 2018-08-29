@@ -36,7 +36,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
         poaClient = PoaClient(EnecuumApplication.applicationContext(),
                 path,
                 port,
-                onTeamSize = object : PoaClient.onTeamListener {
+                onTeamSizeListener = object : PoaClient.onTeamListener {
                     override fun onTeamSize(size: Int) {
                         Handler(Looper.getMainLooper()).post {
                             viewState.displayTeamSize(size);

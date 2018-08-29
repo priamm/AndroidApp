@@ -15,7 +15,9 @@ import com.enecuum.androidapp.presentation.presenter.balance.BalancePresenter
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
 import com.enecuum.androidapp.ui.base_ui_primitives.NoBackFragment
 import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
+import com.jakewharton.rxbinding2.view.RxView
 import kotlinx.android.synthetic.main.fragment_balance.*
+import java.util.concurrent.TimeUnit
 
 class BalanceFragment : NoBackFragment(), BalanceView {
 
@@ -49,9 +51,11 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         pd.setMessage("Connecting...")
         presenter.onCreate()
 
-        start.setOnClickListener {
-            presenter.onMiningToggle();
-        }
+        RxView.clicks(start)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    presenter.onMiningToggle();
+                }
 
         if (PersistentStorage.getAutoMiningStart()) {
             Handler(Looper.getMainLooper()).postDelayed({
@@ -104,7 +108,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     }
 
     override fun displayTeamSize(teamSize: Int) {
-        minedText.post { minedText.text = "Joining, team size is: $teamSize"; }
+        minedText.post { minedText.text = if (teamSize > 0) "Joining, team size is: $teamSize" else ""; }
     }
 
     override fun displayTransactionsHistory(transactionsList: List<String>) {

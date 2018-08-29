@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit
 class PoaClient(val context: Context,
                 val BN_PATH: String,
                 val BN_PORT: String,
-                val onTeamSize: onTeamListener,
+                val onTeamSizeListener: onTeamListener,
                 val onMicroblockCountListerer: onMicroblockCountListener,
                 val onConnectedListner: onConnectedListener,
                 val balanceListener: BalanceListener) {
@@ -98,6 +98,7 @@ class PoaClient(val context: Context,
                     it?.close(1000, "Client close");
                 }
         composite.dispose()
+        onTeamSizeListener.onTeamSize(0)
         onConnectedListner.onDisconnected()
     }
 
@@ -202,7 +203,7 @@ class PoaClient(val context: Context,
                                         val data = it.data.filterNotNull()
                                         val size = data.size
                                         Timber.d("Command size: " + size)
-                                        onTeamSize.onTeamSize(size)
+                                        onTeamSizeListener.onTeamSize(size)
                                         team = data;
                                         if (size > 1) {
                                             startWork(myNodeId, webSocketStringMessageEvents, ws)
