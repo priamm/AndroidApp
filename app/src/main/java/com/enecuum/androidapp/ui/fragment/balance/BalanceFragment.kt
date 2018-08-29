@@ -1,9 +1,14 @@
 package com.enecuum.androidapp.ui.fragment.balance
 
 import android.app.ProgressDialog
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.support.v4.content.LocalBroadcastManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +20,7 @@ import com.enecuum.androidapp.presentation.presenter.balance.BalancePresenter
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
 import com.enecuum.androidapp.ui.base_ui_primitives.NoBackFragment
 import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
+import com.enecuum.androidapp.utils.Utils
 import com.jakewharton.rxbinding2.view.RxView
 import kotlinx.android.synthetic.main.fragment_balance.*
 import java.util.concurrent.TimeUnit
@@ -43,9 +49,16 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         return inflater.inflate(R.layout.fragment_balance, container, false)
     }
 
+    val startMiningReciever = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            presenter.onMiningToggle();
+        }
+    }
+    private val RESTART_ACTION: String = "restart_action"
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        context?.registerReceiver(startMiningReciever, IntentFilter(RESTART_ACTION))
         pd = ProgressDialog(view.context)
 
         pd.setMessage("Connecting...")
@@ -61,11 +74,12 @@ class BalanceFragment : NoBackFragment(), BalanceView {
             Handler(Looper.getMainLooper()).postDelayed({
                 presenter.onMiningToggle();
                 Toast.makeText(view.context, "Restoring after crash", Toast.LENGTH_LONG).show()
+                LocalBroadcastManager.getInstance(context!!).sendBroadcast(Intent(RESTART_ACTION))
                 PersistentStorage.setAutoMiningStart(false)
             }, 10000);
         }
 
-//        //////REMOVE THIS
+//        //////REMOVE THIS ONLY, FOR CRASH TESTING
 //        Handler().postDelayed({
 //            Utils.crashMe()
 //        }, 30000)
@@ -80,10 +94,12 @@ class BalanceFragment : NoBackFragment(), BalanceView {
 //        presenter.onCreate()
         setHasOptionsMenu(true)
         TransactionsHistoryRenderer.configurePanelListener(slidingLayout, panelHint)
-
-
     }
 
+    override fun onDestroyView() {
+        context?.unregisterReceiver(startMiningReciever)
+        super.onDestroyView()
+    }
 
     override fun displayCurrencyRates(enq2Usd: Double, enq2Btc: Double) {
         enqBtc.text = String.format("%f ENQ/BTC", enq2Btc)

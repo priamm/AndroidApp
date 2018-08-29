@@ -165,7 +165,7 @@ class EnecuumApplication : MultiDexApplication() {
             }
 
             override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
-//                Thread.setDefaultUncaughtExceptionHandler(AppCrashHandler(activity!!));
+                Thread.setDefaultUncaughtExceptionHandler(AppCrashHandler(activity!!));
             }
 
         })
