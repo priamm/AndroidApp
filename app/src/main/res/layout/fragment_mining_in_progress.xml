@@ -93,13 +93,6 @@
                     android:text="1"/>
         </LinearLayout>
 
-        <!--<com.jraska.console.Console android:layout_width="match_parent"-->
-                                    <!--android:layout_height="220dp"-->
-                                    <!--android:id="@+id/console">-->
-
-        <!--</com.jraska.console.Console>-->
-
-
         <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

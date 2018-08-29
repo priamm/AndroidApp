@@ -63,6 +63,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                         Handler(Looper.getMainLooper()).post {
                             viewState.changeButtonState(true)
                             viewState.hideProgress()
+                            viewState.hideLoading()
                         }
                     }
 

@@ -108,10 +108,9 @@ class PoaService(val context: Context,
 
     fun connect() {
         Timber.d("Connecting ...")
-        onConnectedListner.onStartConnecting()
         composite = CompositeDisposable()
         onConnectedListner.onDisconnected()
-
+        onConnectedListner.onStartConnecting()
         createKey()
 
         bootNodeWebsocketEvents = getWebSocket(BN_PATH, BN_PORT);
@@ -186,7 +185,8 @@ class PoaService(val context: Context,
                                         teamWs?.close(1000, "Close")
                                         teamWs = it.webSocket
                                         Timber.d("Sending my id: " + myNodeId)
-                                        it.webSocket?.send(gson.toJson(PoANodeUUIDResponse(nodeId = myNodeId)))
+                                        val response =  gson.toJson(PoANodeUUIDResponse(nodeId = myNodeId))
+                                        it.webSocket?.send(response)
                                     });
 
                     composite.add(
