@@ -116,7 +116,9 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     }
 
     override fun displayMicroblocks(count: Int) {
-        minedText.text = "You has mined: $count  ENQ";
+        Handler(Looper.getMainLooper()).post {
+            minedText.text = "You has mined: $count  ENQ";
+        }
     }
 
     override fun displayKarma(karmaValue: Double) {
@@ -124,7 +126,9 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     }
 
     override fun displayTeamSize(teamSize: Int) {
-        minedText.post { minedText.text = if (teamSize > 0) "Joining, team size is: $teamSize" else ""; }
+        Handler(Looper.getMainLooper()).post {
+            minedText.post { minedText.text = if (teamSize > 0) "Joining, team size is: $teamSize" else ""; }
+        }
     }
 
     override fun displayTransactionsHistory(transactionsList: List<String>) {
@@ -138,7 +142,9 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     }
 
     override fun setBalance(balance: Int?) {
-        enqBalance.text = "ENQ " + balance?.toString();
+        Handler(Looper.getMainLooper()).post {
+            enqBalance.text = "ENQ " + balance?.toString();
+        }
     }
 
     override fun showProgress() {
@@ -159,12 +165,16 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     }
 
     override fun updateProgressMessage(str: String) {
-        pd.setMessage(str)
+        Handler(Looper.getMainLooper()).post {
+            pd.setMessage(str)
+        }
     }
 
 
     override fun showLoading() {
-        pd.show()
+        Handler(Looper.getMainLooper()).post {
+            pd.show()
+        }
     }
 
     override fun showConnectionError() {
@@ -175,8 +185,10 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     }
 
     override fun hideLoading() {
-        if (pd.isShowing) {
-            pd.dismiss()
+        Handler(Looper.getMainLooper()).post {
+            if (pd.isShowing) {
+                pd.dismiss()
+            }
         }
     }
 
