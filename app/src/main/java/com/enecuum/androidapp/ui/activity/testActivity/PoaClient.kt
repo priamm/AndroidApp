@@ -185,8 +185,10 @@ class PoaClient(val context: Context,
                                         teamWs?.close(1000, "Close")
                                         teamWs = it.webSocket
                                         Timber.d("Sending my id: " + myNodeId)
-                                        val response =  gson.toJson(PoANodeUUIDResponse(nodeId = myNodeId))
-                                        it.webSocket?.send(response)
+                                        if (!TextUtils.isEmpty(myNodeId)) {
+                                            val response = gson.toJson(PoANodeUUIDResponse(nodeId = myNodeId))
+                                            it.webSocket?.send(response)
+                                        }
                                     });
 
                     composite.add(
