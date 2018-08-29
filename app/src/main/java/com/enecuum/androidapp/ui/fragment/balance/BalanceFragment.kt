@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.fragment_balance.*
 
 class BalanceFragment : NoBackFragment(), BalanceView {
 
-
     companion object {
         const val FORMAT = "%s %.8f"
         const val TAG = "BalanceFragment"
@@ -137,6 +136,10 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         } else {
             start.text = getText(R.string.stop_mining)
         }
+    }
+
+    override fun updateProgressMessage(str: String) {
+        pd.setMessage(str)
     }
 
 

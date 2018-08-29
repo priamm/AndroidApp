@@ -26,6 +26,9 @@ interface BalanceView : HistoryView<String> {
     fun showProgress()
 
     @StateStrategyType(AddToEndSingleStrategy::class)
+    fun updateProgressMessage(str:String)
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
     fun hideProgress()
 
     @StateStrategyType(AddToEndSingleStrategy::class)

@@ -12,6 +12,9 @@ import com.enecuum.androidapp.navigation.TabType
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
 import com.enecuum.androidapp.ui.activity.testActivity.CustomBootNodeFragment
 import com.enecuum.androidapp.ui.activity.testActivity.PoaClient
+import com.jraska.console.Console
+import java.util.*
+import android.os.CountDownTimer
 
 
 @InjectViewState
@@ -64,6 +67,24 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                             viewState.changeButtonState(true)
                             viewState.hideProgress()
                             viewState.hideLoading()
+
+                            //prevent show disconnected
+                            if (!disconnectedByUser) {
+                                object : CountDownTimer(5000, 1000) {
+                                    override fun onTick(millisUntilFinished: Long) {
+                                        viewState.updateProgressMessage("Connecting...  " + millisUntilFinished / 1000 + " sec")
+
+                                    }
+
+                                    override fun onFinish() {
+                                        viewState.updateProgressMessage("Connecting...")
+                                        connect()
+                                    }
+
+                                }.start()
+                                viewState.showProgress()
+                                disconnectedByUser = false
+                            }
                         }
                     }
 
@@ -83,23 +104,43 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
         )
     }
 
+    internal inner class ReconnectTask : TimerTask() {
+        override fun run() {
+            Console.clear()
+        }
+    };
     fun onTokensClick() {
         EnecuumApplication.navigateToFragment(FragmentType.Tokens, TabType.Home)
     }
 
 
+    private var disconnectedByUser: Boolean = false
+
     fun onMiningToggle() {
         if (::poaClient.isInitialized) {
-            if (poaClient.isConnected()) {
-                poaClient.disconnect()
+            if (!poaClient.isConnected()) {
+                connect()
             } else {
-                poaClient.connect()
+                disconnectedByUser = true
+                disconnect()
             }
         }
     }
 
     override fun onDestroy() {
+        disconnect()
         super.onDestroy()
+    }
+
+    fun connect() {
+        if (::poaClient.isInitialized) {
+            if (!poaClient.isConnected()) {
+                poaClient.connect()
+            }
+        }
+    }
+
+    fun disconnect() {
         if (::poaClient.isInitialized) {
             if (poaClient.isConnected()) {
                 poaClient.disconnect()
