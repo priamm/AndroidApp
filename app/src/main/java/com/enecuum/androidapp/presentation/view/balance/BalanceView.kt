@@ -33,4 +33,13 @@ interface BalanceView : HistoryView<String> {
 
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun setBalance(balance: Int?)
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun showLoading()
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun hideLoading()
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun showConnectionError()
 }

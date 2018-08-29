@@ -78,8 +78,8 @@ class PoaService(val context: Context,
                         currentNN = connectPointDescription;
                         isConnectedVal = true
                         onConnectedListner.onConnected(connectPointDescription.ip, connectPointDescription.port)
-                        it.webSocket?.send(gson.toJson(ReconnectRequest()))
-                        nnWs?.close(1000,"Close");
+                        it.webSocket?.send(gson.toJson(ReconnectAction()))
+                        nnWs?.close(1000, "Close");
                         nnWs = it.webSocket
 //                        startAskingForBalance(connectPointDescription.ip, connectPointDescription.port)
                     }
@@ -108,6 +108,7 @@ class PoaService(val context: Context,
 
     fun connect() {
         Timber.d("Connecting ...")
+        onConnectedListner.onStartConnecting()
         composite = CompositeDisposable()
         onConnectedListner.onDisconnected()
 
@@ -118,7 +119,7 @@ class PoaService(val context: Context,
         composite.add(bootNodeWebsocketEvents
                 .filter { it is WebSocketEvent.OpenedEvent }
                 .doOnNext {
-                    bootNodeWebSocket?.close(1000,"Close");
+                    bootNodeWebSocket?.close(1000, "Close");
                     bootNodeWebSocket = it.webSocket
                     Timber.d("Connected to BN, sending request")
                     it.webSocket?.send(gson.toJson(ConnectBNRequest()))
@@ -182,7 +183,7 @@ class PoaService(val context: Context,
                                     .doOnError { Timber.e(it.localizedMessage) }
                                     .filter { it is WebSocketEvent.OpenedEvent }
                                     .subscribe {
-                                        teamWs?.close(1000,"Close")
+                                        teamWs?.close(1000, "Close")
                                         teamWs = it.webSocket
                                         Timber.d("Sending my id: " + myNodeId)
                                         it.webSocket?.send(gson.toJson(PoANodeUUIDResponse(nodeId = myNodeId)))
@@ -259,6 +260,7 @@ class PoaService(val context: Context,
                             val errorResponse = it.second as ErrorResponse
                             Timber.e("Error: ${errorResponse.comment}")
                             Timber.e("Error: ${errorResponse.Msg}")
+                            onConnectedListner.onDisconnected()
                         }
                         .subscribe()
         )
@@ -278,7 +280,7 @@ class PoaService(val context: Context,
                 .doOnNext {
                     Timber.i("Signed all successfully")
                     Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(context, "Sending", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Sending", Toast.LENGTH_SHORT).show()
                     }
                     val publicKeys = mutableListOf<String>()
                     for (responseSignature in it) {
@@ -421,6 +423,10 @@ class PoaService(val context: Context,
         val managedRxWebSocket = RxWebSocket.createAutoManagedRxWebSocket(request)
         val webSocket = managedRxWebSocket
                 .observe()
+                .doOnError {
+                    onConnectedListner.onConnectionError()
+                    onConnectedListner.onDisconnected()
+                }
                 .subscribeOn(Schedulers.io())
                 .retryWhen(RetryWithDelay(10000, 10000))
                 .cache()
@@ -447,7 +453,7 @@ class PoaService(val context: Context,
         val any = when (type) {
             CommunicationSubjects.Team.name -> gson.fromJson(text, TeamResponse::class.java)
             CommunicationSubjects.PotentialConnects.name -> gson.fromJson(text, ConnectBNResponse::class.java)
-            CommunicationSubjects.Connect.name -> gson.fromJson(text, ReconnectRequest::class.java)
+            CommunicationSubjects.Connect.name -> gson.fromJson(text, ReconnectAction::class.java)
             CommunicationSubjects.Broadcast.name -> gson.fromJson(text, ReceivedBroadcastMessage::class.java)
             CommunicationSubjects.KeyBlock.name -> gson.fromJson(text, ReceivedBroadcastKeyblockMessage::class.java)
             CommunicationSubjects.MsgTo.name -> gson.fromJson(text, AddressedMessageResponse::class.java)
@@ -492,8 +498,10 @@ class PoaService(val context: Context,
     }
 
     interface onConnectedListener {
+        fun onStartConnecting();
         fun onConnected(ip: String, port: String);
         fun onDisconnected();
+        fun onConnectionError()
     }
 
     interface BalanceListener {

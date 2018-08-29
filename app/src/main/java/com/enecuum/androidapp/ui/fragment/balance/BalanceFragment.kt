@@ -1,12 +1,12 @@
 package com.enecuum.androidapp.ui.fragment.balance
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
@@ -15,7 +15,6 @@ import com.enecuum.androidapp.presentation.presenter.balance.BalancePresenter
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
 import com.enecuum.androidapp.ui.base_ui_primitives.NoBackFragment
 import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
-import com.enecuum.androidapp.utils.Utils
 import kotlinx.android.synthetic.main.fragment_balance.*
 
 class BalanceFragment : NoBackFragment(), BalanceView {
@@ -36,6 +35,8 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     @InjectPresenter
     lateinit var presenter: BalancePresenter
 
+    lateinit var pd: ProgressDialog;
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_balance, container, false)
@@ -44,19 +45,22 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        pd = ProgressDialog(view.context)
+
+        pd.setMessage("Connecting...")
         presenter.onCreate()
 
         start.setOnClickListener {
             presenter.onMiningToggle();
         }
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            if (PersistentStorage.getAutoMiningStart()) {
+        if (PersistentStorage.getAutoMiningStart()) {
+            Handler(Looper.getMainLooper()).postDelayed({
                 presenter.onMiningToggle();
-                Toast.makeText(view.context,"Restoring after crash",Toast.LENGTH_LONG).show()
+                Toast.makeText(view.context, "Restoring after crash", Toast.LENGTH_LONG).show()
                 PersistentStorage.setAutoMiningStart(false)
-            }
-        },10000);
+            }, 10000);
+        }
 
 //        //////REMOVE THIS
 //        Handler().postDelayed({
@@ -135,6 +139,21 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         }
     }
 
+
+    override fun showLoading() {
+        pd.show()
+    }
+
+    override fun showConnectionError() {
+        Toast.makeText(context, R.string.connection_error, Toast.LENGTH_LONG).show()
+    }
+
+    override fun hideLoading() {
+        if (pd.isShowing) {
+            pd.dismiss()
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         menu?.clear()
@@ -144,4 +163,6 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         super.onDestroy()
         presenter.onDestroy()
     }
+
+
 }

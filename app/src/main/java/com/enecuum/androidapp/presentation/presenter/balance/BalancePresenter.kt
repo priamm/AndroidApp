@@ -48,6 +48,17 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                     }
                 },
                 onConnectedListner = object : PoaService.onConnectedListener {
+                    override fun onConnectionError() {
+                        viewState.showConnectionError()
+                    }
+
+                    override fun onStartConnecting() {
+                        Handler(Looper.getMainLooper()).post {
+                            viewState.changeButtonState(true)
+                            viewState.showLoading()
+                        }
+                    }
+
                     override fun onDisconnected() {
                         Handler(Looper.getMainLooper()).post {
                             viewState.changeButtonState(true)
@@ -59,6 +70,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                         Handler(Looper.getMainLooper()).post {
                             viewState.changeButtonState(false)
                             viewState.showProgress()
+                            viewState.hideLoading()
                         }
                     }
                 },
