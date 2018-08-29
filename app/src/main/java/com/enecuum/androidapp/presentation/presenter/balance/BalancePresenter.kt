@@ -104,7 +104,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
         )
     }
 
-    internal inner class ReconnectTask : TimerTask() {
+    internal inner class CleanTask : TimerTask() {
         override fun run() {
             Console.clear()
         }
