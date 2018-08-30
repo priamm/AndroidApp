@@ -19,8 +19,8 @@ import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.presenter.balance.BalancePresenter
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
 import com.enecuum.androidapp.ui.base_ui_primitives.NoBackFragment
+import com.enecuum.androidapp.ui.base_ui_primitives.tab_fragments.ReceiveTabFragment
 import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
-import com.enecuum.androidapp.utils.Utils
 import com.jakewharton.rxbinding2.view.RxView
 import kotlinx.android.synthetic.main.fragment_balance.*
 import java.util.concurrent.TimeUnit
@@ -30,12 +30,11 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     companion object {
         const val FORMAT = "%s %.8f"
         const val TAG = "BalanceFragment"
-
-        fun newInstance(): BalanceFragment {
-            val fragment: BalanceFragment = BalanceFragment()
-            val args: Bundle = Bundle()
-            fragment.arguments = args
-            return fragment
+        private var instance : BalanceFragment? = null
+        fun singleton() : BalanceFragment {
+            if(instance == null)
+                instance = BalanceFragment()
+            return instance!!
         }
     }
 
@@ -111,9 +110,6 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         enqPlusBalance.text = String.format("ENQ+ %.8f", enqPlus)
     }
 
-    override fun displayPoints(pointsValue: Double) {
-        points.text = String.format(FORMAT, getString(R.string.points), pointsValue)
-    }
 
     override fun displayMicroblocks(count: Int) {
         Handler(Looper.getMainLooper()).post {
@@ -121,9 +117,6 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         }
     }
 
-    override fun displayKarma(karmaValue: Double) {
-        karma.text = String.format(FORMAT, getString(R.string.karma), karmaValue)
-    }
 
     override fun displayTeamSize(teamSize: Int) {
         Handler(Looper.getMainLooper()).post {
@@ -148,19 +141,25 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     }
 
     override fun showProgress() {
-        progressBar.visibility = View.VISIBLE
+        Handler(Looper.getMainLooper()).post {
+            progressBar.visibility = View.VISIBLE
+        }
 
     }
 
     override fun hideProgress() {
-        progressBar.visibility = View.INVISIBLE
+        Handler(Looper.getMainLooper()).post {
+            progressBar.visibility = View.INVISIBLE
+        }
     }
 
     override fun changeButtonState(isStart: Boolean) {
-        if (isStart) {
-            start.text = getText(R.string.start_mining)
-        } else {
-            start.text = getText(R.string.stop_mining)
+        Handler(Looper.getMainLooper()).post {
+            if (isStart) {
+                start.text = getText(R.string.start_mining)
+            } else {
+                start.text = getText(R.string.stop_mining)
+            }
         }
     }
 

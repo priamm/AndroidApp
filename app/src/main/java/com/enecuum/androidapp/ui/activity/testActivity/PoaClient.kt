@@ -73,7 +73,6 @@ class PoaClient(val context: Context,
 
     private val MIN_K_BLOCK_PERIOD: Long = 10
 
-
     private fun reconnectToNN(connectPointDescription: ConnectPointDescription): Flowable<WebSocketEvent>? {
         return getWebSocket(connectPointDescription.ip, connectPointDescription.port)
                 .doOnNext {
@@ -87,7 +86,6 @@ class PoaClient(val context: Context,
 
 
                         val balanceWebSocketEvent = getWebSocket(connectPointDescription.ip, BALANCE_WS_PORT);
-
 
                         composite.add(balanceWebSocketEvent
                                 .filter { it is WebSocketEvent.OpenedEvent }
@@ -125,7 +123,7 @@ class PoaClient(val context: Context,
         Timber.d("Connecting ...")
         composite = CompositeDisposable()
         onConnectedListner.onStartConnecting()
-        createKey()
+        createKeyIfNeeds()
 
         bootNodeWebsocketEvents = getWebSocket(BN_PATH, BN_PORT);
 
@@ -231,7 +229,7 @@ class PoaClient(val context: Context,
 
     }
 
-    fun createKey() {
+    fun createKeyIfNeeds() {
         if (PersistentStorage.getAddress().isEmpty()) {
             val random = SecureRandom()
             val bytes = ByteArray(32)
@@ -263,7 +261,6 @@ class PoaClient(val context: Context,
                             val errorResponse = it.second as ErrorResponse
                             Timber.e("Error: ${errorResponse.comment}")
                             Timber.e("Error: ${errorResponse.Msg}")
-                            disconnect()
                         }
                         .subscribe()
         )
@@ -428,7 +425,7 @@ class PoaClient(val context: Context,
                 .observe()
                 .doOnError {
                     onConnectedListner.onConnectionError()
-                    disconnect()
+                    onConnectedListner.doReconnect()
                 }
                 .subscribeOn(Schedulers.io())
                 .retryWhen(RetryWithDelay(10000, 10000))
@@ -517,6 +514,7 @@ class PoaClient(val context: Context,
         fun onStartConnecting();
         fun onConnected(ip: String, port: String);
         fun onDisconnected();
+        fun doReconnect();
         fun onConnectionError()
     }
 

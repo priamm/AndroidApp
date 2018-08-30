@@ -11,10 +11,6 @@ interface BalanceView : HistoryView<String> {
     fun displayCurrencyRates(enq2Usd: Double, enq2Btc: Double)
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun displayBalances(enq: Double, enqPlus: Double)
-    @StateStrategyType(AddToEndSingleStrategy::class)
-    fun displayPoints(pointsValue: Double)
-    @StateStrategyType(AddToEndSingleStrategy::class)
-    fun displayKarma(karmaValue: Double)
 
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun displayTeamSize(teamSize: Int)

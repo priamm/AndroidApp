@@ -3,10 +3,8 @@ package com.enecuum.androidapp.presentation.presenter.main
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.application.EnecuumApplication
-import com.enecuum.androidapp.navigation.ScreenType
 import com.enecuum.androidapp.navigation.TabType
 import com.enecuum.androidapp.presentation.view.main.MainView
-import com.enecuum.androidapp.utils.MiningUtils
 
 @InjectViewState
 class MainPresenter : MvpPresenter<MainView>() {
@@ -15,7 +13,7 @@ class MainPresenter : MvpPresenter<MainView>() {
     }
 
     fun onHomeClicked() {
-        EnecuumApplication.navigateToTab(TabType.Home)
+        EnecuumApplication.navigateToTab(TabType.Balance)
     }
 
     fun onSendClicked() {

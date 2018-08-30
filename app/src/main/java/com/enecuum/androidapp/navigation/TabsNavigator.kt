@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import com.enecuum.androidapp.ui.base_ui_primitives.tab_fragments.*
+import com.enecuum.androidapp.ui.fragment.balance.BalanceFragment
 import ru.terrakok.cicerone.android.SupportAppNavigator
 
 /**
@@ -23,7 +24,7 @@ class TabsNavigator(activity: FragmentActivity?,
             return null
         val tabType = TabType.valueOf(screenKey)
         return when (tabType) {
-            TabType.Home -> HomeTabFragment.singleton()
+            TabType.Balance -> BalanceFragment.singleton()
             TabType.Send -> SendTabFragment.singleton()
             TabType.Receive -> ReceiveTabFragment.singleton()
             TabType.Settings -> SettingsTabFragment.singleton()

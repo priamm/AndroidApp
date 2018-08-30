@@ -42,7 +42,7 @@ class FragmentNavigator(activity: FragmentActivity?,
             safeData = Bundle.EMPTY
         val fragmentType = FragmentType.valueOf(screenKey)
         when (fragmentType) {
-            FragmentType.Balance -> return BalanceFragment.newInstance()
+            FragmentType.Balance -> return BalanceFragment.singleton()
             FragmentType.Tokens -> return TokensAndJettonsFragment.newInstance()
             FragmentType.ReceiveByAddress -> return ReceiveByAddressFragment.newInstance(safeData as Bundle)
             FragmentType.ReceiveQr -> return ReceiveQrFragment.newInstance(safeData as Bundle)

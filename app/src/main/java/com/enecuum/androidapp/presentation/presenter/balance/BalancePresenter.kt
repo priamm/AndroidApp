@@ -33,41 +33,26 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
     val port = if (custom) customPort else CustomBootNodeFragment.BN_PORT_DEFAULT
 
     fun onCreate() {
-        poaClient = PoaClient(EnecuumApplication.applicationContext(),
-                path,
-                port,
-                onTeamSizeListener = object : PoaClient.onTeamListener {
-                    override fun onTeamSize(size: Int) {
-                        Handler(Looper.getMainLooper()).post {
-                            viewState.displayTeamSize(size);
+        if (!::poaClient.isInitialized) {
+            poaClient = PoaClient(EnecuumApplication.applicationContext(),
+                    path,
+                    port,
+                    onTeamSizeListener = object : PoaClient.onTeamListener {
+                        override fun onTeamSize(size: Int) {
+                            Handler(Looper.getMainLooper()).post {
+                                viewState.displayTeamSize(size);
+                            }
                         }
-                    }
-                },
-                onMicroblockCountListerer = object : PoaClient.onMicroblockCountListener {
-                    override fun onMicroblockCountAndLast(count: Int, microblockResponse: MicroblockResponse, microblockSignature: String) {
-                        microblockList.put(microblockSignature, microblockResponse);
-                        viewState.displayTransactionsHistory(microblockList.keys.toList())
-                        viewState.displayMicroblocks(10 * count);
-                    }
-                },
-                onConnectedListner = object : PoaClient.onConnectedListener {
-                    override fun onConnectionError() {
-                        viewState.showConnectionError()
-                    }
-
-                    override fun onStartConnecting() {
-                        Handler(Looper.getMainLooper()).post {
-                            viewState.changeButtonState(true)
-                            viewState.showLoading()
+                    },
+                    onMicroblockCountListerer = object : PoaClient.onMicroblockCountListener {
+                        override fun onMicroblockCountAndLast(count: Int, microblockResponse: MicroblockResponse, microblockSignature: String) {
+                            microblockList.put(microblockSignature, microblockResponse);
+                            viewState.displayTransactionsHistory(microblockList.keys.toList())
+                            viewState.displayMicroblocks(10 * count);
                         }
-                    }
-
-                    override fun onDisconnected() {
-                        Handler(Looper.getMainLooper()).post {
-                            viewState.changeButtonState(true)
-                            viewState.hideProgress()
-                            viewState.hideLoading()
-
+                    },
+                    onConnectedListner = object : PoaClient.onConnectedListener {
+                        override fun doReconnect() {
                             //prevent show disconnected
                             if (!disconnectedByUser) {
                                 object : CountDownTimer(5000, 1000) {
@@ -86,23 +71,43 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                                 disconnectedByUser = false
                             }
                         }
-                    }
 
-                    override fun onConnected(ip: String, port: String) {
-                        Handler(Looper.getMainLooper()).post {
-                            viewState.changeButtonState(false)
-                            viewState.showProgress()
-                            viewState.hideLoading()
+                        override fun onConnectionError() {
+                            viewState.showConnectionError()
+                        }
+
+                        override fun onStartConnecting() {
+                            Handler(Looper.getMainLooper()).post {
+                                viewState.changeButtonState(true)
+                                viewState.showLoading()
+                            }
+                        }
+
+                        override fun onDisconnected() {
+                            Handler(Looper.getMainLooper()).post {
+                                viewState.changeButtonState(true)
+                                viewState.hideProgress()
+                                viewState.hideLoading()
+                            }
+                        }
+
+                        override fun onConnected(ip: String, port: String) {
+                            Handler(Looper.getMainLooper()).post {
+                                viewState.changeButtonState(false)
+                                viewState.showProgress()
+                                viewState.hideLoading()
+                            }
+                        }
+                    },
+                    balanceListener = object : PoaClient.BalanceListener {
+                        override fun onBalance(amount: Int) {
+                            viewState.setBalance(amount)
                         }
                     }
-                },
-                balanceListener = object : PoaClient.BalanceListener {
-                    override fun onBalance(amount: Int) {
-                        viewState.setBalance(amount)
-                    }
-                }
-        )
+            )
+        }
     }
+
 
     internal inner class CleanTask : TimerTask() {
         override fun run() {
@@ -110,7 +115,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
         }
     };
     fun onTokensClick() {
-        EnecuumApplication.navigateToFragment(FragmentType.Tokens, TabType.Home)
+        EnecuumApplication.navigateToFragment(FragmentType.Tokens, TabType.Balance)
     }
 
 

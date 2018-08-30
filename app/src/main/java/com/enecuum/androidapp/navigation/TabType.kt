@@ -5,7 +5,7 @@ package com.enecuum.androidapp.navigation
  */
 
 enum class TabType {
-    Home,
+    Balance,
     Send,
     Receive,
     Settings

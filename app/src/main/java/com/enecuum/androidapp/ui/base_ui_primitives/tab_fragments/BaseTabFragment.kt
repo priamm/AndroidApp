@@ -12,12 +12,13 @@ import com.enecuum.androidapp.navigation.FragmentNavigator
 import com.enecuum.androidapp.utils.EventBusUtils
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import ru.terrakok.cicerone.android.SupportAppNavigator
 
 /**
  * Created by oleg on 29.01.18.
  */
 open class BaseTabFragment : Fragment() {
-    private var navigator: FragmentNavigator? = null
+    private var navigator: SupportAppNavigator? = null
     protected var isSetupFinished = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,16 +41,20 @@ open class BaseTabFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_container, container, false)
     }
 
-    override fun onResume() {
-        super.onResume()
-        if(navigator == null || !isSetupFinished) {
-            navigator = FragmentNavigator(activity, childFragmentManager, R.id.fragmentContainer)
-        }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        navigator = FragmentNavigator(activity, childFragmentManager, R.id.fragmentContainer)
+
         EnecuumApplication.fragmentCicerone().navigatorHolder.setNavigator(navigator)
     }
 
-    override fun onPause() {
-        super.onPause()
+    fun getNavigator(): SupportAppNavigator? {
+       return navigator
+    }
+
+    override fun onDestroyView() {
         EnecuumApplication.fragmentCicerone().navigatorHolder.removeNavigator()
+        super.onDestroyView()
     }
 }

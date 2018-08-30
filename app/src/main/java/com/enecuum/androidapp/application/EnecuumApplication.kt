@@ -43,7 +43,7 @@ class EnecuumApplication : MultiDexApplication() {
         private lateinit var tabCicerone: Cicerone<Router>
         fun tabCicerone(): Cicerone<Router> = tabCicerone
 
-        private var currentTab = TabType.Home
+        private var currentTab = TabType.Balance
         private val backStack = mutableMapOf<TabType, Int>()
 
         private lateinit var keysetManager: AndroidKeysetManager
@@ -72,7 +72,7 @@ class EnecuumApplication : MultiDexApplication() {
         }
 
         private fun isRoot(screenType: FragmentType, tabType: TabType): Boolean {
-            if (screenType == FragmentType.Balance && tabType == TabType.Home) {
+            if (screenType == FragmentType.Balance && tabType == TabType.Balance) {
                 return true
             }
             if (screenType == FragmentType.SendOptions && tabType == TabType.Send) {
