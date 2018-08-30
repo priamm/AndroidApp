@@ -5,10 +5,11 @@
         android:title=""
         app:showAsAction="ifRoom"
         android:icon="@drawable/home_tab"/>
-    <!--<item android:id="@+id/actionSend"-->
-        <!--android:title=""-->
-        <!--app:showAsAction="ifRoom"-->
-        <!--android:icon="@drawable/send_active"/>-->
+    <item
+        android:id="@+id/actionSend"
+        android:icon="@drawable/send_active"
+        android:title=""
+        app:showAsAction="ifRoom" />
     <!--<item android:id="@+id/actionReceive"-->
         <!--android:title=""-->
         <!--app:showAsAction="ifRoom"-->
