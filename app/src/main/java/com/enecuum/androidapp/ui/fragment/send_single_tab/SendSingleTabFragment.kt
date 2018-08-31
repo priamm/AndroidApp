@@ -1,20 +1,27 @@
 package com.enecuum.androidapp.ui.fragment.send_single_tab
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.arellomobile.mvp.MvpAppCompatFragment
-import com.enecuum.androidapp.R
-import com.enecuum.androidapp.presentation.view.send_single_tab.SendSingleTabView
-import com.enecuum.androidapp.presentation.presenter.send_single_tab.SendSingleTabPresenter
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.enecuum.androidapp.R
 import com.enecuum.androidapp.models.SendReceiveMode
 import com.enecuum.androidapp.models.Transaction
+import com.enecuum.androidapp.persistent_data.PersistentStorage
+import com.enecuum.androidapp.presentation.presenter.send_single_tab.SendSingleTabPresenter
+import com.enecuum.androidapp.presentation.view.send_single_tab.SendSingleTabView
+import com.enecuum.androidapp.ui.activity.testActivity.Base58
 import com.enecuum.androidapp.ui.activity.transaction_details.TransactionDetailsActivity.Companion.TRANSACTION
 import com.enecuum.androidapp.utils.SimpleTextWatcher
 import kotlinx.android.synthetic.main.fragment_send_single_tab.*
+
 
 class SendSingleTabFragment : MvpAppCompatFragment(), SendSingleTabView {
     companion object {
@@ -42,6 +49,18 @@ class SendSingleTabFragment : MvpAppCompatFragment(), SendSingleTabView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val address = PersistentStorage.getAddress()
+        val wallet = Base58.encode(address.toByteArray())
+        myAddressText.setText(wallet)
+
+        copy.setOnClickListener {
+            val clipboard = view.context?.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("wallet", wallet)
+            clipboard.setPrimaryClip(clip)
+            Toast.makeText(view.context, "Your wallet has been copied to clipboard", Toast.LENGTH_SHORT).show()
+        }
+
         presenter.handleArgs(arguments)
         addressText.addTextChangedListener(object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable?) {
@@ -65,7 +84,7 @@ class SendSingleTabFragment : MvpAppCompatFragment(), SendSingleTabView {
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-        if(isVisibleToUser && isSetupFinished) {
+        if (isVisibleToUser && isSetupFinished) {
             presenter.refreshButtonState(addressText.text.toString(), amountText.text.toString())
         }
     }
