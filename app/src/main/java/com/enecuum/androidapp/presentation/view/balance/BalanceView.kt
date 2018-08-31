@@ -2,8 +2,6 @@ package com.enecuum.androidapp.presentation.view.balance
 
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
-import com.enecuum.androidapp.models.Transaction
-import com.enecuum.androidapp.models.inherited.models.MicroblockResponse
 import com.enecuum.androidapp.presentation.view.HistoryView
 
 interface BalanceView : HistoryView<String> {
@@ -40,5 +38,5 @@ interface BalanceView : HistoryView<String> {
     fun hideLoading()
 
     @StateStrategyType(AddToEndSingleStrategy::class)
-    fun showConnectionError()
+    fun showConnectionError(message: String)
 }

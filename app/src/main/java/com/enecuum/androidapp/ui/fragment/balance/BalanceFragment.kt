@@ -19,7 +19,6 @@ import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.presenter.balance.BalancePresenter
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
 import com.enecuum.androidapp.ui.base_ui_primitives.NoBackFragment
-import com.enecuum.androidapp.ui.base_ui_primitives.tab_fragments.ReceiveTabFragment
 import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
 import com.jakewharton.rxbinding2.view.RxView
 import kotlinx.android.synthetic.main.fragment_balance.*
@@ -176,9 +175,9 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         }
     }
 
-    override fun showConnectionError() {
+    override fun showConnectionError(message: String) {
         Handler(Looper.getMainLooper()).post {
-            Toast.makeText(context, R.string.connection_error, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, getString(R.string.connection_error)+": "+message, Toast.LENGTH_LONG).show()
         }
 
     }

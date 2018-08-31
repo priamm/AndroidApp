@@ -72,8 +72,8 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                             }
                         }
 
-                        override fun onConnectionError() {
-                            viewState.showConnectionError()
+                        override fun onConnectionError(message: String) {
+                            viewState.showConnectionError(message)
                         }
 
                         override fun onStartConnecting() {

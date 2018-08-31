@@ -200,6 +200,9 @@ class PoaClient(val context: Context,
                                         if (!TextUtils.isEmpty(myNodeId)) {
                                             val response = gson.toJson(PoANodeUUIDResponse(nodeId = myNodeId))
                                             it.webSocket?.send(response)
+                                        } else {
+                                            onConnectedListner.onConnectionError("Node id is null")
+                                            onConnectedListner.doReconnect()
                                         }
                                     });
 
@@ -424,7 +427,8 @@ class PoaClient(val context: Context,
         val webSocket = managedRxWebSocket
                 .observe()
                 .doOnError {
-                    onConnectedListner.onConnectionError()
+                    Timber.e(it)
+                    onConnectedListner.onConnectionError(it.localizedMessage)
                     onConnectedListner.doReconnect()
                 }
                 .subscribeOn(Schedulers.io())
@@ -515,7 +519,7 @@ class PoaClient(val context: Context,
         fun onConnected(ip: String, port: String);
         fun onDisconnected();
         fun doReconnect();
-        fun onConnectionError()
+        fun onConnectionError(localizedMessage: String)
     }
 
     interface BalanceListener {
