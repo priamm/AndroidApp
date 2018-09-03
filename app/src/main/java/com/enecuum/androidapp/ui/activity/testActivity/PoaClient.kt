@@ -84,7 +84,7 @@ class PoaClient(val context: Context,
                         nnWs?.close(1000, "Close");
                         nnWs = it.webSocket
 
-
+                        PersistentStorage.setMasterNode(connectPointDescription)
                         val balanceWebSocketEvent = getWebSocket(connectPointDescription.ip, BALANCE_WS_PORT);
 
                         composite.add(balanceWebSocketEvent

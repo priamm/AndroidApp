@@ -45,7 +45,7 @@ class SendParametersFragment : NoBackFragment(), SendParametersView {
         }
     }
 
-    override fun getTitle(): String = getString(R.string.send)
+    override fun getTitle(): String = getString(R.string.my_wallet)
 
     override fun displayTransactionsHistory(transactionsList: List<Transaction>) {
 //        TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)

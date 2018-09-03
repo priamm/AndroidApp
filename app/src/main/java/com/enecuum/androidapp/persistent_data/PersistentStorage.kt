@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.enecuum.androidapp.BuildConfig
 import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.models.Currency
+import com.enecuum.androidapp.models.inherited.models.ConnectPointDescription
 
 private val i = 3
 
@@ -140,5 +141,16 @@ object PersistentStorage {
 
     fun getAutoMiningStart(): Boolean {
         return getBoolean(AUTO_MINING_START)
+    }
+
+    fun setMasterNode(masterNodeAddress: ConnectPointDescription) {
+        setString("MASTER_NODE_IP", masterNodeAddress.ip);
+        setString("MASTER_NODE_PORT", masterNodeAddress.port);
+    }
+
+    fun getMasterNode(): ConnectPointDescription {
+        val ip = getPrefs().getString("MASTER_NODE_IP", "")
+        val port = getPrefs().getString("MASTER_NODE_PORT", "")
+        return ConnectPointDescription(ip!!, port!!)
     }
 }

@@ -24,7 +24,7 @@
     <string name="create_seed_title">Seed creation</string>
     <string name="remember_seed">Remember your seed phrase:</string>
     <string name="my_wallet">My wallet</string>
-    <string name="balance">balance</string>
+    <string name="balance">Balance</string>
     <string name="karma">Karma</string>
     <string name="points">Points</string>
     <plurals name="percent_plural">

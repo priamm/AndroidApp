@@ -130,7 +130,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     override fun getTitle(): String {
         if (activity == null)
             return ""
-        return activity!!.getString(R.string.my_wallet)
+        return activity!!.getString(R.string.mining)
     }
 
     override fun setBalance(balance: Int?) {
