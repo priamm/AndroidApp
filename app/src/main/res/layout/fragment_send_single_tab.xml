@@ -47,7 +47,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|right"
                 android:layout_marginBottom="6dp"
-                android:src="@drawable/copy1" />
+                android:src="@drawable/copy1"
+                android:paddingTop="4dp"/>
         </FrameLayout>
 
         <EditText

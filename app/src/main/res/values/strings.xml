@@ -88,6 +88,7 @@
     <string name="start_mining">Start mining</string>
     <string name="stop_mining">Stop mining</string>
     <string name="connection_error">Connection error</string>
+    <string name="coming_soon">Coming soon</string>
     <plurals name="team_members">
         <item quantity="other">%1$d team members</item>
     </plurals>
