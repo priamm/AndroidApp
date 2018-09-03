@@ -39,5 +39,6 @@ class SendEnqTabsAdapter(fm: FragmentManager?, val context: Context) : FragmentP
             else
                 "ENQ+"
 
-    override fun getCount(): Int = 2
+    //use first tab only
+    override fun getCount(): Int = 1
 }
