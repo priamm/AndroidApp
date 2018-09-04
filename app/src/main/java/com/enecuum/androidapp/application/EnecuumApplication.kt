@@ -121,11 +121,11 @@ class EnecuumApplication : MultiDexApplication() {
         Fabric.with(this, Crashlytics())
         Config.register(TinkConfig.TINK_1_1_0);
 //        Security.addProvider(BouncyCastleProvider())
-        keysetManager = AndroidKeysetManager.Builder()
-                .withSharedPref(appContext, "my_keyset_name", "my_pref_file_name")
-                .withMasterKeyUri("android-keystore://my_master_key_id")
-                .withKeyTemplate(SignatureKeyTemplates.ECDSA_P256)
-                .build()
+//        keysetManager = AndroidKeysetManager.Builder()
+//                .withSharedPref(appContext, "my_keyset_name", "my_pref_file_name")
+//                .withMasterKeyUri("android-keystore://my_master_key_id")
+//                .withKeyTemplate(SignatureKeyTemplates.ECDSA_P256)
+//                .build()
 
         Timber.plant(ConsoleTree());
         Timber.plant()
