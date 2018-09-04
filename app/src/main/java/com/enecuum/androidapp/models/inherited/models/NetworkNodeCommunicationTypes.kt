@@ -47,6 +47,7 @@ data class ConnectPointDescription(val ip: String,
 data class PoANodeUUIDResponse(val tag: String = Tags.Response.name,
                                val type: String = CommunicationSubjects.NodeId.name,
                                val nodeId: String,
+                               val version: Int,
                                val nodeType: String = NodeTypes.PoA.name)
 
 data class ReconnectResponse(val tag: String = Tags.Response.name,

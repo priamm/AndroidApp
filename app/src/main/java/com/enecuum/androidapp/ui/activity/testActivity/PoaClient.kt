@@ -6,6 +6,7 @@ import android.os.Looper
 import android.text.TextUtils
 import android.util.Base64
 import android.widget.Toast
+import com.enecuum.androidapp.BuildConfig
 import com.enecuum.androidapp.models.inherited.models.*
 import com.enecuum.androidapp.models.inherited.models.Sha.hash256
 import com.enecuum.androidapp.network.RxWebSocket
@@ -198,7 +199,8 @@ class PoaClient(val context: Context,
                                         teamWs = it.webSocket
                                         Timber.d("Sending my id: " + myNodeId)
                                         if (!TextUtils.isEmpty(myNodeId)) {
-                                            val response = gson.toJson(PoANodeUUIDResponse(nodeId = myNodeId))
+                                            val versionCode = BuildConfig.VERSION_CODE
+                                            val response = gson.toJson(PoANodeUUIDResponse(nodeId = myNodeId, version = versionCode))
                                             it.webSocket?.send(response)
                                         } else {
                                             onConnectedListner.onConnectionError("Node id is null")
