@@ -2,20 +2,14 @@ package com.enecuum.androidapp.presentation.presenter.send_finish
 
 import android.os.Bundle
 import android.text.TextUtils
-import android.widget.Toast
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuum.androidapp.models.Currency
-import com.enecuum.androidapp.models.SendReceiveMode
-import com.enecuum.androidapp.models.Transaction
-import com.enecuum.androidapp.models.TransactionType
 import com.enecuum.androidapp.models.inherited.models.ResponseStringRpc
 import com.enecuum.androidapp.network.RxWebSocket
 import com.enecuum.androidapp.network.WebSocketEvent
 import com.enecuum.androidapp.persistent_data.PersistentStorage.getMasterNode
-import com.enecuum.androidapp.presentation.presenter.balance.JsonRPCResponse
 import com.enecuum.androidapp.presentation.view.send_finish.SendFinishView
-import com.enecuum.androidapp.ui.activity.testActivity.RetryWithDelay
 import com.enecuum.androidapp.ui.fragment.send_parameters.SendParametersFragment
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -24,6 +18,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.Request
 import timber.log.Timber
+import java.util.*
 
 @InjectViewState
 class SendFinishPresenter : MvpPresenter<SendFinishView>() {
@@ -56,15 +51,19 @@ class SendFinishPresenter : MvpPresenter<SendFinishView>() {
 
     var compositeDisposable = CompositeDisposable();
     var gson: Gson = GsonBuilder().disableHtmlEscaping().create()
+    val random = Random()
     fun onSendClick() {
         val masterNode = getMasterNode()
         val webSocket = getWebSocket(masterNode.ip, masterNode.port)
+
+
 
         val owner = "H92R1kj4cJiuSdGBRAW5jX4g4ngff4oGQ3bFffJC7xPj"
         val reciever = "LB4JCsuWPqYuB99qe9cCS8bucpCWHrx5qg8PvLFpTfhU"
         val sign_s = "ODE0NzgyMTU2NDY0NjUyNjYxODQ1MTI3Nzg3ODc4MTkzNDAxMzk5NjIyOTM5OTk3NTM3MTgwOTI0MjYzODU1Mjc4Nzg2NjEzNjk0MDQ="
         val sign_r = "NzI4Mzc1MTk0MDE2NzM1MjIwMzk2MTExNzc1NzE2MjA4MTQxMDM2NTg3OTkzNzkwMzA0MzU2MDY4MjU5ODU3MDQzNzUzOTczNjk0Nzg="
-        val queryString = "{\"jsonrpc\":\"2.0\",\"params\":{\"tx\":{\"amount\":${amount},\"uuid\":13,\"owner\":\"$owner\",\"receiver\":\"$reciever\",\"currency\":\"ENQ\",\"sign\":{\"sign_s\":\"$sign_s\",\"sign_r\":\"$sign_r\"}}},\"method\":\"enq_sendTransaction\",\"id\":1}"
+        val uuid = random.nextInt()
+        val queryString = "{\"jsonrpc\":\"2.0\",\"params\":{\"tx\":{\"amount\":${amount},\"uuid\":${uuid},\"owner\":\"$owner\",\"receiver\":\"$reciever\",\"currency\":\"ENQ\",\"sign\":{\"sign_s\":\"$sign_s\",\"sign_r\":\"$sign_r\"}}},\"method\":\"enq_sendTransaction\",\"id\":1}"
 
         compositeDisposable.add(
                 webSocket
