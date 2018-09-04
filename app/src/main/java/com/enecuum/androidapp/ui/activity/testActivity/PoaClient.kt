@@ -292,6 +292,11 @@ class PoaClient(val context: Context,
                         }
                     }
 
+                    if (currentTransactions.isEmpty()) {
+                        Timber.w("Microblock is empty, won't send")
+                        return@doOnNext;
+                    }
+
                     val k_hash = keyblockHash
                     val microblockMsg = MicroblockMsg(Tx = currentTransactions,
                             publisher = publisher,
