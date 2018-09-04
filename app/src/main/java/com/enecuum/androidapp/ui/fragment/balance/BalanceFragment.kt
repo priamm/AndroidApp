@@ -29,9 +29,9 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     companion object {
         const val FORMAT = "%s %.8f"
         const val TAG = "BalanceFragment"
-        private var instance : BalanceFragment? = null
-        fun singleton() : BalanceFragment {
-            if(instance == null)
+        private var instance: BalanceFragment? = null
+        fun singleton(): BalanceFragment {
+            if (instance == null)
                 instance = BalanceFragment()
             return instance!!
         }
@@ -112,16 +112,17 @@ class BalanceFragment : NoBackFragment(), BalanceView {
 
     override fun displayMicroblocks(count: Int) {
         Handler(Looper.getMainLooper()).post {
-            minedText.text = "You has mined: $count  ENQ";
+//            minedText.text = "You has mined: $count  ENQ";
         }
     }
 
 
     override fun displayTeamSize(teamSize: Int) {
         Handler(Looper.getMainLooper()).post {
-            minedText.post { minedText.text = if (teamSize > 0) "Joining, team size is: $teamSize" else ""; }
+//            minedText.post { minedText.text = if (teamSize > 0) "Waiting" else "Work in progress"; }
         }
     }
+
 
     override fun displayTransactionsHistory(transactionsList: List<String>) {
         TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
@@ -177,7 +178,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
 
     override fun showConnectionError(message: String) {
         Handler(Looper.getMainLooper()).post {
-            Toast.makeText(context, getString(R.string.connection_error)+": "+message, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, getString(R.string.connection_error) + ": " + message, Toast.LENGTH_LONG).show()
         }
 
     }
