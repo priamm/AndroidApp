@@ -128,4 +128,6 @@ data class KBlockStructure(val time: Int, val nonce: Int, val number: Int, val t
 
 data class ResponseRpc(val jsonrpc: String, val result: Result?, val id: Int)
 
+data class ResponseStringRpc(val jsonrpc: String, val result: String?, val id: Int)
+
 data class Result(val balance: Int)

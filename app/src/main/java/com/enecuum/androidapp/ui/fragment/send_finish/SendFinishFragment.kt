@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.enecuum.androidapp.R
 import com.enecuum.androidapp.presentation.view.send_finish.SendFinishView
 import com.enecuum.androidapp.presentation.presenter.send_finish.SendFinishPresenter
@@ -16,6 +17,8 @@ import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
 import kotlinx.android.synthetic.main.fragment_send_finish.*
 
 class SendFinishFragment : BackTitleFragment(), SendFinishView {
+
+
     companion object {
         const val TAG = "SendFinishFragment"
 
@@ -61,5 +64,9 @@ class SendFinishFragment : BackTitleFragment(), SendFinishView {
 
     override fun hideHistory() {
         mainLayout.panelHeight = 0
+    }
+
+    override fun showTransactionSendStatus(isSent: Boolean) {
+        Toast.makeText(context, if (isSent) "Transaction sent: " else "Transaction not sent" , Toast.LENGTH_SHORT).show()
     }
 }
