@@ -270,7 +270,7 @@ class PoaClient(val context: Context,
                         .subscribe()
         )
 
-        val publisher = Base58.encode(PersistentStorage.getAddress().toByteArray())
+        val publisher =  PersistentStorage.getWallet()
         composite.add(addressedMessageResponse
                 .map {
                     val addressedMessageResponse = it.second as AddressedMessageResponse;
@@ -398,7 +398,7 @@ class PoaClient(val context: Context,
                                 val hash256 = hash256(requestForSignature.data!!);
                                 Timber.d("Processing hash: ${System.currentTimeMillis() - before} millis ")
                                 val enc = rsaCipher.encrypt(hash256);
-                                val myEncodedPublicKey = Base58.encode(PersistentStorage.getAddress().toByteArray());
+                                val myEncodedPublicKey =  PersistentStorage.getWallet()
                                 val period = System.currentTimeMillis() - before;
 
                                 val responseSignature = ResponseSignature(signature = Signature(myId, hash256, enc, myEncodedPublicKey))
@@ -497,7 +497,8 @@ class PoaClient(val context: Context,
                             }
                         }.subscribe());
 
-        val address = Base58.encode(PersistentStorage.getAddress().toByteArray())
+
+        val address =  PersistentStorage.getWallet()
         val query = "{\"jsonrpc\":\"2.0\",\"method\":\"getWallet\",\"params\":{\"hash\":\"$address\",\"limit\":-1},\"id\":4}"
         composite.add(
                 Flowable.interval(1000, PERIOD_ASK_FOR_BALANCE, TimeUnit.MILLISECONDS)

@@ -50,8 +50,7 @@ class SendSingleTabFragment : MvpAppCompatFragment(), SendSingleTabView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val address = PersistentStorage.getAddress()
-        val wallet = Base58.encode(address.toByteArray())
+        val wallet = PersistentStorage.getWallet()
         myAddressText.setText(wallet)
 
         copy.setOnClickListener {

@@ -6,6 +6,7 @@ import com.enecuum.androidapp.BuildConfig
 import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.models.Currency
 import com.enecuum.androidapp.models.inherited.models.ConnectPointDescription
+import com.enecuum.androidapp.ui.activity.testActivity.Base58
 
 private val i = 3
 
@@ -99,6 +100,11 @@ object PersistentStorage {
     }
 
     fun getAddress(): String = getPrefs().getString(ADDRESS, "")
+
+    fun getWallet(): String {
+        val address = getAddress()
+        return Base58.encode(address.toByteArray());
+    }
 
     fun setAddress(address: String) {
         if (address.isEmpty())

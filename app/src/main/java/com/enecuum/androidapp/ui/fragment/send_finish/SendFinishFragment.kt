@@ -1,22 +1,42 @@
 package com.enecuum.androidapp.ui.fragment.send_finish
 
+import android.app.ProgressDialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.enecuum.androidapp.R
-import com.enecuum.androidapp.presentation.view.send_finish.SendFinishView
-import com.enecuum.androidapp.presentation.presenter.send_finish.SendFinishPresenter
-
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.enecuum.androidapp.R
 import com.enecuum.androidapp.models.Currency
 import com.enecuum.androidapp.models.Transaction
+import com.enecuum.androidapp.presentation.presenter.send_finish.SendFinishPresenter
+import com.enecuum.androidapp.presentation.view.send_finish.SendFinishView
 import com.enecuum.androidapp.ui.base_ui_primitives.BackTitleFragment
-import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
 import kotlinx.android.synthetic.main.fragment_send_finish.*
 
 class SendFinishFragment : BackTitleFragment(), SendFinishView {
+
+
+    lateinit var pd: ProgressDialog;
+
+    override fun showProgress() {
+        Handler(Looper.getMainLooper()).post {
+            pd.show()
+        }
+
+    }
+
+    override fun hideProgress() {
+        Handler(Looper.getMainLooper()).post {
+            if (pd.isShowing) {
+                pd.dismiss()
+            }
+        }
+
+    }
 
 
     companion object {
@@ -39,10 +59,12 @@ class SendFinishFragment : BackTitleFragment(), SendFinishView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        pd = ProgressDialog(activity)
         presenter.handleArgs(arguments)
         send.setOnClickListener {
             presenter.onSendClick()
         }
+
         setHasOptionsMenu(true)
     }
 
@@ -67,6 +89,6 @@ class SendFinishFragment : BackTitleFragment(), SendFinishView {
     }
 
     override fun showTransactionSendStatus(isSent: Boolean) {
-        Toast.makeText(context, if (isSent) "Transaction sent: " else "Transaction not sent" , Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, if (isSent) "Transaction sent: " else "Transaction not sent", Toast.LENGTH_SHORT).show()
     }
 }

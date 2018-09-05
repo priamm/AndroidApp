@@ -33,9 +33,8 @@ class MyWalletFragment : BackTitleFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val address = PersistentStorage.getAddress()
-        val encode = Base58.encode(address.toByteArray())
-        myId.setText(encode)
+        val address = PersistentStorage.getWallet()
+        myId.setText(address)
 
     }
 }
