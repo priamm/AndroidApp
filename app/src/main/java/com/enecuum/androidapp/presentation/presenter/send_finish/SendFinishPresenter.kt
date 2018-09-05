@@ -93,8 +93,10 @@ class SendFinishPresenter : MvpPresenter<SendFinishView>() {
                         .subscribe({
                             val isSent = !TextUtils.isEmpty(it.result)
                             viewState.showTransactionSendStatus(isSent)
+                            viewState.hideProgress();
                         }, {
                             Timber.e(it)
+                            viewState.hideProgress();
                         }));
 
     }
