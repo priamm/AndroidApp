@@ -24,6 +24,7 @@ class SendFinishFragment : BackTitleFragment(), SendFinishView {
 
     override fun showProgress() {
         Handler(Looper.getMainLooper()).post {
+            pd.setTitle("Sending...")
             pd.show()
         }
 

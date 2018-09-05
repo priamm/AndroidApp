@@ -57,7 +57,7 @@ class SendFinishPresenter : MvpPresenter<SendFinishView>() {
     val random = Random()
     fun onSendClick() {
         val masterNode = getMasterNode()
-        val webSocket = getWebSocket(masterNode.ip, masterNode.port)
+        val webSocket = getWebSocket(masterNode.ip, "1555")
 
 
 
