@@ -23,13 +23,13 @@ import java.util.*
 
 @InjectViewState
 class SendFinishPresenter : MvpPresenter<SendFinishView>() {
-    var amount: Float? = 0.0f
+    var amount: Int? = 0
 
     private var address: String? = null
 
     fun handleArgs(arguments: Bundle?) {
         address = arguments?.getString(SendParametersFragment.Companion.ADDRESS)
-        amount = arguments?.getFloat(SendParametersFragment.Companion.AMOUNT)
+        amount = arguments?.getInt(SendParametersFragment.Companion.AMOUNT)
         val currency = arguments?.getSerializable(SendParametersFragment.Companion.CURRENCY) as Currency
         val isHistoryVisible = arguments.getBoolean(SendParametersFragment.Companion.IS_HISTORY_VISIBLE)
         if (isHistoryVisible) {

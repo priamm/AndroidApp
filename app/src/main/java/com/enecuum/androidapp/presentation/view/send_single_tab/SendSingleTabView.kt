@@ -7,7 +7,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import com.enecuum.androidapp.models.Transaction
 
 interface SendSingleTabView : MvpView {
-    fun setupWithAmount(amount: Float)
+    fun setupWithAmount(amount: Int)
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun changeAddress(newValue: String)
     fun setupWithTransaction(transaction: Transaction)

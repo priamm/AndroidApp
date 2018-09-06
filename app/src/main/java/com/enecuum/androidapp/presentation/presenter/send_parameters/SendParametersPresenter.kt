@@ -25,7 +25,7 @@ class SendParametersPresenter : MvpPresenter<SendParametersView>(), ResultListen
     companion object {
         const val SCAN_RESULT = 100
     }
-    private var currentAmount = 0f
+    private var currentAmount = 0
     private var currency = Currency.Enq
     private var address: String = ""
 
@@ -81,7 +81,7 @@ class SendParametersPresenter : MvpPresenter<SendParametersView>(), ResultListen
         if(currentAmount > 0 && address.isNotEmpty()) {
             val bundle = Bundle()
             bundle.putString(SendParametersFragment.Companion.ADDRESS, address)
-            bundle.putFloat(SendParametersFragment.Companion.AMOUNT, currentAmount)
+            bundle.putInt(SendParametersFragment.Companion.AMOUNT, currentAmount)
             bundle.putSerializable(SendParametersFragment.Companion.CURRENCY, currency)
             bundle.putBoolean(SendParametersFragment.Companion.IS_HISTORY_VISIBLE, isMainMode)
             if(isMainMode) {

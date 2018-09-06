@@ -20,7 +20,7 @@ import org.greenrobot.eventbus.Subscribe
 @InjectViewState
 class SendSingleTabPresenter : MvpPresenter<SendSingleTabView>() {
     private var isAddressDefined = false
-    private var currentAmount = 0f
+    private var currentAmount = 0
     private var currency: Currency? = null
     private var address = ""
 
@@ -31,7 +31,7 @@ class SendSingleTabPresenter : MvpPresenter<SendSingleTabView>() {
             SendReceiveMode.EnqPlus -> Currency.EnqPlus
         }
 
-        viewState.setupWithAmount(PersistentStorage.getCurrentBalance().toFloat())
+        viewState.setupWithAmount(PersistentStorage.getCurrentBalance())
         EventBusUtils.register(this)
         val transaction = arguments.getSerializable(TRANSACTION) as Transaction?
         if (transaction != null)
@@ -53,10 +53,9 @@ class SendSingleTabPresenter : MvpPresenter<SendSingleTabView>() {
 
     fun onAmountTextChanged(text: String, skip: Boolean = false) {
         try {
-            val floatRepresentation = text.toFloat()
-            currentAmount = floatRepresentation
+            currentAmount = text.toInt()
         } catch (e: Throwable) {
-            currentAmount = 0f
+            currentAmount = 0
             e.printStackTrace()
         }
         if (!skip)

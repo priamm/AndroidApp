@@ -68,8 +68,8 @@ class SendSingleTabFragment : MvpAppCompatFragment(), SendSingleTabView {
         })
     }
 
-    override fun setupWithAmount(amount: Float) {
-        balanceAmount.text = String.format("%s %.8f", getString(R.string.your_balance), amount)
+    override fun setupWithAmount(amount: Int) {
+        balanceAmount.text = String.format("%s %d", getString(R.string.your_balance), amount)
         sendMax.setOnClickListener {
             amountText.setText(amount.toString())
         }

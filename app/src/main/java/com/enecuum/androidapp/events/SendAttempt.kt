@@ -8,5 +8,5 @@ import java.io.Serializable
  */
 data class SendAttempt(
         val currency: Currency,
-        val amount: Float?,
+        val amount: Int?,
         val address: String?) : Serializable

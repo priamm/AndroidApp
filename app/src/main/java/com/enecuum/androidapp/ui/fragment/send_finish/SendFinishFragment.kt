@@ -36,7 +36,7 @@ class SendFinishFragment : BackTitleFragment(), SendFinishView {
             if (pd.isShowing) {
                 pd.dismiss()
             }
-            Toast.makeText(context, if (isSuccess) "Transaction sent: " else "Transaction not sent", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, if (isSuccess) "Transaction sent" else "Transaction not sent", Toast.LENGTH_SHORT).show()
             if (isSuccess) {
                 EnecuumApplication.exitFromCurrentFragment()
             }
@@ -80,9 +80,9 @@ class SendFinishFragment : BackTitleFragment(), SendFinishView {
 //        TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
     }
 
-    override fun setupWithData(address: String?, amount: Float?, currency: Currency) {
+    override fun setupWithData(address: String?, amount: Int?, currency: Currency) {
         addressText.text = address
-        amountCurrency.text = String.format("%.8f %s", amount, currency.value)
+        amountCurrency.text = String.format("%d %s", amount, currency.value)
     }
 
     override fun onResume() {

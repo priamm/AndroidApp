@@ -5,7 +5,7 @@ import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.presentation.view.HistoryView
 
 interface SendFinishView : HistoryView<Transaction> {
-    fun setupWithData(address: String?, amount: Float?, currency: Currency)
+    fun setupWithData(address: String?, amount: Int?, currency: Currency)
     fun hideHistory()
     fun doOnStartSending()
     fun doOnResult(isSuccess: Boolean)
