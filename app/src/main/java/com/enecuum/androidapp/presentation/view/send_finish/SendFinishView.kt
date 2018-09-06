@@ -8,6 +8,6 @@ interface SendFinishView : HistoryView<Transaction> {
     fun setupWithData(address: String?, amount: Float?, currency: Currency)
     fun hideHistory()
     fun showTransactionSendStatus(isSent:Boolean)
-    fun showProgress()
-    fun hideProgress()
+    fun doOnStartSending()
+    fun doOnResult(isSuccess: Boolean)
 }

@@ -22,7 +22,7 @@ class SendFinishFragment : BackTitleFragment(), SendFinishView {
 
     lateinit var pd: ProgressDialog;
 
-    override fun showProgress() {
+    override fun doOnStartSending() {
         Handler(Looper.getMainLooper()).post {
             pd.setTitle("Sending...")
             pd.show()
@@ -30,11 +30,12 @@ class SendFinishFragment : BackTitleFragment(), SendFinishView {
 
     }
 
-    override fun hideProgress() {
+    override fun doOnResult(isSuccess: Boolean) {
         Handler(Looper.getMainLooper()).post {
             if (pd.isShowing) {
                 pd.dismiss()
             }
+            Toast.makeText(activity?.applicationContext, if (isSuccess) R.string.success else R.string.fail, Toast.LENGTH_LONG).show()
         }
 
     }

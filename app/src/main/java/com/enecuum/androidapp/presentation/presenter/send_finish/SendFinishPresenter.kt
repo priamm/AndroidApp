@@ -75,7 +75,7 @@ class SendFinishPresenter : MvpPresenter<SendFinishView>() {
                             it.webSocket?.send(queryString)
                         }
                         .doOnNext {
-                            viewState.showProgress();
+                            viewState.doOnStartSending();
                         }
                         .subscribeOn(Schedulers.io())
                         .subscribe({
@@ -88,15 +88,14 @@ class SendFinishPresenter : MvpPresenter<SendFinishView>() {
                         .filter { it is WebSocketEvent.StringMessageEvent }
                         .map { (it as WebSocketEvent.StringMessageEvent).text}
                         .map { gson.fromJson(it, ResponseStringRpc::class.java) }
-                        .doOnNext { viewState.hideProgress(); }
                         .subscribeOn(Schedulers.io())
                         .subscribe({
                             val isSent = !TextUtils.isEmpty(it.result)
                             viewState.showTransactionSendStatus(isSent)
-                            viewState.hideProgress();
+                            viewState.doOnResult(true);
                         }, {
                             Timber.e(it)
-                            viewState.hideProgress();
+                            viewState.doOnResult(false);
                         }));
 
     }
