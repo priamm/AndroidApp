@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
+import com.enecuum.androidapp.application.EnecuumApplication
 import com.enecuum.androidapp.models.Currency
 import com.enecuum.androidapp.models.Transaction
 import com.enecuum.androidapp.presentation.presenter.send_finish.SendFinishPresenter
@@ -35,7 +36,10 @@ class SendFinishFragment : BackTitleFragment(), SendFinishView {
             if (pd.isShowing) {
                 pd.dismiss()
             }
-            Toast.makeText(activity?.applicationContext, if (isSuccess) R.string.success else R.string.fail, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, if (isSuccess) "Transaction sent: " else "Transaction not sent", Toast.LENGTH_SHORT).show()
+            if (isSuccess) {
+                EnecuumApplication.exitFromCurrentFragment()
+            }
         }
 
     }
@@ -88,9 +92,5 @@ class SendFinishFragment : BackTitleFragment(), SendFinishView {
 
     override fun hideHistory() {
         mainLayout.panelHeight = 0
-    }
-
-    override fun showTransactionSendStatus(isSent: Boolean) {
-        Toast.makeText(context, if (isSent) "Transaction sent: " else "Transaction not sent", Toast.LENGTH_SHORT).show()
     }
 }

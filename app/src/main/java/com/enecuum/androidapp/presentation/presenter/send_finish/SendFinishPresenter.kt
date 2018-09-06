@@ -91,8 +91,7 @@ class SendFinishPresenter : MvpPresenter<SendFinishView>() {
                         .subscribeOn(Schedulers.io())
                         .subscribe({
                             val isSent = !TextUtils.isEmpty(it.result)
-                            viewState.showTransactionSendStatus(isSent)
-                            viewState.doOnResult(true);
+                            viewState.doOnResult(isSent);
                         }, {
                             Timber.e(it)
                             viewState.doOnResult(false);
