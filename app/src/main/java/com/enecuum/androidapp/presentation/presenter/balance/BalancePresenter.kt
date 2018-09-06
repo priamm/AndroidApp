@@ -15,6 +15,7 @@ import com.enecuum.androidapp.ui.activity.testActivity.PoaClient
 import com.jraska.console.Console
 import java.util.*
 import android.os.CountDownTimer
+import com.enecuum.androidapp.persistent_data.PersistentStorage
 
 
 @InjectViewState
@@ -102,6 +103,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                     balanceListener = object : PoaClient.BalanceListener {
                         override fun onBalance(amount: Int) {
                             viewState.setBalance(amount)
+                            PersistentStorage.setCurrentBalance(amount)
                         }
                     }
             )

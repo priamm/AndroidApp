@@ -145,6 +145,16 @@ object PersistentStorage {
         setBoolean(AUTO_MINING_START, autoStart)
     }
 
+    private val CURRENT_BALANCE: String = "CURRENT_BALANCE"
+
+    fun setCurrentBalance(amount: Int) {
+        setInt(CURRENT_BALANCE, amount)
+    }
+
+    fun getCurrentBalance(): Int {
+        return getPrefs().getInt(CURRENT_BALANCE, 0)
+    }
+
     fun getAutoMiningStart(): Boolean {
         return getBoolean(AUTO_MINING_START)
     }

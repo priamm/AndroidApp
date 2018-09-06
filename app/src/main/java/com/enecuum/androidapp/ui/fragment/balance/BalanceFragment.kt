@@ -15,6 +15,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuum.androidapp.R
+import com.enecuum.androidapp.application.EnecuumApplication
+import com.enecuum.androidapp.events.MainActivityStopped
 import com.enecuum.androidapp.persistent_data.PersistentStorage
 import com.enecuum.androidapp.presentation.presenter.balance.BalancePresenter
 import com.enecuum.androidapp.presentation.view.balance.BalanceView
@@ -22,6 +24,7 @@ import com.enecuum.androidapp.ui.base_ui_primitives.NoBackFragment
 import com.enecuum.androidapp.utils.TransactionsHistoryRenderer
 import com.jakewharton.rxbinding2.view.RxView
 import kotlinx.android.synthetic.main.fragment_balance.*
+import org.greenrobot.eventbus.EventBus
 import java.util.concurrent.TimeUnit
 
 class BalanceFragment : NoBackFragment(), BalanceView {

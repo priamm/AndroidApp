@@ -19,10 +19,9 @@ import org.greenrobot.eventbus.Subscribe
 
 @InjectViewState
 class SendSingleTabPresenter : MvpPresenter<SendSingleTabView>() {
-    private var totalAmount: Float = 0f
     private var isAddressDefined = false
     private var currentAmount = 0f
-    private var currency : Currency? = null
+    private var currency: Currency? = null
     private var address = ""
 
     fun handleArgs(arguments: Bundle?) {
@@ -31,11 +30,11 @@ class SendSingleTabPresenter : MvpPresenter<SendSingleTabView>() {
             SendReceiveMode.Enq -> Currency.Enq
             SendReceiveMode.EnqPlus -> Currency.EnqPlus
         }
-        totalAmount = PersistentStorage.getCurrencyAmount(currency!!)
-        viewState.setupWithAmount(totalAmount)
+
+        viewState.setupWithAmount(PersistentStorage.getCurrentBalance().toFloat())
         EventBusUtils.register(this)
         val transaction = arguments.getSerializable(TRANSACTION) as Transaction?
-        if(transaction != null)
+        if (transaction != null)
             viewState.setupWithTransaction(transaction)
     }
 
@@ -46,37 +45,38 @@ class SendSingleTabPresenter : MvpPresenter<SendSingleTabView>() {
 
     @Subscribe
     fun onSendAddressChanged(event: SendAddressChanged) {
-        if(event.currency == currency) {
+        if (event.currency == currency) {
             viewState.changeAddress(event.newValue)
             //onAddressChanged(event.newValue)
         }
     }
 
-    fun onAmountTextChanged(text: String, skip:Boolean = false) {
+    fun onAmountTextChanged(text: String, skip: Boolean = false) {
         try {
             val floatRepresentation = text.toFloat()
             currentAmount = floatRepresentation
-        } catch (e : Throwable) {
+        } catch (e: Throwable) {
             currentAmount = 0f
             e.printStackTrace()
         }
-        if(!skip)
+        if (!skip)
             validate()
     }
 
+
     private fun validate() {
         EventBus.getDefault().post(SendAttempt(currency!!, currentAmount, address))
-        if (currentAmount > totalAmount || currentAmount <= 0) {
+        if (currentAmount >  PersistentStorage.getCurrentBalance().toFloat() || currentAmount <= 0) {
             EventBus.getDefault().post(ChangeButtonState(false))
         } else {
             EventBus.getDefault().post(ChangeButtonState(isAddressDefined))
         }
     }
 
-    fun onAddressChanged(address: String, skip:Boolean = false) {
+    fun onAddressChanged(address: String, skip: Boolean = false) {
         this.address = address
         isAddressDefined = address.isNotEmpty()
-        if(!skip)
+        if (!skip)
             validate()
     }
 
