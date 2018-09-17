@@ -27,17 +27,30 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
 
     val microblockList = hashMapOf<String, MicroblockResponse>()
 
-    val custom = sharedPreferences.getBoolean(CustomBootNodeFragment.customBN, false)
+    val customBn = sharedPreferences.getBoolean(CustomBootNodeFragment.customBN, false)
+
     val customPath = sharedPreferences.getString(CustomBootNodeFragment.customBNIP, CustomBootNodeFragment.BN_PATH_DEFAULT);
     val customPort = sharedPreferences.getString(CustomBootNodeFragment.customBNPORT, CustomBootNodeFragment.BN_PORT_DEFAULT);
-    val path = if (custom) customPath else CustomBootNodeFragment.BN_PATH_DEFAULT
-    val port = if (custom) customPort else CustomBootNodeFragment.BN_PORT_DEFAULT
+
+    val pathBn = if (customBn) customPath else CustomBootNodeFragment.BN_PATH_DEFAULT
+    val portBn = if (customBn) customPort else CustomBootNodeFragment.BN_PORT_DEFAULT
+
+    val customTn = sharedPreferences.getBoolean(CustomBootNodeFragment.customTM, false)
+
+    val customPathTn = sharedPreferences.getString(CustomBootNodeFragment.customTNIP, CustomBootNodeFragment.BN_PATH_DEFAULT);
+    val customPortTn = sharedPreferences.getString(CustomBootNodeFragment.customTNPORT, CustomBootNodeFragment.TN_PORT_DEFAULT);
+
+    val pathTn = if (customTn) customPathTn else CustomBootNodeFragment.BN_PATH_DEFAULT
+    val portTn = if (customTn) customPortTn else CustomBootNodeFragment.TN_PORT_DEFAULT
 
     fun onCreate() {
         if (!::poaClient.isInitialized) {
             poaClient = PoaClient(EnecuumApplication.applicationContext(),
-                    path,
-                    port,
+                    BN_PATH = pathBn,
+                    BN_PORT = portBn,
+                    TEAM_WS_IP = pathTn,
+                    TEAM_WS_PORT = portTn,
+                    BALANCE_WS_PORT = CustomBootNodeFragment.M_PORT_DEFAULT,
                     onTeamSizeListener = object : PoaClient.onTeamListener {
                         override fun onTeamSize(size: Int) {
                             Handler(Looper.getMainLooper()).post {

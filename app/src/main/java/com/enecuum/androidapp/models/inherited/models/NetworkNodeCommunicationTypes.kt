@@ -4,6 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class BasePoAMessage(val type: String)
+
 data class ConnectBNRequest(val tag: String = Tags.Request.name,
                             val type: String = CommunicationSubjects.PotentialConnects.name)
 

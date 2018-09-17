@@ -127,7 +127,7 @@ class EnecuumApplication : MultiDexApplication() {
 //                .withKeyTemplate(SignatureKeyTemplates.ECDSA_P256)
 //                .build()
 
-        Timber.plant(ConsoleTree());
+        Timber.plant(Timber.DebugTree())
         Timber.plant()
 
         cicerone = Cicerone.create()

@@ -91,6 +91,7 @@
     <string name="coming_soon">Coming soon</string>
     <string name="success">Success</string>
     <string name="fail">Fail</string>
+    <string name="fragment_settings_custom_team_node">Custom team node</string>
     <plurals name="team_members">
         <item quantity="other">%1$d team members</item>
     </plurals>

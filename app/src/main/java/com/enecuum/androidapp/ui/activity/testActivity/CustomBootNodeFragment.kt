@@ -21,11 +21,19 @@ class CustomBootNodeFragment : BackTitleFragment() {
     companion object {
         const val TAG = "CustomBootNodeFragment"
         val customBN = "customBootNode"
-        val customBNPORT = "bootNodePort"
-        val customBNIP = "bootNodeIp"
+        val customTM = "customTeamNode"
 
-        val BN_PATH_DEFAULT = "212.92.98.141"//"88.99.86.200"
+        val customBNPORT = "bootNodePort"
+        val customTNPORT = "teamNodePort"
+
+        val customBNIP = "bootNodeIp"
+        val customTNIP = "teamNodeIp"
+
+        val BN_PATH_DEFAULT = "staging.enecuum.com"
         val BN_PORT_DEFAULT = "1554"
+        val M_PORT_DEFAULT = "1555"
+        val RPC_JSON_PORT = "1556"
+        val TN_PORT_DEFAULT = "1557"
 
         fun newInstance(): CustomBootNodeFragment {
             val fragment = CustomBootNodeFragment()
@@ -52,11 +60,21 @@ class CustomBootNodeFragment : BackTitleFragment() {
 //        },1000,30000)
 
         val sharedPreferences = activity?.getSharedPreferences("pref", Context.MODE_PRIVATE);
+
+
         bootNodePort.setText(sharedPreferences?.getString(customBNPORT, BN_PORT_DEFAULT))
         bootNodeIp.setText(sharedPreferences?.getString(customBNIP, BN_PATH_DEFAULT))
+        textChanges(bootNodePort).subscribe { s -> sharedPreferences?.edit { putString(customBNPORT, s.toString()) } }
+        textChanges(bootNodeIp).subscribe { s -> sharedPreferences?.edit { putString(customBNIP, s.toString()) } }
 
         textChanges(bootNodePort).subscribe { s -> sharedPreferences?.edit { putString(customBNPORT, s.toString()) } }
         textChanges(bootNodeIp).subscribe { s -> sharedPreferences?.edit { putString(customBNIP, s.toString()) } }
+
+        et_tn_port.setText(sharedPreferences?.getString(customTNPORT, TN_PORT_DEFAULT))
+        et_tn.setText(sharedPreferences?.getString(customTNIP, BN_PATH_DEFAULT))
+
+        textChanges(et_tn_port).subscribe { s -> sharedPreferences?.edit { putString(customTNPORT, s.toString()) } }
+        textChanges(et_tn).subscribe { s -> sharedPreferences?.edit { putString(customTNIP, s.toString()) } }
 
         countTransactions.setText(PersistentStorage.getCountTransactionForRequest().toString())
         textChanges(countTransactions).filter { isInteger(it.toString()) }.subscribe { PersistentStorage.setCountTransactionForRequest(Integer.parseInt(it.toString())) }
@@ -67,11 +85,24 @@ class CustomBootNodeFragment : BackTitleFragment() {
             sharedPreferences?.edit { putBoolean(customBN, isChecked) }
         }
 
+        cb_tn.setOnCheckedChangeListener { btn, isChecked ->
+            et_tn.isEnabled = isChecked
+            et_tn_port.isEnabled = isChecked
+            sharedPreferences?.edit { putBoolean(customTM, isChecked) }
+        }
+
         val customBnEnabled = sharedPreferences?.getBoolean(customBN, false)
         cbBN.isChecked = customBnEnabled!!
 
         bootNodePort.isEnabled = customBnEnabled
         bootNodeIp.isEnabled = customBnEnabled
+
+        val customTnEnabled = sharedPreferences.getBoolean(customTM, false)
+        cb_tn.isChecked = customTnEnabled
+
+        et_tn.isEnabled = customBnEnabled
+        et_tn_port.isEnabled = customBnEnabled
+
 
         restart.setOnClickListener {
             android.os.Process.killProcess(android.os.Process.myPid())
