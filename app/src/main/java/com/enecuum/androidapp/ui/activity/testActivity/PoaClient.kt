@@ -35,7 +35,6 @@ class PoaClient(val context: Context,
                 val BN_PORT: String,
                 val TEAM_WS_IP : String,
                 val TEAM_WS_PORT : String,
-                val BALANCE_WS_PORT : String,
                 val onTeamSizeListener: onTeamListener,
                 val onMicroblockCountListerer: onMicroblockCountListener,
                 val onConnectedListner: onConnectedListener,
@@ -623,6 +622,8 @@ class PoaClient(val context: Context,
         } else if (text.contains("rpc")) {
             val responseRpc = gson.fromJson(text, ResponseRpc::class.java)
             return responseRpc
+        } else {
+            return ""
         }
 
         throw IllegalArgumentException("Can't parse type: $text")

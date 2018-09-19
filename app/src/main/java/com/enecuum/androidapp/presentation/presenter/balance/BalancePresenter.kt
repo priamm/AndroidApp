@@ -50,7 +50,6 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                     BN_PORT = portBn,
                     TEAM_WS_IP = pathTn,
                     TEAM_WS_PORT = portTn,
-                    BALANCE_WS_PORT = CustomBootNodeFragment.RPC_JSON_PORT,
                     onTeamSizeListener = object : PoaClient.onTeamListener {
                         override fun onTeamSize(size: Int) {
                             Handler(Looper.getMainLooper()).post {
