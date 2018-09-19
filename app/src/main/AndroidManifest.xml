@@ -78,8 +78,11 @@
                   android:theme="@style/Theme.AppCompat.Light.Mining"
                   android:windowSoftInputMode="adjustResize|stateVisible"/>
         <meta-data
-                android:name="io.fabric.ApiKey"
-                android:value="c100bb97808367870f166194699dba9711d0c850" />
+            android:name="io.fabric.ApiKey"
+            android:value="4ac38a21951387f8b2dd54cf411574b40dce23b0" />
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="false" />
     </application>
 
 </manifest>

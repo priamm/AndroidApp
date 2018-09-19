@@ -29,10 +29,14 @@ class CustomBootNodeFragment : BackTitleFragment() {
         val customBNIP = "bootNodeIp"
         val customTNIP = "teamNodeIp"
 
+
         val BN_PATH_DEFAULT = "staging.enecuum.com"
         val BN_PORT_DEFAULT = "1554"
+
         val M_PORT_DEFAULT = "1555"
         val RPC_JSON_PORT = "1556"
+
+        val TN_PATH_DEFAULT = "staging.enecuum.com"
         val TN_PORT_DEFAULT = "1557"
 
         fun newInstance(): CustomBootNodeFragment {
@@ -64,14 +68,12 @@ class CustomBootNodeFragment : BackTitleFragment() {
 
         bootNodePort.setText(sharedPreferences?.getString(customBNPORT, BN_PORT_DEFAULT))
         bootNodeIp.setText(sharedPreferences?.getString(customBNIP, BN_PATH_DEFAULT))
-        textChanges(bootNodePort).subscribe { s -> sharedPreferences?.edit { putString(customBNPORT, s.toString()) } }
-        textChanges(bootNodeIp).subscribe { s -> sharedPreferences?.edit { putString(customBNIP, s.toString()) } }
 
         textChanges(bootNodePort).subscribe { s -> sharedPreferences?.edit { putString(customBNPORT, s.toString()) } }
         textChanges(bootNodeIp).subscribe { s -> sharedPreferences?.edit { putString(customBNIP, s.toString()) } }
 
         et_tn_port.setText(sharedPreferences?.getString(customTNPORT, TN_PORT_DEFAULT))
-        et_tn.setText(sharedPreferences?.getString(customTNIP, BN_PATH_DEFAULT))
+        et_tn.setText(sharedPreferences?.getString(customTNIP, TN_PATH_DEFAULT))
 
         textChanges(et_tn_port).subscribe { s -> sharedPreferences?.edit { putString(customTNPORT, s.toString()) } }
         textChanges(et_tn).subscribe { s -> sharedPreferences?.edit { putString(customTNIP, s.toString()) } }

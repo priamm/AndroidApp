@@ -5,12 +5,17 @@ import android.os.Parcelable
 
 data class BasePoAMessage(val type: String)
 
+data class GetApiServices(val type: String = CommunicationSubjects.getApiServers.name)
+
 data class ConnectBNRequest(val tag: String = Tags.Request.name,
                             val type: String = CommunicationSubjects.PotentialConnects.name)
 
 data class ConnectBNResponse(val tag: String = Tags.Response.name,
                              val type: String = CommunicationSubjects.PotentialConnects.name,
                              val connects: List<ConnectPointDescription>)
+
+data class ConnectApiServicesResponse(val type: String = CommunicationSubjects.getApiServers.name,
+                                      val msg : List<ConnectPointDescription>)
 
 //{"tag":"Response","type":"ErrorOfConnect", "Msg":"{\"tag\":\"Request\",\"type\":\"PotentialConnects\"}", "comment" : "not a connect msg"}
 data class ErrorResponse(val tag: String = Tags.Response.name,

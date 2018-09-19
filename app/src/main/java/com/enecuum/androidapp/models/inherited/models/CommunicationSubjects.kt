@@ -2,6 +2,7 @@ package com.enecuum.androidapp.models.inherited.models
 
 enum class CommunicationSubjects {
     PotentialConnects,
+    getApiServers,
     //    Connects,
     KeyBlock,
     Pending,

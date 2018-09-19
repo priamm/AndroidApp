@@ -7,6 +7,7 @@ import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
 import android.widget.Toast
+import com.crashlytics.android.Crashlytics
 import com.enecuum.androidapp.BuildConfig
 import com.enecuum.androidapp.models.inherited.models.*
 import com.enecuum.androidapp.models.inherited.models.Sha.hash256
@@ -42,7 +43,7 @@ class PoaClient(val context: Context,
 
     val TRANSACTION_COUNT_IN_MICROBLOCK = 1
 
-    private val PERIOD_ASK_FOR_BALANCE: Long = 30000
+    private val PERIOD_ASK_FOR_BALANCE: Long = 1
 
     var composite: CompositeDisposable = CompositeDisposable()
     var nnWs: WebSocket? = null
@@ -86,15 +87,7 @@ class PoaClient(val context: Context,
 
                         PersistentStorage.setMasterNode(connectPointDescription)
 
-                        val balanceWebSocketEvent = getWebSocket(connectPointDescription.ip, BALANCE_WS_PORT);
 
-                        composite.add(balanceWebSocketEvent
-                                .filter { it is WebSocketEvent.OpenedEvent }
-                                .subscribe {
-                                    balanceWebSocket = it.webSocket
-                                    Timber.i("Starting listening balance at: " + connectPointDescription.ip + ":" + BALANCE_WS_PORT)
-                                    startAskingForBalance(balanceWebSocketEvent)
-                                })
                     }
                 }
                 .subscribeOn(Schedulers.io())
@@ -121,6 +114,7 @@ class PoaClient(val context: Context,
     }
 
     fun connect() {
+
         Timber.d("Connecting ...")
         composite = CompositeDisposable()
         onConnectedListner.onStartConnecting()
@@ -142,14 +136,57 @@ class PoaClient(val context: Context,
                     val connectBNRequestJson = gson.toJson(ConnectBNRequest())
                     Timber.d("BootNode : request to get master node's $connectBNRequestJson")
                     it.webSocket?.send(connectBNRequestJson)
+
+                    val connectApiServicesJson = gson.toJson(GetApiServices())
+                    it.webSocket?.send(connectApiServicesJson)
                 }
                 .subscribe())
+
+
+        composite.add(
+                bootNodeWebsocketEvents
+                          .filter { it is WebSocketEvent.StringMessageEvent }
+                          .cast(WebSocketEvent.StringMessageEvent::class.java)
+                          .map {
+                              parse(it.text!!)
+                          }
+                          .filter({
+                              it is ConnectApiServicesResponse
+                          })
+                          .cast(ConnectApiServicesResponse::class.java)
+                          .doOnNext {
+
+                              Timber.d("BootNode : got list of api services : $it.toString()")
+
+                              it.msg.firstOrNull()?.let { balancePoint ->
+                                  val balanceWebSocketEvent = getWebSocket(balancePoint.ip, balancePoint.port)
+
+                                  composite.add(balanceWebSocketEvent
+                                          .filter { it is WebSocketEvent.OpenedEvent }
+                                          .subscribe ({
+                                              balanceWebSocket = it.webSocket
+                                              Timber.i("Starting listening balance at: " + balancePoint.ip + ":" + balancePoint.port)
+                                              startAskingForBalance(balanceWebSocketEvent)
+                                          }, {
+                                              Crashlytics.log("Balance webSocket : got throwable")
+                                              Crashlytics.logException(it)
+                                          }))
+                              }
+                          }
+                          .subscribeOn(Schedulers.io())
+                          .subscribe()
+        )
+
 
         nnWsEvents = bootNodeWebsocketEvents
                 .filter { it is WebSocketEvent.StringMessageEvent }
                 .cast(WebSocketEvent.StringMessageEvent::class.java)
-                .map { parse(it.text!!) }
-                .filter({ it is ConnectBNResponse })
+                .map {
+                    parse(it.text!!)
+                }
+                .filter({
+                    it is ConnectBNResponse
+                })
                 .cast(ConnectBNResponse::class.java)
                 .doOnNext {
                     Timber.d("BootNode : got list of master nodes: $it.toString()")
@@ -183,10 +220,12 @@ class PoaClient(val context: Context,
                         .doOnNext {
                             when (it) {
                                 is WebSocketEvent.StringMessageEvent -> Timber.i("Recieved message at:" + DateFormat.getDateTimeInstance().format(Date()))
-                                is WebSocketEvent.OpenedEvent -> Timber.i("WS Opened Event");
-                                is WebSocketEvent.ClosedEvent -> Timber.i("WS Closed Event");
+                                is WebSocketEvent.OpenedEvent -> Timber.i("WS Opened Event")
+                                is WebSocketEvent.ClosedEvent -> Timber.i("WS Closed Event")
                                 is WebSocketEvent.FailureEvent -> {
-                                    Timber.e("WS Failue Event :${it.t?.localizedMessage}, ${it.response.toString()}")
+                                    Crashlytics.log("Master node webSocket : got throwable  ${it.t?.localizedMessage}, ${it.response.toString()}")
+                                    Crashlytics.logException(it.t)
+                                    Timber.e("WS Failue Event : ${it.t?.localizedMessage}, ${it.response.toString()}")
                                 }
                             }
                         }.subscribe())
@@ -210,9 +249,6 @@ class PoaClient(val context: Context,
 
         composite.add(
                 teamWsEvents
-                        .doOnError {
-                            Timber.e(it.localizedMessage)
-                        }
                         .filter {
                             it is WebSocketEvent.OpenedEvent
                         }
@@ -239,12 +275,13 @@ class PoaClient(val context: Context,
                                 onConnectedListner.doReconnect()
                             }
                         } , {
-                            Timber.d(it)
+                            Crashlytics.log("Team webSocket (opened event) : got throwable ${it.localizedMessage}")
+                            Timber.e(it.localizedMessage)
+                            Crashlytics.logException(it)
                         }))
 
         composite.add(
                 teamWsEvents
-                        .doOnError { Timber.e(it.localizedMessage) }
                         .filter {
                             it is WebSocketEvent.StringMessageEvent
                         }
@@ -252,8 +289,8 @@ class PoaClient(val context: Context,
                         .map { parse(it.text!!) }
                         .filter { it is TeamResponse }
                         .cast(TeamResponse::class.java)
-                        .doOnNext {
-
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({
                             val data = it.data.filterNotNull()
                             val size = data.size
 
@@ -267,9 +304,11 @@ class PoaClient(val context: Context,
                                 Timber.d("TeamNode : command size > 1, start work")
                                 startWork(myNodeId, webSocketStringMessageEventsMasterNode, ws, teamWsEvents)
                             }
-                        }
-                        .subscribeOn(Schedulers.io())
-                        .subscribe())
+                        },{
+                            Crashlytics.log("Team webSocket (string message event) : got throwable ${it.localizedMessage}")
+                            Timber.e(it.localizedMessage)
+                            Crashlytics.logException(it)
+                        }))
     }
 
     fun createKeyIfNeeds() {
@@ -290,7 +329,10 @@ class PoaClient(val context: Context,
         //wait for k-block fromTeamNode
         composite.add(
                 teamWsEvents
-                        .doOnError { Timber.e(it.localizedMessage) }
+                        .doOnError {
+                            Timber.e(it.localizedMessage)
+                            Crashlytics.logException(it)
+                        }
                         .filter {
                             it is WebSocketEvent.StringMessageEvent
                         }
@@ -362,6 +404,9 @@ class PoaClient(val context: Context,
                 }
                 .distinctUntilChanged()
                 .buffer(team.size - 1)  //we need singns from all teams memeber except himself
+                .doOnError {
+                    Crashlytics.logException(it)
+                }
                 .doOnNext {
 
                     //Got all sings
@@ -424,6 +469,10 @@ class PoaClient(val context: Context,
                 transactionResponses
                         .filter { it.second is TransactionResponse }
                         .map { it.second as TransactionResponse }
+                        .doOnError {
+                            Crashlytics.log("")
+                            Crashlytics.logException(it)
+                        }
                         .doOnNext {
                             Timber.d("MasterNode : ${it.transactions.size} transactions")
                         }
@@ -594,6 +643,9 @@ class PoaClient(val context: Context,
             PoACommunicationSubjects.Peek.name -> gson.fromJson(text, PoANodeCommunicationTypes.PoWPeekResponse::class.java)
             CommunicationSubjects.ErrorOfConnect.name -> gson.fromJson(text, ErrorResponse::class.java)
             CommunicationSubjects.Microblock.name -> gson.fromJson(text, MicroblockResponse::class.java)
+            CommunicationSubjects.getApiServers.name -> {
+                gson.fromJson(text, ConnectApiServicesResponse::class.java)
+            }
 
             else -> {
                 throw IllegalArgumentException("Can't parse type: $type with messages: $text")
@@ -614,6 +666,9 @@ class PoaClient(val context: Context,
                         .doOnNext {
                             Timber.d(it.toString())
                         }
+                        .doOnError {
+                            Crashlytics.logException(it)
+                        }
                         .cast(ResponseRpc::class.java)
                         .doOnNext {
                             if (it.result != null) {
@@ -628,8 +683,8 @@ class PoaClient(val context: Context,
         val address =  PersistentStorage.getWallet()
         val query = "{\"jsonrpc\":\"2.0\",\"method\":\"getWallet\",\"params\":{\"hash\":\"$address\",\"limit\":-1},\"id\":4}"
         composite.add(
-                Flowable.interval(1000, PERIOD_ASK_FOR_BALANCE, TimeUnit.MILLISECONDS)
-                        .subscribe {
+                Flowable.interval(1000, PERIOD_ASK_FOR_BALANCE, TimeUnit.MINUTES)
+                        .subscribe ({
 
                             val sent = balanceWebSocket?.send(query)
                             sent?.let {
@@ -637,7 +692,10 @@ class PoaClient(val context: Context,
                                     Timber.d("Ask for balance did not sent")
                                 }
                             }
-                        })
+                        }, {
+                            Crashlytics.log("Balance web socket : got throwable")
+                            Crashlytics.logException(it)
+                        }))
     }
 
     interface onTeamListener {

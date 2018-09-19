@@ -37,10 +37,10 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
 
     val customTn = sharedPreferences.getBoolean(CustomBootNodeFragment.customTM, false)
 
-    val customPathTn = sharedPreferences.getString(CustomBootNodeFragment.customTNIP, CustomBootNodeFragment.BN_PATH_DEFAULT);
+    val customPathTn = sharedPreferences.getString(CustomBootNodeFragment.customTNIP, CustomBootNodeFragment.TN_PATH_DEFAULT);
     val customPortTn = sharedPreferences.getString(CustomBootNodeFragment.customTNPORT, CustomBootNodeFragment.TN_PORT_DEFAULT);
 
-    val pathTn = if (customTn) customPathTn else CustomBootNodeFragment.BN_PATH_DEFAULT
+    val pathTn = if (customTn) customPathTn else CustomBootNodeFragment.TN_PATH_DEFAULT
     val portTn = if (customTn) customPortTn else CustomBootNodeFragment.TN_PORT_DEFAULT
 
     fun onCreate() {
@@ -50,7 +50,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                     BN_PORT = portBn,
                     TEAM_WS_IP = pathTn,
                     TEAM_WS_PORT = portTn,
-                    BALANCE_WS_PORT = CustomBootNodeFragment.M_PORT_DEFAULT,
+                    BALANCE_WS_PORT = CustomBootNodeFragment.RPC_JSON_PORT,
                     onTeamSizeListener = object : PoaClient.onTeamListener {
                         override fun onTeamSize(size: Int) {
                             Handler(Looper.getMainLooper()).post {
