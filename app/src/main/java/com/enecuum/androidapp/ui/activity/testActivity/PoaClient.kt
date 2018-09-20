@@ -560,8 +560,8 @@ class PoaClient(val context: Context,
                     continue
                 }
 
-                //TODO in currentTransactions must json
-                val message = gson.toJson(RequestForSignature(data = currentTransactions.toString()))
+                val transactions = gson.toJson(currentTransactions)
+                val message = gson.toJson(RequestForSignature(data = transactions))
 
                 if (message != null) {
                     Timber.d("Sending\nfrom: $myId\nto: $teamMember")
