@@ -42,7 +42,7 @@ class PoaClient(val context: Context,
 
     val TRANSACTION_COUNT_IN_MICROBLOCK = 1
 
-    private val PERIOD_ASK_FOR_BALANCE: Long = 1
+    private val PERIOD_ASK_FOR_BALANCE: Long = 30000
 
     var composite: CompositeDisposable = CompositeDisposable()
     var nnWs: WebSocket? = null
@@ -684,9 +684,10 @@ class PoaClient(val context: Context,
         val address =  PersistentStorage.getWallet()
         val query = "{\"jsonrpc\":\"2.0\",\"method\":\"getWallet\",\"params\":{\"hash\":\"$address\",\"limit\":-1},\"id\":4}"
         composite.add(
-                Flowable.interval(1000, PERIOD_ASK_FOR_BALANCE, TimeUnit.MINUTES)
+                Flowable.interval(1000, PERIOD_ASK_FOR_BALANCE, TimeUnit.MILLISECONDS)
                         .subscribe ({
 
+                            Timber.d("Ask for balance")
                             val sent = balanceWebSocket?.send(query)
                             sent?.let {
                                 if (!sent) {
