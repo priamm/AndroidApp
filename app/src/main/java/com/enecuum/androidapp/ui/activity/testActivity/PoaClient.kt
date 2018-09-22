@@ -374,6 +374,9 @@ class PoaClient(val context: Context,
         val addressedMessageResponse = webSocketStringMessageEvents
                 .filter { it.second is AddressedMessageResponse }
 
+        val addressedMessageResponseWithTransactions = webSocketStringMessageEvents
+                .filter { it.second is AddressedMessageRequestWithTransactions }
+
         val transactionResponses = webSocketStringMessageEvents
                 .filter({ it.second is TransactionResponse })
 
@@ -419,8 +422,8 @@ class PoaClient(val context: Context,
 
                     for (responseSignature in it) {
 
-                        if (!TextUtils.isEmpty(responseSignature.signature?.publicKeyEncoded58)) {
-                            responseSignature.signature?.publicKeyEncoded58?.let { it1 -> publicKeysFromOtherTeamMembers.add(it1) }
+                        if (!TextUtils.isEmpty(responseSignature?.signature?.publicKeyEncoded58)) {
+                            responseSignature?.signature?.publicKeyEncoded58?.let { it1 -> publicKeysFromOtherTeamMembers.add(it1) }
                         }
                     }
 
@@ -499,26 +502,27 @@ class PoaClient(val context: Context,
 
 
         composite.add(
-                addressedMessageResponse
+                addressedMessageResponseWithTransactions
                         .doOnComplete({ Timber.e("Complete") })
+                        .filter { it.second is  AddressedMessageRequestWithTransactions}
                         .doOnNext {
                             val before = System.currentTimeMillis()
 
-                            val response = it.second as AddressedMessageResponse
+                            val response = it.second as AddressedMessageRequestWithTransactions
 
                             if (response.from == myId) {
                                 Timber.d("Message from me, skipping...")
                             }
 
                             //Transactions of another member
-                            val requestForSignature = gson.fromJson(response.msg, RequestForSignature::class.java)
+                            val requestForSignature = gson.toJson(response.msg)
 
                             //we have request For Signature
-                            if (requestForSignature.data != null) {
+                            if (requestForSignature != null) {
 
                                 //Timber.d("Request for signature from: ${response.from} ")
 
-                                val hash256 = hash256(requestForSignature.data!!)
+                                val hash256 = hash256(requestForSignature)
 
                                 //Timber.d("Processing hash: ${System.currentTimeMillis() - before} millis ")
 
@@ -560,18 +564,17 @@ class PoaClient(val context: Context,
                     continue
                 }
 
-                val transactions = gson.toJson(currentTransactions)
-                val message = gson.toJson(RequestForSignature(data = transactions))
-
-                if (message != null) {
+                //if (currentTransactions != null) {
                     Timber.d("Sending\nfrom: $myId\nto: $teamMember")
 
-                    val toJson = gson.toJson(AddressedMessageRequest(msg = message, to = teamMember, from = myId))
+                    var toJson = gson.toJson(AddressedMessageRequestWithTransactions(msg = RequestForSignatureList(data = currentTransactions), to = teamMember, from = myId))
+
+                    toJson = toJson.replace("\\", "")
 
                     Timber.d("Send message with transactions to another member use MasterNode, json data : $toJson")
 
                     websocketMasterNode.send(toJson)
-                }
+               // }
 
             }
         } else {
@@ -637,7 +640,15 @@ class PoaClient(val context: Context,
             CommunicationSubjects.Connect.name -> gson.fromJson(text, ReconnectAction::class.java)
             CommunicationSubjects.Broadcast.name -> gson.fromJson(text, ReceivedBroadcastMessage::class.java)
             CommunicationSubjects.KeyBlock.name -> gson.fromJson(text, ReceivedBroadcastKeyblockMessage::class.java)
-            CommunicationSubjects.MsgTo.name -> gson.fromJson(text, AddressedMessageResponse::class.java)
+            CommunicationSubjects.MsgTo.name -> {
+                if (text?.contains("signature") == true) {
+                    gson.fromJson(text, AddressedMessageResponse::class.java)
+                } else {
+                    gson.fromJson(text, AddressedMessageRequestWithTransactions::class.java)
+                }
+
+            }
+
             CommunicationSubjects.PoWList.name -> gson.fromJson(text, PowsResponse::class.java)
             CommunicationSubjects.NodeId.name -> gson.fromJson(text, ReconnectResponse::class.java)
             CommunicationSubjects.Transactions.name -> gson.fromJson(text, TransactionResponse::class.java);
@@ -687,7 +698,7 @@ class PoaClient(val context: Context,
                 Flowable.interval(1000, PERIOD_ASK_FOR_BALANCE, TimeUnit.MILLISECONDS)
                         .subscribe ({
 
-                            Timber.d("Ask for balance")
+                            //Timber.d("Ask for balance")
                             val sent = balanceWebSocket?.send(query)
                             sent?.let {
                                 if (!sent) {

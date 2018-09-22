@@ -85,10 +85,16 @@ data class AddressedMessageRequest(val tag: String? = Tags.Msg.name,
                                    val to: String?,
                                    val msg: String?)
 
-data class AddressedMessageResponse(val tag: String = Tags.Msg.name,
-                                    val type: String = CommunicationSubjects.MsgTo.name,
-                                    val from: String,
-                                    val msg: String)
+data class AddressedMessageRequestWithTransactions(val tag: String? = Tags.Msg.name,
+                                   val type: String? = CommunicationSubjects.MsgTo.name,
+                                   val from: String?,
+                                   val to: String?,
+                                   val msg: RequestForSignatureList)
+
+data class AddressedMessageResponse(val tag : String = Tags.Msg.name,
+                                    val type : String = CommunicationSubjects.MsgTo.name,
+                                    val from : String,
+                                    val msg : String)
 
 
 data class TeamResponse(val tag: String = Tags.Response.name,
