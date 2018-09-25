@@ -1,5 +1,5 @@
 import android.text.TextUtils
-import com.enecuum.androidapp.models.inherited.models.PoANodeUUIDResponse
+import com.enecuumwallet.androidapp.models.inherited.models.PoANodeUUIDResponse
 
 import com.google.gson.Gson
 import junit.framework.Assert.*

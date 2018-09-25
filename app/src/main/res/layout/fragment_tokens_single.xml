@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.enecuum.androidapp.ui.fragment.tokens_single.TokensSingleFragment"
+    tools:context="com.enecuumwallet.androidapp.ui.fragment.tokens_single.TokensSingleFragment"
     android:orientation="vertical"
     android:paddingLeft="16dp"
     android:paddingRight="16dp">

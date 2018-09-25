@@ -3,10 +3,10 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 xmlns:app="http://schemas.android.com/apk/res-auto"
-tools:context="com.enecuum.androidapp.ui.activity.forgot.ForgotPinActivity"
+tools:context="com.enecuumwallet.androidapp.ui.activity.forgot.ForgotPinActivity"
 android:background="@color/navy"
 android:orientation="vertical">
-<com.enecuum.androidapp.ui.view.UnscrollableViewPager
+<com.enecuumwallet.androidapp.ui.view.UnscrollableViewPager
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:layout_weight="1"
