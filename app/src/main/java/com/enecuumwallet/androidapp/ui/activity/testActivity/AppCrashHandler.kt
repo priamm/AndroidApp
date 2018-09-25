@@ -5,6 +5,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import com.crashlytics.android.Crashlytics
 
 import com.enecuumwallet.androidapp.application.EnecuumApplication
 import com.enecuumwallet.androidapp.ui.activity.splash.SplashActivity
@@ -12,6 +13,9 @@ import com.enecuumwallet.androidapp.ui.activity.splash.SplashActivity
 class AppCrashHandler(private val activity: Activity) : Thread.UncaughtExceptionHandler {
 
     override fun uncaughtException(thread: Thread, ex: Throwable) {
+        Crashlytics.log("uncaughtException, app will be restarted")
+        Crashlytics.logException(ex)
+
         val intent = Intent(activity, SplashActivity::class.java)
         intent.putExtra("crash", true)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
