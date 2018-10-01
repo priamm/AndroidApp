@@ -58,10 +58,9 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                         }
                     },
                     onMicroblockCountListerer = object : PoaClient.onMicroblockCountListener {
-                        override fun onMicroblockCountAndLast(count: Int, microblockResponse: MicroblockResponse, microblockSignature: String) {
-                            microblockList.put(microblockSignature, microblockResponse);
+                        override fun onMicroblockCountAndLast(microblockResponse: MicroblockResponse, microblockSignature: String) {
+                            microblockList[microblockSignature] = microblockResponse
                             viewState.displayTransactionsHistory(microblockList.keys.toList())
-                            viewState.displayMicroblocks(10 * count);
                         }
                     },
                     onConnectedListner = object : PoaClient.onConnectedListener {

@@ -1,5 +1,6 @@
 package com.enecuumwallet.androidapp.utils
 
+import android.content.Context
 import android.support.v4.widget.SlidingPaneLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -17,8 +18,8 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
  * Created by oleg on 31.01.18.
  */
 object TransactionsHistoryRenderer {
-    fun displayTransactionsInRecyclerView(transactionsList : List<String>, recyclerView: RecyclerView) {
-        val adapter = TransactionsListAdapter(transactionsList)
+    fun displayTransactionsInRecyclerView(transactionsList : List<String>, recyclerView: RecyclerView, context : Context) {
+        val adapter = TransactionsListAdapter(transactionsList, context )
         val layoutManager = LinearLayoutManager(recyclerView.context)
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter

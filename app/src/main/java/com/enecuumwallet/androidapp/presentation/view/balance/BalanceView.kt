@@ -14,9 +14,6 @@ interface BalanceView : HistoryView<String> {
     fun displayTeamSize(teamSize: Int)
 
     @StateStrategyType(AddToEndSingleStrategy::class)
-    fun displayMicroblocks(count: Int)
-
-    @StateStrategyType(AddToEndSingleStrategy::class)
     fun showProgress()
 
     @StateStrategyType(AddToEndSingleStrategy::class)

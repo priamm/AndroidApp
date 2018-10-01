@@ -1,5 +1,6 @@
 package com.enecuumwallet.androidapp.ui.adapters
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.text.method.LinkMovementMethod
@@ -12,13 +13,16 @@ import java.net.URLEncoder
 import android.support.v4.content.ContextCompat.startActivity
 import android.content.Intent
 import android.net.Uri
+import com.crashlytics.android.Crashlytics
 import com.enecuumwallet.androidapp.application.EnecuumApplication
+import timber.log.Timber
 
 
 /**
  * Created by oleg on 30.01.18.
  */
-class TransactionsListAdapter(private val data: List<String>) : RecyclerView.Adapter<TransactionViewHolder>() {
+class TransactionsListAdapter(private val data: List<String>, private val context: Context) : RecyclerView.Adapter<TransactionViewHolder>() {
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder =
             TransactionViewHolder(LayoutInflater.from(parent.context).inflate(
@@ -45,9 +49,16 @@ class TransactionsListAdapter(private val data: List<String>) : RecyclerView.Ada
 //        val textToShow = "<a href=\"$url\">$microblockString</a>"
         holder.itemView.address.setClickable(true);
         holder.itemView.address?.text = microblockString//Html.fromHtml(textToShow);
-        holder.itemView.setOnClickListener {
-            val i = Intent(Intent.ACTION_VIEW,Uri.parse(url.replace("%0A","")))
-            startActivity(EnecuumApplication.applicationContext(), i,null);
+
+        try  {
+            holder.itemView.setOnClickListener {
+                val i = Intent(Intent.ACTION_VIEW, Uri.parse(url.replace("%0A", "")))
+                startActivity(context, i, null)
+            }
+        } catch (e : Throwable) {
+            Timber.d(e)
+            Crashlytics.log("TransactionsListAdapter : click item, got throwable")
+            Crashlytics.logException(e)
         }
 //        holder.itemView.amount?.text = "10 ENQ"
 //        when(transaction.transactionType) {

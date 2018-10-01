@@ -113,13 +113,6 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     }
 
 
-    override fun displayMicroblocks(count: Int) {
-        Handler(Looper.getMainLooper()).post {
-//            minedText.text = "You has mined: $count  ENQ";
-        }
-    }
-
-
     override fun displayTeamSize(teamSize: Int) {
         Handler(Looper.getMainLooper()).post {
 //            minedText.post { minedText.text = if (teamSize > 0) "Waiting" else "Work in progress"; }
@@ -128,7 +121,10 @@ class BalanceFragment : NoBackFragment(), BalanceView {
 
 
     override fun displayTransactionsHistory(transactionsList: List<String>) {
-        TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory)
+        this.context?.let {
+            TransactionsHistoryRenderer.displayTransactionsInRecyclerView(transactionsList, transactionsHistory, it)
+        }
+
     }
 
     override fun getTitle(): String {
