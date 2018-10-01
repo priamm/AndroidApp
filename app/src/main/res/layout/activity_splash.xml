@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.enecuum.androidapp.ui.activity.splash.SplashActivity"
+    tools:context="com.enecuumwallet.androidapp.ui.activity.splash.SplashActivity"
     >
 <ImageView
     android:layout_width="match_parent"
@@ -12,6 +12,6 @@
 <fragment
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:name="com.enecuum.androidapp.ui.fragment.loading.LoadingFragment"
+    android:name="com.enecuumwallet.androidapp.ui.fragment.loading.LoadingFragment"
     android:id="@+id/loading"/>
 </FrameLayout>

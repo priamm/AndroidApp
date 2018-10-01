@@ -6,7 +6,7 @@ android:orientation="vertical"
 android:paddingLeft="16dp"
 android:paddingRight="16dp"
     android:background="@color/navy"
-    tools:context="com.enecuum.androidapp.ui.fragment.receive_single_tab.ReceiveSingleTabFragment">
+    tools:context="com.enecuumwallet.androidapp.ui.fragment.receive_single_tab.ReceiveSingleTabFragment">
     <FrameLayout
         android:layout_marginTop="16dp"
         android:layout_width="match_parent"

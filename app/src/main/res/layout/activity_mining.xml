@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/navy"
-    tools:context="com.enecuum.androidapp.ui.activity.mining.MiningActivity"
+    tools:context="com.enecuumwallet.androidapp.ui.activity.mining.MiningActivity"
     android:orientation="vertical"
     >
     <ImageView

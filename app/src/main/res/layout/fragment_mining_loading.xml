@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
-    tools:context="com.enecuum.androidapp.ui.fragment.mining_loading.MiningLoadingFragment"
+    tools:context="com.enecuumwallet.androidapp.ui.fragment.mining_loading.MiningLoadingFragment"
     android:orientation="vertical"
     tools:background="@drawable/group">
     <View

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.enecuum.androidapp.ui.fragment.balance.BalanceFragment"
+    tools:context="com.enecuumwallet.androidapp.ui.fragment.balance.BalanceFragment"
     android:orientation="vertical"
     android:gravity="bottom"
     android:id="@+id/slidingLayout"
@@ -209,13 +209,13 @@
                         android:gravity="center_vertical"
                         android:padding="16dp"
         >
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      tools:text="You has mined: 10 ENQ"
-                      android:layout_alignParentLeft="true"
-                      android:textColor="@color/background_white"
-                      android:id="@+id/minedText"
-            />
+            <!--<TextView android:layout_width="wrap_content"-->
+                      <!--android:layout_height="wrap_content"-->
+                      <!--tools:text="You has mined: 10 ENQ"-->
+                      <!--android:layout_alignParentLeft="true"-->
+                      <!--android:textColor="@color/background_white"-->
+                      <!--android:id="@+id/minedText"-->
+            <!--/>-->
 
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"

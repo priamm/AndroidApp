@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.enecuum.androidapp.ui.activity.main.MainActivity"
+    tools:context="com.enecuumwallet.androidapp.ui.activity.main.MainActivity"
     android:background="@color/navy"
     android:orientation="vertical">
     <include layout="@layout/mining_toolbar"/>
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/dark_indigo_four"/>
-    <com.enecuum.androidapp.ui.view.BottomNavigationViewEx
+    <com.enecuumwallet.androidapp.ui.view.BottomNavigationViewEx
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         app:menu="@menu/bottom_menu"

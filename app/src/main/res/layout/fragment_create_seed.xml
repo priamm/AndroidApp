@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.enecuum.androidapp.ui.fragment.create_seed.CreateSeedFragment"
+    tools:context="com.enecuumwallet.androidapp.ui.fragment.create_seed.CreateSeedFragment"
     android:orientation="vertical">
 <TextView
     android:layout_width="match_parent"

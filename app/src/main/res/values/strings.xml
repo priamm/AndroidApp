@@ -24,7 +24,7 @@
     <string name="create_seed_title">Seed creation</string>
     <string name="remember_seed">Remember your seed phrase:</string>
     <string name="my_wallet">My wallet</string>
-    <string name="balance">balance</string>
+    <string name="balance">Balance</string>
     <string name="karma">Karma</string>
     <string name="points">Points</string>
     <plurals name="percent_plural">
@@ -44,7 +44,7 @@
     <string name="confirm_send">Confirm send</string>
     <string name="you_are_going_to_send">You are going to send:</string>
     <string name="to_address">To address</string>
-    <string name="send_history">Send History</string>
+    <string name="send_history">Transactions History</string>
     <string name="receive_history">Receive History</string>
     <string name="text_copied">text copied</string>
     <string name="use_qr_code">Use QR code</string>
@@ -85,9 +85,13 @@
     <string name="mining_history">Mining History</string>
     <string name="verificator">Back Verificator</string>
     <string name="custom_bn">Custom Boot Node</string>
-    <string name="start_mining">Start mining</string>
-    <string name="stop_mining">Stop mining</string>
+    <string name="start_mining">Start activity</string>
+    <string name="stop_mining">Stop activity</string>
     <string name="connection_error">Connection error</string>
+    <string name="coming_soon">Coming soon</string>
+    <string name="success">Success</string>
+    <string name="fail">Fail</string>
+    <string name="fragment_settings_custom_team_node">Custom team node</string>
     <plurals name="team_members">
         <item quantity="other">%1$d team members</item>
     </plurals>

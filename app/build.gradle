@@ -14,7 +14,7 @@ android {
         applicationId "com.enecuum.androidapp"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 20
+        versionCode 31
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
@@ -106,9 +106,11 @@ dependencies {
     implementation 'com.yakivmospan:scytale:1.0.1'
 
     implementation 'io.github.novacrypto:BIP39:0.1.9'
-    compile('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
-        transitive = true;
+    compile('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
+        transitive = true
     }
+
+    compile 'com.google.firebase:firebase-core:16.0.3'
 }
 
 
