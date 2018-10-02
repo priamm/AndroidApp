@@ -502,11 +502,12 @@ class PoaClient(val context: Context,
 
 
         val trDisposable = transactionResponses
+                .onBackpressureDrop()
                 .filter { it.second is TransactionResponse }
                 .map { it.second as TransactionResponse }
                 .filter { team.size > 1}
                 .doOnError {
-                    Crashlytics.log("")
+                    Crashlytics.log("Master node : transactions got error")
                     Crashlytics.logException(it)
                 }
                 .doOnNext {
@@ -525,7 +526,7 @@ class PoaClient(val context: Context,
 
                         //send transactions to other team members
                         websocketMasterNode?.let { wsMN ->
-                            sendTransactions(wsMN, it.transactions)
+                            sendTransactions(wsMN, it.transactions, team)
                         }
                     }
                 }
@@ -586,7 +587,7 @@ class PoaClient(val context: Context,
                         .subscribe())
     }
 
-    private fun sendTransactions(websocketMasterNode : WebSocket, transactions : List<Transaction>) {
+    private fun sendTransactions(websocketMasterNode : WebSocket, transactions : List<Transaction>, team: List<String>) {
 
         if (team.size > 1) {
 
