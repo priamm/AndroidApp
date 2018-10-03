@@ -57,7 +57,7 @@ class PoaClient(val context: Context,
     var balanceWebSocket: WebSocket? = null
 
     var gson: Gson = GsonBuilder().disableHtmlEscaping().create()
-    private lateinit var webSocketStringMessageEventsMasterNode: ConnectableFlowable<Pair<WebSocket?, Any?>>
+    private lateinit var webSocketStringMessageEventsMasterNode: Flowable<Pair<WebSocket?, Any?>>
     private lateinit var bootNodeWebsocketEvents: ConnectableFlowable<WebSocketEvent>
     private lateinit var nnWsEvents: ConnectableFlowable<WebSocketEvent>
     val rsaCipher = RSACipher()
@@ -113,18 +113,15 @@ class PoaClient(val context: Context,
                 }
                 .subscribeOn(Schedulers.io())
                 .share()
-                .replay()
 
-        webSocketStringMessageEventsMasterNode
+        composite.add(webSocketStringMessageEventsMasterNode
                 .filter {
                     it.second is ReconnectResponse
                 }
                 .doOnNext {
                     Timber.d("Start connect to team node")
                     connectToTeamNode(it)
-                }.subscribe()
-
-        composite.add(webSocketStringMessageEventsMasterNode.connect())
+                }.subscribe())
     }
 
     private var team: List<String> = mutableListOf()
@@ -557,9 +554,6 @@ class PoaClient(val context: Context,
                     Crashlytics.log("Master node : transactions got error")
                     Crashlytics.logException(it)
                 }
-                .doOnNext {
-                    Timber.d("MasterNode : ${it.transactions.size} transactions")
-                }
                 .filter({ prev_hash != "" })
                 .doOnNext {
                     if (currentTransactions.size > TRANSACTIONS_LIMIT_TO_PREVENT_OVERFLOW) {
@@ -638,15 +632,11 @@ class PoaClient(val context: Context,
 
         if (team.size > 1) {
 
-            Timber.d("Team size : ${team.size}")
-
             for (teamMember in team) {
 
                 if (teamMember == myId && transactions.isEmpty()) {
                     continue
                 }
-
-                Timber.d("Sending\nfrom: $myId\nto: $teamMember")
 
                 var toJson = gson.toJson(AddressedMessageRequestWithTransactions(msg = RequestForSignatureList(data = transactions), to = teamMember, from = myId))
 
