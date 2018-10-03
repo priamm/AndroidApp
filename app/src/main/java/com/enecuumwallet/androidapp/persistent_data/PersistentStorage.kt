@@ -164,6 +164,17 @@ object PersistentStorage {
         setString("MASTER_NODE_PORT", masterNodeAddress.port);
     }
 
+    fun setApiNode(apiNodeAddress: ConnectPointDescription) {
+        setString("API_NODE_IP", apiNodeAddress.ip)
+        setString("API_NODE_PORT", apiNodeAddress.port)
+    }
+
+    fun getApiNode(): ConnectPointDescription {
+        val ip = getPrefs().getString("API_NODE_IP", "")
+        val port = getPrefs().getString("API_NODE_PORT", "")
+        return ConnectPointDescription(ip!!, port!!)
+    }
+
     fun getMasterNode(): ConnectPointDescription {
         val ip = getPrefs().getString("MASTER_NODE_IP", "")
         val port = getPrefs().getString("MASTER_NODE_PORT", "")

@@ -20,6 +20,7 @@ import com.google.gson.GsonBuilder
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.flowables.ConnectableFlowable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.Request
 import okhttp3.WebSocket
@@ -56,9 +57,9 @@ class PoaClient(val context: Context,
     var balanceWebSocket: WebSocket? = null
 
     var gson: Gson = GsonBuilder().disableHtmlEscaping().create()
-    private lateinit var webSocketStringMessageEventsMasterNode: Flowable<Pair<WebSocket?, Any?>>
-    private lateinit var bootNodeWebsocketEvents: Flowable<WebSocketEvent>
-    private lateinit var nnWsEvents: Flowable<WebSocketEvent>
+    private lateinit var webSocketStringMessageEventsMasterNode: ConnectableFlowable<Pair<WebSocket?, Any?>>
+    private lateinit var bootNodeWebsocketEvents: ConnectableFlowable<WebSocketEvent>
+    private lateinit var nnWsEvents: ConnectableFlowable<WebSocketEvent>
     val rsaCipher = RSACipher()
     var currentNodes: List<ConnectPointDescription>? = listOf()
 
@@ -80,23 +81,50 @@ class PoaClient(val context: Context,
 
     private var microBlockWasReady = true
 
-    private fun reconnectToNN(connectPointDescription: ConnectPointDescription): Flowable<WebSocketEvent>? {
-        return getWebSocket(connectPointDescription.ip, connectPointDescription.port)
-                .doOnNext {
-                    if (it is WebSocketEvent.OpenedEvent) {
-                        currentNN = connectPointDescription;
-                        isConnectedVal = true
-                        onConnectedListner.onConnected(connectPointDescription.ip, connectPointDescription.port)
-                        it.webSocket?.send(gson.toJson(ReconnectAction()))
-                        nnWs?.close(1000, "Close")
-                        nnWs = it.webSocket
+    private fun reconnectToNN(connectPointDescription: ConnectPointDescription) {
 
-                        PersistentStorage.setMasterNode(connectPointDescription)
-                    }
+        val masterNode = getWebSocket(connectPointDescription.ip, connectPointDescription.port)
+
+        composite.add(masterNode
+                .filter {
+                    it is WebSocketEvent.OpenedEvent
                 }
-                .cacheWithInitialCapacity(1)
-                .subscribeOn(Schedulers.io())
+                .doOnNext {
+                    currentNN = connectPointDescription
+                    isConnectedVal = true
+                    onConnectedListner.onConnected(connectPointDescription.ip, connectPointDescription.port)
+                    it.webSocket?.send(gson.toJson(ReconnectAction()))
+                    nnWs?.close(1000, "Close")
+                    nnWs = it.webSocket
 
+                    PersistentStorage.setMasterNode(connectPointDescription)
+                }
+                .subscribe())
+
+        composite.add(masterNode.connect())
+
+        webSocketStringMessageEventsMasterNode = masterNode
+                .filter {
+                    it is WebSocketEvent.StringMessageEvent
+                }
+                .cast(WebSocketEvent.StringMessageEvent::class.java)
+                .map {
+                    Pair(it.webSocket, parse(it.text!!))
+                }
+                .subscribeOn(Schedulers.io())
+                .share()
+                .replay()
+
+        webSocketStringMessageEventsMasterNode
+                .filter {
+                    it.second is ReconnectResponse
+                }
+                .doOnNext {
+                    Timber.d("Start connect to team node")
+                    connectToTeamNode(it)
+                }.subscribe()
+
+        composite.add(webSocketStringMessageEventsMasterNode.connect())
     }
 
     private var team: List<String> = mutableListOf()
@@ -123,26 +151,27 @@ class PoaClient(val context: Context,
         microBlockWasReady = true
 
         Timber.d("Connecting ...")
+
+
         composite = CompositeDisposable()
         onConnectedListner.onStartConnecting()
         createKeyIfNeeds()
 
+
         bootNodeWebsocketEvents = getWebSocket(BN_PATH, BN_PORT)
 
         composite.add(bootNodeWebsocketEvents
-                .filter { it is WebSocketEvent.OpenedEvent }
+                .filter {
+                    it is WebSocketEvent.OpenedEvent
+                }
                 .doOnNext {
                     Timber.d("BootNode : open")
 
-                    bootNodeWebSocket?.close(1000, "Close")
-                    bootNodeWebSocket = it.webSocket
-
-                    //Timber.d("Connected to BN, sending request")
 
                     //request to BootNode
                     val connectBNRequestJson = gson.toJson(ConnectBNRequest())
                     Timber.d("BootNode : request to get master node's $connectBNRequestJson")
-                    it.webSocket?.send(connectBNRequestJson)
+                    val masterNodeReqSend = it.webSocket?.send(connectBNRequestJson)
 
                     val connectApiServicesJson = gson.toJson(GetApiServices())
                     it.webSocket?.send(connectApiServicesJson)
@@ -150,10 +179,13 @@ class PoaClient(val context: Context,
                 }
                 .subscribe())
 
+        composite.add(bootNodeWebsocketEvents.connect())
 
         composite.add(
                 bootNodeWebsocketEvents
-                          .filter { it is WebSocketEvent.StringMessageEvent }
+                          .filter {
+                              it is WebSocketEvent.StringMessageEvent
+                          }
                           .cast(WebSocketEvent.StringMessageEvent::class.java)
                           .map {
                               parse(it.text!!)
@@ -167,6 +199,8 @@ class PoaClient(val context: Context,
                               Timber.d("BootNode : got list of api services : $it.toString()")
 
                               it.msg.firstOrNull()?.let { balancePoint ->
+                                  PersistentStorage.setApiNode(balancePoint)
+
                                   val balanceWebSocketEvent = getWebSocket(balancePoint.ip, balancePoint.port)
 
                                   composite.add(balanceWebSocketEvent
@@ -179,14 +213,15 @@ class PoaClient(val context: Context,
                                               Crashlytics.log("Balance webSocket : got throwable")
                                               Crashlytics.logException(it)
                                           }))
+
+                                  composite.add(balanceWebSocketEvent.connect())
                               }
                           }
                           .subscribeOn(Schedulers.io())
                           .subscribe()
         )
 
-
-        nnWsEvents = bootNodeWebsocketEvents
+        composite.add(bootNodeWebsocketEvents
                 .filter { it is WebSocketEvent.StringMessageEvent }
                 .cast(WebSocketEvent.StringMessageEvent::class.java)
                 .map {
@@ -199,21 +234,30 @@ class PoaClient(val context: Context,
                 .doOnNext {
                     Timber.d("BootNode : got list of master nodes: $it.toString()")
                     currentNodes = it.connects
-                }
-                .flatMap {
-                    Flowable.fromIterable(it.connects)
-                }
-                .firstOrError()
-                .doOnSuccess {
-                    Timber.d("Connecting to master node : ${it.ip}:${it.port}")
-                }.toFlowable()
-                .switchMap {
-                    reconnectToNN(it)
-                }
-                .cacheWithInitialCapacity(1)
-                .subscribeOn(Schedulers.io())
 
-        webSocketStringMessageEventsMasterNode =
+                    reconnectToNN(it.connects.first())
+                }
+                .subscribeOn(Schedulers.io())
+                .subscribe())
+
+
+        /*composite.add(nnWsEvents.connect())*/
+
+        /*nnWsEvents //Мастер нода
+                .filter { it is WebSocketEvent.StringMessageEvent }
+                .cast(WebSocketEvent.StringMessageEvent::class.java)
+                .map {
+                    Pair(it.webSocket, parse(it.text!!))
+                }
+                .filter { it.second is ReconnectResponse }
+                .doOnNext {
+                    Timber.d("Start connect to team node")
+                    connectToTeamNode(it)
+                }
+                .subscribeOn(Schedulers.io())*/
+
+        /*
+        /*webSocketStringMessageEventsMasterNode =*/
                 nnWsEvents //Мастер нода
                 .filter { it is WebSocketEvent.StringMessageEvent }
                 .cast(WebSocketEvent.StringMessageEvent::class.java)
@@ -222,7 +266,16 @@ class PoaClient(val context: Context,
                 }
                 .subscribeOn(Schedulers.io())
 
-        composite.add(
+        webSocketStringMessageEventsMasterNode
+                .filter { it.second is ReconnectResponse }
+                .doOnNext {
+                    Timber.d("Start connect to team node")
+                    connectToTeamNode(it)
+                }
+
+        composite.add(webSocketStringMessageEventsMasterNode.connect())
+
+        /*composite.add(
                 nnWsEvents
                         .doOnNext {
                             when (it) {
@@ -235,15 +288,7 @@ class PoaClient(val context: Context,
                                     Timber.e("WS Failue Event : ${it.t?.localizedMessage}, ${it.response.toString()}")
                                 }
                             }
-                        }.subscribe())
-
-        val myId = webSocketStringMessageEventsMasterNode
-                .filter { it.second is ReconnectResponse }
-                .doOnNext {
-                    connectToTeamNode(it)
-                }
-
-        composite.add(myId.subscribe())
+                        }.subscribe())*/*/
 
     }
 
@@ -359,7 +404,7 @@ class PoaClient(val context: Context,
                             if (keyblockHash != prev_hash) {
 
                                 Timber.d("-------------------------------------------------------")
-                                Timber.d("TeamNode : got key-block,  hash of it: $keyblockHash")
+                                Timber.d("TeamNode : got key-block,  hash of it: $keyblockHash, last microblock ready $microBlockWasReady")
 
                                 if (microBlockWasReady) {
                                     Timber.d("TeamNode : ask new transactions")
@@ -373,6 +418,8 @@ class PoaClient(val context: Context,
                         }
                         .subscribeOn(Schedulers.io())
                         .subscribe())
+
+        composite.add(teamWsEvents.connect())
     }
 
     fun createKeyIfNeeds() {
@@ -627,12 +674,13 @@ class PoaClient(val context: Context,
     }
 
     private fun getWebSocket(ip: String,
-                             port: String): Flowable<WebSocketEvent> {
+                             port: String): ConnectableFlowable<WebSocketEvent> {
 
 
         val request = Request.Builder().url("ws://$ip:$port").build()
 
         val managedRxWebSocket = RxWebSocket.createAutoManagedRxWebSocket(request)
+
         val webSocket = managedRxWebSocket
                 .observe()
                 .doOnError {
@@ -642,7 +690,29 @@ class PoaClient(val context: Context,
                 }
                 .subscribeOn(Schedulers.io())
                 .retryWhen(RetryWithDelay(10000, 10000))
-                .cacheWithInitialCapacity(1)
+                .share()
+                .replay()
+
+        return webSocket
+    }
+
+    private fun getNotConnectableWebSocket(ip: String,
+                             port: String): Flowable<WebSocketEvent> {
+
+
+        val request = Request.Builder().url("ws://$ip:$port").build()
+
+        val managedRxWebSocket = RxWebSocket.createAutoManagedRxWebSocket(request)
+
+        val webSocket = managedRxWebSocket
+                .observe()
+                .doOnError {
+                    Timber.e(it)
+                    onConnectedListner.onConnectionError(it.localizedMessage)
+                    onConnectedListner.doReconnect()
+                }
+                .subscribeOn(Schedulers.io())
+                .retryWhen(RetryWithDelay(10000, 10000))
 
         return webSocket
     }
@@ -715,9 +785,6 @@ class PoaClient(val context: Context,
                         .filter { it is WebSocketEvent.StringMessageEvent }
                         .cast(WebSocketEvent.StringMessageEvent::class.java)
                         .map { parse(it.text!!) }
-                        .doOnNext {
-                            //Timber.d(it.toString())
-                        }
                         .doOnError {
                             Crashlytics.logException(it)
                         }

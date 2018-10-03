@@ -9,6 +9,7 @@ import com.enecuumwallet.androidapp.models.inherited.models.ResponseStringRpc
 import com.enecuumwallet.androidapp.network.RxWebSocket
 import com.enecuumwallet.androidapp.network.WebSocketEvent
 import com.enecuumwallet.androidapp.persistent_data.PersistentStorage
+import com.enecuumwallet.androidapp.persistent_data.PersistentStorage.getApiNode
 import com.enecuumwallet.androidapp.persistent_data.PersistentStorage.getMasterNode
 import com.enecuumwallet.androidapp.presentation.view.send_finish.SendFinishView
 import com.enecuumwallet.androidapp.ui.fragment.send_parameters.SendParametersFragment
@@ -56,10 +57,8 @@ class SendFinishPresenter : MvpPresenter<SendFinishView>() {
     var gson: Gson = GsonBuilder().disableHtmlEscaping().create()
     val random = Random()
     fun onSendClick() {
-        val masterNode = getMasterNode()
-        val webSocket = getWebSocket(masterNode.ip, "1555")
-
-
+        val apiNode = getApiNode()
+        val webSocket = getWebSocket(apiNode.ip, apiNode.port)
 
         val owner = PersistentStorage.getWallet()
         val reciever = address
