@@ -13,7 +13,7 @@
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
-        <!--android:name=".ui.activity.splash.SplashActivity"-->
+
         <activity
                 android:name=".ui.activity.splash.SplashActivity"
                 android:noHistory="true"

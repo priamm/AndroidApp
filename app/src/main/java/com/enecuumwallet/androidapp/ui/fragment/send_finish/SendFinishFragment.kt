@@ -7,7 +7,6 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuumwallet.androidapp.R
 import com.enecuumwallet.androidapp.application.EnecuumApplication
@@ -36,7 +35,7 @@ class SendFinishFragment : BackTitleFragment(), SendFinishView {
             if (pd.isShowing) {
                 pd.dismiss()
             }
-            Toast.makeText(context, if (isSuccess) "Transaction sent" else "Transaction not sent", Toast.LENGTH_SHORT).show()
+
             if (isSuccess) {
                 EnecuumApplication.exitFromCurrentFragment()
             }

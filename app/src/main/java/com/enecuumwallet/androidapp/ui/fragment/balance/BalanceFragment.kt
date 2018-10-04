@@ -12,7 +12,6 @@ import android.support.v4.content.LocalBroadcastManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuumwallet.androidapp.R
 import com.enecuumwallet.androidapp.application.EnecuumApplication
@@ -73,11 +72,10 @@ class BalanceFragment : NoBackFragment(), BalanceView {
 
         if (PersistentStorage.getAutoMiningStart()) {
             Handler(Looper.getMainLooper()).postDelayed({
-                presenter.onMiningToggle();
-                Toast.makeText(view.context, "Restoring after crash", Toast.LENGTH_LONG).show()
+                presenter.onMiningToggle()
                 LocalBroadcastManager.getInstance(context!!).sendBroadcast(Intent(RESTART_ACTION))
                 PersistentStorage.setAutoMiningStart(false)
-            }, 10000);
+            }, 10000)
         }
 
 //        //////REMOVE THIS ONLY, FOR CRASH TESTING
@@ -177,7 +175,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
 
     override fun showConnectionError(message: String) {
         Handler(Looper.getMainLooper()).post {
-            Toast.makeText(context, getString(R.string.connection_error) + ": " + message, Toast.LENGTH_LONG).show()
+            //Toast.makeText(context, getString(R.string.connection_error) + ": " + message, Toast.LENGTH_LONG).show()
         }
 
     }

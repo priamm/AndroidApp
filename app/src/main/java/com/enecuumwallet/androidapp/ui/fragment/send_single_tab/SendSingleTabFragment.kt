@@ -8,7 +8,6 @@ import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuumwallet.androidapp.R
@@ -57,7 +56,6 @@ class SendSingleTabFragment : MvpAppCompatFragment(), SendSingleTabView {
             val clipboard = view.context?.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("wallet", wallet)
             clipboard.setPrimaryClip(clip)
-            Toast.makeText(view.context, "Your wallet has been copied to clipboard", Toast.LENGTH_SHORT).show()
         }
 
         presenter.handleArgs(arguments)

@@ -6,7 +6,6 @@ import android.os.Looper
 import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
-import android.widget.Toast
 import com.crashlytics.android.Crashlytics
 import com.enecuumwallet.androidapp.BuildConfig
 import com.enecuumwallet.androidapp.models.inherited.models.*
@@ -130,11 +129,15 @@ class PoaClient(val context: Context,
 
     fun disconnect() {
         isConnectedVal = false
+
         listOf(nnWs, bootNodeWebSocket, teamWs, balanceWebSocket)
                 .forEach {
-                    it?.close(1000, "Client close");
+                    it?.close(1000, "Client close")
                 }
+
         composite.dispose()
+        miningComposite.dispose()
+
         onTeamSizeListener.onTeamSize(0)
         onConnectedListner.onDisconnected()
     }
@@ -236,57 +239,6 @@ class PoaClient(val context: Context,
                 }
                 .subscribeOn(Schedulers.io())
                 .subscribe())
-
-
-        /*composite.add(nnWsEvents.connect())*/
-
-        /*nnWsEvents //Мастер нода
-                .filter { it is WebSocketEvent.StringMessageEvent }
-                .cast(WebSocketEvent.StringMessageEvent::class.java)
-                .map {
-                    Pair(it.webSocket, parse(it.text!!))
-                }
-                .filter { it.second is ReconnectResponse }
-                .doOnNext {
-                    Timber.d("Start connect to team node")
-                    connectToTeamNode(it)
-                }
-                .subscribeOn(Schedulers.io())*/
-
-        /*
-        /*webSocketStringMessageEventsMasterNode =*/
-                nnWsEvents //Мастер нода
-                .filter { it is WebSocketEvent.StringMessageEvent }
-                .cast(WebSocketEvent.StringMessageEvent::class.java)
-                .map {
-                    Pair(it.webSocket, parse(it.text!!))
-                }
-                .subscribeOn(Schedulers.io())
-
-        webSocketStringMessageEventsMasterNode
-                .filter { it.second is ReconnectResponse }
-                .doOnNext {
-                    Timber.d("Start connect to team node")
-                    connectToTeamNode(it)
-                }
-
-        composite.add(webSocketStringMessageEventsMasterNode.connect())
-
-        /*composite.add(
-                nnWsEvents
-                        .doOnNext {
-                            when (it) {
-                                is WebSocketEvent.StringMessageEvent -> Timber.i("Recieved message at:" + DateFormat.getDateTimeInstance().format(Date()))
-                                is WebSocketEvent.OpenedEvent -> Timber.i("WS Opened Event")
-                                is WebSocketEvent.ClosedEvent -> Timber.i("WS Closed Event")
-                                is WebSocketEvent.FailureEvent -> {
-                                    Crashlytics.log("Master node webSocket : got throwable  ${it.t?.localizedMessage}, ${it.response.toString()}")
-                                    Crashlytics.logException(it.t)
-                                    Timber.e("WS Failue Event : ${it.t?.localizedMessage}, ${it.response.toString()}")
-                                }
-                            }
-                        }.subscribe())*/*/
-
     }
 
     private fun connectToTeamNode(masterNodeAndMessage : Pair<WebSocket?, Any?>){
@@ -463,10 +415,6 @@ class PoaClient(val context: Context,
                     //Got all sings
                     Timber.i("Signed all successfully")
 
-                    Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(context, "Sending", Toast.LENGTH_SHORT).show()
-                    }
-
                     val publicKeysFromOtherTeamMembers = mutableListOf<String>() //все подписи от других участников
 
                     for (responseSignature in it) {
@@ -493,7 +441,9 @@ class PoaClient(val context: Context,
                                             sign_r = "NDU=",//encode64(sign_r.toByteArray()), два хэша которые позволяет проверить подпись
                                             sign_s = "NDU=")))//encode64(sign_s.toByteArray()))))
 
+
                     val microblockMsgString = gson.toJson(microblockMsg)
+
                     val microblockMsgHash = hash256(microblockMsgString.trim().toByteArray())
                     val microblockMsgHashBase64 = Base64.encodeToString(microblockMsgHash, Base64.DEFAULT)
 
@@ -638,14 +588,25 @@ class PoaClient(val context: Context,
                     continue
                 }
 
-                var toJson = gson.toJson(AddressedMessageRequestWithTransactions(msg = RequestForSignatureList(data = transactions), to = teamMember, from = myId))
+                try {
+                    var toJson = gson.toJson(AddressedMessageRequestWithTransactions(msg = RequestForSignatureList(data = transactions), to = teamMember, from = myId))
 
-                toJson = toJson.replace("\\", "")
+                    toJson = toJson.replace("\\", "")
 
-                //Timber.d("Send message with transactions to another member use MasterNode, json data : $toJson")
-                Timber.d("Send message with transactions to another member use MasterNode")
+                    //Timber.d("Send message with transactions to another member use MasterNode, json data : $toJson")
+                    Timber.d("Send message with transactions to another member use MasterNode")
 
-                websocketMasterNode.send(toJson)
+                    websocketMasterNode.send(toJson)
+                } catch (e : Throwable) {
+                    Crashlytics.log("send transactions got throwable")
+                    Crashlytics.log("total reconnect")
+
+                    Crashlytics.logException(e)
+
+                    disconnect()
+                    connect()
+                }
+
             }
         } else {
             Timber.d("Team is empty")
@@ -739,7 +700,6 @@ class PoaClient(val context: Context,
                     } else {
                         gson.fromJson(text, AddressedMessageRequestWithTransactions::class.java)
                     }
-
                 }
 
                 CommunicationSubjects.PoWList.name -> gson.fromJson(text, PowsResponse::class.java)
@@ -825,8 +785,6 @@ class PoaClient(val context: Context,
     }
 
     interface BalanceListener {
-        fun onBalance(amount: Int);
+        fun onBalance(amount: Int)
     }
-
-
 }
