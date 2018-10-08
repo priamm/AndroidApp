@@ -14,8 +14,8 @@ android {
         applicationId "com.enecuum.androidapp"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 36
-        versionName "1.0.36"
+        versionCode 38
+        versionName "1.0.38"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {

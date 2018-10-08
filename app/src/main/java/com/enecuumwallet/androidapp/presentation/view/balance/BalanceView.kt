@@ -1,39 +1,43 @@
 package com.enecuumwallet.androidapp.presentation.view.balance
 
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
+import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy
+import com.arellomobile.mvp.viewstate.strategy.SkipStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import com.enecuumwallet.androidapp.presentation.view.HistoryView
 
 interface BalanceView : HistoryView<String> {
-    @StateStrategyType(AddToEndSingleStrategy::class)
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
     fun displayCurrencyRates(enq2Usd: Double, enq2Btc: Double)
-    @StateStrategyType(AddToEndSingleStrategy::class)
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
     fun displayBalances(enq: Double, enqPlus: Double)
 
-    @StateStrategyType(AddToEndSingleStrategy::class)
+    @StateStrategyType(OneExecutionStateStrategy::class)
     fun displayTeamSize(teamSize: Int)
 
-    @StateStrategyType(AddToEndSingleStrategy::class)
+    @StateStrategyType(OneExecutionStateStrategy::class)
     fun showProgress()
 
-    @StateStrategyType(AddToEndSingleStrategy::class)
+    @StateStrategyType(OneExecutionStateStrategy::class)
     fun updateProgressMessage(str:String)
 
-    @StateStrategyType(AddToEndSingleStrategy::class)
+    @StateStrategyType(OneExecutionStateStrategy::class)
     fun hideProgress()
 
-    @StateStrategyType(AddToEndSingleStrategy::class)
+    @StateStrategyType(OneExecutionStateStrategy::class)
     fun changeButtonState(isStart:Boolean)
 
-    @StateStrategyType(AddToEndSingleStrategy::class)
+    @StateStrategyType(OneExecutionStateStrategy::class)
     fun setBalance(balance: Int?)
 
-    @StateStrategyType(AddToEndSingleStrategy::class)
+    @StateStrategyType(OneExecutionStateStrategy::class)
     fun showLoading()
 
-    @StateStrategyType(AddToEndSingleStrategy::class)
+    @StateStrategyType(OneExecutionStateStrategy::class)
     fun hideLoading()
 
-    @StateStrategyType(AddToEndSingleStrategy::class)
+    @StateStrategyType(OneExecutionStateStrategy::class)
     fun showConnectionError(message: String)
 }

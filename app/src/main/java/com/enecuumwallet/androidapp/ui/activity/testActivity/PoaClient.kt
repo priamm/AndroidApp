@@ -64,6 +64,10 @@ class PoaClient(val context: Context,
 
     private var isConnectedVal: Boolean = false
 
+    var isMiningStarted  = false
+
+    var lastBalance = 0
+
     private var currentNN: ConnectPointDescription? = null
 
     var currentTransactions: List<Transaction> = listOf()
@@ -140,6 +144,8 @@ class PoaClient(val context: Context,
 
         onTeamSizeListener.onTeamSize(0)
         onConnectedListner.onDisconnected()
+
+        isMiningStarted = false
     }
 
 
@@ -149,6 +155,7 @@ class PoaClient(val context: Context,
 
     fun connect() {
         microBlockWasReady = true
+        isMiningStarted = true
 
         Timber.d("Connecting ...")
 
@@ -194,8 +201,8 @@ class PoaClient(val context: Context,
                               it is ConnectApiServicesResponse
                           })
                           .cast(ConnectApiServicesResponse::class.java)
-                          .doOnNext {
-
+                          .subscribeOn(Schedulers.io())
+                          .subscribe({
                               Timber.d("BootNode : got list of api services : $it.toString()")
 
                               it.msg.firstOrNull()?.let { balancePoint ->
@@ -216,9 +223,11 @@ class PoaClient(val context: Context,
 
                                   composite.add(balanceWebSocketEvent.connect())
                               }
-                          }
-                          .subscribeOn(Schedulers.io())
-                          .subscribe()
+                          } , {
+                              Timber.d(it)
+                              Crashlytics.log("Boot node, StringMessageEvent, got throwable")
+                              Crashlytics.logException(it)
+                          })
         )
 
         composite.add(bootNodeWebsocketEvents
@@ -739,14 +748,20 @@ class PoaClient(val context: Context,
                             Crashlytics.logException(it)
                         }
                         .cast(ResponseRpc::class.java)
-                        .doOnNext {
+                        .subscribe({
                             if (it.result != null) {
                                 //Timber.i("Got balance: ${it.result.balance}")
                                 balanceListener.onBalance(it.result.balance)
+                                lastBalance = it.result.balance
                             } else {
                                 balanceListener.onBalance(0)
+                                lastBalance = 0
                             }
-                        }.subscribe())
+                        },{
+                            Timber.d(it)
+                            Crashlytics.log("Balance web socket got throwable")
+                            Crashlytics.logException(it)
+                        }))
 
 
         val address =  PersistentStorage.getWallet()
@@ -777,10 +792,10 @@ class PoaClient(val context: Context,
     }
 
     interface onConnectedListener {
-        fun onStartConnecting();
-        fun onConnected(ip: String, port: String);
-        fun onDisconnected();
-        fun doReconnect();
+        fun onStartConnecting()
+        fun onConnected(ip: String, port: String)
+        fun onDisconnected()
+        fun doReconnect()
         fun onConnectionError(localizedMessage: String)
     }
 

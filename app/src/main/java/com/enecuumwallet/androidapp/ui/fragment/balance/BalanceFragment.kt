@@ -42,7 +42,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     @InjectPresenter
     lateinit var presenter: BalancePresenter
 
-    lateinit var pd: ProgressDialog;
+    lateinit var pd: ProgressDialog
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -73,24 +73,22 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         if (PersistentStorage.getAutoMiningStart()) {
             Handler(Looper.getMainLooper()).postDelayed({
                 presenter.onMiningToggle()
-                LocalBroadcastManager.getInstance(context!!).sendBroadcast(Intent(RESTART_ACTION))
+
+                context?.let {
+                    LocalBroadcastManager.getInstance(it).sendBroadcast(Intent(RESTART_ACTION))
+                }
+
                 PersistentStorage.setAutoMiningStart(false)
             }, 10000)
         }
 
-//        //////REMOVE THIS ONLY, FOR CRASH TESTING
-//        Handler().postDelayed({
-//            Utils.crashMe()
-//        }, 30000)
-
         tokens.setOnClickListener({
             presenter.onTokensClick()
         })
-        progressBar.getIndeterminateDrawable().setColorFilter(
-                getResources().getColor(R.color.turquoise_blue_three),
-                android.graphics.PorterDuff.Mode.SRC_IN);
+        progressBar.indeterminateDrawable.setColorFilter(
+                resources.getColor(R.color.turquoise_blue_three),
+                android.graphics.PorterDuff.Mode.SRC_IN)
 
-//        presenter.onCreate()
         setHasOptionsMenu(true)
         TransactionsHistoryRenderer.configurePanelListener(slidingLayout, panelHint)
     }
