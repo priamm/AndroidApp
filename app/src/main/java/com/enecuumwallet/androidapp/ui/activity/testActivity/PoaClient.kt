@@ -5,7 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
 import android.util.Base64
-import android.util.Log
+import android.util.Base64.DEFAULT
 import com.crashlytics.android.Crashlytics
 import com.enecuumwallet.androidapp.BuildConfig
 import com.enecuumwallet.androidapp.models.inherited.models.*
@@ -17,7 +17,7 @@ import com.enecuumwallet.androidapp.utils.ByteBufferUtils
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
+
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.flowables.ConnectableFlowable
 import io.reactivex.schedulers.Schedulers
@@ -154,6 +154,13 @@ class PoaClient(val context: Context,
     }
 
     fun connect() {
+        val ecdsAchiper = ECDSAchiper()
+
+        val pair = ecdsAchiper.ecdsaKeyPair
+
+        Timber.d("Private key ${pair.private}")
+        Timber.d("Public key ${Base64.encodeToString(pair.public.encoded, DEFAULT)}")
+
         microBlockWasReady = true
         isMiningStarted = true
 
@@ -365,8 +372,6 @@ class PoaClient(val context: Context,
                                 Timber.d("TeamNode : got key-block,  hash of it: $keyblockHash, last microblock ready $microBlockWasReady")
 
                                 if (microBlockWasReady) {
-                                    Timber.d("TeamNode : ask new transactions")
-                                    Timber.d("-------------------------------------------------------")
                                     askForNewTransactions(ws)
                                     microBlockWasReady = false
                                 }
@@ -505,15 +510,12 @@ class PoaClient(val context: Context,
 
 
         val trDisposable = transactionResponses
-                .onBackpressureDrop()
                 .filter { it.second is TransactionResponse }
                 .map { it.second as TransactionResponse }
-                .filter { team.size > 1}
                 .doOnError {
                     Crashlytics.log("Master node : transactions got error")
                     Crashlytics.logException(it)
                 }
-                .filter({ prev_hash != "" })
                 .doOnNext {
                     if (currentTransactions.size > TRANSACTIONS_LIMIT_TO_PREVENT_OVERFLOW) {
                         currentTransactions = listOf()
@@ -555,6 +557,8 @@ class PoaClient(val context: Context,
                             //we have request For Signature
                             if (requestForSignature != null) {
 
+                                //Перед подписью сделать hash
+
                                 //Timber.d("Request for signature from: ${response.from} ")
 
                                 val hash256 = hash256(requestForSignature)
@@ -593,29 +597,26 @@ class PoaClient(val context: Context,
 
             for (teamMember in team) {
 
-                if (teamMember == myId && transactions.isEmpty()) {
-                    continue
+                if (teamMember != myId) {
+                    try {
+                        var toJson = gson.toJson(AddressedMessageRequestWithTransactions(msg = RequestForSignatureList(data = transactions), to = teamMember, from = myId))
+
+                        toJson = toJson.replace("\\", "")
+
+                        //Timber.d("Send message with transactions to another member use MasterNode, json data : $toJson")
+                        Timber.d("Send message with transactions to another member use MasterNode")
+
+                        websocketMasterNode.send(toJson)
+                    } catch (e : Throwable) {
+                        Crashlytics.log("send transactions got throwable")
+                        Crashlytics.log("total reconnect")
+
+                        Crashlytics.logException(e)
+
+                        disconnect()
+                        connect()
+                    }
                 }
-
-                try {
-                    var toJson = gson.toJson(AddressedMessageRequestWithTransactions(msg = RequestForSignatureList(data = transactions), to = teamMember, from = myId))
-
-                    toJson = toJson.replace("\\", "")
-
-                    //Timber.d("Send message with transactions to another member use MasterNode, json data : $toJson")
-                    Timber.d("Send message with transactions to another member use MasterNode")
-
-                    websocketMasterNode.send(toJson)
-                } catch (e : Throwable) {
-                    Crashlytics.log("send transactions got throwable")
-                    Crashlytics.log("total reconnect")
-
-                    Crashlytics.logException(e)
-
-                    disconnect()
-                    connect()
-                }
-
             }
         } else {
             Timber.d("Team is empty")

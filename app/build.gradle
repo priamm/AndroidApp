@@ -11,11 +11,11 @@ apply plugin: 'io.fabric'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.enecuum.androidapp"
+        applicationId "com.enecuum.wallet"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 38
-        versionName "1.0.38"
+        versionCode 39
+        versionName "1.0.39"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
