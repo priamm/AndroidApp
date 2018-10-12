@@ -51,7 +51,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
 
     val startMiningReciever = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            presenter.onMiningToggle();
+            presenter.onMiningToggle()
         }
     }
     private val RESTART_ACTION: String = "restart_action"
@@ -67,7 +67,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         RxView.clicks(start)
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribe {
-                    presenter.onMiningToggle();
+                    presenter.onMiningToggle()
                 }
 
         if (PersistentStorage.getAutoMiningStart()) {

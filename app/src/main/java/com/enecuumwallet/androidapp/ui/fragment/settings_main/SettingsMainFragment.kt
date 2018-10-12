@@ -36,10 +36,14 @@ class SettingsMainFragment : NoBackFragment(), SettingsMainView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         SettingsInfoUtils.setupSettingInfo(changePin, changePinInfo, changePinDescription, {presenter.onChangePinClick()})
+
         SettingsInfoUtils.setupSettingInfo(backupActions, backupInfo, backupDescription, {presenter.onBackupActionClick()})
+
         SettingsInfoUtils.setupSettingInfo(aboutApp, aboutInfo, aboutDescription, {presenter.onAboutAppClick()})
-        SettingsInfoUtils.setupSettingInfo(customBn,customNodeInfo,customBn,{ presenter.onCustomBNAppClick() })
-        SettingsInfoUtils.setupSettingInfo(myWallet,myWalletInfo,myWallet,{ presenter.onMyWalletClick() })
+
+        SettingsInfoUtils.setupSettingInfo(customBn,customNodeInfo, bootNodeDescription,{ presenter.onCustomBNAppClick() })
+
+        SettingsInfoUtils.setupSettingInfo(myWallet,myWalletInfo, walletDescription,{ presenter.onMyWalletClick() })
 
         setHasOptionsMenu(true)
     }

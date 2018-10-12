@@ -18,9 +18,11 @@ object SettingsInfoUtils {
         titleView.setOnClickListener {
             callback()
         }
+
         description.setOnClickListener {
             callback()
         }
+
         icon.setOnClickListener {
             if(description.visibility == View.GONE) {
                 description.visibility = View.VISIBLE

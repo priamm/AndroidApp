@@ -617,6 +617,7 @@ class PoaClient(val context: Context,
                         connect()
                     }
                 }
+
             }
         } else {
             Timber.d("Team is empty")
