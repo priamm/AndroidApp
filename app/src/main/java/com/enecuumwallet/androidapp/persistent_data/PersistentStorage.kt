@@ -26,6 +26,9 @@ object PersistentStorage {
     private const val COUNT_TRANSACTIONS = "COUNT_TRANSACTIONS"
     private const val CURRENT_NN = "CURRENT_NN"
     private const val AUTO_MINING_START = "AUTO_MINING_START"
+    private const val PRIVATE_KEY = "PRIVATE_KEY"
+    private const val PUBLIC_KEY = "PRIVATE_KEY"
+
     private fun getPrefs(): SharedPreferences = EnecuumApplication.applicationContext()
             .getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
 
@@ -55,6 +58,15 @@ object PersistentStorage {
         val editor = getPrefs().edit()
         editor.putFloat(key, value)
         editor.apply()
+    }
+
+    fun setKeys(privateKey : String, publicKey : String) {
+        setString(PRIVATE_KEY, privateKey)
+        setString(PUBLIC_KEY, publicKey)
+    }
+
+    fun isKeysExist() : Boolean {
+        return getPrefs().getString(PRIVATE_KEY, "").isNotEmpty() && getPrefs().getString(PUBLIC_KEY, "").isNotEmpty()
     }
 
     fun setRegistrationFinished() {

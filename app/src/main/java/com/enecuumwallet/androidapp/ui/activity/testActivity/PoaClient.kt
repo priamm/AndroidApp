@@ -154,13 +154,6 @@ class PoaClient(val context: Context,
     }
 
     fun connect() {
-        val ecdsAchiper = ECDSAchiper()
-
-        val pair = ecdsAchiper.ecdsaKeyPair
-
-        Timber.d("Private key ${pair.private}")
-        Timber.d("Public key ${Base64.encodeToString(pair.public.encoded, DEFAULT)}")
-
         microBlockWasReady = true
         isMiningStarted = true
 
@@ -386,12 +379,25 @@ class PoaClient(val context: Context,
     }
 
     fun createKeyIfNeeds() {
-        if (PersistentStorage.getAddress().isEmpty()) {
-            val random = SecureRandom()
-            val bytes = ByteArray(32)
-            random.nextBytes(bytes)
-            PersistentStorage.setAddress(Base58.encode(bytes))
-        }
+        //if (!PersistentStorage.isKeysExist()) {
+            val ecdsAchiper = ECDSAchiper()
+
+            val pair = ecdsAchiper.ecdsaKeyPair
+
+            Timber.d("Private key ${pair.private}")
+
+            val publicKeyStr = pair.public.toString()
+
+            Timber.d("Public key : $publicKeyStr")
+            Timber.d("Public key X : ${pair.public}")
+            Timber.d("Public key Y : ${pair.public}")
+
+            Timber.d("Public key base58 ${Base58.encode(pair.public.encoded)}")
+
+
+            PersistentStorage.setAddress(Base58.encode(pair.public.encoded))
+
+        //}
     }
 
     private fun startListeningSignature(webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>, //messages from MasterNode
