@@ -55,30 +55,34 @@ class NewAccountPresenter : MvpPresenter<NewAccountView>(), DialogInterface.OnCl
             1 -> {
                 if(firstPin != pin) {
                     EnecuumApplication.cicerone().router.showSystemMessage(
-                            EnecuumApplication.applicationContext().getString(R.string.pin_not_equals)
-                    )
+                            EnecuumApplication.applicationContext().getString(R.string.pin_not_equals))
                     return
                 } else {
                     PersistentStorage.setPin(pin)
-                    viewState.moveNext()
+                    openNextScreen()
+                    //viewState.moveNext()
                 }
             }
             2 -> {
                 if (isKeyBackedUp) {
                     viewState.moveNext()
-                } else {
-                    viewState.displaySkipDialog()
-                    return
-                }
-            }
-            3 -> {
-                if (isSeedBackedUp) {
                     openNextScreen()
                 } else {
                     viewState.displaySkipDialog()
                     return
                 }
             }
+
+
+            /*3 -> {
+                if (isSeedBackedUp) {
+                    openNextScreen()
+                } else {
+                    viewState.displaySkipDialog()
+                    return
+                }
+            }*/
+
         }
         currentPage++
     }

@@ -30,6 +30,7 @@ class NewAccountPagerAdapter(fm : FragmentManager) : FragmentPagerAdapter(fm) {
 //                return NewAccountQrFragment.newInstance()
 //            }
             2 -> return CreateSeedFragment.newInstance(Bundle.EMPTY)
+
         }
         return Fragment()
     }

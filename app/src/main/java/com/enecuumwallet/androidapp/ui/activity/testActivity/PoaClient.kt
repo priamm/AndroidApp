@@ -5,7 +5,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
 import android.util.Base64
-import android.util.Base64.DEFAULT
 import com.crashlytics.android.Crashlytics
 import com.enecuumwallet.androidapp.BuildConfig
 import com.enecuumwallet.androidapp.models.inherited.models.*
@@ -14,6 +13,7 @@ import com.enecuumwallet.androidapp.network.RxWebSocket
 import com.enecuumwallet.androidapp.network.WebSocketEvent
 import com.enecuumwallet.androidapp.persistent_data.PersistentStorage
 import com.enecuumwallet.androidapp.utils.ByteBufferUtils
+import com.enecuumwallet.androidapp.utils.ByteBufferUtils.encode64
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.reactivex.Flowable
@@ -25,9 +25,9 @@ import okhttp3.Request
 import okhttp3.WebSocket
 import timber.log.Timber
 import java.math.BigInteger
-import java.security.SecureRandom
-import java.text.DateFormat
-import java.util.*
+import java.security.KeyFactory
+import java.security.Signature
+import java.security.spec.PKCS8EncodedKeySpec
 import java.util.concurrent.TimeUnit
 
 
@@ -48,6 +48,9 @@ class PoaClient(val context: Context,
     var composite: CompositeDisposable = CompositeDisposable()
 
     var miningComposite: CompositeDisposable = CompositeDisposable()
+
+    val signature = Signature.getInstance("SHA256withECDSA")
+    val keyFactory = KeyFactory.getInstance("ECDSA", org.bouncycastle.jce.provider.BouncyCastleProvider())
 
 
     var nnWs: WebSocket? = null
@@ -379,25 +382,33 @@ class PoaClient(val context: Context,
     }
 
     fun createKeyIfNeeds() {
-        //if (!PersistentStorage.isKeysExist()) {
-            val ecdsAchiper = ECDSAchiper()
+        if (!PersistentStorage.isKeysExist()) {
 
+            val ecdsAchiper = ECDSAchiper()
             val pair = ecdsAchiper.ecdsaKeyPair
 
-            Timber.d("Private key ${pair.private}")
+            val privateSindex = pair.private.toString().indexOf("S:")
+            val privateSkey = pair.private.toString().slice(privateSindex + 3 until pair.private.toString().length - 1)
 
-            val publicKeyStr = pair.public.toString()
+            val publicXindex = pair.public.toString().indexOf("X:")
+            val publicYindex = pair.public.toString().indexOf("Y:")
 
-            Timber.d("Public key : $publicKeyStr")
-            Timber.d("Public key X : ${pair.public}")
-            Timber.d("Public key Y : ${pair.public}")
-
-            Timber.d("Public key base58 ${Base58.encode(pair.public.encoded)}")
-
+            var publicXkey = pair.public.toString().slice(publicXindex + 3 until publicYindex)
+            val publicYkey = pair.public.toString().slice(publicYindex + 3 until pair.public.toString().length - 1)
 
             PersistentStorage.setAddress(Base58.encode(pair.public.encoded))
 
-        //}
+            publicXkey = publicXkey.trim()
+
+            Timber.d("privateSkey ${privateSkey}")
+            Timber.d("privateXkey ${publicXkey}")
+            Timber.d("privateYkey ${publicYkey}")
+
+            val compressedPK = ECDSAchiper.compressPubKey(BigInteger((publicXkey + publicYkey), 16))
+
+            PersistentStorage.setKeys(privateSkey, publicXkey, publicYkey)
+            PersistentStorage.setAddress(compressedPK)
+        }
     }
 
     private fun startListeningSignature(webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>, //messages from MasterNode
@@ -439,8 +450,8 @@ class PoaClient(val context: Context,
 
                     for (responseSignature in it) {
 
-                        if (!TextUtils.isEmpty(responseSignature?.signature?.publicKeyEncoded58)) {
-                            responseSignature?.signature?.publicKeyEncoded58?.let { it1 -> publicKeysFromOtherTeamMembers.add(it1) }
+                        if (!TextUtils.isEmpty(responseSignature?.modelSignature?.publicKeyEncoded58)) {
+                            responseSignature?.modelSignature?.publicKeyEncoded58?.let { it1 -> publicKeysFromOtherTeamMembers.add(it1) }
                         }
                     }
 
@@ -452,15 +463,11 @@ class PoaClient(val context: Context,
                             K_hash = k_hash!!,
                             wallets = publicKeysFromOtherTeamMembers)
 
-                    val sign_r = BigInteger.TEN;
-                    val sign_s = BigInteger.TEN;
-
                     val microblockResponse = MicroblockResponse(
                             microblock = Microblock(microblockMsg,
                                     sign = MicroblockSignature(
-                                            sign_r = "NDU=",//encode64(sign_r.toByteArray()), два хэша которые позволяет проверить подпись
-                                            sign_s = "NDU=")))//encode64(sign_s.toByteArray()))))
-
+                                            sign_r = encode64(PersistentStorage.getPublicXKey()),
+                                            sign_s = encode64(PersistentStorage.getPublicYKey()))))
 
                     val microblockMsgString = gson.toJson(microblockMsg)
 
@@ -563,22 +570,33 @@ class PoaClient(val context: Context,
                             //we have request For Signature
                             if (requestForSignature != null) {
 
-                                //Перед подписью сделать hash
-
-                                //Timber.d("Request for signature from: ${response.from} ")
-
+                                //hash data
                                 val hash256 = hash256(requestForSignature)
 
-                                //Timber.d("Processing hash: ${System.currentTimeMillis() - before} millis ")
 
-                                val enc = rsaCipher.encrypt(hash256)
+                                //ECDSA signature
+
+
+                                /*val p8ks = PKCS8EncodedKeySpec(
+                                        Base64.decode(PersistentStorage.getPrivateKey(), Base64.DEFAULT))
+
+                                val privKeyA = keyFactory.generatePrivate(p8ks)
+
+                                signature.initSign(privKeyA)
+                                signature.update(requestForSignature.toByteArray())
+
+                                val ecdsaSignature = Base64.encodeToString(signature.sign(), Base64.DEFAULT)*/
+                                //ECDSA signature
+
+                                //sign data
+                                val enc = rsaCipher.encrypt(hash256) //TODO old signature
+
                                 val myEncodedPublicKey =  PersistentStorage.getWallet()
 
-                                val period = System.currentTimeMillis() - before
-
-                                val responseSignature = ResponseSignature(signature = Signature(myId, hash256, enc, myEncodedPublicKey))
-
-                                //Timber.d("Processing total time: $period millis ")
+                                val responseSignature = ResponseSignature(modelSignature = ModelSignature(myId,
+                                        hash256, //data hash
+                                        enc,  // sign
+                                        myEncodedPublicKey))
 
                                 val addressedMessageRequest = AddressedMessageRequestWithTransactionSignature(
                                         to = response.from,

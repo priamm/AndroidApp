@@ -119,9 +119,11 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                     }
             )
         } else {
-            viewState.changeButtonState(!poaClient.isMiningStarted)
-            viewState.setBalance(poaClient.lastBalance)
-            viewState.showProgress()
+            if (poaClient.isMiningStarted) {
+                viewState.changeButtonState(!poaClient.isMiningStarted)
+                viewState.setBalance(poaClient.lastBalance)
+                viewState.showProgress()
+            }
         }
     }
 

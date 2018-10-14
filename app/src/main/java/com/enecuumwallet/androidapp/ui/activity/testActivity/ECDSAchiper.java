@@ -1,5 +1,6 @@
 package com.enecuumwallet.androidapp.ui.activity.testActivity;
 
+import java.math.BigInteger;
 import java.security.KeyPairGenerator;
 import java.security.SecureRandom;
 
@@ -22,4 +23,22 @@ public class ECDSAchiper {
 
             return g.generateKeyPair();
     }
+
+    public static String compressPubKey(BigInteger pubKey) {
+        String pubKeyYPrefix = pubKey.testBit(0) ? "03" : "02";
+        String pubKeyHex = pubKey.toString(16);
+        String pubKeyX = pubKeyHex.substring(0, 64);
+        return pubKeyYPrefix + pubKeyX;
+    }
+
+    public static String compressPubKey2(BigInteger pubKey) {
+        String pubKeyYPrefix = pubKey.getLowestSetBit() != 0 ? "02" : "03";
+        String pubKeyHex = pubKey.toString(16);
+        String pubKeyX = pubKeyHex.substring(0, 64);
+        return pubKeyYPrefix + pubKeyX;
+    }
+
+    public static boolean isEven(BigInteger number)  {
+           return number.getLowestSetBit() != 0;
+  }
 }

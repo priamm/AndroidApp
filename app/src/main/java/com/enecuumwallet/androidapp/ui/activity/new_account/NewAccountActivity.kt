@@ -29,11 +29,15 @@ class NewAccountActivity : BackActivity(), NewAccountView {
         setContentView(R.layout.activity_new_account)
 
         val adapter = NewAccountPagerAdapter(supportFragmentManager)
+
         pager.adapter = adapter
+
         indicator.setViewPager(pager)
+
         next.setOnClickListener {
             presenter.onNextClick(pager.currentItem)
         }
+
         title = getString(R.string.pin_creation)
     }
 
@@ -46,9 +50,9 @@ class NewAccountActivity : BackActivity(), NewAccountView {
 //            2 -> {
 //                title = getString(R.string.backup_file)
 //            }
-            2 -> {
+            /*2 -> {
                 title = getString(R.string.seed_phrase)
-            }
+            }*/
         }
     }
 

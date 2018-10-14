@@ -27,7 +27,8 @@ object PersistentStorage {
     private const val CURRENT_NN = "CURRENT_NN"
     private const val AUTO_MINING_START = "AUTO_MINING_START"
     private const val PRIVATE_KEY = "PRIVATE_KEY"
-    private const val PUBLIC_KEY = "PRIVATE_KEY"
+    private const val PUBLIC_KEY_X = "PRIVATE_KEY_X"
+    private const val PUBLIC_KEY_Y = "PRIVATE_KEY_Y"
 
     private fun getPrefs(): SharedPreferences = EnecuumApplication.applicationContext()
             .getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
@@ -60,13 +61,27 @@ object PersistentStorage {
         editor.apply()
     }
 
-    fun setKeys(privateKey : String, publicKey : String) {
+    fun getPrivateKey() : String {
+        return getPrefs().getString(PRIVATE_KEY, "")
+    }
+
+    fun getPublicXKey() : String {
+        return getPrefs().getString(PUBLIC_KEY_X, "")
+    }
+
+    fun getPublicYKey() : String {
+        return getPrefs().getString(PUBLIC_KEY_Y, "")
+    }
+
+    fun setKeys(privateKey : String, publicKeyX : String, publicKeyY : String) {
         setString(PRIVATE_KEY, privateKey)
-        setString(PUBLIC_KEY, publicKey)
+        setString(PUBLIC_KEY_X, publicKeyX)
+        setString(PUBLIC_KEY_Y, publicKeyY)
     }
 
     fun isKeysExist() : Boolean {
-        return getPrefs().getString(PRIVATE_KEY, "").isNotEmpty() && getPrefs().getString(PUBLIC_KEY, "").isNotEmpty()
+        return getPrefs().getString(PRIVATE_KEY, "").isNotEmpty() && getPrefs().getString(PUBLIC_KEY_X, "").isNotEmpty()
+        && getPrefs().getString(PUBLIC_KEY_Y, "").isNotEmpty()
     }
 
     fun setRegistrationFinished() {
@@ -115,7 +130,7 @@ object PersistentStorage {
 
     fun getWallet(): String {
         val address = getAddress()
-        return Base58.encode(address.toByteArray());
+        return Base58.encode(address.toByteArray())
     }
 
     fun setAddress(address: String) {
