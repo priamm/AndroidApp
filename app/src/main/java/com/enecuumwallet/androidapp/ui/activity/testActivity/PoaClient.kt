@@ -593,7 +593,7 @@ class PoaClient(val context: Context,
 
                                 val myEncodedPublicKey =  PersistentStorage.getWallet()
 
-                                val responseSignature = ResponseSignature(modelSignature = ModelSignature(myId,
+                                val responseSignature = ResponseSignature(signature = ModelSignature(myId,
                                         hash256, //data hash
                                         enc,  // sign
                                         myEncodedPublicKey))
