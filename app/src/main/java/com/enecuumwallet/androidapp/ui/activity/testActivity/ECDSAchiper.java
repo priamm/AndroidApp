@@ -1,9 +1,12 @@
 package com.enecuumwallet.androidapp.ui.activity.testActivity;
 
+import android.support.annotation.Nullable;
 import android.util.Base64;
 
+import org.bouncycastle.jce.PKCS12Util;
 import org.bouncycastle.jce.interfaces.ECKey;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.jetbrains.annotations.Contract;
 import org.web3j.crypto.ECDSASignature;
 import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.Sign;
@@ -73,7 +76,7 @@ public class ECDSAchiper {
 
     private static PrivateKey bytesToPrivateKey(byte[] pkcs8key) throws GeneralSecurityException {
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(pkcs8key);
-        KeyFactory factory = KeyFactory.getInstance("EC",  new BouncyCastleProvider());
+        KeyFactory factory = KeyFactory.getInstance("ECDSA",  new BouncyCastleProvider());
         return factory.generatePrivate(spec);
     }
 }

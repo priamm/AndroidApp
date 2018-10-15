@@ -23,10 +23,15 @@ import io.reactivex.flowables.ConnectableFlowable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.Request
 import okhttp3.WebSocket
+import org.bouncycastle.jcajce.provider.keystore.PKCS12
+import org.bouncycastle.jce.provider.BouncyCastleProvider
+import org.bouncycastle.jce.spec.ECPublicKeySpec
 import timber.log.Timber
 import java.math.BigInteger
 import java.security.KeyFactory
+import java.security.PKCS12Attribute
 import java.security.Signature
+import java.security.spec.ECPrivateKeySpec
 import java.security.spec.PKCS8EncodedKeySpec
 import java.util.concurrent.TimeUnit
 
@@ -410,9 +415,16 @@ class PoaClient(val context: Context,
 
             PersistentStorage.setKeys(privateSkey, publicXkey, publicYkey)
             PersistentStorage.setAddress(compressedPK)
+            //PersistentStorage.savePrivateKey(pair.private)
+
+            //val factory = KeyFactory.getInstance("ECDSA", BouncyCastleProvider())
+
+            //var keySpec = factory.getKeySpec(pair.private, ECPrivateKeySpec::class.java)
 
 
-            ECDSAchiper.signData("Hello".toByteArray(), PersistentStorage.getPrivateKey())
+            //Timber.d("key spec - $keySpec")
+
+            //Timber.d("Digital signature" +  Base58.encode(ECDSAchiper.signData("Hello".toByteArray(), PersistentStorage.getPrivateKeyObject())))
         }
     }
 
@@ -455,8 +467,8 @@ class PoaClient(val context: Context,
 
                     for (responseSignature in it) {
 
-                        if (!TextUtils.isEmpty(responseSignature?.modelSignature?.publicKeyEncoded58)) {
-                            responseSignature?.modelSignature?.publicKeyEncoded58?.let { it1 -> publicKeysFromOtherTeamMembers.add(it1) }
+                        if (!TextUtils.isEmpty(responseSignature?.signature?.publicKeyEncoded58)) {
+                            responseSignature?.signature?.publicKeyEncoded58?.let { it1 -> publicKeysFromOtherTeamMembers.add(it1) }
                         }
                     }
 
