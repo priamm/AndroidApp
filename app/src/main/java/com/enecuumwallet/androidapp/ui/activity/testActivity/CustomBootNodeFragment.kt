@@ -15,7 +15,7 @@ import java.util.*
 
 class CustomBootNodeFragment : BackTitleFragment() {
     override fun getTitle(): String {
-        return activity!!.getString(R.string.custom_bn);
+        return activity!!.getString(R.string.custom_bn)
     }
 
     companion object {

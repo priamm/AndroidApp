@@ -31,13 +31,6 @@ public class ECDSAchiper {
         return pubKeyYPrefix + pubKeyX;
     }
 
-    public static String compressPubKey2(BigInteger pubKey) {
-        String pubKeyYPrefix = pubKey.getLowestSetBit() != 0 ? "02" : "03";
-        String pubKeyHex = pubKey.toString(16);
-        String pubKeyX = pubKeyHex.substring(0, 64);
-        return pubKeyYPrefix + pubKeyX;
-    }
-
     public static boolean isEven(BigInteger number)  {
            return number.getLowestSetBit() != 0;
   }

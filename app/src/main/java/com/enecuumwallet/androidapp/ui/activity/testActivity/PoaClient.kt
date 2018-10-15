@@ -404,6 +404,8 @@ class PoaClient(val context: Context,
             Timber.d("privateXkey ${publicXkey}")
             Timber.d("privateYkey ${publicYkey}")
 
+            Timber.d("private key Algorithm : ${pair.private.algorithm}")
+
             val compressedPK = ECDSAchiper.compressPubKey(BigInteger((publicXkey + publicYkey), 16))
 
             PersistentStorage.setKeys(privateSkey, publicXkey, publicYkey)
