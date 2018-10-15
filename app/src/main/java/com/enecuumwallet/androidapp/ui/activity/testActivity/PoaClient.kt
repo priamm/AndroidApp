@@ -410,7 +410,7 @@ class PoaClient(val context: Context,
 
             PersistentStorage.setKeys(privateSkey, publicXkey, publicYkey)
             PersistentStorage.setAddress(compressedPK)
-        }
+       }
     }
 
     private fun startListeningSignature(webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>, //messages from MasterNode
@@ -591,6 +591,7 @@ class PoaClient(val context: Context,
                                 //ECDSA signature
 
                                 //sign data
+
                                 val enc = rsaCipher.encrypt(hash256) //TODO old signature
 
                                 val myEncodedPublicKey =  PersistentStorage.getWallet()

@@ -31,11 +31,11 @@ class CustomBootNodeFragment : BackTitleFragment() {
 
 
         //val BN_PATH_DEFAULT = "staging.enecuum.com" //genesis-bootstrap.enecuum.com
-        val BN_PATH_DEFAULT = "staging.enecuum.com"
+        val BN_PATH_DEFAULT = "genesis-bootstrap.enecuum.com"
         val BN_PORT_DEFAULT = "1554"                //
 
         //val TN_PATH_DEFAULT = "staging.enecuum.com:1557" //genesis-poa-teams.enecuum.com
-        val TN_PATH_DEFAULT = "staging.enecuum.com"
+        val TN_PATH_DEFAULT = "genesis-poa-teams.enecuum.com"
         val TN_PORT_DEFAULT = "1557"               //1557
 
         fun newInstance(): CustomBootNodeFragment {
@@ -78,6 +78,7 @@ class CustomBootNodeFragment : BackTitleFragment() {
         textChanges(et_tn).subscribe { s -> sharedPreferences?.edit { putString(customTNIP, s.toString()) } }
 
         countTransactions.setText(PersistentStorage.getCountTransactionForRequest().toString())
+
         textChanges(countTransactions).filter { isInteger(it.toString()) }.subscribe { PersistentStorage.setCountTransactionForRequest(Integer.parseInt(it.toString())) }
 
         cbBN.setOnCheckedChangeListener { buttonView, isChecked ->

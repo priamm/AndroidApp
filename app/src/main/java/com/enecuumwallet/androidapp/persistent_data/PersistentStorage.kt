@@ -3,6 +3,7 @@ package com.enecuumwallet.androidapp.persistent_data
 import android.content.Context
 import android.content.SharedPreferences
 import com.enecuumwallet.androidapp.BuildConfig
+import com.enecuumwallet.androidapp.application.Constants.AppConstants.DEFAULT_TRANSACTIONS_COUNT
 import com.enecuumwallet.androidapp.application.EnecuumApplication
 import com.enecuumwallet.androidapp.models.Currency
 import com.enecuumwallet.androidapp.models.inherited.models.ConnectPointDescription
@@ -161,7 +162,7 @@ object PersistentStorage {
         setString(CURRENT_NN, address)
     }
 
-    private val DEFAULT_TRANSACTIONS_COUNT = 250
+
 
     fun getCountTransactionForRequest(): Int = getPrefs().getInt(COUNT_TRANSACTIONS, DEFAULT_TRANSACTIONS_COUNT)
     fun setCountTransactionForRequest(value: Int) {
