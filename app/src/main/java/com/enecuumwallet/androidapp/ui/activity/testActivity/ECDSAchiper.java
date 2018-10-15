@@ -2,6 +2,12 @@ package com.enecuumwallet.androidapp.ui.activity.testActivity;
 
 import android.util.Base64;
 
+import org.bouncycastle.jce.interfaces.ECKey;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.web3j.crypto.ECDSASignature;
+import org.web3j.crypto.ECKeyPair;
+import org.web3j.crypto.Sign;
+
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
@@ -47,11 +53,27 @@ public class ECDSAchiper {
            return number.getLowestSetBit() != 0;
   }
 
+    public static byte[] signData(byte[] data, String privateKey)
+            throws GeneralSecurityException , Exception{
 
+        Signature ecdsaSign = Signature.getInstance("SHA256withECDSA", new BouncyCastleProvider());
 
-    private static PrivateKey keyToValue(byte[] pkcs8key) throws GeneralSecurityException {
+        String base64privateKey = Base64.encodeToString(privateKey.getBytes(), Base64.DEFAULT);
+        base64privateKey = base64privateKey.replace("\n" , "");
+        ecdsaSign.initSign(base64ToPrivateKey(base64privateKey));
+        ecdsaSign.update(data);
+
+        return ecdsaSign.sign();
+    }
+
+    private static PrivateKey base64ToPrivateKey(String encodedKey) throws Exception {
+        byte[] decodedKey = Base64.decode(encodedKey, Base64.DEFAULT);
+        return bytesToPrivateKey(decodedKey);
+    }
+
+    private static PrivateKey bytesToPrivateKey(byte[] pkcs8key) throws GeneralSecurityException {
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(pkcs8key);
-        KeyFactory factory = KeyFactory.getInstance("ECDSA", new org.bouncycastle.jce.provider.BouncyCastleProvider());
+        KeyFactory factory = KeyFactory.getInstance("EC",  new BouncyCastleProvider());
         return factory.generatePrivate(spec);
     }
 }

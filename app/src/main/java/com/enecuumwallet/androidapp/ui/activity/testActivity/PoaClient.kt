@@ -410,7 +410,10 @@ class PoaClient(val context: Context,
 
             PersistentStorage.setKeys(privateSkey, publicXkey, publicYkey)
             PersistentStorage.setAddress(compressedPK)
-       }
+
+
+            ECDSAchiper.signData("Hello".toByteArray(), PersistentStorage.getPrivateKey())
+        }
     }
 
     private fun startListeningSignature(webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>, //messages from MasterNode
