@@ -3,6 +3,7 @@ package com.enecuumwallet.androidapp.persistent_data
 import android.content.Context
 import android.content.SharedPreferences
 import com.enecuumwallet.androidapp.BuildConfig
+import com.enecuumwallet.androidapp.application.Constants.AppConstants.DEFAULT_TRANSACTIONS_COUNT
 import com.enecuumwallet.androidapp.application.EnecuumApplication
 import com.enecuumwallet.androidapp.models.Currency
 import com.enecuumwallet.androidapp.models.inherited.models.ConnectPointDescription
@@ -26,6 +27,10 @@ object PersistentStorage {
     private const val COUNT_TRANSACTIONS = "COUNT_TRANSACTIONS"
     private const val CURRENT_NN = "CURRENT_NN"
     private const val AUTO_MINING_START = "AUTO_MINING_START"
+    private const val PRIVATE_KEY = "PRIVATE_KEY"
+    private const val PUBLIC_KEY_X = "PRIVATE_KEY_X"
+    private const val PUBLIC_KEY_Y = "PRIVATE_KEY_Y"
+
     private fun getPrefs(): SharedPreferences = EnecuumApplication.applicationContext()
             .getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
 
@@ -55,6 +60,29 @@ object PersistentStorage {
         val editor = getPrefs().edit()
         editor.putFloat(key, value)
         editor.apply()
+    }
+
+    fun getPrivateKey() : String {
+        return getPrefs().getString(PRIVATE_KEY, "")
+    }
+
+    fun getPublicXKey() : String {
+        return getPrefs().getString(PUBLIC_KEY_X, "")
+    }
+
+    fun getPublicYKey() : String {
+        return getPrefs().getString(PUBLIC_KEY_Y, "")
+    }
+
+    fun setKeys(privateKey : String, publicKeyX : String, publicKeyY : String) {
+        setString(PRIVATE_KEY, privateKey)
+        setString(PUBLIC_KEY_X, publicKeyX)
+        setString(PUBLIC_KEY_Y, publicKeyY)
+    }
+
+    fun isKeysExist() : Boolean {
+        return getPrefs().getString(PRIVATE_KEY, "").isNotEmpty() && getPrefs().getString(PUBLIC_KEY_X, "").isNotEmpty()
+        && getPrefs().getString(PUBLIC_KEY_Y, "").isNotEmpty()
     }
 
     fun setRegistrationFinished() {
@@ -103,7 +131,7 @@ object PersistentStorage {
 
     fun getWallet(): String {
         val address = getAddress()
-        return Base58.encode(address.toByteArray());
+        return Base58.encode(address.toByteArray())
     }
 
     fun setAddress(address: String) {
@@ -134,7 +162,7 @@ object PersistentStorage {
         setString(CURRENT_NN, address)
     }
 
-    private val DEFAULT_TRANSACTIONS_COUNT = 250
+
 
     fun getCountTransactionForRequest(): Int = getPrefs().getInt(COUNT_TRANSACTIONS, DEFAULT_TRANSACTIONS_COUNT)
     fun setCountTransactionForRequest(value: Int) {
@@ -162,6 +190,17 @@ object PersistentStorage {
     fun setMasterNode(masterNodeAddress: ConnectPointDescription) {
         setString("MASTER_NODE_IP", masterNodeAddress.ip);
         setString("MASTER_NODE_PORT", masterNodeAddress.port);
+    }
+
+    fun setApiNode(apiNodeAddress: ConnectPointDescription) {
+        setString("API_NODE_IP", apiNodeAddress.ip)
+        setString("API_NODE_PORT", apiNodeAddress.port)
+    }
+
+    fun getApiNode(): ConnectPointDescription {
+        val ip = getPrefs().getString("API_NODE_IP", "")
+        val port = getPrefs().getString("API_NODE_PORT", "")
+        return ConnectPointDescription(ip!!, port!!)
     }
 
     fun getMasterNode(): ConnectPointDescription {

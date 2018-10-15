@@ -4,6 +4,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.enecuumwallet.androidapp.BuildConfig
 import com.enecuumwallet.androidapp.R
+import com.enecuumwallet.androidapp.application.Constants
 import com.enecuumwallet.androidapp.application.EnecuumApplication
 import com.enecuumwallet.androidapp.navigation.FragmentType
 import com.enecuumwallet.androidapp.navigation.ScreenType
@@ -19,19 +20,19 @@ class SettingsAboutAppPresenter : MvpPresenter<SettingsAboutAppView>() {
     }
 
     fun openSite() {
-        SystemIntentManager.openSite("https://enecuum.com")
+        SystemIntentManager.openSite(Constants.AppConstants.URL_WEB_SITE)
     }
 
     fun onTermsClick() {
-        SystemIntentManager.openSite("https://enecuum.com/docs/terms.pdf")
+        SystemIntentManager.openSite(Constants.AppConstants.URL_TERMS)
     }
 
     fun onPrivacyClick() {
-        SystemIntentManager.openSite("https://enecuum.com/docs/privacy.pdf") //TODO: add real address
+        SystemIntentManager.openSite(Constants.AppConstants.URL_PRIVACY)
     }
 
     fun onWhitePaperClick() {
-        SystemIntentManager.openSite("https://enecuum.com/docs/Enecuum_WP.pdf") //TODO: add real address
+        SystemIntentManager.openSite(Constants.AppConstants.URL_WHITE_PAPER)
     }
 
 

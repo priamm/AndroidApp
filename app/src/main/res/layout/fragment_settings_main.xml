@@ -131,6 +131,20 @@
             android:paddingRight="16dp"/>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/aboutDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="23dp"
+        android:fontFamily="sans-serif"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/about_app_description"
+        android:textColor="@color/white_87"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        android:visibility="gone" />
+
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -160,6 +174,21 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"/>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/bootNodeDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="23dp"
+        android:fontFamily="sans-serif"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/fragment_settings_bootNode_description"
+        android:textColor="@color/white_87"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        android:visibility="gone" />
+
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -192,22 +221,20 @@
                 android:paddingRight="16dp"/>
     </LinearLayout>
 
-
-
     <TextView
-        android:paddingRight="16dp"
-        android:paddingLeft="16dp"
+        android:id="@+id/walletDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:fontFamily="sans-serif"
-        android:textStyle="normal"
-        android:textColor="@color/white_87"
-        android:text="@string/about_app_description"
-        android:id="@+id/aboutDescription"
-        android:visibility="gone"
         android:layout_marginBottom="23dp"
-        />
+        android:fontFamily="sans-serif"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/fragment_settings_about_my_wallet"
+        android:textColor="@color/white_87"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        android:visibility="gone" />
+
     <!--<View
         android:layout_width="match_parent"
         android:layout_height="1dp"

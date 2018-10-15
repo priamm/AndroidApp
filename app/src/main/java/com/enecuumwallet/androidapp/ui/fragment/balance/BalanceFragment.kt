@@ -12,7 +12,6 @@ import android.support.v4.content.LocalBroadcastManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.enecuumwallet.androidapp.R
 import com.enecuumwallet.androidapp.application.EnecuumApplication
@@ -43,7 +42,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     @InjectPresenter
     lateinit var presenter: BalancePresenter
 
-    lateinit var pd: ProgressDialog;
+    lateinit var pd: ProgressDialog
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -52,7 +51,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
 
     val startMiningReciever = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            presenter.onMiningToggle();
+            presenter.onMiningToggle()
         }
     }
     private val RESTART_ACTION: String = "restart_action"
@@ -68,31 +67,28 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         RxView.clicks(start)
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribe {
-                    presenter.onMiningToggle();
+                    presenter.onMiningToggle()
                 }
 
         if (PersistentStorage.getAutoMiningStart()) {
             Handler(Looper.getMainLooper()).postDelayed({
-                presenter.onMiningToggle();
-                Toast.makeText(view.context, "Restoring after crash", Toast.LENGTH_LONG).show()
-                LocalBroadcastManager.getInstance(context!!).sendBroadcast(Intent(RESTART_ACTION))
-                PersistentStorage.setAutoMiningStart(false)
-            }, 10000);
-        }
+                presenter.onMiningToggle()
 
-//        //////REMOVE THIS ONLY, FOR CRASH TESTING
-//        Handler().postDelayed({
-//            Utils.crashMe()
-//        }, 30000)
+                context?.let {
+                    LocalBroadcastManager.getInstance(it).sendBroadcast(Intent(RESTART_ACTION))
+                }
+
+                PersistentStorage.setAutoMiningStart(false)
+            }, 10000)
+        }
 
         tokens.setOnClickListener({
             presenter.onTokensClick()
         })
-        progressBar.getIndeterminateDrawable().setColorFilter(
-                getResources().getColor(R.color.turquoise_blue_three),
-                android.graphics.PorterDuff.Mode.SRC_IN);
+        progressBar.indeterminateDrawable.setColorFilter(
+                resources.getColor(R.color.turquoise_blue_three),
+                android.graphics.PorterDuff.Mode.SRC_IN)
 
-//        presenter.onCreate()
         setHasOptionsMenu(true)
         TransactionsHistoryRenderer.configurePanelListener(slidingLayout, panelHint)
     }
@@ -177,7 +173,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
 
     override fun showConnectionError(message: String) {
         Handler(Looper.getMainLooper()).post {
-            Toast.makeText(context, getString(R.string.connection_error) + ": " + message, Toast.LENGTH_LONG).show()
+            //Toast.makeText(context, getString(R.string.connection_error) + ": " + message, Toast.LENGTH_LONG).show()
         }
 
     }

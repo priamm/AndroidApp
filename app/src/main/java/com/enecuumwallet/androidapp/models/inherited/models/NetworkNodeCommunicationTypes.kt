@@ -159,4 +159,4 @@ data class ResponseStringRpc(val jsonrpc: String, val result: String?, val id: I
 
 data class Result(val balance: Int)
 
-data class MsgSignature(var signature : Signature?)
+data class MsgSignature(var modelSignature : ModelSignature?)

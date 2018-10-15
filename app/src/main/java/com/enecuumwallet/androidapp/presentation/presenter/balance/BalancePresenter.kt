@@ -53,7 +53,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                     onTeamSizeListener = object : PoaClient.onTeamListener {
                         override fun onTeamSize(size: Int) {
                             Handler(Looper.getMainLooper()).post {
-                                viewState.displayTeamSize(size);
+                                viewState.displayTeamSize(size)
                             }
                         }
                     },
@@ -118,6 +118,12 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                         }
                     }
             )
+        } else {
+            if (poaClient.isMiningStarted) {
+                viewState.changeButtonState(!poaClient.isMiningStarted)
+                viewState.setBalance(poaClient.lastBalance)
+                viewState.showProgress()
+            }
         }
     }
 

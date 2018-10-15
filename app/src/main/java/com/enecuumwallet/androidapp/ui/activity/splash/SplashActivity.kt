@@ -30,7 +30,7 @@ class SplashActivity : BaseActivity(), SplashView {
 
         val crashed = getIntent().getBooleanExtra("crash", false)
         if (crashed) {
-            Toast.makeText(this, "App restarted after crash", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "App restarted after crash", Toast.LENGTH_SHORT).show()
         }
 
         PersistentStorage.setAutoMiningStart(crashed)
