@@ -8,12 +8,14 @@ import android.util.Base64
 import com.crashlytics.android.Crashlytics
 import com.enecuumwallet.androidapp.BuildConfig
 import com.enecuumwallet.androidapp.models.inherited.models.*
+import com.enecuumwallet.androidapp.models.inherited.models.Sha.bytesToHex
 import com.enecuumwallet.androidapp.models.inherited.models.Sha.hash256
 import com.enecuumwallet.androidapp.network.RxWebSocket
 import com.enecuumwallet.androidapp.network.WebSocketEvent
 import com.enecuumwallet.androidapp.persistent_data.PersistentStorage
 import com.enecuumwallet.androidapp.utils.ByteBufferUtils
 import com.enecuumwallet.androidapp.utils.ByteBufferUtils.encode64
+import com.google.crypto.tink.subtle.Hex
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.reactivex.Flowable
@@ -23,10 +25,15 @@ import io.reactivex.flowables.ConnectableFlowable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.Request
 import okhttp3.WebSocket
+import org.bouncycastle.jcajce.provider.keystore.PKCS12
+import org.bouncycastle.jce.provider.BouncyCastleProvider
+import org.bouncycastle.jce.spec.ECPublicKeySpec
 import timber.log.Timber
 import java.math.BigInteger
 import java.security.KeyFactory
+import java.security.PKCS12Attribute
 import java.security.Signature
+import java.security.spec.ECPrivateKeySpec
 import java.security.spec.PKCS8EncodedKeySpec
 import java.util.concurrent.TimeUnit
 
@@ -247,7 +254,14 @@ class PoaClient(val context: Context,
                     Timber.d("BootNode : got list of master nodes: $it.toString()")
                     currentNodes = it.connects
 
-                    reconnectToNN(it.connects.first())
+                    if (it.connects.isEmpty()) {
+                        Crashlytics.log("MN list is empty")
+                    }
+
+
+                    it.connects.firstOrNull()?.let {
+                        reconnectToNN(it)
+                    }
                 }
                 .subscribeOn(Schedulers.io())
                 .subscribe())
@@ -406,11 +420,14 @@ class PoaClient(val context: Context,
 
             Timber.d("private key Algorithm : ${pair.private.algorithm}")
 
+            val privateKeyBase64 = Base64.encodeToString(pair.private.encoded, Base64.DEFAULT)
+
             val compressedPK = ECDSAchiper.compressPubKey(BigInteger((publicXkey + publicYkey), 16))
 
-            PersistentStorage.setKeys(privateSkey, publicXkey, publicYkey)
+            PersistentStorage.setKeys(privateKeyBase64, publicXkey, publicYkey)
             PersistentStorage.setAddress(compressedPK)
-       }
+
+        }
     }
 
     private fun startListeningSignature(webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>, //messages from MasterNode
@@ -452,13 +469,13 @@ class PoaClient(val context: Context,
 
                     for (responseSignature in it) {
 
-                        if (!TextUtils.isEmpty(responseSignature?.modelSignature?.publicKeyEncoded58)) {
-                            responseSignature?.modelSignature?.publicKeyEncoded58?.let { it1 -> publicKeysFromOtherTeamMembers.add(it1) }
+                        if (!TextUtils.isEmpty(responseSignature?.signature?.publicKeyEncoded58)) {
+                            responseSignature?.signature?.publicKeyEncoded58?.let { it1 -> publicKeysFromOtherTeamMembers.add(it1) }
                         }
                     }
 
-
                     val k_hash = keyblockHash
+
                     val microblockMsg = MicroblockMsg(
                             Tx = currentTransactions,
                             publisher = publisher,
@@ -575,24 +592,9 @@ class PoaClient(val context: Context,
                                 //hash data
                                 val hash256 = hash256(requestForSignature)
 
+                                //val enc = rsaCipher.encrypt(hash256) //TODO old signature
 
-                                //ECDSA signature
-
-
-                                /*val p8ks = PKCS8EncodedKeySpec(
-                                        Base64.decode(PersistentStorage.getPrivateKey(), Base64.DEFAULT))
-
-                                val privKeyA = keyFactory.generatePrivate(p8ks)
-
-                                signature.initSign(privKeyA)
-                                signature.update(requestForSignature.toByteArray())
-
-                                val ecdsaSignature = Base64.encodeToString(signature.sign(), Base64.DEFAULT)*/
-                                //ECDSA signature
-
-                                //sign data
-
-                                val enc = rsaCipher.encrypt(hash256) //TODO old signature
+                                val enc  = ECDSAchiper.signDataBase64(requestForSignature.toByteArray())
 
                                 val myEncodedPublicKey =  PersistentStorage.getWallet()
 
