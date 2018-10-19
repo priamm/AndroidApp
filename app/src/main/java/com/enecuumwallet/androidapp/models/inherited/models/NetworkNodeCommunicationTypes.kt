@@ -103,8 +103,7 @@ data class AddressedMessageRequestWithTransactions(
                                    val tag: String? = Tags.transactions.name,
                                    val type: String? = CommunicationSubjects.request.name,
                                    val from: String?,
-                                   val tx : List<Transaction>/*,
-                                   val version: String*/)
+                                   val tx : List<Transaction>)
 
 data class AddressedMessageResponse(val tag : String = Tags.Msg.name,
                                     val type : String = CommunicationSubjects.MsgTo.name,
