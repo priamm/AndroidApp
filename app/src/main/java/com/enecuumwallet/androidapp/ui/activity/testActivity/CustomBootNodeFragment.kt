@@ -35,7 +35,7 @@ class CustomBootNodeFragment : BackTitleFragment() {
         val BN_PORT_DEFAULT = "1554"                //
 
         //val TN_PATH_DEFAULT = "staging.enecuum.com:1557" //genesis-poa-teams.enecuum.com
-        val TN_PATH_DEFAULT = "genesis-poa-teams.enecuum.com"
+        val TN_PATH_DEFAULT = "genesis-bootstrap.enecuum.com"
         val TN_PORT_DEFAULT = "1557"               //1557
 
         fun newInstance(): CustomBootNodeFragment {

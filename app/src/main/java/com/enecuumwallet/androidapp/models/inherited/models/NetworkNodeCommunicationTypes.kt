@@ -53,7 +53,7 @@ data class ConnectPointDescription(val ip: String,
 data class PoANodeUUIDResponse(val tag: String = Tags.Response.name,
                                val type: String = CommunicationSubjects.NodeId.name,
                                val nodeId: String,
-                               val version: Int,
+                               val version: String,
                                val nodeType: String = NodeTypes.PoA.name)
 
 data class ReconnectResponse(val tag: String = Tags.Response.name,
@@ -85,25 +85,26 @@ data class AddressedMessageRequest(val tag: String? = Tags.Msg.name,
                                    val to: String?,
                                    val msg: String?)
 
-data class AddressedMessageRequestWithTransactionSignature(val tag: String? = Tags.Msg.name,
-                                   val type: String? = CommunicationSubjects.MsgTo.name,
-                                   val from: String?,
+data class AddressedMessageRequestWithTransactionSignature(
+                                   val tag: String? = Tags.transactions.name,
+                                   val type: String? = CommunicationSubjects.response.name,
                                    val to: String?,
-                                   val msg: ResponseSignature)
+                                   val sign: ModelSignature)
 
 
-data class AddressedMessageRequestWithSignature(val tag: String? = Tags.Msg.name,
-                                   val type: String? = CommunicationSubjects.MsgTo.name,
-                                   val from: String?,
+data class AddressedMessageRequestWithSignature(
+                                   val tag: String? = Tags.transactions.name,
+                                   val type: String? = CommunicationSubjects.response.name,
                                    val to: String?,
-                                   val msg: MsgSignature?)
+                                   val sign : ModelSignature?)
 
 
-data class AddressedMessageRequestWithTransactions(val tag: String? = Tags.Msg.name,
-                                   val type: String? = CommunicationSubjects.MsgTo.name,
+data class AddressedMessageRequestWithTransactions(
+                                   val tag: String? = Tags.transactions.name,
+                                   val type: String? = CommunicationSubjects.request.name,
                                    val from: String?,
-                                   val to: String?,
-                                   val msg: RequestForSignatureList)
+                                   val tx : List<Transaction>/*,
+                                   val version: String*/)
 
 data class AddressedMessageResponse(val tag : String = Tags.Msg.name,
                                     val type : String = CommunicationSubjects.MsgTo.name,

@@ -4,5 +4,7 @@ enum class Tags {
     Action,
     Request,
     Response,
+    response,
     Msg,
+    transactions
 }
