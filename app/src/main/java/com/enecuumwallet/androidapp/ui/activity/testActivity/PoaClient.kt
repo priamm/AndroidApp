@@ -763,7 +763,7 @@ class PoaClient(val context: Context,
                     throw IllegalArgumentException("Can't parse type: $type with messages: $text")
                 }
             }
-            
+
             return any
         } catch (e : Throwable) {
             Timber.d("Parse : can't parse message, type: $type")
