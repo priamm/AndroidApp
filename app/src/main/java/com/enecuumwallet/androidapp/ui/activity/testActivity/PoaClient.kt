@@ -629,12 +629,12 @@ class PoaClient(val context: Context,
 
     private fun sendTransactions(websocket : WebSocket, transactions : List<Transaction>, team: List<String>) {
         try {
-                        var toJson = gson.toJson(AddressedMessageRequestWithTransactions(from = myId, tx = transactions/*, version = BuildConfig.VERSION_NAME*/))
+                        var toJson = gson.toJson(AddressedMessageRequestWithTransactions(from = myId, tx = transactions))
 
                         toJson = toJson.replace("\\", "")
 
-                        //Timber.d("Send message with transactions to another member use MasterNode, json data : $toJson")
-                        Timber.d("Send message with transactions to another member use TeamNode")
+                        Timber.d("Send message with transactions to another member use MasterNode, json data : $toJson")
+                        //Timber.d("Send message with transactions to another member use TeamNode")
 
                         websocket.send(toJson)
 
