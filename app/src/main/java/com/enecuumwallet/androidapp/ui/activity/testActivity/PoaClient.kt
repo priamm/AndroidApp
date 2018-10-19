@@ -8,14 +8,13 @@ import android.util.Base64
 import com.crashlytics.android.Crashlytics
 import com.enecuumwallet.androidapp.BuildConfig
 import com.enecuumwallet.androidapp.models.inherited.models.*
-import com.enecuumwallet.androidapp.models.inherited.models.Sha.bytesToHex
 import com.enecuumwallet.androidapp.models.inherited.models.Sha.hash256
 import com.enecuumwallet.androidapp.network.RxWebSocket
 import com.enecuumwallet.androidapp.network.WebSocketEvent
 import com.enecuumwallet.androidapp.persistent_data.PersistentStorage
+import com.enecuumwallet.androidapp.presentation.presenter.balance.BalancePresenter
 import com.enecuumwallet.androidapp.utils.ByteBufferUtils
 import com.enecuumwallet.androidapp.utils.ByteBufferUtils.encode64
-import com.google.crypto.tink.subtle.Hex
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.reactivex.Flowable
@@ -25,16 +24,10 @@ import io.reactivex.flowables.ConnectableFlowable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.Request
 import okhttp3.WebSocket
-import org.bouncycastle.jcajce.provider.keystore.PKCS12
-import org.bouncycastle.jce.provider.BouncyCastleProvider
-import org.bouncycastle.jce.spec.ECPublicKeySpec
 import timber.log.Timber
 import java.math.BigInteger
 import java.security.KeyFactory
-import java.security.PKCS12Attribute
 import java.security.Signature
-import java.security.spec.ECPrivateKeySpec
-import java.security.spec.PKCS8EncodedKeySpec
 import java.util.concurrent.TimeUnit
 
 
@@ -46,7 +39,8 @@ class PoaClient(val context: Context,
                 val onTeamSizeListener: onTeamListener,
                 val onMicroblockCountListerer: onMicroblockCountListener,
                 val onConnectedListner: onConnectedListener,
-                val balanceListener: BalanceListener) {
+                val balanceListener: BalanceListener,
+                var updateStatus : (String) -> Unit) {
 
     val TRANSACTION_COUNT_IN_MICROBLOCK = 1
 
@@ -135,6 +129,7 @@ class PoaClient(val context: Context,
                     Timber.d("Start connect to team node")
                     connectToTeamNode(it)
                 }.subscribe())
+
     }
 
     private var team: List<String> = mutableListOf()
@@ -156,6 +151,8 @@ class PoaClient(val context: Context,
         onConnectedListner.onDisconnected()
 
         isMiningStarted = false
+
+        updateStatus(BalancePresenter.STATUS_DISCONNECTED)
     }
 
 
@@ -183,7 +180,6 @@ class PoaClient(val context: Context,
                 }
                 .doOnNext {
                     Timber.d("BootNode : open")
-
 
                     //request to BootNode
                     val connectBNRequestJson = gson.toJson(ConnectBNRequest())
@@ -290,14 +286,13 @@ class PoaClient(val context: Context,
 
 
                             if (!TextUtils.isEmpty(myNodeId)) {
-
-                                val versionCode = BuildConfig.VERSION_CODE
-
-                                val response = gson.toJson(PoANodeUUIDResponse(nodeId = myNodeId, version = versionCode))
+                                val response = gson.toJson(PoANodeUUIDResponse(nodeId = myNodeId, version = BuildConfig.VERSION_NAME))
 
                                 Timber.d("TeamNode : отправка своего id , json = $response")
 
                                 it.webSocket?.send(response)
+
+                                updateStatus(BalancePresenter.STATUS_WAITING_FOR_TEAM)
                             } else {
                                 onConnectedListner.onConnectionError("Node id is null")
                                 onConnectedListner.doReconnect()
@@ -307,6 +302,17 @@ class PoaClient(val context: Context,
                             Timber.e(it.localizedMessage)
                             Crashlytics.logException(it)
                         }))
+
+        val webSocketStringMessageEventsTeamNode = teamWsEvents
+                .filter {
+                    it is WebSocketEvent.StringMessageEvent
+                }
+                .cast(WebSocketEvent.StringMessageEvent::class.java)
+                .map {
+                    Pair(it.webSocket, parse(it.text!!))
+                }
+                .subscribeOn(Schedulers.io())
+                .share()
 
         composite.add(
                 teamWsEvents
@@ -328,9 +334,17 @@ class PoaClient(val context: Context,
 
                             Timber.d("TeamNode : team size updated, current team size : ${team.size}, team :  $data")
 
+
                             if (team.size > 1) {
-                                startListeningSignature(webSocketStringMessageEventsMasterNode, ws)
-                                startWork(myNodeId, webSocketStringMessageEventsMasterNode, ws)
+                                startListeningSignature(webSocketStringMessageEventsTeamNode, ws)
+                                startWork(
+                                        myNodeId,
+                                        webSocketStringMessageEventsMasterNode,
+                                        webSocketStringMessageEventsTeamNode,
+                                        ws,
+                                        teamWs)
+
+                                updateStatus(BalancePresenter.STATUS_WAITING_FOR_K_BLOCK)
                             } else {
                                 Timber.d("Dispose mining")
 
@@ -343,7 +357,6 @@ class PoaClient(val context: Context,
                             Timber.e(it.localizedMessage)
                             Crashlytics.logException(it)
                         }))
-
 
         //wait for k-block fromTeamNode
         composite.add(
@@ -393,6 +406,27 @@ class PoaClient(val context: Context,
                         .subscribe())
 
         composite.add(teamWsEvents.connect())
+
+        webSocketStringMessageEventsMasterNode
+                .map { it.second as TransactionResponse }
+                .doOnError {
+                    Crashlytics.log("Master node : transactions got error")
+                    Crashlytics.logException(it)
+                }
+                .doOnNext {
+                    currentTransactions = it.transactions
+
+                    if (currentTransactions.size >= TRANSACTION_COUNT_IN_MICROBLOCK) {
+                        Timber.i("START asking for sign")
+
+                        //send transactions to other team members
+                        teamWs?.let { wsTN ->
+                            sendTransactions(wsTN, it.transactions, team)
+                        }
+                    }
+                }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
     }
 
     fun createKeyIfNeeds() {
@@ -430,7 +464,7 @@ class PoaClient(val context: Context,
         }
     }
 
-    private fun startListeningSignature(webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>, //messages from MasterNode
+    private fun startListeningSignature(webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>,
                                         websocketMasterNode: WebSocket? //MasterNode)
     ){
         Timber.d("Start listening signature")
@@ -445,7 +479,7 @@ class PoaClient(val context: Context,
                 .map {
                     val addressedMessageResponse = it.second as AddressedMessageRequestWithSignature
                     Timber.d("Team size ${team.size}")
-                    addressedMessageResponse.msg
+                    addressedMessageResponse.sign
 
                 }
                 .distinctUntilChanged()
@@ -462,6 +496,8 @@ class PoaClient(val context: Context,
                         return@doOnNext
                     }
 
+                    updateStatus(BalancePresenter.STATUS_PUBLISHING)
+
                     //Got all sings
                     Timber.i("Signed all successfully")
 
@@ -469,8 +505,8 @@ class PoaClient(val context: Context,
 
                     for (responseSignature in it) {
 
-                        if (!TextUtils.isEmpty(responseSignature?.signature?.publicKeyEncoded58)) {
-                            responseSignature?.signature?.publicKeyEncoded58?.let { it1 -> publicKeysFromOtherTeamMembers.add(it1) }
+                        if (!TextUtils.isEmpty(responseSignature?.publicKeyEncoded58)) {
+                            responseSignature?.publicKeyEncoded58?.let { it1 -> publicKeysFromOtherTeamMembers.add(it1) }
                         }
                     }
 
@@ -495,7 +531,6 @@ class PoaClient(val context: Context,
 
                     val microblockJson = gson.toJson(microblockResponse)
 
-
                     Timber.d("Microblock was ready, sending it")
 
                     websocketMasterNode?.send(microblockJson)
@@ -511,7 +546,9 @@ class PoaClient(val context: Context,
     }
     private fun startWork(myId: String,
                           webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>, //messages from MasterNode
-                          websocketMasterNode: WebSocket? //MasterNode
+                          webSocketStringMessageEventsTN: Flowable<Pair<WebSocket?, Any?>>, //messages from TeamNode
+                          websocketMasterNode: WebSocket?, //MasterNode
+                          websocketTeamNode: WebSocket?  //TeamNode
     ) {
 
         Timber.d("Start work")
@@ -519,8 +556,10 @@ class PoaClient(val context: Context,
         val broadcastMessage = webSocketStringMessageEvents
                 .filter { it.second is ReceivedBroadcastMessage }
 
-        val addressedMessageResponseWithTransactions = webSocketStringMessageEvents
-                .filter { it.second is AddressedMessageRequestWithTransactions }
+        val addressedMessageResponseWithTransactions = webSocketStringMessageEventsTN
+                .filter {
+                    it.second is AddressedMessageRequestWithTransactions
+                }
 
         val transactionResponses = webSocketStringMessageEvents
                 .filter({
@@ -540,35 +579,6 @@ class PoaClient(val context: Context,
                         .subscribe()
         )
 
-
-        val trDisposable = transactionResponses
-                .filter { it.second is TransactionResponse }
-                .map { it.second as TransactionResponse }
-                .doOnError {
-                    Crashlytics.log("Master node : transactions got error")
-                    Crashlytics.logException(it)
-                }
-                .doOnNext {
-                    if (currentTransactions.size > TRANSACTIONS_LIMIT_TO_PREVENT_OVERFLOW) {
-                        currentTransactions = listOf()
-                    }
-
-                    currentTransactions = it.transactions
-
-                    if (currentTransactions.size >= TRANSACTION_COUNT_IN_MICROBLOCK) {
-                        Timber.i("START asking for sign")
-
-                        //send transactions to other team members
-                        websocketMasterNode?.let { wsMN ->
-                            sendTransactions(wsMN, it.transactions, team)
-                        }
-                    }
-                }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
-
-        miningComposite.add(trDisposable)
-
         miningComposite.add(
                 addressedMessageResponseWithTransactions
                         .doOnComplete({ Timber.e("Complete") })
@@ -584,7 +594,7 @@ class PoaClient(val context: Context,
                             }
 
                             //Transactions of another member
-                            val requestForSignature = gson.toJson(response.msg)
+                            val requestForSignature = gson.toJson(response)
 
                             //we have request For Signature
                             if (requestForSignature != null) {
@@ -592,21 +602,18 @@ class PoaClient(val context: Context,
                                 //hash data
                                 val hash256 = hash256(requestForSignature)
 
-                                //val enc = rsaCipher.encrypt(hash256) //TODO old signature
-
                                 val enc  = ECDSAchiper.signDataBase64(requestForSignature.toByteArray())
 
                                 val myEncodedPublicKey =  PersistentStorage.getWallet()
 
-                                val responseSignature = ResponseSignature(signature = ModelSignature(myId,
+                                val responseSignature =  ModelSignature(myId,
                                         hash256, //data hash
                                         enc,  // sign
-                                        myEncodedPublicKey))
+                                        myEncodedPublicKey)
 
                                 val addressedMessageRequest = AddressedMessageRequestWithTransactionSignature(
                                         to = response.from,
-                                        msg = responseSignature,
-                                        from = myId)
+                                        sign = responseSignature)
 
                                 val addressMessageJson = gson.toJson(addressedMessageRequest)
 
@@ -620,23 +627,20 @@ class PoaClient(val context: Context,
                         .subscribe())
     }
 
-    private fun sendTransactions(websocketMasterNode : WebSocket, transactions : List<Transaction>, team: List<String>) {
-
-        if (team.size > 1) {
-
-            for (teamMember in team) {
-
-                if (teamMember != myId) {
-                    try {
-                        var toJson = gson.toJson(AddressedMessageRequestWithTransactions(msg = RequestForSignatureList(data = transactions), to = teamMember, from = myId))
+    private fun sendTransactions(websocket : WebSocket, transactions : List<Transaction>, team: List<String>) {
+        try {
+                        var toJson = gson.toJson(AddressedMessageRequestWithTransactions(from = myId, tx = transactions/*, version = BuildConfig.VERSION_NAME*/))
 
                         toJson = toJson.replace("\\", "")
 
                         //Timber.d("Send message with transactions to another member use MasterNode, json data : $toJson")
-                        Timber.d("Send message with transactions to another member use MasterNode")
+                        Timber.d("Send message with transactions to another member use TeamNode")
 
-                        websocketMasterNode.send(toJson)
-                    } catch (e : Throwable) {
+                        websocket.send(toJson)
+
+                        updateStatus(BalancePresenter.STATUS_WAITING_FOR_SIGNING)
+
+        } catch (e : Throwable) {
                         Crashlytics.log("send transactions got throwable")
                         Crashlytics.log("total reconnect")
 
@@ -644,12 +648,6 @@ class PoaClient(val context: Context,
 
                         disconnect()
                         connect()
-                    }
-                }
-
-            }
-        } else {
-            Timber.d("Team is empty")
         }
     }
 
@@ -660,8 +658,9 @@ class PoaClient(val context: Context,
     }
 
     fun askForNewTransactions(websocket: WebSocket?) {
-            Timber.d("Master node : ask new transactions : ${gson.toJson(TransactionRequest(number = PersistentStorage.getCountTransactionForRequest()))}")
-            websocket?.send(gson.toJson(TransactionRequest(number = PersistentStorage.getCountTransactionForRequest())))
+        updateStatus(BalancePresenter.STATUS_RECEIVING)
+        Timber.d("Master node : ask new transactions : ${gson.toJson(TransactionRequest(number = PersistentStorage.getCountTransactionForRequest()))}")
+        websocket?.send(gson.toJson(TransactionRequest(number = PersistentStorage.getCountTransactionForRequest())))
     }
 
     private fun getWebSocket(ip: String,
@@ -752,16 +751,25 @@ class PoaClient(val context: Context,
                     gson.fromJson(text, ConnectApiServicesResponse::class.java)
                 }
 
+                CommunicationSubjects.request.name -> {
+                    gson.fromJson(text, AddressedMessageRequestWithTransactions::class.java)
+                }
+                CommunicationSubjects.response.name -> {
+                    gson.fromJson(text, AddressedMessageRequestWithSignature::class.java)
+                }
+
+
                 else -> {
                     throw IllegalArgumentException("Can't parse type: $type with messages: $text")
                 }
             }
-
-            //Timber.d("Parsing msg with type : $type , json data $text")
-
+            
             return any
         } catch (e : Throwable) {
             Timber.d("Parse : can't parse message, type: $type")
+            Timber.d("Parse : can't parse message, text : $text")
+
+
             Crashlytics.log("Parse : can't parse message, type: $type")
             Crashlytics.logException(e)
             return ""

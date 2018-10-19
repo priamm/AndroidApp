@@ -21,7 +21,17 @@ import com.enecuumwallet.androidapp.persistent_data.PersistentStorage
 @InjectViewState
 class BalancePresenter : MvpPresenter<BalanceView>() {
 
+    companion object {
+       const val STATUS_WAITING_FOR_TEAM = "Waiting for team completion"
+        const val STATUS_WAITING_FOR_K_BLOCK = "Waiting for k-block"
+        const val STATUS_WAITING_FOR_SIGNING = "Waiting for signing"
+        const val STATUS_RECEIVING = "Receiving transactions"
+        const val STATUS_PUBLISHING = "Publishing microblock"
+        const val STATUS_DISCONNECTED = "Disconnected"
+    }
+
     private lateinit var poaClient: PoaClient
+    private var currentStatus = STATUS_WAITING_FOR_TEAM
 
     val sharedPreferences = EnecuumApplication.applicationContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
 
@@ -117,12 +127,16 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                             PersistentStorage.setCurrentBalance(amount)
                         }
                     }
-            )
+            , updateStatus = { it ->
+                currentStatus = it
+                viewState.updateMiningStatus(it)
+            })
         } else {
             if (poaClient.isMiningStarted) {
                 viewState.changeButtonState(!poaClient.isMiningStarted)
                 viewState.setBalance(poaClient.lastBalance)
                 viewState.showProgress()
+                viewState.updateMiningStatus(currentStatus)
             }
         }
     }

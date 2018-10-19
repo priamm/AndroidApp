@@ -196,5 +196,10 @@ class BalanceFragment : NoBackFragment(), BalanceView {
         presenter.onDestroy()
     }
 
+    override fun updateMiningStatus(status: String) {
+        Handler(Looper.getMainLooper()).post {
+             minedText.post { minedText.text = status }
+        }
+    }
 
 }

@@ -40,4 +40,7 @@ interface BalanceView : HistoryView<String> {
 
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun showConnectionError(message: String)
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun updateMiningStatus(status : String)
 }

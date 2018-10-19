@@ -11,6 +11,8 @@ enum class CommunicationSubjects {
     Broadcast,
     PoWList,
     MsgTo,
+    request,
+    response,
     //    Transaction,
     Transactions,
     Microblock,
