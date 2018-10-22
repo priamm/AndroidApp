@@ -453,8 +453,6 @@ class PoaClient(val context: Context,
             var publicXkey = pair.public.toString().slice(publicXindex + 3 until publicYindex)
             val publicYkey = pair.public.toString().slice(publicYindex + 3 until pair.public.toString().length - 1)
 
-            PersistentStorage.setAddress(Base58.encode(pair.public.encoded))
-
             publicXkey = publicXkey.trim()
 
             Timber.d("privateSkey ${privateSkey}")
@@ -468,6 +466,7 @@ class PoaClient(val context: Context,
             val compressedPK = ECDSAchiper.compressPubKey(BigInteger((publicXkey + publicYkey), 16))
 
             PersistentStorage.setKeys(privateKeyBase64, publicXkey, publicYkey)
+
             PersistentStorage.setAddress(compressedPK)
         }
     }

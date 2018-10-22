@@ -158,17 +158,6 @@ object PersistentStorage {
     fun isMiningInProgress(): Boolean =
             getPrefs().getBoolean(IS_MINING_IN_PROGRESS, false)
 
-
-    fun getCurrentNNAddress(): String = getPrefs().getString(CURRENT_NN, "")
-
-    fun setCurrentNNAddress(address: String) {
-        if (address.isEmpty())
-            return
-        setString(CURRENT_NN, address)
-    }
-
-
-
     fun getCountTransactionForRequest(): Int = getPrefs().getInt(COUNT_TRANSACTIONS, DEFAULT_TRANSACTIONS_COUNT)
     fun setCountTransactionForRequest(value: Int) {
         setInt(COUNT_TRANSACTIONS, value)
