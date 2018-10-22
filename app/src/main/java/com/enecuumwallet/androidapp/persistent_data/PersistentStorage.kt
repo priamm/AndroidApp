@@ -34,7 +34,6 @@ object PersistentStorage {
     private const val PRIVATE_KEY = "PRIVATE_KEY"
     private const val PUBLIC_KEY_X = "PRIVATE_KEY_X"
     private const val PUBLIC_KEY_Y = "PRIVATE_KEY_Y"
-    private const val PRIVATE_KEY_JAVA_SECURITY = "PRIVATE_KEY_JAVA_SECURITY"
 
     private fun getPrefs(): SharedPreferences = EnecuumApplication.applicationContext()
             .getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
@@ -140,19 +139,6 @@ object PersistentStorage {
         return Base58.encode(address.toByteArray())
     }
 
-    fun savePrivateKey(privateKey : PrivateKey) {
-        val gson = Gson()
-        val json = gson.toJson(privateKey)
-
-        setString(PRIVATE_KEY_JAVA_SECURITY, json)
-    }
-
-    fun getPrivateKeyObject() : PrivateKey? {
-        val gson = Gson()
-        val privateKey = getPrefs().getString(PRIVATE_KEY_JAVA_SECURITY, "")
-        val obj = gson.fromJson(privateKey, PrivateKey::class.java)
-        return obj
-    }
     fun setAddress(address: String) {
         if (address.isEmpty())
             return

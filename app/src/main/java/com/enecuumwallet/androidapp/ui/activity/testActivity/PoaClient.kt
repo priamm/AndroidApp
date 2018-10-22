@@ -26,10 +26,7 @@ import okhttp3.Request
 import okhttp3.WebSocket
 import timber.log.Timber
 import java.math.BigInteger
-import java.security.KeyFactory
-import java.security.Signature
 import java.util.concurrent.TimeUnit
-
 
 class PoaClient(val context: Context,
                 val BN_PATH: String,
@@ -50,20 +47,16 @@ class PoaClient(val context: Context,
 
     var miningComposite: CompositeDisposable = CompositeDisposable()
 
-    val signature = Signature.getInstance("SHA256withECDSA")
-    val keyFactory = KeyFactory.getInstance("ECDSA", org.bouncycastle.jce.provider.BouncyCastleProvider())
-
-
     var nnWs: WebSocket? = null
     var teamWs: WebSocket? = null
     var bootNodeWebSocket: WebSocket? = null
     var balanceWebSocket: WebSocket? = null
 
     var gson: Gson = GsonBuilder().disableHtmlEscaping().create()
+
     private lateinit var webSocketStringMessageEventsMasterNode: Flowable<Pair<WebSocket?, Any?>>
     private lateinit var bootNodeWebsocketEvents: ConnectableFlowable<WebSocketEvent>
-    private lateinit var nnWsEvents: ConnectableFlowable<WebSocketEvent>
-    val rsaCipher = RSACipher()
+
     var currentNodes: List<ConnectPointDescription>? = listOf()
 
     private var isConnectedVal: Boolean = false
@@ -79,12 +72,6 @@ class PoaClient(val context: Context,
     private var keyblockHash: String? = null
 
     private var prev_hash: String = ""
-
-    private var microblocksSoFar = 0
-
-    private val TRANSACTIONS_LIMIT_TO_PREVENT_OVERFLOW: Int = 1000
-
-    private val MIN_K_BLOCK_PERIOD: Long = 10
 
     private var microBlockWasReady = true
 
@@ -309,6 +296,7 @@ class PoaClient(val context: Context,
                 }
                 .cast(WebSocketEvent.StringMessageEvent::class.java)
                 .map {
+                    //Timber.d(it.text)
                     Pair(it.webSocket, parse(it.text!!))
                 }
                 .subscribeOn(Schedulers.io())
@@ -408,6 +396,7 @@ class PoaClient(val context: Context,
         composite.add(teamWsEvents.connect())
 
         webSocketStringMessageEventsMasterNode
+                .filter { it.second is TransactionResponse }
                 .map { it.second as TransactionResponse }
                 .doOnError {
                     Crashlytics.log("Master node : transactions got error")
@@ -421,9 +410,26 @@ class PoaClient(val context: Context,
 
                         //send transactions to other team members
                         teamWs?.let { wsTN ->
-                            sendTransactions(wsTN, it.transactions, team)
+                            sendTransactions(wsTN, it.transactions)
                         }
                     }
+                }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
+
+        webSocketStringMessageEventsTeamNode
+                .filter {
+                    it.second is ErrorEvent
+                }
+                .map {
+                    it.second as ErrorEvent
+                }
+                .doOnError {
+                    Timber.d("Team node : version error")
+                }
+                .doOnNext {
+                    Timber.d("Team node : error ${it.code}")
+                    disconnect()
                 }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
@@ -460,7 +466,6 @@ class PoaClient(val context: Context,
 
             PersistentStorage.setKeys(privateKeyBase64, publicXkey, publicYkey)
             PersistentStorage.setAddress(compressedPK)
-
         }
     }
 
@@ -532,8 +537,8 @@ class PoaClient(val context: Context,
                     val microblockJson = gson.toJson(microblockResponse)
 
                     Timber.d("Microblock was ready, sending it")
-
                     websocketMasterNode?.send(microblockJson)
+
                     microBlockWasReady = true
                     currentTransactions = listOf()
 
@@ -553,18 +558,10 @@ class PoaClient(val context: Context,
 
         Timber.d("Start work")
 
-        val broadcastMessage = webSocketStringMessageEvents
-                .filter { it.second is ReceivedBroadcastMessage }
-
         val addressedMessageResponseWithTransactions = webSocketStringMessageEventsTN
                 .filter {
                     it.second is AddressedMessageRequestWithTransactions
                 }
-
-        val transactionResponses = webSocketStringMessageEvents
-                .filter({
-                    it.second is TransactionResponse
-                })
 
         val errorMessageResponse = webSocketStringMessageEvents
                 .filter { it.second is ErrorResponse }
@@ -613,7 +610,8 @@ class PoaClient(val context: Context,
 
                                 val addressedMessageRequest = AddressedMessageRequestWithTransactionSignature(
                                         to = response.from,
-                                        sign = responseSignature)
+                                        sign = responseSignature,
+                                        version = BuildConfig.VERSION_NAME)
 
                                 val addressMessageJson = gson.toJson(addressedMessageRequest)
 
@@ -627,13 +625,13 @@ class PoaClient(val context: Context,
                         .subscribe())
     }
 
-    private fun sendTransactions(websocket : WebSocket, transactions : List<Transaction>, team: List<String>) {
+    private fun sendTransactions(websocket : WebSocket, transactions : List<Transaction>) {
         try {
-                        var toJson = gson.toJson(AddressedMessageRequestWithTransactions(from = myId, tx = transactions))
+                        var toJson = gson.toJson(AddressedMessageRequestWithTransactions(from = myId, tx = transactions, version = BuildConfig.VERSION_NAME))
 
                         toJson = toJson.replace("\\", "")
 
-                        Timber.d("Send message with transactions to another member use MasterNode, json data : $toJson")
+                        Timber.d("Send message with transactions, json data : $toJson")
                         //Timber.d("Send message with transactions to another member use TeamNode")
 
                         websocket.send(toJson)
@@ -658,9 +656,9 @@ class PoaClient(val context: Context,
     }
 
     fun askForNewTransactions(websocket: WebSocket?) {
-        updateStatus(BalancePresenter.STATUS_RECEIVING)
         Timber.d("Master node : ask new transactions : ${gson.toJson(TransactionRequest(number = PersistentStorage.getCountTransactionForRequest()))}")
         websocket?.send(gson.toJson(TransactionRequest(number = PersistentStorage.getCountTransactionForRequest())))
+        updateStatus(BalancePresenter.STATUS_RECEIVING)
     }
 
     private fun getWebSocket(ip: String,
@@ -686,40 +684,20 @@ class PoaClient(val context: Context,
         return webSocket
     }
 
-    private fun getNotConnectableWebSocket(ip: String,
-                             port: String): Flowable<WebSocketEvent> {
-
-
-        val request = Request.Builder().url("ws://$ip:$port").build()
-
-        val managedRxWebSocket = RxWebSocket.createAutoManagedRxWebSocket(request)
-
-        val webSocket = managedRxWebSocket
-                .observe()
-                .doOnError {
-                    Timber.e(it)
-                    onConnectedListner.onConnectionError(it.localizedMessage)
-                    onConnectedListner.doReconnect()
-                }
-                .subscribeOn(Schedulers.io())
-                .retryWhen(RetryWithDelay(10000, 10000))
-
-        return webSocket
-    }
-
     private fun parse(text: String): Any? {
 
         val containsType = text.contains("type")
+        val code = text.contains("code")
 
-        if (containsType) {
-            val fromJson = gson.fromJson(text, BasePoAMessage::class.java)
-            val type = fromJson.type
-            return parse(type, text)
-        } else if (text.contains("rpc")) {
-            val responseRpc = gson.fromJson(text, ResponseRpc::class.java)
-            return responseRpc
-        } else {
-            return ""
+        return when {
+            containsType -> {
+                val fromJson = gson.fromJson(text, BasePoAMessage::class.java)
+                val type = fromJson.type
+                parse(type, text)
+            }
+            text.contains("rpc") -> gson.fromJson(text, ResponseRpc::class.java)
+            code -> gson.fromJson(text, ErrorEvent::class.java)
+            else -> ""
         }
 
         throw IllegalArgumentException("Can't parse type: $text")
@@ -754,10 +732,14 @@ class PoaClient(val context: Context,
                 CommunicationSubjects.request.name -> {
                     gson.fromJson(text, AddressedMessageRequestWithTransactions::class.java)
                 }
+
                 CommunicationSubjects.response.name -> {
                     gson.fromJson(text, AddressedMessageRequestWithSignature::class.java)
                 }
 
+                CommunicationSubjects.response.name -> {
+                    gson.fromJson(text, AddressedMessageRequestWithSignature::class.java)
+                }
 
                 else -> {
                     throw IllegalArgumentException("Can't parse type: $type with messages: $text")

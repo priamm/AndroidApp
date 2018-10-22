@@ -18,5 +18,6 @@ enum class CommunicationSubjects {
     Microblock,
     Keyblock,
     ErrorOfConnect,
-    Team
+    Team,
+    version_conflict
 }

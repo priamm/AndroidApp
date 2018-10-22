@@ -89,7 +89,8 @@ data class AddressedMessageRequestWithTransactionSignature(
                                    val tag: String? = Tags.transactions.name,
                                    val type: String? = CommunicationSubjects.response.name,
                                    val to: String?,
-                                   val sign: ModelSignature)
+                                   val sign: ModelSignature,
+                                   val version: String? = null)
 
 
 data class AddressedMessageRequestWithSignature(
@@ -103,7 +104,12 @@ data class AddressedMessageRequestWithTransactions(
                                    val tag: String? = Tags.transactions.name,
                                    val type: String? = CommunicationSubjects.request.name,
                                    val from: String?,
-                                   val tx : List<Transaction>)
+                                   val tx : List<Transaction>,
+                                   val version : String)
+
+data class ErrorEvent(
+        val tag: String? = Tags.error.name,
+        val code : String)
 
 data class AddressedMessageResponse(val tag : String = Tags.Msg.name,
                                     val type : String = CommunicationSubjects.MsgTo.name,
