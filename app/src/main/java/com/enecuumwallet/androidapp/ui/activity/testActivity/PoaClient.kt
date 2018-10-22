@@ -44,7 +44,6 @@ class PoaClient(val context: Context,
     private val PERIOD_ASK_FOR_BALANCE: Long = 30000
 
     var composite: CompositeDisposable = CompositeDisposable()
-
     var miningComposite: CompositeDisposable = CompositeDisposable()
 
     var nnWs: WebSocket? = null
@@ -153,8 +152,9 @@ class PoaClient(val context: Context,
 
         Timber.d("Connecting ...")
 
-
         composite = CompositeDisposable()
+        miningComposite = CompositeDisposable()
+
         onConnectedListner.onStartConnecting()
         createKeyIfNeeds()
 
@@ -254,6 +254,9 @@ class PoaClient(val context: Context,
         val teamWsEvents = getWebSocket(TEAM_WS_IP, TEAM_WS_PORT)
 
         val myNodeId = (masterNodeAndMessage.second as ReconnectResponse).node_id
+
+        Timber.d("my node : ${myNodeId}")
+
         val ws = masterNodeAndMessage.first
 
         myId = myNodeId
