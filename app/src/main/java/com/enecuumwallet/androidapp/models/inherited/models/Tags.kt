@@ -6,5 +6,6 @@ enum class Tags {
     Response,
     response,
     Msg,
-    transactions
+    transactions,
+    error
 }

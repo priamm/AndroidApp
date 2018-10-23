@@ -16,6 +16,7 @@ import com.jraska.console.Console
 import java.util.*
 import android.os.CountDownTimer
 import com.enecuumwallet.androidapp.persistent_data.PersistentStorage
+import timber.log.Timber
 
 
 @InjectViewState
@@ -69,8 +70,10 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                     },
                     onMicroblockCountListerer = object : PoaClient.onMicroblockCountListener {
                         override fun onMicroblockCountAndLast(microblockResponse: MicroblockResponse, microblockSignature: String) {
-                            microblockList[microblockSignature] = microblockResponse
-                            viewState.displayTransactionsHistory(microblockList.keys.toList())
+                            Handler(Looper.getMainLooper()).post {
+                                microblockList[microblockSignature] = microblockResponse
+                                viewState.displayTransactionsHistory(microblockList.keys.toList())
+                            }
                         }
                     },
                     onConnectedListner = object : PoaClient.onConnectedListener {
@@ -137,6 +140,7 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
                 viewState.setBalance(poaClient.lastBalance)
                 viewState.showProgress()
                 viewState.updateMiningStatus(currentStatus)
+                viewState.displayTransactionsHistory(microblockList.keys.toList())
             }
         }
     }

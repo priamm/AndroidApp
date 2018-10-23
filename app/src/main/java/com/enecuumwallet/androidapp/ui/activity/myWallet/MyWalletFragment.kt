@@ -34,7 +34,7 @@ class MyWalletFragment : BackTitleFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val address = PersistentStorage.getWallet()
-        myId.setText(address)
+        myId.text = address
 
     }
 }
