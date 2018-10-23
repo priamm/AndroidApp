@@ -326,6 +326,11 @@ class PoaClient(val context: Context,
                             Timber.d("TeamNode : team size updated, current team size : ${team.size}, team :  $data")
 
 
+                            Timber.d("Dispose mining")
+
+                            miningComposite.clear()
+                            microBlockWasReady = true
+
                             if (team.size > 1) {
                                 startListeningSignature(webSocketStringMessageEventsTeamNode, ws)
                                 startWork(
@@ -336,11 +341,6 @@ class PoaClient(val context: Context,
                                         teamWs)
 
                                 updateStatus(BalancePresenter.STATUS_WAITING_FOR_K_BLOCK)
-                            } else {
-                                Timber.d("Dispose mining")
-
-                                miningComposite.clear()
-                                microBlockWasReady = true
                             }
 
                         },{
@@ -547,6 +547,8 @@ class PoaClient(val context: Context,
                     Handler(Looper.getMainLooper()).post {
                         onMicroblockCountListerer.onMicroblockCountAndLast(microblockResponse, microblockMsgHashBase64)
                     }
+
+                    updateStatus(BalancePresenter.STATUS_WAITING_FOR_K_BLOCK)
                 }
                 .subscribeOn(Schedulers.io())
                 .subscribe())
