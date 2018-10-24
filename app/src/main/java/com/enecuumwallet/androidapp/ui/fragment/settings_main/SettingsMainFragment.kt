@@ -1,6 +1,7 @@
 package com.enecuumwallet.androidapp.ui.fragment.settings_main
 
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,5 +58,18 @@ class SettingsMainFragment : NoBackFragment(), SettingsMainView {
     override fun onResume() {
         super.onResume()
         menu?.clear()
+    }
+
+    override fun onShowOTPcode(code: String) {
+        this.context?.let {
+            tv_code_description.setTextColor(ContextCompat.getColor(it, R.color.green_700))
+            tv_code_description.visibility = View.VISIBLE
+            tv_code_description.text = code
+        }
+
+    }
+
+    override fun onShowError(error: String) {
+
     }
 }

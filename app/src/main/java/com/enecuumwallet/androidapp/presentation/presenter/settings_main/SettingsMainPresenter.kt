@@ -15,6 +15,11 @@ import timber.log.Timber
 
 @InjectViewState
 class SettingsMainPresenter : MvpPresenter<SettingsMainView>() {
+
+    companion object {
+        const val ERROR_CODE_KEY_INVALID = "error_code_key_invalid"
+    }
+
     fun onChangePinClick() {
         EnecuumApplication.navigateToActivity(ScreenType.ChangePin)
     }
@@ -46,6 +51,8 @@ class SettingsMainPresenter : MvpPresenter<SettingsMainView>() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Timber.d(it.code)
+
+                    viewState.onShowOTPcode(code = it.code ?: "")
                 } , {
                     Timber.d(it)
                 })

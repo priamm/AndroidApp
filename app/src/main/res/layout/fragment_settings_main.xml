@@ -244,6 +244,20 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_code_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="23dp"
+        android:fontFamily="sans-serif"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textColor="@color/white_87"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        android:textIsSelectable="true"
+        android:visibility="gone" />
+
 
     <TextView
         android:id="@+id/walletDescription"
