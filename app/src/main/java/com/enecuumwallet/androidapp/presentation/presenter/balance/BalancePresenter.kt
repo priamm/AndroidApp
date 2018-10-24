@@ -29,6 +29,8 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
         const val STATUS_RECEIVING = "Receiving transactions"
         const val STATUS_PUBLISHING = "Publishing microblock"
         const val STATUS_DISCONNECTED = "Disconnected"
+
+        const val KEY_GENERATED_ERROR = "Keys can't be generated"
     }
 
     private lateinit var poaClient: PoaClient

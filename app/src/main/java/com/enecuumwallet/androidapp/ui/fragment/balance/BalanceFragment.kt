@@ -40,7 +40,7 @@ class BalanceFragment : NoBackFragment(), BalanceView {
     }
 
     @InjectPresenter
-    lateinit var presenter: BalancePresenter
+    lateinit var presenter : BalancePresenter
 
     lateinit var pd: ProgressDialog
 

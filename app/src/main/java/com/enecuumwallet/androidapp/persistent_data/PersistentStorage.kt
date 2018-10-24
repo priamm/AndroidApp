@@ -136,7 +136,7 @@ object PersistentStorage {
 
     fun getWallet(): String {
         val address = getAddress()
-        return Base58.encode(address.toByteArray())
+        return Base58.encode(address)
     }
 
     fun setAddress(address: String) {

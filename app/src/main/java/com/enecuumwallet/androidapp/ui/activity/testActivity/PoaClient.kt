@@ -440,34 +440,44 @@ class PoaClient(val context: Context,
 
     fun createKeyIfNeeds() {
         if (!PersistentStorage.isKeysExist()) {
+            try {
+                val ecdsAchiper = ECDSAchiper()
+                val pair = ecdsAchiper.ecdsaKeyPair
 
-            val ecdsAchiper = ECDSAchiper()
-            val pair = ecdsAchiper.ecdsaKeyPair
+                val privateSindex = pair.private.toString().indexOf("S:")
+                val privateSkey = pair.private.toString().slice(privateSindex + 3 until pair.private.toString().length - 1)
 
-            val privateSindex = pair.private.toString().indexOf("S:")
-            val privateSkey = pair.private.toString().slice(privateSindex + 3 until pair.private.toString().length - 1)
+                val publicXindex = pair.public.toString().indexOf("X:")
+                val publicYindex = pair.public.toString().indexOf("Y:")
 
-            val publicXindex = pair.public.toString().indexOf("X:")
-            val publicYindex = pair.public.toString().indexOf("Y:")
+                var publicXkey = pair.public.toString().slice(publicXindex + 3 until publicYindex)
+                val publicYkey = pair.public.toString().slice(publicYindex + 3 until pair.public.toString().length - 1)
 
-            var publicXkey = pair.public.toString().slice(publicXindex + 3 until publicYindex)
-            val publicYkey = pair.public.toString().slice(publicYindex + 3 until pair.public.toString().length - 1)
+                publicXkey = publicXkey.trim()
 
-            publicXkey = publicXkey.trim()
+                Timber.d("privateSkey ${privateSkey}")
+                Timber.d("privateXkey ${publicXkey}")
+                Timber.d("privateYkey ${publicYkey}")
 
-            Timber.d("privateSkey ${privateSkey}")
-            Timber.d("privateXkey ${publicXkey}")
-            Timber.d("privateYkey ${publicYkey}")
+                Timber.d("private key Algorithm : ${pair.private.algorithm}")
 
-            Timber.d("private key Algorithm : ${pair.private.algorithm}")
+                val privateKeyBase64 = Base64.encodeToString(pair.private.encoded, Base64.DEFAULT)
 
-            val privateKeyBase64 = Base64.encodeToString(pair.private.encoded, Base64.DEFAULT)
+                val compressedPK = ECDSAchiper.compressPubKey(BigInteger((publicXkey + publicYkey), 16))
 
-            val compressedPK = ECDSAchiper.compressPubKey(BigInteger((publicXkey + publicYkey), 16))
+                PersistentStorage.setKeys(privateKeyBase64, publicXkey, publicYkey)
 
-            PersistentStorage.setKeys(privateKeyBase64, publicXkey, publicYkey)
+                PersistentStorage.setAddress(compressedPK)
 
-            PersistentStorage.setAddress(compressedPK)
+            } catch (e: Throwable) {
+                updateStatus(BalancePresenter.KEY_GENERATED_ERROR)
+
+                Timber.d(e)
+                Timber.d("Error when try to generated keys")
+
+                Crashlytics.logException(e)
+                Crashlytics.log("Error when try to generated keys")
+            }
         }
     }
 
