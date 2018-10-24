@@ -8,6 +8,8 @@ interface Constants {
         const val URL_TERMS = "https://enecuum.com/docs/terms.pdf"
         const val URL_WEB_SITE = "https://enecuum.com"
         const val DEFAULT_TRANSACTIONS_COUNT = 10
+
+        const val BASE_URL_OTP = "http://95.213.204.111:1558"
     }
 
 }

@@ -46,6 +46,10 @@ class SettingsMainFragment : NoBackFragment(), SettingsMainView {
         SettingsInfoUtils.setupSettingInfo(myWallet,myWalletInfo, walletDescription,{ presenter.onMyWalletClick() })
 
         setHasOptionsMenu(true)
+
+        tv_otp.setOnClickListener {
+            presenter.onOTPclick()
+        }
     }
 
     override fun getTitle(): String = getString(R.string.settings)

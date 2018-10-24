@@ -6,7 +6,12 @@ import com.enecuumwallet.androidapp.application.EnecuumApplication
 import com.enecuumwallet.androidapp.navigation.FragmentType
 import com.enecuumwallet.androidapp.navigation.ScreenType
 import com.enecuumwallet.androidapp.navigation.TabType
+import com.enecuumwallet.androidapp.persistent_data.PersistentStorage
 import com.enecuumwallet.androidapp.presentation.view.settings_main.SettingsMainView
+import com.enecuumwallet.androidapp.ui.activity.testActivity.ECDSAchiper
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 
 @InjectViewState
 class SettingsMainPresenter : MvpPresenter<SettingsMainView>() {
@@ -28,5 +33,21 @@ class SettingsMainPresenter : MvpPresenter<SettingsMainView>() {
 
     fun onMyWalletClick() {
         EnecuumApplication.navigateToFragment(FragmentType.MyWallet, TabType.Settings)
+    }
+
+    fun onOTPclick() {
+        val pulicKey = PersistentStorage.getWallet()
+        val sign = ECDSAchiper.signDataHex(pulicKey.toByteArray())
+
+        EnecuumApplication
+                .otpApi
+                .getOtpCode(pulicKey, sign)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    Timber.d(it.code)
+                } , {
+                    Timber.d(it)
+                })
     }
 }

@@ -3,6 +3,8 @@ package com.enecuumwallet.androidapp.ui.activity.testActivity
 import android.util.Base64
 import com.enecuumwallet.androidapp.persistent_data.PersistentStorage
 import org.bouncycastle.jce.provider.BouncyCastleProvider
+import org.bouncycastle.util.encoders.Hex
+import org.bouncycastle.util.encoders.HexEncoder
 import java.math.BigInteger
 import java.security.*
 import java.security.spec.ECGenParameterSpec
@@ -22,7 +24,16 @@ class ECDSAchiper {
             return g.generateKeyPair()
         }
 
+
     companion object {
+
+        private fun signData(data: ByteArray) : ByteArray {
+            val ecdsaSign = Signature.getInstance("SHA256withECDSA", BouncyCastleProvider())
+            val privateKey = getPrivateKey()
+            ecdsaSign.initSign(privateKey)
+            ecdsaSign.update(data)
+            return ecdsaSign.sign()
+        }
 
         fun compressPubKey(pubKey: BigInteger): String {
             val pubKeyYPrefix = if (pubKey.testBit(0)) "03" else "02"
@@ -37,12 +48,12 @@ class ECDSAchiper {
 
         @Throws(GeneralSecurityException::class, Exception::class)
         fun signDataBase64(data: ByteArray): String {
+            return Base64.encodeToString(signData(data), Base64.DEFAULT)
+        }
 
-            val ecdsaSign = Signature.getInstance("SHA256withECDSA", BouncyCastleProvider())
-            val privateKey = getPrivateKey()
-            ecdsaSign.initSign(privateKey)
-            ecdsaSign.update(data)
-            return Base64.encodeToString(ecdsaSign.sign(), Base64.DEFAULT)
+        @Throws(GeneralSecurityException::class, Exception::class)
+        fun signDataHex(data: ByteArray): String {
+            return Hex.toHexString(signData(data))
         }
 
         fun getSRformSignature(sign : ByteArray) : Pair<String, String> {

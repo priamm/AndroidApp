@@ -94,6 +94,7 @@
     <string name="fragment_settings_custom_team_node">Custom team node</string>
     <string name="fragment_settings_bootNode_description">Network connection settings</string>
     <string name="fragment_settings_about_my_wallet">Account information</string>
+    <string name="fragment_settings_main_otp">OTP</string>
     <plurals name="team_members">
         <item quantity="other">%1$d team members</item>
     </plurals>

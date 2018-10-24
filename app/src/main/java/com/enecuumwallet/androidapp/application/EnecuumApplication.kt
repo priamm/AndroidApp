@@ -5,16 +5,19 @@ import android.content.Context
 import android.os.Bundle
 import android.support.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
+import com.enecuumwallet.androidapp.application.Constants.AppConstants.BASE_URL_OTP
 import com.enecuumwallet.androidapp.events.MainActivityStopped
 import com.enecuumwallet.androidapp.navigation.FragmentType
 import com.enecuumwallet.androidapp.navigation.ScreenType
 import com.enecuumwallet.androidapp.navigation.TabType
+import com.enecuumwallet.androidapp.network.api.OtpApi
 import com.enecuumwallet.androidapp.ui.activity.testActivity.AppCrashHandler
 import com.enecuumwallet.androidapp.utils.EventBusUtils
 import com.google.crypto.tink.Config
 import com.google.crypto.tink.config.TinkConfig
 import com.google.crypto.tink.integration.android.AndroidKeysetManager
 import com.google.crypto.tink.signature.SignatureKeyTemplates
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.jraska.console.timber.ConsoleTree
 import io.fabric.sdk.android.Fabric
 import org.greenrobot.eventbus.Subscribe
@@ -23,12 +26,15 @@ import ru.terrakok.cicerone.Router
 import timber.log.Timber
 import java.util.*
 import com.jraska.console.Console
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 /**
  * Created by oleg on 22.01.18.
  */
 class EnecuumApplication : MultiDexApplication() {
+
 
     companion object {
         private lateinit var appContext: Context
@@ -45,6 +51,9 @@ class EnecuumApplication : MultiDexApplication() {
 
         private var currentTab = TabType.Balance
         private val backStack = mutableMapOf<TabType, Int>()
+
+        lateinit var otpApi : OtpApi
+            private set
 
         private lateinit var keysetManager: AndroidKeysetManager
         fun keysetManager(): AndroidKeysetManager = keysetManager
@@ -119,7 +128,9 @@ class EnecuumApplication : MultiDexApplication() {
         super.onCreate()
         appContext = applicationContext
 
-        Config.register(TinkConfig.TINK_1_1_0);
+        otpApi = providesOtpApi()
+
+        Config.register(TinkConfig.TINK_1_1_0)
 
 //        Security.addProvider(BouncyCastleProvider())
 //        keysetManager = AndroidKeysetManager.Builder()
@@ -189,6 +200,17 @@ class EnecuumApplication : MultiDexApplication() {
         override fun run() {
             Console.clear()
         }
-    };
+    }
 
+    private fun providesRetrofit() : Retrofit {
+        return Retrofit.Builder()
+                .baseUrl(BASE_URL_OTP)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+    }
+
+    private fun providesOtpApi() : OtpApi {
+        return providesRetrofit().create( OtpApi::class.java )
+    }
 }
