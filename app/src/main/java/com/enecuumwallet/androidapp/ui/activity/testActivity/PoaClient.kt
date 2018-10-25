@@ -147,7 +147,6 @@ class PoaClient(val context: Context,
     }
 
     fun connect() {
-        //throw RuntimeException("This is a crash")
 
         microBlockWasReady = true
         isMiningStarted = true
@@ -420,7 +419,10 @@ class PoaClient(val context: Context,
                     }
                 }
                 .subscribeOn(Schedulers.io())
-                .subscribe()
+                .subscribe({} , {
+                    Crashlytics.logException(it)
+                    Crashlytics.log("Send transaction got throwable")
+                })
 
         webSocketStringMessageEventsTeamNode
                 .filter {
@@ -491,15 +493,12 @@ class PoaClient(val context: Context,
         val addressedMessageResponse = webSocketStringMessageEvents
                 .filter { it.second is AddressedMessageRequestWithSignature }
 
-        val publisher =  PersistentStorage.getWallet() //
+        val publisher =  PersistentStorage.getWallet()
 
         miningComposite.add(
                 addressedMessageResponse
                 .map {
-                    val addressedMessageResponse = it.second as AddressedMessageRequestWithSignature
-                    Timber.d("Team size ${team.size}")
-                    addressedMessageResponse.sign
-
+                    (it.second as AddressedMessageRequestWithSignature).sign
                 }
                 .distinctUntilChanged()
                 .buffer(team.size - 1)  //we need singns from all teams memeber except himself
@@ -563,7 +562,10 @@ class PoaClient(val context: Context,
                     updateStatus(BalancePresenter.STATUS_WAITING_FOR_K_BLOCK)
                 }
                 .subscribeOn(Schedulers.io())
-                .subscribe())
+                .subscribe({}, {
+                    Crashlytics.logException(it)
+                    Crashlytics.log("Listening signature got throwable")
+                }))
     }
     private fun startWork(myId: String,
                           webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>, //messages from MasterNode
@@ -647,15 +649,15 @@ class PoaClient(val context: Context,
 
                         toJson = toJson.replace("\\", "")
 
-                        Timber.d("Send message with transactions, json data : $toJson")
-                        //Timber.d("Send message with transactions to another member use TeamNode")
+                        //Timber.d("Send message with transactions, json data : $toJson")
+                        Timber.d("Send message with transactions to another member use TeamNode")
 
                         websocket.send(toJson)
 
                         updateStatus(BalancePresenter.STATUS_WAITING_FOR_SIGNING)
 
         } catch (e : Throwable) {
-                        Crashlytics.log("send transactions got throwable")
+                        Crashlytics.log("send transactions got throwable, count transactions ${transactions.size}")
                         Crashlytics.log("total reconnect")
 
                         Crashlytics.logException(e)
