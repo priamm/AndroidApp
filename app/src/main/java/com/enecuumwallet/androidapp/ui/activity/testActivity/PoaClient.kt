@@ -147,6 +147,8 @@ class PoaClient(val context: Context,
     }
 
     fun connect() {
+        //throw RuntimeException("This is a crash")
+
         microBlockWasReady = true
         isMiningStarted = true
 

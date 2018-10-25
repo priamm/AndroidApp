@@ -14,8 +14,8 @@ android {
         applicationId "com.enecuum.wallet"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 47
-        versionName "1.0.47"
+        versionCode 49
+        versionName "1.0.49"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
