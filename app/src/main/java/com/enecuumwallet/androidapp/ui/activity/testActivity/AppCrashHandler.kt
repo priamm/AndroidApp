@@ -8,12 +8,14 @@ import android.content.Intent
 import com.crashlytics.android.Crashlytics
 
 import com.enecuumwallet.androidapp.application.EnecuumApplication
+import com.enecuumwallet.androidapp.persistent_data.PersistentStorage
 import com.enecuumwallet.androidapp.ui.activity.splash.SplashActivity
 
 class AppCrashHandler(private val activity: Activity) : Thread.UncaughtExceptionHandler {
 
     override fun uncaughtException(thread: Thread, ex: Throwable) {
-        Crashlytics.log("uncaughtException, app will be restarted")
+
+        Crashlytics.log("uncaughtException, app will be restarted, count microblocks in session ${PersistentStorage.getCountMicroblcok()}")
         Crashlytics.logException(ex)
 
         val intent = Intent(activity, SplashActivity::class.java)

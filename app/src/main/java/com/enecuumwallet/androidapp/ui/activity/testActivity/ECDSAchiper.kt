@@ -27,8 +27,9 @@ class ECDSAchiper {
 
     companion object {
 
+        val ecdsaSign = Signature.getInstance("SHA256withECDSA", BouncyCastleProvider())
+
         private fun signData(data: ByteArray) : ByteArray {
-            val ecdsaSign = Signature.getInstance("SHA256withECDSA", BouncyCastleProvider())
             val privateKey = getPrivateKey()
             ecdsaSign.initSign(privateKey)
             ecdsaSign.update(data)

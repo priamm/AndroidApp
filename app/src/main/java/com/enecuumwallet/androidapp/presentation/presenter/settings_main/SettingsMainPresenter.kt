@@ -9,8 +9,11 @@ import com.enecuumwallet.androidapp.navigation.TabType
 import com.enecuumwallet.androidapp.persistent_data.PersistentStorage
 import com.enecuumwallet.androidapp.presentation.view.settings_main.SettingsMainView
 import com.enecuumwallet.androidapp.ui.activity.testActivity.ECDSAchiper
+import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.intellij.lang.annotations.Flow
 import timber.log.Timber
 
 @InjectViewState
@@ -42,16 +45,22 @@ class SettingsMainPresenter : MvpPresenter<SettingsMainView>() {
 
     fun onOTPclick() {
         val pulicKey = PersistentStorage.getWallet()
-        val sign = ECDSAchiper.signDataHex(pulicKey.toByteArray())
 
-        EnecuumApplication
-                .otpApi
-                .getOtpCode(pulicKey, sign)
+        val signFlowable  = Single.create<String>({ emitter ->
+            val sign = ECDSAchiper.signDataHex(pulicKey.toByteArray())
+            emitter.onSuccess(sign)
+        })
+
+        signFlowable
+                .flatMapPublisher({sign ->
+                    return@flatMapPublisher EnecuumApplication
+                            .otpApi
+                            .getOtpCode(pulicKey, sign)
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Timber.d(it.code)
-
                     viewState.onShowOTPcode(code = it.code ?: "")
                 } , {
                     Timber.d(it)

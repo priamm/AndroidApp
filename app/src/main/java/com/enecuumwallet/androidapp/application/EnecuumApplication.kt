@@ -26,6 +26,7 @@ import ru.terrakok.cicerone.Router
 import timber.log.Timber
 import java.util.*
 import com.jraska.console.Console
+import com.squareup.leakcanary.LeakCanary
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -126,6 +127,13 @@ class EnecuumApplication : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return
+        }
+
+        LeakCanary.install(this)
+
         appContext = applicationContext
 
         otpApi = providesOtpApi()
@@ -178,7 +186,7 @@ class EnecuumApplication : MultiDexApplication() {
             }
 
             override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
-                Thread.setDefaultUncaughtExceptionHandler(AppCrashHandler(activity!!));
+                Thread.setDefaultUncaughtExceptionHandler(AppCrashHandler(activity!!))
             }
 
         })

@@ -34,6 +34,7 @@ object PersistentStorage {
     private const val PRIVATE_KEY = "PRIVATE_KEY"
     private const val PUBLIC_KEY_X = "PRIVATE_KEY_X"
     private const val PUBLIC_KEY_Y = "PRIVATE_KEY_Y"
+    private const val COUNT_MICROBLOCK_PER_SESSION = "count_microblock_per_session"
 
     private fun getPrefs(): SharedPreferences = EnecuumApplication.applicationContext()
             .getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
@@ -201,5 +202,13 @@ object PersistentStorage {
         val ip = getPrefs().getString("MASTER_NODE_IP", "")
         val port = getPrefs().getString("MASTER_NODE_PORT", "")
         return ConnectPointDescription(ip!!, port!!)
+    }
+
+    fun setCountMicroblcok(count : Int) {
+        setInt(COUNT_MICROBLOCK_PER_SESSION, count)
+    }
+
+    fun getCountMicroblcok() {
+        getPrefs().getInt(COUNT_MICROBLOCK_PER_SESSION, 0)
     }
 }

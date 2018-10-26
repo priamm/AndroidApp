@@ -74,6 +74,8 @@ class PoaClient(val context: Context,
 
     private var microBlockWasReady = true
 
+    private var countMicroblock = 0
+
     private fun reconnectToNN(connectPointDescription: ConnectPointDescription) {
 
         val masterNode = getWebSocket(connectPointDescription.ip, connectPointDescription.port)
@@ -157,6 +159,7 @@ class PoaClient(val context: Context,
         miningComposite = CompositeDisposable()
 
         onConnectedListner.onStartConnecting()
+
         createKeyIfNeeds()
 
 
@@ -337,9 +340,7 @@ class PoaClient(val context: Context,
                                 startWork(
                                         myNodeId,
                                         webSocketStringMessageEventsMasterNode,
-                                        webSocketStringMessageEventsTeamNode,
-                                        ws,
-                                        teamWs)
+                                        webSocketStringMessageEventsTeamNode)
 
                                 updateStatus(BalancePresenter.STATUS_WAITING_FOR_K_BLOCK)
                             }
@@ -559,21 +560,22 @@ class PoaClient(val context: Context,
                         onMicroblockCountListerer.onMicroblockCountAndLast(microblockResponse, microblockMsgHashBase64)
                     }
 
+                    countMicroblock++
+                    PersistentStorage.setCountMicroblcok(countMicroblock)
+
                     updateStatus(BalancePresenter.STATUS_WAITING_FOR_K_BLOCK)
                 }
                 .subscribeOn(Schedulers.io())
                 .subscribe({}, {
+                    Timber.d(it)
                     Crashlytics.logException(it)
                     Crashlytics.log("Listening signature got throwable")
                 }))
     }
     private fun startWork(myId: String,
                           webSocketStringMessageEvents: Flowable<Pair<WebSocket?, Any?>>, //messages from MasterNode
-                          webSocketStringMessageEventsTN: Flowable<Pair<WebSocket?, Any?>>, //messages from TeamNode
-                          websocketMasterNode: WebSocket?, //MasterNode
-                          websocketTeamNode: WebSocket?  //TeamNode
-    ) {
-
+                          webSocketStringMessageEventsTN: Flowable<Pair<WebSocket?, Any?>>) //messages from TeamNode)
+    {
         Timber.d("Start work")
 
         val addressedMessageResponseWithTransactions = webSocketStringMessageEventsTN
@@ -631,8 +633,6 @@ class PoaClient(val context: Context,
                                         sign = responseSignature,
                                         version = BuildConfig.VERSION_NAME)
 
-                                val addressMessageJson = gson.toJson(addressedMessageRequest)
-
                                 //Timber.d("Signed data, send message with signature, json : $addressMessageJson")
                                 Timber.d("Signed data, send back to PoA")
 
@@ -640,7 +640,11 @@ class PoaClient(val context: Context,
                             }
                         }
                         .subscribeOn(Schedulers.io())
-                        .subscribe())
+                        .subscribe({} , {
+                            Timber.d(it)
+                            Crashlytics.logException(it)
+                            Crashlytics.log("Signing data got throwable")
+                        }))
     }
 
     private fun sendTransactions(websocket : WebSocket, transactions : List<Transaction>) {
