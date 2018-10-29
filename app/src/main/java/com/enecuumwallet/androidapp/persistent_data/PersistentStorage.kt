@@ -208,7 +208,7 @@ object PersistentStorage {
         setInt(COUNT_MICROBLOCK_PER_SESSION, count)
     }
 
-    fun getCountMicroblcok() {
-        getPrefs().getInt(COUNT_MICROBLOCK_PER_SESSION, 0)
+    fun getCountMicroblcok() : Int {
+        return getPrefs().getInt(COUNT_MICROBLOCK_PER_SESSION, 0)
     }
 }

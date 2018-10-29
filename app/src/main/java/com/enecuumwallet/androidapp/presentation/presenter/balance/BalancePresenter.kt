@@ -58,6 +58,9 @@ class BalancePresenter : MvpPresenter<BalanceView>() {
 
     fun onCreate() {
         if (!::poaClient.isInitialized) {
+
+            PersistentStorage.setCountMicroblcok(0)
+
             poaClient = PoaClient(EnecuumApplication.applicationContext(),
                     BN_PATH = pathBn,
                     BN_PORT = portBn,

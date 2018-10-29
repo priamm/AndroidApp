@@ -11,6 +11,7 @@ import com.enecuumwallet.androidapp.navigation.FragmentType
 import com.enecuumwallet.androidapp.navigation.ScreenType
 import com.enecuumwallet.androidapp.navigation.TabType
 import com.enecuumwallet.androidapp.network.api.OtpApi
+import com.enecuumwallet.androidapp.persistent_data.PersistentStorage
 import com.enecuumwallet.androidapp.ui.activity.testActivity.AppCrashHandler
 import com.enecuumwallet.androidapp.utils.EventBusUtils
 import com.google.crypto.tink.Config
@@ -127,6 +128,8 @@ class EnecuumApplication : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
+
+
 
         if (LeakCanary.isInAnalyzerProcess(this)) {
             return
